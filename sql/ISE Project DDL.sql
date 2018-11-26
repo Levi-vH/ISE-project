@@ -382,4 +382,3 @@ alter table WORKSHOP
    add constraint FK_WORKSHOP_ref_SECTOR foreign key (SECTOR_NAAM)
       references SECTOR (SECTOR_NAAM)
 go
-
