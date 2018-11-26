@@ -5,6 +5,7 @@ USE [UnitTesting SBB]
 --==============================================================
 
 EXEC tSQLt.NewTestClass 'testWorkshop';
+EXEC tSQLt.NewTestClass 'testDeelnemer';
 
 
 --==============================================================
@@ -18,19 +19,18 @@ GO
 CREATE PROCEDURE [testWorkshop].[test on workshop types INC]
 AS
 BEGIN
-	--voorbereiden
-		--faken van de tabel, strippen van alle constraints, lege tabel
-	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; --dbo is het default schema igv create table 
-	--nu de te testen constraint er weer opzetten, deze bestaat namelijk al
+		
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
 	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopTypes';
 
 	EXEC tSQLt.ExpectNoException
-	--actie
+	
 	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
 	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
 	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
 	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
-	values(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'INC', NULL, NULL, NULL, NULL, NULL, NULL); 
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'INC', NULL, NULL, NULL, NULL, NULL, NULL); 
 END
 GO
 
@@ -41,19 +41,18 @@ GO
 CREATE PROCEDURE [testWorkshop].[test on workshop types COM]
 AS
 BEGIN
-	--voorbereiden
-		--faken van de tabel, strippen van alle constraints, lege tabel
-	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; --dbo is het default schema igv create table 
-	--nu de te testen constraint er weer opzetten, deze bestaat namelijk al
+	
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
 	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopTypes';
 
 	EXEC tSQLt.ExpectNoException
-	--actie
+	
 	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
 	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
 	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
 	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
-	values(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'COM', NULL, NULL, NULL, NULL, NULL, NULL); 
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'COM', NULL, NULL, NULL, NULL, NULL, NULL); 
 END
 GO
 
@@ -64,19 +63,18 @@ GO
 CREATE PROCEDURE [testWorkshop].[test on workshop types COB]
 AS
 BEGIN
-	--voorbereiden
-		--faken van de tabel, strippen van alle constraints, lege tabel
-	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; --dbo is het default schema igv create table 
-	--nu de te testen constraint er weer opzetten, deze bestaat namelijk al
+		
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
 	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopTypes';
 
 	EXEC tSQLt.ExpectException
-	--actie
+	
 	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
 	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
 	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
 	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
-	values(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'COB', NULL, NULL, NULL, NULL, NULL, NULL); 
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'COB', NULL, NULL, NULL, NULL, NULL, NULL); 
 END
 GO
 
@@ -91,19 +89,18 @@ GO
 CREATE PROCEDURE [testWorkshop].[test for advisor in INC workshops 1]
 AS
 BEGIN
-	--voorbereiden
-		--faken van de tabel, strippen van alle constraints, lege tabel
-	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; --dbo is het default schema igv create table 
-	--nu de te testen constraint er weer opzetten, deze bestaat namelijk al
+	
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
 	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopAdvisor';
 
 	EXEC tSQLt.ExpectnoException
-	--actie
+	
 	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
 	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
 	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
 	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
-	values(NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'COM', NULL, NULL, NULL, NULL, NULL, NULL); 
+	VALUES(NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'COM', NULL, NULL, NULL, NULL, NULL, NULL); 
 END
 GO
 
@@ -114,19 +111,18 @@ GO
 CREATE PROCEDURE [testWorkshop].[test for advisor in INC workshops 2]
 AS
 BEGIN
-	--voorbereiden
-		--faken van de tabel, strippen van alle constraints, lege tabel
-	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; --dbo is het default schema igv create table 
-	--nu de te testen constraint er weer opzetten, deze bestaat namelijk al
+	
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
 	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopAdvisor';
 
 	EXEC tSQLt.ExpectnoException
-	--actie
+	
 	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
 	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
 	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
 	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
-	values(NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
+	VALUES(NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
 END
 GO
 
@@ -137,19 +133,18 @@ GO
 CREATE PROCEDURE [testWorkshop].[test for advisor in INC workshops 3]
 AS
 BEGIN
-	--voorbereiden
-		--faken van de tabel, strippen van alle constraints, lege tabel
-	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; --dbo is het default schema igv create table 
-	--nu de te testen constraint er weer opzetten, deze bestaat namelijk al
+	
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
 	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopAdvisor';
 
 	EXEC tSQLt.ExpectException
-	--actie
+	
 	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
 	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
 	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
 	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
-	values(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'INC', NULL, NULL, NULL, NULL, NULL, NULL); 
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'INC', NULL, NULL, NULL, NULL, NULL, NULL); 
 END
 GO
 
@@ -160,21 +155,189 @@ GO
 CREATE PROCEDURE [testWorkshop].[test for advisor in INC workshops 4]
 AS
 BEGIN
-	--voorbereiden
-		--faken van de tabel, strippen van alle constraints, lege tabel
-	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; --dbo is het default schema igv create table 
-	--nu de te testen constraint er weer opzetten, deze bestaat namelijk al
+		
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
 	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopAdvisor';
 
 	EXEC tSQLt.ExpectnoException
-	--actie
+	
 	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
 	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
 	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
 	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
-	values(NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'INC', NULL, NULL, NULL, NULL, NULL, NULL); 
+	VALUES(NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'INC', NULL, NULL, NULL, NULL, NULL, NULL); 
+END
+GO
+
+--==============================================================
+-- tests for the check on workshop date
+--==============================================================
+
+-- test for workshopdate = 20 seconds after getdate
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopdate 1]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for workshopdate 1]
+AS
+BEGIN
+		
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopDate';
+
+	EXEC tSQLt.ExpectnoException
+	
+	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, DATEADD(s, 20, GETDATE()), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
+END
+GO
+
+-- test for workshopdate = 20 seconds before getdate
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopdate 2]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for workshopdate 2]
+AS
+BEGIN
+	
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopDate';
+
+	EXEC tSQLt.ExpectException
+	
+	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, DATEADD(s, -20, GETDATE()), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
+END
+GO
+
+--========================================================================================
+-- tests if the workshopstatus is 'uitgezet', 'bevestigd', 'geannuleerd' or 'afgehandeld'
+--========================================================================================
+
+-- test for status is uitgezet
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopstatus 1]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for workshopstatus 1]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopState';
+
+	EXEC tSQLt.ExpectnoException
+	
+	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'uitgezet', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
+END
+GO
+
+-- test for status is uitgezet
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopstatus 2]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for workshopstatus 2]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopState';
+
+	EXEC tSQLt.ExpectnoException
+	
+	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
 END
 GO
 
 
+--========================================================================================
+-- tests for the deelnemer table
+--========================================================================================
+
+--========================================================================================
+-- test if the e-mail contains a '@' and a '.'
+--========================================================================================
+
+-- test for emails without a '@'
+DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer emails 1]
+GO
+
+CREATE PROCEDURE [testDeelnemer].[test for deelnemer emails 1]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.DEELNEMER';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_DeelnemerEmail';
+
+	EXEC tSQLt.ExpectException
+	
+	INSERT INTO DEELNEMER ([DEELNEMER_ID], [SECTOR_NAAM], [ORGANISATIENUMMER], [AANHEF], [ATTRIBUTE_25], [ATTRIBUTE_26],
+	 [GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [ORGANISATIE_VESTIGINGSPLAATS], [ATTRIBUTE_58],
+	  [GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'henkpieter.nl', NULL, NULL, NULL, NULL, NULL, NULL);  
+END
+GO
+
+-- test for emails without a '.'
+DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer emails 1]
+GO
+
+CREATE PROCEDURE [testDeelnemer].[test for deelnemer emails 1]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.DEELNEMER';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_DeelnemerEmail';
+
+	EXEC tSQLt.ExpectException
+	
+	INSERT INTO DEELNEMER ([DEELNEMER_ID], [SECTOR_NAAM], [ORGANISATIENUMMER], [AANHEF], [ATTRIBUTE_25], [ATTRIBUTE_26],
+	 [GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [ORGANISATIE_VESTIGINGSPLAATS], [ATTRIBUTE_58],
+	  [GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'henk@pieternl', NULL, NULL, NULL, NULL, NULL, NULL); 
+END
+GO
+
+-- test for emails with a '@' and a '.'
+DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer emails 1]
+GO
+
+CREATE PROCEDURE [testDeelnemer].[test for deelnemer emails 1]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.DEELNEMER';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_DeelnemerEmail';
+
+	EXEC tSQLt.ExpectnoException
+	
+	INSERT INTO DEELNEMER ([DEELNEMER_ID], [SECTOR_NAAM], [ORGANISATIENUMMER], [AANHEF], [ATTRIBUTE_25], [ATTRIBUTE_26],
+	 [GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [ORGANISATIE_VESTIGINGSPLAATS], [ATTRIBUTE_58],
+	  [GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'henk@pieter.nl', NULL, NULL, NULL, NULL, NULL, NULL); 
+END
+GO
+
 EXEC [tSQLt].[Run] '[testWorkshop]'
+
+EXEC [tSQLt].[Run] '[testDeelnemer]'
