@@ -9,14 +9,53 @@
     <?php include 'header.html';  ?>
 </head>
 <body>
+<?php
+// define empty variables
+$contactinfo = $workshopadress = $workshoppostcode = $workshopcity = $workshopleader = $workshopnotes = "";
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $contactinfo = check_input($_POST["contactinfo"]);
+    $workshopadress = check_input($_POST["workshopaddress"]);
+    $workshoppostcode = check_input($_POST["workshoppostcode"]);
+    $workshopcity = check_input($_POST["workshopcity"]);
+    $workshopleader = check_input($_POST["workshopleader"]);
+    $workshopnotes = check_input(@$_POST['workshopnotes']);
+}
+$host = 'localhost';
+$user = 'iseprojectuser';
+$pass = 'iseprojectww';
+
+/*$conn = mssql_connect($host, $user, $pass);
+mssql_select_db('SBBWorkshopOmgeving', $conn);
+
+// Call a simple query
+$result = mssql_query('SELECT * FROM sometable', $conn);
+
+// Release the result resource
+mssql_free_result($result);
+
+// Then execute the procedure
+$proc = mssql_init('proccreateworkshop', $conn);
+$proc_result = mssql_execute($proc);
+
+mssql_free_statement($proc);
+?>
+*/
+
+function check_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  return $data;
+}
+?>
 <div class="container">
     <h2>Maak een nieuwe workshop</h2>
     <form class="form-horizontal" action="/createworkshop.php">
         <div class="form-group">
             <label class="control-label col-sm-2" for="workshoptype">Type workshop:</label>
             <div class="col-sm-10">
-                <select class="form-control" id="sel1">
+                <select class="form-control" name="workshoptype">
                     <option>TYPE...</option>
                     <option>INCOMPANY</option>
                     <option>INDIVIDUEEL</option>
@@ -34,16 +73,11 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="contactinfo">Contactpersoon:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Contactpersoon gegevens" name="workshopdate">
+                <input type="text" class="form-control" placeholder="Contactpersoon gegevens" name="contactinfo">
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="workshopmodule">Module:</label>
-            <div class="col-sm-10">
-                <input type="radio" name="moduleoption">Module 1
-                <input type="radio" name="moduleoption">Module 2
-                <input type="radio" name="moduleoption">Module 3
-            </div>
             <div class="col-sm-10">
                 <select class="form-control" id="sel1">
                     <option>Selecteer module...</option>
@@ -93,13 +127,6 @@
             <label class="control-label col-sm-2" for="workshopnotes">Opmerkingen workshop:</label>
             <div class="col-sm-10">
                 <input type="txt" class="form-control" placeholder="Opmerkingen" name="workshopnotes">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <div class="checkbox">
-                    <label><input type="checkbox" name="remember"> Remember me</label>
-                </div>
             </div>
         </div>
         <div class="form-group">
