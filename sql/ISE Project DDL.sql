@@ -177,13 +177,13 @@ go
 /* Table: ADVISEUR                                              */
 /*==============================================================*/
 create table ADVISEUR (
-   ADVISEUR_ID          int                  not null,
+   ADVISEUR_ID          int IDENTITY         not null,
    ORGANISATIENUMMER    varchar(15)          not null,
-   ATTRIBUTE_13         varchar(256)         not null,
-   ATTRIBUTE_14         varchar(256)         not null,
+   VOORNAAM				varchar(256)         not null,
+   ACHTERNAAM			varchar(256)         not null,
    TELEFOONNUMMER       varchar(256)         null,
    EMAIL                varchar(256)         null,
-   constraint PK_ADVISEUR primary key nonclustered (ADVISEUR_ID)
+   constraint PK_ADVISEUR primary key (ADVISEUR_ID)
 )
 go
 
@@ -191,11 +191,11 @@ go
 /* Table: BESCHIKBAARHEID                                       */
 /*==============================================================*/
 create table BESCHIKBAARHEID (
-   WORKSHOPLEIDER_ID    int                  not null,
+   WORKSHOPLEIDER_ID    int IDENTITY         not null,
    KWARTAAL             char(1)              not null,
    JAAR                 smallint             not null,
    AANTAL_UUR           smallint             not null,
-   constraint PK_BESCHIKBAARHEID primary key nonclustered (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
+   constraint PK_BESCHIKBAARHEID primary key (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
 )
 go
 
@@ -203,13 +203,13 @@ go
 /* Table: CONTACTPERSOON                                        */
 /*==============================================================*/
 create table CONTACTPERSOON (
-   CONTACTPERSOON_ID    int                  not null,
+   CONTACTPERSOON_ID    int IDENTITY         not null,
    ORGANISATIENUMMER    varchar(15)          not null,
    VOORNAAM             varchar(256)         not null,
    ACHTERNAAM           varchar(256)         not null,
    TELEFOONNUMMER       varchar(256)         null,
    EMAIL                varchar(256)         null,
-   constraint PK_CONTACTPERSOON primary key nonclustered (CONTACTPERSOON_ID)
+   constraint PK_CONTACTPERSOON primary key (CONTACTPERSOON_ID)
 )
 go
 
@@ -217,21 +217,21 @@ go
 /* Table: DEELNEMER                                             */
 /*==============================================================*/
 create table DEELNEMER (
-   DEELNEMER_ID         int                  not null,
-   SECTOR_NAAM          varchar(256)         not null,
-   ORGANISATIENUMMER    varchar(15)          null,
-   AANHEF               varchar(4)           not null,
-   ATTRIBUTE_25         varchar(256)         not null,
-   ATTRIBUTE_26         varchar(256)         not null,
-   GEBOORTEDATUM        datetime             not null,
-   EMAIL                varchar(256)         not null,
-   TELEFOONNUMMER       varchar(256)         not null,
-   OPLEIDINGSNIVEAU     varchar(11)          not null,
-   ORGANISATIE_VESTIGINGSPLAATS varchar(256)         not null,
-   ATTRIBUTE_58         bit                  not null,
-   GEWENST_BEGELEIDINGSNIVEAU varchar(256)         null,
-   FUNCTIENAAM          varchar(256)         null,
-   constraint PK_DEELNEMER primary key nonclustered (DEELNEMER_ID)
+   DEELNEMER_ID					int IDENTITY         not null,
+   SECTOR_NAAM					varchar(256)         not null,
+   ORGANISATIENUMMER			varchar(15)          null,
+   AANHEF						varchar(4)           not null,
+   VOORNAAM						varchar(256)         not null,
+   ACHTERNAAM					varchar(256)         not null,
+   GEBOORTEDATUM				datetime             not null,
+   EMAIL						varchar(256)         not null,
+   TELEFOONNUMMER				varchar(256)         not null,
+   OPLEIDINGSNIVEAU				varchar(11)          not null,
+   ORGANISATIE_VESTIGINGSPLAATS	varchar(256)         not null,
+   IS_OPEN_INSCHRIJVING         bit                  not null,
+   GEWENST_BEGELEIDINGSNIVEAU	varchar(256)         null,
+   FUNCTIENAAM					varchar(256)         null,
+   constraint PK_DEELNEMER primary key (DEELNEMER_ID)
 )
 go
 
@@ -239,7 +239,7 @@ go
 /* Table: DEELNEMER_IN_WORKSHOP                                 */
 /*==============================================================*/
 create table DEELNEMER_IN_WORKSHOP (
-   WORKSHOP_ID          int                  not null,
+   WORKSHOP_ID          int			         not null,
    DEELNEMER_ID         int                  not null,
    VOLGNUMMER           int                  not null,
    IS_GOEDGEKEURD       bit                  not null,
@@ -251,9 +251,9 @@ go
 /* Table: MODULE                                                */
 /*==============================================================*/
 create table MODULE (
-   MODULE_NUMMER        int                  not null,
-   ATTRIBUTE_48         varchar(256)         not null,
-   constraint PK_MODULE primary key nonclustered (MODULE_NUMMER)
+   MODULE_NUMMER       int                  not null,
+   MODULE_NAAM         varchar(256)         not null,
+   constraint PK_MODULE primary key (MODULE_NUMMER)
 )
 go
 
@@ -263,7 +263,7 @@ go
 create table ORGANISATIE (
    ORGANISATIENUMMER    varchar(15)          not null,
    ORGANIATIENAAM       varchar(256)         null,
-   constraint PK_ORGANISATIE primary key nonclustered (ORGANISATIENUMMER)
+   constraint PK_ORGANISATIE primary key (ORGANISATIENUMMER)
 )
 go
 
@@ -272,7 +272,7 @@ go
 /*==============================================================*/
 create table SECTOR (
    SECTOR_NAAM          varchar(256)         not null,
-   constraint PK_SECTOR primary key nonclustered (SECTOR_NAAM)
+   constraint PK_SECTOR primary key (SECTOR_NAAM)
 )
 go
 
@@ -280,30 +280,30 @@ go
 /* Table: WORKSHOP                                              */
 /*==============================================================*/
 create table WORKSHOP (
-   WORKSHOP_ID          int                  not null,
-   WORKSHOPLEIDER_ID    int                  null,
-   CONTACTPERSOON_ID    int                  null,
-   ORGANISATIENUMMER    varchar(15)          null,
-   MODULE_NUMMER        int                  null,
-   ADVISEUR_ID          int                  null,
-   SECTOR_NAAM          varchar(256)         null,
-   DATUM                datetime             null,
-   STARTTIJD            datetime             null,
-   EINDTIJD             datetime             null,
-   HUISNUMMER           varchar(8)           null,
-   STRAATNAAM           varchar(256)         null,
-   POSTCODE             varchar(12)          null,
-   PLAATSNAAM           varchar(256)         null,
-   STATUS               varchar(256)         null,
-   OPMERKING            varchar(255)         null,
-   TYPE                 varchar(3)           null,
-   VERWERKT_BREIN       datetime             null,
-   DEELNEMER_GEGEGEVENS_ONTVANGEN datetime             null,
-   OVK_BEVESTIGING      datetime             null,
-   PRESENTIELIJST_VERSTUURD datetime             null,
-   PRESENTIELIJST_ONTVANGEN datetime             null,
-   BEWIJS_DEELNAME_MAIL_SBB_WSL datetime             null,
-   constraint PK_WORKSHOP primary key nonclustered (WORKSHOP_ID)
+   WORKSHOP_ID						int IDENTITY         not null,
+   WORKSHOPLEIDER_ID				int                  null,
+   CONTACTPERSOON_ID				int                  null,
+   ORGANISATIENUMMER				varchar(15)          null,
+   MODULE_NUMMER					int                  null,
+   ADVISEUR_ID						int                  null,
+   SECTOR_NAAM						varchar(256)         null,
+   DATUM							datetime             null,
+   STARTTIJD						datetime             null,
+   EINDTIJD							datetime             null,
+   HUISNUMMER						varchar(8)           null,
+   STRAATNAAM						varchar(256)         null,
+   POSTCODE							varchar(12)          null,
+   PLAATSNAAM						varchar(256)         null,
+   STATUS							varchar(256)         null,
+   OPMERKING						varchar(255)         null,
+   TYPE								varchar(3)           null,
+   VERWERKT_BREIN					datetime             null,
+   DEELNEMER_GEGEGEVENS_ONTVANGEN	datetime             null,
+   OVK_BEVESTIGING					datetime             null,
+   PRESENTIELIJST_VERSTUURD			datetime             null,
+   PRESENTIELIJST_ONTVANGEN			datetime             null,
+   BEWIJS_DEELNAME_MAIL_SBB_WSL		datetime             null,
+   constraint PK_WORKSHOP primary key (WORKSHOP_ID)
 )
 go
 
@@ -311,75 +311,75 @@ go
 /* Table: WORKSHOPLEIDER                                        */
 /*==============================================================*/
 create table WORKSHOPLEIDER (
-   WORKSHOPLEIDER_ID    int                  not null,
-   ATTRIBUTE_8          varchar(256)         not null,
-   AVOORNAAMTTRIBUTE_9  varchar(256)         not null,
-   constraint PK_WORKSHOPLEIDER primary key nonclustered (WORKSHOPLEIDER_ID)
+   WORKSHOPLEIDER_ID    int IDENTITY         not null,
+   VOORNAAM				varchar(256)         not null,
+   ACHTERNAAM			varchar(256)         not null,
+   constraint PK_WORKSHOPLEIDER primary key (WORKSHOPLEIDER_ID)
 )
 go
 
 alter table ADVISEUR
-   add constraint FK_ADVISEUR_ADVISEUR__ORGANISA foreign key (ORGANISATIENUMMER)
+   add constraint FK_ADVISEUR_ref_ORGANISATIE foreign key (ORGANISATIENUMMER)
       references ORGANISATIE (ORGANISATIENUMMER)
 go
 
 alter table BESCHIKBAARHEID
-   add constraint FK_BESCHIKB_BESCHIKBB_WORKSHOP foreign key (WORKSHOPLEIDER_ID)
+   add constraint FK_BESCHIKBAARHEID_ref_WORKSHOPLEIDER foreign key (WORKSHOPLEIDER_ID)
       references WORKSHOPLEIDER (WORKSHOPLEIDER_ID)
 go
 
 alter table CONTACTPERSOON
-   add constraint FK_CONTACTP_CONTACTPE_ORGANISA foreign key (ORGANISATIENUMMER)
+   add constraint FK_CONTACTPERSOON_ref_ORGANISATIE foreign key (ORGANISATIENUMMER)
       references ORGANISATIE (ORGANISATIENUMMER)
 go
 
 alter table DEELNEMER
-   add constraint FK_DEELNEME_DEELNEMER_ORGANISA foreign key (ORGANISATIENUMMER)
+   add constraint FK_DEELNEMER_ref_ORGANISATIE foreign key (ORGANISATIENUMMER)
       references ORGANISATIE (ORGANISATIENUMMER)
 go
 
 alter table DEELNEMER
-   add constraint FK_DEELNEME_SECTOR_VA_SECTOR foreign key (SECTOR_NAAM)
+   add constraint FK_DEELNEMER_ref_SECTOR foreign key (SECTOR_NAAM)
       references SECTOR (SECTOR_NAAM)
 go
 
 alter table DEELNEMER_IN_WORKSHOP
-   add constraint FK_DEELNEME_DEELNEMER_DEELNEME foreign key (DEELNEMER_ID)
+   add constraint FK_DEELNEMER_IN_WORKSHOP_ref_DEELNEMER foreign key (DEELNEMER_ID)
       references DEELNEMER (DEELNEMER_ID)
 go
 
 alter table DEELNEMER_IN_WORKSHOP
-   add constraint FK_DEELNEME_WORKSHOP__WORKSHOP foreign key (WORKSHOP_ID)
+   add constraint FK_DEELNEMER_IN_WORKSHOP_ref_WORKSHOP foreign key (WORKSHOP_ID)
       references WORKSHOP (WORKSHOP_ID)
 go
 
 alter table WORKSHOP
-   add constraint FK_WORKSHOP_ADVISEUR__ADVISEUR foreign key (ADVISEUR_ID)
+   add constraint FK_WORKSHOP_ref_ADVISEUR foreign key (ADVISEUR_ID)
       references ADVISEUR (ADVISEUR_ID)
 go
 
 alter table WORKSHOP
-   add constraint FK_WORKSHOP_CONTACTPE_CONTACTP foreign key (CONTACTPERSOON_ID)
+   add constraint FK_WORKSHOP_ref_CONTACTPERSOON foreign key (CONTACTPERSOON_ID)
       references CONTACTPERSOON (CONTACTPERSOON_ID)
 go
 
 alter table WORKSHOP
-   add constraint FK_WORKSHOP_MODULE_VA_MODULE foreign key (MODULE_NUMMER)
+   add constraint FK_WORKSHOP_ref_MODULE foreign key (MODULE_NUMMER)
       references MODULE (MODULE_NUMMER)
 go
 
 alter table WORKSHOP
-   add constraint FK_WORKSHOP_ORGANISAT_ORGANISA foreign key (ORGANISATIENUMMER)
+   add constraint FK_WORKSHOP_ref_ORGANISATIE foreign key (ORGANISATIENUMMER)
       references ORGANISATIE (ORGANISATIENUMMER)
 go
 
 alter table WORKSHOP
-   add constraint FK_WORKSHOP_WORKSHOPL_WORKSHOP foreign key (WORKSHOPLEIDER_ID)
+   add constraint FK_WORKSHOP_ref_WORKSHOPLEIDER foreign key (WORKSHOPLEIDER_ID)
       references WORKSHOPLEIDER (WORKSHOPLEIDER_ID)
 go
 
 alter table WORKSHOP
-   add constraint FK_WORKSHOP_WORKSHOP__SECTOR foreign key (SECTOR_NAAM)
+   add constraint FK_WORKSHOP_ref_SECTOR foreign key (SECTOR_NAAM)
       references SECTOR (SECTOR_NAAM)
 go
 
