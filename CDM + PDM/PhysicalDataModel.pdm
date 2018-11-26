@@ -1838,7 +1838,7 @@ SOURCE 0 Arial,8,N</a:FontList>
 </c:Object>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o10">
-<a:Rect>((69603,-41129), (84423,-29348))</a:Rect>
+<a:Rect>((76388,-41129), (77638,-29348))</a:Rect>
 <a:ListOfPoints>((77013,-40729),(77013,-29748))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
@@ -1971,7 +1971,7 @@ SOURCE 0 Arial,8,N</a:FontList>
 </c:Object>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o31">
-<a:Rect>((-3474,5146), (30688,24423))</a:Rect>
+<a:Rect>((-3474,5146), (30688,24416))</a:Rect>
 <a:ListOfPoints>((30288,23417),(4176,23417),(4176,5546))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
@@ -4096,14 +4096,15 @@ DAT 1543226205</a:History>
 </o:Column>
 <o:Column Id="o169">
 <a:ObjectID>A1AC2181-867F-4428-A4E8-DAD6B2DF3C59</a:ObjectID>
-<a:Name>Open_Inschrijving?</a:Name>
+<a:Name>Is_Open_Inschrijving</a:Name>
 <a:Code>ATTRIBUTE_58</a:Code>
 <a:CreationDate>1543226205</a:CreationDate>
 <a:Creator>markv</a:Creator>
-<a:ModificationDate>1543226205</a:ModificationDate>
+<a:ModificationDate>1543226749</a:ModificationDate>
 <a:Modifier>markv</a:Modifier>
 <a:History>ORG {2A0130AD-8EFD-4438-96A7-DA8E67C9545F}
-DAT 1543226205</a:History>
+DAT 1543226205
+ATT NAME</a:History>
 <a:DataType>bit</a:DataType>
 <a:Column.Mandatory>1</a:Column.Mandatory>
 <c:Domain>
@@ -5317,7 +5318,7 @@ ATT MAND</a:History>
 <a:TargetModelURL>file:///C|/Users/markv/Documents/GitHub/ISE-project/CDM + PDM/ConceptualDataModel.cdm</a:TargetModelURL>
 <a:TargetModelID>A3CE6382-079F-44F1-AF7E-90CD5F7EE393</a:TargetModelID>
 <a:TargetModelClassID>1E597170-9350-11D1-AB3C-0020AF71E433</a:TargetModelClassID>
-<a:TargetModelLastModificationDate>1543226205</a:TargetModelLastModificationDate>
+<a:TargetModelLastModificationDate>1543226714</a:TargetModelLastModificationDate>
 <c:SessionShortcuts>
 <o:Shortcut Ref="o3"/>
 </c:SessionShortcuts>
