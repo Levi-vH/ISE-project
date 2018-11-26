@@ -14,7 +14,15 @@ ORDER BY ORGANISATIENAAM
 /*==============================================================*/
 /* Table: ADVISEUR                                              */
 /*==============================================================*/
+WITH orgnum AS
+(
+SELECT TOP 300 ORGANISATIENUMMER
+FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
+ORDER BY NEWID()
+),
+(
 
+)
 go
 
 /*==============================================================*/
