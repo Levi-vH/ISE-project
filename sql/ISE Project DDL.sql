@@ -262,7 +262,7 @@ go
 /*==============================================================*/
 create table ORGANISATIE (
    ORGANISATIENUMMER    varchar(15)          not null,
-   ORGANIATIENAAM       varchar(256)         null,
+   ORGANISATIENAAM       varchar(256)         null,
    constraint PK_ORGANISATIE primary key (ORGANISATIENUMMER)
 )
 go

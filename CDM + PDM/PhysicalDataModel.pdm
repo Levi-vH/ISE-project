@@ -1980,7 +1980,7 @@ SOURCE 0 Arial,8,N</a:FontList>
 </c:Object>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o31">
-<a:Rect>((-3474,5146), (30688,24330))</a:Rect>
+<a:Rect>((-3474,5146), (30688,24311))</a:Rect>
 <a:ListOfPoints>((30288,23417),(4176,23417),(4176,5546))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
@@ -2792,14 +2792,16 @@ DAT 1543226205</a:History>
 </o:Column>
 <o:Column Id="o88">
 <a:ObjectID>B5F20071-8F3A-48F2-ADA0-9D957BCC838D</a:ObjectID>
-<a:Name>Organiatienaam</a:Name>
-<a:Code>ORGANIATIENAAM</a:Code>
+<a:Name>Organisatienaam</a:Name>
+<a:Code>ORGANISATIENAAM</a:Code>
 <a:CreationDate>1543226205</a:CreationDate>
 <a:Creator>markv</a:Creator>
-<a:ModificationDate>1543226205</a:ModificationDate>
+<a:ModificationDate>1543237082</a:ModificationDate>
 <a:Modifier>markv</a:Modifier>
 <a:History>ORG {78D2EE4E-78F1-4B48-96A3-45FBA9FE2F65}
-DAT 1543226205</a:History>
+DAT 1543226205
+ATT NAME
+ATT CODE</a:History>
 <a:DataType>varchar(256)</a:DataType>
 <a:Length>256</a:Length>
 <c:Domain>
