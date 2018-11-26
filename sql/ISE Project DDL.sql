@@ -313,6 +313,7 @@ create table WORKSHOPLEIDER (
    WORKSHOPLEIDER_ID    int IDENTITY         not null,
    VOORNAAM				varchar(255)         not null,
    ACHTERNAAM			varchar(255)         not null,
+   TOEVOEGING			tinyint				 null,
    constraint PK_WORKSHOPLEIDER primary key (WORKSHOPLEIDER_ID)
 )
 go

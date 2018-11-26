@@ -5,7 +5,6 @@ INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
 SELECT ROW_NUMBER() OVER (ORDER BY S.Name) AS [ORGANISATIENUMMER], S.Name AS [ORGANISATIENAAM]
 FROM [AdventureWorks2014].[Sales].[Store] S
 go
-
 /*
 SELECT *
 FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
