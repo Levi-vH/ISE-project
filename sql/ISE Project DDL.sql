@@ -242,7 +242,7 @@ create table DEELNEMER_IN_WORKSHOP (
    WORKSHOP_ID          int			         not null,
    DEELNEMER_ID         int                  not null,
    VOLGNUMMER           int                  not null,
-   IS_GOEDGEKEURD       bit                  not null,
+   IS_GOEDGEKEURD       bit                  not null	DEFAULT 0,
    constraint PK_DEELNEMER_IN_WORKSHOP primary key (WORKSHOP_ID, DEELNEMER_ID)
 )
 go
