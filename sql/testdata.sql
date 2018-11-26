@@ -1,10 +1,9 @@
-USE SBBWorkshopOmgeving
-GO
-
 /*==============================================================*/
 /* Table: ORGANISATIE                                           */
 /*==============================================================*/
-
+INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
+SELECT		NEWID()
+WHERE		id < 1000
 go
 
 /*==============================================================*/
