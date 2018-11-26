@@ -1819,8 +1819,11 @@ Shadow=0
 <a:PaperSource>15</a:PaperSource>
 <c:Symbols>
 <o:ReferenceSymbol Id="o6">
-<a:Rect>((53239,-28153), (68245,-26497))</a:Rect>
-<a:ListOfPoints>((53639,-27528),(66456,-27528))</a:ListOfPoints>
+<a:ModificationDate>1543226897</a:ModificationDate>
+<a:CenterTextOffset>(-60, 600)</a:CenterTextOffset>
+<a:SourceTextOffset>(330, -1020)</a:SourceTextOffset>
+<a:Rect>((55402,-29268), (71369,-26137))</a:Rect>
+<a:ListOfPoints>((55802,-27768),(70969,-27768))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
 <a:LineColor>11184640</a:LineColor>
@@ -1838,8 +1841,9 @@ SOURCE 0 Arial,8,N</a:FontList>
 </c:Object>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o10">
-<a:Rect>((69603,-41129), (84423,-29348))</a:Rect>
-<a:ListOfPoints>((77013,-40729),(77013,-29748))</a:ListOfPoints>
+<a:ModificationDate>1543226884</a:ModificationDate>
+<a:Rect>((74703,-41369), (89523,-29588))</a:Rect>
+<a:ListOfPoints>((82113,-40969),(82113,-29988))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
 <a:LineColor>11184640</a:LineColor>
@@ -1895,8 +1899,11 @@ SOURCE 0 Arial,8,N</a:FontList>
 </c:Object>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o19">
-<a:Rect>((53239,-17175), (67695,-15519))</a:Rect>
-<a:ListOfPoints>((53639,-16550),(66675,-16550))</a:ListOfPoints>
+<a:ModificationDate>1543226907</a:ModificationDate>
+<a:CenterTextOffset>(-240, 420)</a:CenterTextOffset>
+<a:SourceTextOffset>(870, -1080)</a:SourceTextOffset>
+<a:Rect>((55402,-18229), (70988,-15218))</a:Rect>
+<a:ListOfPoints>((55802,-16669),(70588,-16669))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
 <a:LineColor>11184640</a:LineColor>
@@ -1952,8 +1959,10 @@ SOURCE 0 Arial,8,N</a:FontList>
 </c:Object>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o28">
-<a:Rect>((13241,-15164), (29897,-13173))</a:Rect>
-<a:ListOfPoints>((29497,-14204),(13641,-14204))</a:ListOfPoints>
+<a:ModificationDate>1543226927</a:ModificationDate>
+<a:SourceTextOffset>(-900, -1020)</a:SourceTextOffset>
+<a:Rect>((14940,-15705), (27734,-13174))</a:Rect>
+<a:ListOfPoints>((27334,-14205),(15340,-14205))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
 <a:LineColor>11184640</a:LineColor>
@@ -1971,7 +1980,7 @@ SOURCE 0 Arial,8,N</a:FontList>
 </c:Object>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o31">
-<a:Rect>((-3474,5146), (30688,24423))</a:Rect>
+<a:Rect>((-3474,5146), (30688,24330))</a:Rect>
 <a:ListOfPoints>((30288,23417),(4176,23417),(4176,5546))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
@@ -2028,8 +2037,10 @@ SOURCE 0 Arial,8,N</a:FontList>
 </c:Object>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o37">
-<a:Rect>((7236,-27700), (29897,-26044))</a:Rect>
-<a:ListOfPoints>((7636,-27075),(29497,-27075))</a:ListOfPoints>
+<a:ModificationDate>1543226920</a:ModificationDate>
+<a:SourceTextOffset>(600, -660)</a:SourceTextOffset>
+<a:Rect>((9327,-28215), (27734,-26044))</a:Rect>
+<a:ListOfPoints>((9727,-27075),(27334,-27075))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
 <a:LineColor>11184640</a:LineColor>
@@ -2047,8 +2058,10 @@ SOURCE 0 Arial,8,N</a:FontList>
 </c:Object>
 </o:ReferenceSymbol>
 <o:ReferenceSymbol Id="o40">
-<a:Rect>((-28686,-27745), (-9080,-25754))</a:Rect>
-<a:ListOfPoints>((-9480,-26785),(-28286,-26785))</a:ListOfPoints>
+<a:ModificationDate>1543226923</a:ModificationDate>
+<a:SourceTextOffset>(-660, -960)</a:SourceTextOffset>
+<a:Rect>((-25195,-28226), (-11171,-25755))</a:Rect>
+<a:ListOfPoints>((-11571,-26786),(-24795,-26786))</a:ListOfPoints>
 <a:CornerStyle>1</a:CornerStyle>
 <a:ArrowStyle>1</a:ArrowStyle>
 <a:LineColor>11184640</a:LineColor>
@@ -2112,8 +2125,9 @@ LABL 0 Arial,8,N</a:FontList>
 </c:Object>
 </o:TableSymbol>
 <o:TableSymbol Id="o8">
+<a:ModificationDate>1543226884</a:ModificationDate>
 <a:IconMode>-1</a:IconMode>
-<a:Rect>((65869,-29748), (88157,-25309))</a:Rect>
+<a:Rect>((70969,-29988), (93257,-25549))</a:Rect>
 <a:LineColor>11184640</a:LineColor>
 <a:FillColor>16777136</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -2204,8 +2218,9 @@ LABL 0 Arial,8,N</a:FontList>
 </c:Object>
 </o:TableSymbol>
 <o:TableSymbol Id="o11">
+<a:ModificationDate>1543226884</a:ModificationDate>
 <a:IconMode>-1</a:IconMode>
-<a:Rect>((65638,-45648), (88790,-40250))</a:Rect>
+<a:Rect>((70738,-45888), (93890,-40490))</a:Rect>
 <a:LineColor>11184640</a:LineColor>
 <a:FillColor>16777136</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -2250,8 +2265,9 @@ LABL 0 Arial,8,N</a:FontList>
 </c:Object>
 </o:TableSymbol>
 <o:TableSymbol Id="o20">
+<a:ModificationDate>1543226900</a:ModificationDate>
 <a:IconMode>-1</a:IconMode>
-<a:Rect>((66088,-18549), (85038,-14550))</a:Rect>
+<a:Rect>((70588,-18669), (89538,-14670))</a:Rect>
 <a:LineColor>11184640</a:LineColor>
 <a:FillColor>16777136</a:FillColor>
 <a:ShadowColor>12632256</a:ShadowColor>
@@ -4096,14 +4112,15 @@ DAT 1543226205</a:History>
 </o:Column>
 <o:Column Id="o169">
 <a:ObjectID>A1AC2181-867F-4428-A4E8-DAD6B2DF3C59</a:ObjectID>
-<a:Name>Open_Inschrijving?</a:Name>
+<a:Name>Is_Open_Inschrijving</a:Name>
 <a:Code>ATTRIBUTE_58</a:Code>
 <a:CreationDate>1543226205</a:CreationDate>
 <a:Creator>markv</a:Creator>
-<a:ModificationDate>1543226205</a:ModificationDate>
+<a:ModificationDate>1543226749</a:ModificationDate>
 <a:Modifier>markv</a:Modifier>
 <a:History>ORG {2A0130AD-8EFD-4438-96A7-DA8E67C9545F}
-DAT 1543226205</a:History>
+DAT 1543226205
+ATT NAME</a:History>
 <a:DataType>bit</a:DataType>
 <a:Column.Mandatory>1</a:Column.Mandatory>
 <c:Domain>
@@ -5312,12 +5329,12 @@ ATT MAND</a:History>
 <a:Code>CONCEPTUALDATAMODEL</a:Code>
 <a:CreationDate>1543226205</a:CreationDate>
 <a:Creator>markv</a:Creator>
-<a:ModificationDate>1543226205</a:ModificationDate>
+<a:ModificationDate>1543226714</a:ModificationDate>
 <a:Modifier>markv</a:Modifier>
 <a:TargetModelURL>file:///C|/Users/markv/Documents/GitHub/ISE-project/CDM + PDM/ConceptualDataModel.cdm</a:TargetModelURL>
 <a:TargetModelID>A3CE6382-079F-44F1-AF7E-90CD5F7EE393</a:TargetModelID>
 <a:TargetModelClassID>1E597170-9350-11D1-AB3C-0020AF71E433</a:TargetModelClassID>
-<a:TargetModelLastModificationDate>1543226205</a:TargetModelLastModificationDate>
+<a:TargetModelLastModificationDate>1543226714</a:TargetModelLastModificationDate>
 <c:SessionShortcuts>
 <o:Shortcut Ref="o3"/>
 </c:SessionShortcuts>
