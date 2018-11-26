@@ -14,93 +14,93 @@ GO
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('ADVISEUR') and o.name = 'FK_ADVISEUR_ADVISEUR__ORGANISA')
+   where r.fkeyid = object_id('ADVISEUR') and o.name = 'FK_ADVISEUR_ref_ORGANISATIE')
 alter table ADVISEUR
-   drop constraint FK_ADVISEUR_ADVISEUR__ORGANISA
+   drop constraint FK_ADVISEUR_ref_ORGANISATIE
 go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('BESCHIKBAARHEID') and o.name = 'FK_BESCHIKB_BESCHIKBB_WORKSHOP')
+   where r.fkeyid = object_id('BESCHIKBAARHEID') and o.name = 'FK_BESCHIKBAARHEID_ref_WORKSHOPLEIDER')
 alter table BESCHIKBAARHEID
-   drop constraint FK_BESCHIKB_BESCHIKBB_WORKSHOP
+   drop constraint FK_BESCHIKBAARHEID_ref_WORKSHOPLEIDER
 go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('CONTACTPERSOON') and o.name = 'FK_CONTACTP_CONTACTPE_ORGANISA')
+   where r.fkeyid = object_id('CONTACTPERSOON') and o.name = 'FK_CONTACTPERSOON_ref_ORGANISATIE')
 alter table CONTACTPERSOON
-   drop constraint FK_CONTACTP_CONTACTPE_ORGANISA
+   drop constraint FK_CONTACTPERSOON_ref_ORGANISATIE
 go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('DEELNEMER') and o.name = 'FK_DEELNEME_DEELNEMER_ORGANISA')
+   where r.fkeyid = object_id('DEELNEMER') and o.name = 'FK_DEELNEMER_ref_ORGANISATIE')
 alter table DEELNEMER
-   drop constraint FK_DEELNEME_DEELNEMER_ORGANISA
+   drop constraint FK_DEELNEMER_ref_ORGANISATIE
 go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('DEELNEMER') and o.name = 'FK_DEELNEME_SECTOR_VA_SECTOR')
+   where r.fkeyid = object_id('DEELNEMER') and o.name = 'FK_DEELNEMER_ref_SECTOR')
 alter table DEELNEMER
-   drop constraint FK_DEELNEME_SECTOR_VA_SECTOR
+   drop constraint FK_DEELNEMER_ref_SECTOR
 go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('DEELNEMER_IN_WORKSHOP') and o.name = 'FK_DEELNEME_DEELNEMER_DEELNEME')
+   where r.fkeyid = object_id('DEELNEMER_IN_WORKSHOP') and o.name = 'FK_DEELNEMER_IN_WORKSHOP_ref_DEELNEMER')
 alter table DEELNEMER_IN_WORKSHOP
-   drop constraint FK_DEELNEME_DEELNEMER_DEELNEME
+   drop constraint FK_DEELNEMER_IN_WORKSHOP_ref_DEELNEMER
 go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('DEELNEMER_IN_WORKSHOP') and o.name = 'FK_DEELNEME_WORKSHOP__WORKSHOP')
+   where r.fkeyid = object_id('DEELNEMER_IN_WORKSHOP') and o.name = 'FK_DEELNEMER_IN_WORKSHOP_ref_WORKSHOP')
 alter table DEELNEMER_IN_WORKSHOP
-   drop constraint FK_DEELNEME_WORKSHOP__WORKSHOP
+   drop constraint FK_DEELNEMER_IN_WORKSHOP_ref_WORKSHOP
 go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('WORKSHOP') and o.name = 'FK_WORKSHOP_ADVISEUR__ADVISEUR')
+   where r.fkeyid = object_id('WORKSHOP') and o.name = 'FK_WORKSHOP_ref_ADVISEUR')
 alter table WORKSHOP
-   drop constraint FK_WORKSHOP_ADVISEUR__ADVISEUR
+   drop constraint FK_WORKSHOP_ref_ADVISEUR
 go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('WORKSHOP') and o.name = 'FK_WORKSHOP_CONTACTPE_CONTACTP')
+   where r.fkeyid = object_id('WORKSHOP') and o.name = 'FK_WORKSHOP_ref_CONTACTPERSOON')
 alter table WORKSHOP
-   drop constraint FK_WORKSHOP_CONTACTPE_CONTACTP
+   drop constraint FK_WORKSHOP_ref_CONTACTPERSOON
 go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('WORKSHOP') and o.name = 'FK_WORKSHOP_MODULE_VA_MODULE')
+   where r.fkeyid = object_id('WORKSHOP') and o.name = 'FK_WORKSHOP_ref_MODULE')
 alter table WORKSHOP
-   drop constraint FK_WORKSHOP_MODULE_VA_MODULE
+   drop constraint FK_WORKSHOP_ref_MODULE
 go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('WORKSHOP') and o.name = 'FK_WORKSHOP_ORGANISAT_ORGANISA')
+   where r.fkeyid = object_id('WORKSHOP') and o.name = 'FK_WORKSHOP_ref_ORGANISATIE')
 alter table WORKSHOP
-   drop constraint FK_WORKSHOP_ORGANISAT_ORGANISA
+   drop constraint FK_WORKSHOP_ref_ORGANISATIE
 go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('WORKSHOP') and o.name = 'FK_WORKSHOP_WORKSHOPL_WORKSHOP')
+   where r.fkeyid = object_id('WORKSHOP') and o.name = 'FK_WORKSHOP_ref_WORKSHOPLEIDER')
 alter table WORKSHOP
-   drop constraint FK_WORKSHOP_WORKSHOPL_WORKSHOP
+   drop constraint FK_WORKSHOP_ref_WORKSHOPLEIDER
 go
 
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
-   where r.fkeyid = object_id('WORKSHOP') and o.name = 'FK_WORKSHOP_WORKSHOP__SECTOR')
+   where r.fkeyid = object_id('WORKSHOP') and o.name = 'FK_WORKSHOP_ref_SECTOR')
 alter table WORKSHOP
-   drop constraint FK_WORKSHOP_WORKSHOP__SECTOR
+   drop constraint FK_WORKSHOP_ref_SECTOR
 go
 
 if exists (select 1
