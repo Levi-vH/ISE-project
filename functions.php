@@ -24,3 +24,20 @@ function connectToDB(){
     }
     return $handler;
 }
+
+
+function selectBox($naamWaarde, $tabelnaam, $kolomnaam){
+    $handler = connectToDB();
+    $select = '<select class="form-control" name="'.$naamWaarde.'">';
+    $sql ="SELECT $kolomnaam FROM $tabelnaam ORDER BY $kolomnaam";
+
+    $query = $handler->prepare($sql);
+    $query->execute();
+
+    while($resultaat = $query->fetch()){
+        $select.= '<option value="'. $resultaat[$kolomnaam] . '">'. $resultaat[$kolomnaam] . '</option>';
+    }
+    $select .= '</select>';
+
+    return $select;
+}

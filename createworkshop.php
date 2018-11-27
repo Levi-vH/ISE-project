@@ -44,21 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 //mssql_free_statement($sql);
-function selectBox($naamWaarde, $tabelnaam, $kolomnaam){
-    $handler = connectToDB();
-    $select = '<select name="'.$naamWaarde.'">';
-    $sql ="SELECT $kolomnaam FROM $tabelnaam ORDER BY $kolomnaam";
-
-    $query = $handler->prepare($sql);
-    $query->execute();
-
-    while($resultaat = $query->fetch()){
-        $select.= '<option value="'. $resultaat[$kolomnaam] . '">'. $resultaat[$kolomnaam] . '</option>';
-    }
-    $select .= '</select><br>';
-
-    return $select;
-}
 
 ?>
 <div class="container">
@@ -92,7 +77,7 @@ function selectBox($naamWaarde, $tabelnaam, $kolomnaam){
             <label class="control-label col-sm-2" for="workshopmodule">Module:</label>
             <div class="col-sm-10">
                 <?php
-                selectBox(workshopmodule, module, modulenaam);
+               echo selectBox("workshopmodule", "module", "modulenaam");
                 ?>
             </div>
         </div>
