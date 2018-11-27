@@ -26,6 +26,22 @@ function connectToDB(){
 }
 
 
+function ModuleselectBox($naamWaarde, $tabelnaam, $kolomnamen, $kolomvalue){
+    $handler = connectToDB();
+    $select = '<select class="form-control" name="'.$naamWaarde.'">';
+    $sql ="SELECT $kolomnamen[0], $kolomnamen[1] FROM $tabelnaam";
+
+    $query = $handler->prepare($sql);
+    $query->execute();
+
+    while($resultaat = $query->fetch()){
+        $select.= '<option value="'. $resultaat[$kolomvalue] . '">Module '. $resultaat[$kolomnamen[0]] . ': ' . $resultaat[$kolomnamen[1]]. '</option>';
+    }
+    $select .= '</select>';
+
+    return $select;
+}
+
 function selectBox($naamWaarde, $tabelnaam, $kolomnaam){
     $handler = connectToDB();
     $select = '<select class="form-control" name="'.$naamWaarde.'">';
@@ -35,7 +51,7 @@ function selectBox($naamWaarde, $tabelnaam, $kolomnaam){
     $query->execute();
 
     while($resultaat = $query->fetch()){
-        $select.= '<option value="'. $resultaat[$kolomnaam] . '">'. $resultaat[$kolomnaam] . '</option>';
+        $select.= '<option value="'. $resultaat[$kolomnaam] . '">' . $resultaat[$kolomnaam] . '</option>';
     }
     $select .= '</select>';
 

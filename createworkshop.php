@@ -77,30 +77,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label col-sm-2" for="workshopmodule">Module:</label>
             <div class="col-sm-10">
                 <?php
-               echo selectBox("workshopmodule", "module", "modulenaam");
+               echo ModuleselectBox("workshopmodule", "module",array("modulenummer", "modulenaam"), "modulenummer");
                 ?>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="workshopcompany">Organisatie:</label>
             <div class="col-sm-10">
-                <select class="form-control" name="workshopcompany">
-                    <option>Selecteer organisatie...</option>
-                    <option>SBB</option>
-                    <option>NSB</option>
-                    <option>Lageschool van Arnhem en Duisburg</option>
-                </select>
+                <?php
+                echo selectBox("workshopcompany", "organisatie","organisatienaam");
+                ?>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="workshopsector">Sector:</label>
             <div class="col-sm-10">
-                <select class="form-control" name="workshopsector">
-                    <option>Selecteer sector...</option>
-                    <option>ZWS</option>
-                    <option>NSB</option>
-                    <option>BSN</option>
-                </select>
+                <?php
+                echo selectBox("workshopsector", "sector","sectornaam");
+                ?>
             </div>
         </div>
         <div class="form-group">
@@ -136,7 +130,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
             <label class="control-label col-sm-2" for="workshopleader">Workshopleider workshop:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Workshopleider" name="workshopleader">
+                <?php
+                echo selectBox("workshopleader", "workshopleider","voornaam");
+                ?>
             </div>
         </div>
         <div class="form-group">
