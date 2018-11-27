@@ -47,6 +47,7 @@ function check_input($data) {
   $data = htmlspecialchars($data);
   return $data;
 }
+
 ?>
 <div class="container">
     <h2>Maak een nieuwe workshop</h2>
@@ -147,7 +148,7 @@ function check_input($data) {
         <div class="form-group">
             <label class="control-label col-sm-2" for="workshopnotes">Opmerkingen workshop:</label>
             <div class="col-sm-10">
-                <input type="txt" class="form-control" placeholder="Opmerkingen" name="workshopnotes">
+                <input type="text" class="form-control" placeholder="Opmerkingen" name="workshopnotes">
             </div>
         </div>
         <div class="form-group">
