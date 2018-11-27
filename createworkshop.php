@@ -31,7 +31,7 @@ if( $conn === false ) {
      die( print_r( sqlsrv_errors(), true));
 }
 
-$sql = "exec proc_create_workshop(?, ?, ?, ? , ?, ?,?,?,?,?,?)";
+$sql = "exec proc_create_workshop(?, ?, ?, ? , ?, ?,?,?,?,?,?,?)";
 $params = array(1, $workshoptype, 2, "");
 
 $stmt = sqlsrv_query( $conn, $sql, $params);
