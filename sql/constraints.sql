@@ -4,6 +4,8 @@ GO
 
 --=========================================================================
 -- check if workshopstate = 'bevestigd' when WORKSHOPLEIDER_ID is not null
+-- ik denk dat het fout gaat omdat de update in de trigger dezelfde trigger nog een keer aanroept 
+-- en dan heeft status wel een waarde waardoor de raiserror 2 altijd voorkomt
 --=========================================================================
 DROP TRIGGER IF EXISTS dbo.TRG_workshop_state_bevestigd
 GO
@@ -19,33 +21,47 @@ BEGIN
 	--IF EXISTS	(SELECT STATUS FROM inserted)
 	--RETURN
 
+	SELECT *
+	FROM INSERTED
+
+	SELECT *
+	FROM DELETED
+
 	IF EXISTS  (SELECT WORKSHOPLEIDER_ID
 				FROM DELETED)
-	RETURN
+	RAISERROR ('WORKSHOP status was not changed to bevestigd automatically1', 16,1)
 
 	IF NOT EXISTS  (SELECT WORKSHOPLEIDER_ID
 					FROM DELETED)
 	BEGIN
-		IF EXISTS  (SELECT STATUS FROM DELETED)
-		BEGIN
-			IF EXISTS (SELECT STATUS FROM INSERTED)
-			RETURN
-		END
+	
+	IF EXISTS (SELECT STATUS FROM INSERTED)
+	RAISERROR ('WORKSHOP status was not changed to bevestigd automatically2', 16,1)
+
+	IF EXISTS  (SELECT STATUS FROM DELETED)
+	RAISERROR ('WORKSHOP status was not changed to bevestigd automatically3', 16,1)
 	END
 
 	IF UPDATE(WORKSHOPLEIDER_ID)
-	BEGIN
+	BEGIN 
 		IF NOT EXISTS  (SELECT WORKSHOPLEIDER_ID
 						FROM DELETED)
-		BEGIN
+		BEGIN TRY
 			UPDATE WORKSHOP
 			SET STATUS = 'bevestigd'
 			FROM WORKSHOP W INNER JOIN inserted i
 			ON W.WORKSHOP_ID = i.WORKSHOP_ID AND i.WORKSHOPLEIDER_ID IS NOT NULL
 
-		END
+			SELECT *
+			FROM WORKSHOP
+		END TRY
+
+		BEGIN CATCH
+		THROW;
+		END CATCH
+
 	END
-	ELSE RETURN
+	ELSE RAISERROR ('WORKSHOP status was not changed to bevestigd automatically4', 16,1)
 END
 GO
 
@@ -128,3 +144,4 @@ ADD CONSTRAINT CK_DeelnemerBirthdate CHECK (GEBOORTEDATUM < GETDATE())
 
 
 DELETE FROM WORKSHOP WHERE WORKSHOP_ID = 1
+
