@@ -1,11 +1,156 @@
 USE [UnitTesting SBB]
 
+EXEC tSQLt.NewTestClass 'testWorkshop';
+EXEC tSQLt.NewTestClass 'testDeelnemer';
+
 --==============================================================
 -- all tests for the workshop table constraints
 --==============================================================
 
-EXEC tSQLt.NewTestClass 'testWorkshop';
-EXEC tSQLt.NewTestClass 'testDeelnemer';
+--==============================================================
+-- tests for the check on the automatic update on status
+--==============================================================
+EXEC [tSQLt].[Run] '[testWorkshop]'
+--test with workhop_id = 1 and type = 'afgehandeld'
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 1]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 1]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
+
+	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TRG_workshop_state_bevestigd'
+
+	EXEC [tSQLt].[ExpectException] @ExpectedMessage = 'WORKSHOP status was not changed to bevestigd automatically',
+	 @ExpectedSeverity = 16, @ExpectedErrorNumber = 50000
+	
+	INSERT INTO WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'afgehandeld', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
+
+END
+GO
+
+--test with workhop_id = 1 and workshopleider_ID = '1'
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 2]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 2]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
+
+	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TRG_workshop_state_bevestigd'
+
+	EXEC [tSQLt].[ExpectNoException]
+	
+	INSERT INTO WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
+
+END
+GO
+
+--test with workhop_id = 1, workshopleider_ID = '1' and type = 'afgehandeld'
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 3]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 3]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
+
+	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TRG_workshop_state_bevestigd'
+
+	EXEC [tSQLt].[ExpectException] @ExpectedMessage = 'WORKSHOP status was not changed to bevestigd automatically',
+	 @ExpectedSeverity = 16, @ExpectedErrorNumber = 50000
+	
+	INSERT INTO WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'afgehandeld', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
+
+END
+GO
+
+--test with workhop_id = 1
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 4]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 4]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
+
+	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TRG_workshop_state_bevestigd'
+
+	EXEC [tSQLt].[ExpectnoException]
+	
+	INSERT INTO WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
+
+END
+GO
+
+--test with type = 'afgehandeld'
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 5]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 5]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
+
+	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TRG_workshop_state_bevestigd'
+
+	EXEC [tSQLt].[ExpectException] @ExpectedMessage = 'WORKSHOP status was not changed to bevestigd automatically',
+	 @ExpectedSeverity = 16, @ExpectedErrorNumber = 50000
+	
+	INSERT INTO WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'afgehandeld', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
+
+END
+GO
+
+--test with workshopleider_ID = '1'
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 6]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 6]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
+
+	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TRG_workshop_state_bevestigd'
+
+	EXEC [tSQLt].[ExpectnoException]
+	
+	INSERT INTO WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
+
+END
+GO
 
 
 --==============================================================
@@ -26,7 +171,7 @@ BEGIN
 
 	EXEC tSQLt.ExpectNoException
 	
-	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	INSERT INTO WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
 	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
 	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
 	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
@@ -306,7 +451,7 @@ BEGIN
 
 	EXEC tSQLt.ExpectnoException
 	
-	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	INSERT into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
 	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
 	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
 	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])

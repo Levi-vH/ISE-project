@@ -1,25 +1,24 @@
 USE SBBWorkshopOmgeving
 GO
 
-
 CREATE OR ALTER PROC proc_create_workshop
   (
-    @organisatienummer VARCHAR(15),
     @workshoptype VARCHAR(3),
-    @workshopdate DATETIME,
+    @workshopdate varchar(10),
     @modulenummer INT,
-    @workshopstarttime DATETIME,
-    @workshopendtime DATETIME,
-    @workshopaddress DATETIME,
+	@organisatienummer VARCHAR(15),
+	@workshopsector VARCHAR(255),
+    @workshopstarttime varchar(10),
+    @workshopendtime varchar(10),
+    @workshopaddress varchar(10),
     @workshoppostcode VARCHAR(12),
     @workshopcity VARCHAR(255),
     @workshopleader VARCHAR(100),
-    @workshopNote VARCHAR(255),
-    @workshopsector VARCHAR(255)
+    @workshopNote VARCHAR(255)
   )
 AS
   BEGIN
-
+  set nocount on
 	  /*
 
 		Create a workshop based on the given parameters

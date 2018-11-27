@@ -1,3 +1,48 @@
+<?php
+// define (empty) variables
+$workshoptype = $workshopdate = $contactinfo = $workshopmodule = $workshopcompany = $workshopsector = $starttime = $endtime =
+$workshopadress = $workshoppostcode = $workshopcity = $workshopleader = $workshopnotes = '';
+
+// The ones that do not get checked are dropdown or select.
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $workshoptype = $_POST["workshoptype"];
+    $workshopdate = $_POST["workshopdate"];
+    //$contactinfo = check_input($_POST["contactinfo"]);
+    $workshopmodule = $_POST["workshopmodule"];
+    $workshopcompany = $_POST["workshopcompany"];
+    $workshopsector = $_POST["workshopsector"];
+    $starttime = $_POST["workshopstarttime"];
+    $endtime = $_POST["workshopendtime"];
+    $workshopadress = check_input($_POST["workshopaddress"]);
+    $workshoppostcode = check_input($_POST["workshoppostcode"]);
+    $workshopcity = check_input($_POST["workshopcity"]);
+    $workshopleader = check_input($_POST["workshopleader"]);
+    $workshopnotes = check_input(@$_POST['workshopnotes']);
+
+    //Try to make connection
+    $conn = connectToDB();
+
+    //Run the stored procedure
+    $sql = "exec proc_create_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $workshoptype, PDO::PARAM_STR);
+    $stmt->bindParam(2, $workshopdate, PDO::PARAM_STR);
+    //$stmt->bindParam(3, $contactinfo, PDO::PARAM_STR);
+    $stmt->bindParam(3, $workshopmodule, PDO::PARAM_INT);
+    $stmt->bindParam(4, $workshopcompany, PDO::PARAM_INT);
+    $stmt->bindParam(5, $workshopsector, PDO::PARAM_STR);
+    $stmt->bindParam(6, $starttime, PDO::PARAM_STR);
+    $stmt->bindParam(7, $endtime, PDO::PARAM_STR);
+    $stmt->bindParam(8, $workshopadress, PDO::PARAM_STR);
+    $stmt->bindParam(9, $workshoppostcode, PDO::PARAM_STR);
+    $stmt->bindParam(10, $workshopcity, PDO::PARAM_STR);
+    $stmt->bindParam(11, $workshopleader, PDO::PARAM_STR);
+    $stmt->bindParam(12, $workshopnotes, PDO::PARAM_STR);
+    $stmt->execute();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,46 +54,10 @@
     <?php include 'header.html';  include 'functions.php'?>
 </head>
 <body>
-<?php
-// define (empty) variables
-$workshoptype = $workshopdate = $contactinfo = $workshopmodule = $workshopcompany = $workshopsector = $starttime = $endtime =
-$workshopadress = $workshoppostcode = $workshopcity = $workshopleader = $workshopnotes = '';
 
-// The ones that do not get checked are dropdown or select.
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $workshoptype = $_POST["workshoptype"];
-    $workshopdate = $_POST["workshopdate"];
-    $contactinfo = check_input($_POST["contactinfo"]);
-    $workshopmodule = $_POST["workshopmodule"];
-    $workshopcompany = $_POST["workshopcompany"];
-    $workshopsector = $_POST["workshopsector"];
-    $starttime = $_POST["starttime"];
-    $endtime = $_POST["endtime"];
-    $workshopadress = check_input($_POST["workshopaddress"]);
-    $workshoppostcode = check_input($_POST["workshoppostcode"]);
-    $workshopcity = check_input($_POST["workshopcity"]);
-    $workshopleader = check_input($_POST["workshopleader"]);
-    $workshopnotes = check_input(@$_POST['workshopnotes']);
-
-    //Try to make connection
-    //connectToDB();
-
-    //Run the stored procedure
-    $sql = "exec proc_create_workshop(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $params = array($workshoptype, $workshopdate, $contactinfo, $workshopmodule, $workshopcompany, $workshopsector, $starttime,
-        $endtime, $workshopadress, $workshoppostcode, $workshopcity, $workshopleader, $workshopnotes);
-    $stmt = sqlsrv_query( $conn, $sql, $params);
-    if( $stmt === false ) {
-        die( print_r( sqlsrv_errors(), true));
-    }
-}
-
-//mssql_free_statement($sql);
-
-?>
 <div class="container">
     <h2>Maak een nieuwe workshop</h2>
-    <form class="form-horizontal" action="/createworkshop.php">
+    <form class="form-horizontal" action="createworkshop.php" method="post">
         <div class="form-group">
             <label class="control-label col-sm-2" for="workshoptype">Type workshop:</label>
             <div class="col-sm-10">
@@ -77,8 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label col-sm-2" for="workshopmodule">Module:</label>
             <div class="col-sm-10">
                 <?php
-               //echo ModuleselectBox("workshopmodule", "module",array("modulenummer", "modulenaam"), "modulenummer");
-                echo selectBox("workshopmodule", "module",array("modulenummer", "modulenaam"), "modulenummer", array("modulenummer", "modulenaam"));
+               echo moduleselectBox("workshopmodule", "module",array("modulenummer", "modulenaam"), "modulenummer");
                 ?>
             </div>
         </div>
@@ -86,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label col-sm-2" for="workshopcompany">Organisatie:</label>
             <div class="col-sm-10">
                 <?php
-                echo selectBox("workshopcompany", "organisatie",array("organisatienaam", 'organisatienummer'), "organisatienummer", array("organisatienaam"));
+                echo OrganisatieselectBox("workshopcompany", "organisatie",array("organisatienaam", "organisatienummer"), "organisatienummer");
                 ?>
             </div>
         </div>
@@ -94,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label col-sm-2" for="workshopsector">Sector:</label>
             <div class="col-sm-10">
                 <?php
-                echo selectBox("workshopsector", "sector",array("sectornaam"), "sectornaam", array("sectornaam"));
+                echo selectBox("workshopsector", "sector","sectornaam");
                 ?>
             </div>
         </div>
@@ -132,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label col-sm-2" for="workshopleader">Workshopleider workshop:</label>
             <div class="col-sm-10">
                 <?php
-                echo selectBox("workshopleader", "workshopleider",array("workshopleider_id","voornaam","achternaam"), 'workshopleider_id', array("voornaam", "achternaam") );
+                echo WorkshopleiderselectBox("workshopleader", "workshopleider",array("voornaam", "achternaam", "workshopleider_id"), "workshopleider_id");
                 ?>
             </div>
         </div>

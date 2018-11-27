@@ -194,7 +194,7 @@ go
 /* Table: BESCHIKBAARHEID                                       */
 /*==============================================================*/
 create table BESCHIKBAARHEID (
-   WORKSHOPLEIDER_ID    int IDENTITY         not null,
+   WORKSHOPLEIDER_ID    int			         not null,
    KWARTAAL             char(1)              not null,
    JAAR                 smallint             not null,
    AANTAL_UUR           smallint             not null,
