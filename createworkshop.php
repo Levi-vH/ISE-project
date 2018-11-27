@@ -6,46 +6,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <?php include 'header.html';  ?>
+    <?php include 'header.html';  include 'functions.php'?>
 </head>
 <body>
 <?php
-// define empty variables
-$contactinfo = $workshopadress = $workshoppostcode = $workshopcity = $workshopleader = $workshopnotes = "";
+// define (empty) variables
+$workshoptype = $workshopdate = $contactinfo = $workshopmodule = $workshopcompany = $workshopsector = $starttime = $endtime =
+$workshopadress = $workshoppostcode = $workshopcity = $workshopleader = $workshopnotes = '';
 
+// The ones that do not get checked are dropdown or select.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $workshoptype = $_POST["workshoptype"];
+    $workshopdate = $_POST["workshopdate"];
     $contactinfo = check_input($_POST["contactinfo"]);
+    $workshopmodule = $_POST["workshopmodule"];
+    $workshopcompany = $_POST["workshopcompany"];
+    $workshopsector = $_POST["workshopsector"];
+    $starttime = $_POST["starttime"];
+    $endtime = $_POST["endtime"];
     $workshopadress = check_input($_POST["workshopaddress"]);
     $workshoppostcode = check_input($_POST["workshoppostcode"]);
     $workshopcity = check_input($_POST["workshopcity"]);
     $workshopleader = check_input($_POST["workshopleader"]);
     $workshopnotes = check_input(@$_POST['workshopnotes']);
-}
-$host = 'localhost';
-$user = 'iseprojectuser';
-$pass = 'iseprojectww';
 
-$connectionInfo = array( "Database"=>"SQL", "UID"=>"iseprojectuser", "PWD"=>"iseprojectww" );
-$conn = sqlsrv_connect( $host, $connectionInfo);
-if( $conn === false ) {
-     die( print_r( sqlsrv_errors(), true));
-}
+    //Try to make connection
+    //connectToDB();
 
-$sql = "exec proc_create_workshop(?, ?, ?, ? , ?, ?,?,?,?,?,?)";
-$params = array(1, $workshoptype, 2, "");
-
-$stmt = sqlsrv_query( $conn, $sql, $params);
-if( $stmt === false ) {
-     die( print_r( sqlsrv_errors(), true));
+    //Run the stored procedure
+    $sql = "exec proc_create_workshop(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $params = array($workshoptype, $workshopdate, $contactinfo, $workshopmodule, $workshopcompany, $workshopsector, $starttime,
+        $endtime, $workshopadress, $workshoppostcode, $workshopcity, $workshopleader, $workshopnotes);
+    $stmt = sqlsrv_query( $conn, $sql, $params);
+    if( $stmt === false ) {
+        die( print_r( sqlsrv_errors(), true));
+    }
 }
 
-mssql_free_statement($proc);
+//mssql_free_statement($sql);
+function selectBox($naamWaarde, $tabelnaam, $kolomnaam){
 
-function check_input($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  return $data;
+    $handler = connectToDB();
+    $select = '<select name="'.$naamWaarde.'">';
+    $sql ="SELECT $kolomnaam FROM $tabelnaam ORDER BY $kolomnaam";
+
+    $query = $handler->prepare($sql);
+    $query->execute();
+
+    while($resultaat = $query->fetch()){
+        $select.= '<option value="'. $resultaat[$kolomnaam] . '">'. $resultaat[$kolomnaam] . '</option>';
+    }
+    $select .= '</select><br>';
+
+    return $select;
 }
 
 ?>
@@ -79,12 +92,9 @@ function check_input($data) {
         <div class="form-group">
             <label class="control-label col-sm-2" for="workshopmodule">Module:</label>
             <div class="col-sm-10">
-                <select class="form-control" name="workshopmodule">
-                    <option>Selecteer module...</option>
-                    <option>Module 1: Matching en Voorbereiding</option>
-                    <option>Module 2: Begeleiding tijdens BPV</option>
-                    <option>Module 3: Beoordeling</option>
-                </select>
+                <?php
+                selectBox(workshopmodule, module, modulenaam);
+                ?>
             </div>
         </div>
         <div class="form-group">
