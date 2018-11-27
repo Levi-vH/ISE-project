@@ -8,16 +8,19 @@ function check_input($data)
     return $data;
 }
 
-function connectToDB() {
-    $host = '(local)';
-    $user = "iseprojectuser";
-    $pass = "iseprojectww";
-    $db = "SBBWorkshopOmgeving";
+function connectToDB(){
+    $hostnaam = '(local)';
+    $dbnaam ='SBBWorkshopOmgeving';
+    $username = 'iseprojectuser';
+    $wachtwoord = 'iseprojectww';
 
-    $connectionInfo = array("Database" => $db, "UID" => $user, "PWD" => $pass);
-    $conn = sqlsrv_connect($host, $connectionInfo);
-    if ($conn === false) {
-        die(print_r(sqlsrv_errors(), true));
+    try {
+        $handler = new PDO("sqlsrv:Server=$hostnaam; Database=$dbnaam; ConnectionPooling=0", "$username", "$wachtwoord");
+
+        $handler->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+    }catch (PDOException $e){
+        echo "Er ging iets mis met de database.<br>";
+        echo "De melding is {$e->getMessage()}<br><br>";
     }
-    return $conn;
+    return $handler;
 }

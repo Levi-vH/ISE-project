@@ -43,14 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-<<<<<<< HEAD
 //mssql_free_statement($sql);
 function selectBox($naamWaarde, $tabelnaam, $kolomnaam){
-=======
-$sql = "exec proc_create_workshop(?, ?, ?, ? , ?, ?,?,?,?,?,?,?)";
-$params = array(1, $workshoptype, 2, "");
->>>>>>> 8b680ee76efa9fa50869707136675a534476c2ea
-
     $handler = connectToDB();
     $select = '<select name="'.$naamWaarde.'">';
     $sql ="SELECT $kolomnaam FROM $tabelnaam ORDER BY $kolomnaam";
