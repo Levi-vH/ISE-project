@@ -2,7 +2,7 @@ USE SBBWorkshopOmgeving
 GO
 
 
-CREATE PROC proc_create_workshop
+CREATE OR ALTER PROC proc_create_workshop
   (
     @organisatienummer VARCHAR(15),
     @workshoptype VARCHAR(3),
