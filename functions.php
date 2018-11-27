@@ -27,7 +27,7 @@ function connectToDB(){
 
 
 
-function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayColumns){
+function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayColumns, $order){
     $handler = connectToDB();
     $select = '<select class="form-control" name="'.$naamWaarde.'">';
 
@@ -37,7 +37,7 @@ function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayCol
         $kolomString .= ',' . $kolommen[$i];
     }
 
-    $sql ="SELECT $kolomString FROM $tabelnaam";
+    $sql ="SELECT $kolomString FROM $tabelnaam ORDER BY $order";
 
     $query = $handler->prepare($sql);
     $query->execute();
