@@ -139,10 +139,10 @@ FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID]
 INSERT INTO [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID] (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
 SELECT WORKSHOPLEIDER_ID,
-RAND() AS [quarter], -- quarter/kwartaal
-RAND() AS [year], -- year/jaar
-RAND() AS [hours] -- amount of hours/aantal uur
-FROM WORKSHOPLEIDER
+FLOOR(RAND(CHECKSUM(NEWID()))*(10-7+1)+1) AS [quarter], -- quarter/kwartaal
+FLOOR(RAND(CHECKSUM(NEWID()))*(10-5+1)+2020) AS [year], -- year/jaar
+FLOOR(RAND(CHECKSUM(NEWID()))*(10+20)+30) AS [hours] -- amount of hours/aantal uur
+FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER]
 go
 /*
 SELECT *
