@@ -26,34 +26,52 @@ function connectToDB(){
 }
 
 
-function ModuleselectBox($naamWaarde, $tabelnaam, $kolomnamen, $kolomvalue){
+
+function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayColumns){
     $handler = connectToDB();
     $select = '<select class="form-control" name="'.$naamWaarde.'">';
-    $sql ="SELECT $kolomnamen[0], $kolomnamen[1] FROM $tabelnaam";
+
+    $kolomString = $kolommen[0];
+
+    for($i = 1; $i < sizeof($kolommen); $i++){
+        $kolomString .= ',' . $kolommen[$i];
+    }
+
+    $sql ="SELECT $kolomString FROM $tabelnaam";
 
     $query = $handler->prepare($sql);
     $query->execute();
 
-    while($resultaat = $query->fetch()){
-        $select.= '<option value="'. $resultaat[$kolomvalue] . '">Module '. $resultaat[$kolomnamen[0]] . ': ' . $resultaat[$kolomnamen[1]]. '</option>';
-    }
+    while($resultaat = $query->fetch(PDO::FETCH_ASSOC)){
+
+        $displayString = '';
+
+        if($kolommen == $displayColumns){
+
+            foreach($resultaat as $row){
+                    $displayString .= $row . ' ';
+                }
+        }else{
+
+            foreach (array_keys($resultaat) as $column){
+                if(in_array($column, $displayColumns)){
+                    $displayString .= $resultaat[$column] .  ' ';
+                }
+            }
+        }
+
+        $select.= '<option value="'. $resultaat[$optionvalue] . '">' . $displayString . '</option>';
+
+        }
+
     $select .= '</select>';
 
     return $select;
 }
 
-function selectBox($naamWaarde, $tabelnaam, $kolomnaam){
-    $handler = connectToDB();
-    $select = '<select class="form-control" name="'.$naamWaarde.'">';
-    $sql ="SELECT $kolomnaam FROM $tabelnaam ORDER BY $kolomnaam";
 
-    $query = $handler->prepare($sql);
-    $query->execute();
-
-    while($resultaat = $query->fetch()){
-        $select.= '<option value="'. $resultaat[$kolomnaam] . '">' . $resultaat[$kolomnaam] . '</option>';
-    }
-    $select .= '</select>';
-
-    return $select;
+function pre_r($input){
+    echo '<pre>';
+    print_r($input);
+    echo '</pre>';
 }

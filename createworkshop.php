@@ -77,7 +77,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label col-sm-2" for="workshopmodule">Module:</label>
             <div class="col-sm-10">
                 <?php
-               echo ModuleselectBox("workshopmodule", "module",array("modulenummer", "modulenaam"), "modulenummer");
+               //echo ModuleselectBox("workshopmodule", "module",array("modulenummer", "modulenaam"), "modulenummer");
+                echo selectBox("workshopmodule", "module",array("modulenummer", "modulenaam"), "modulenummer", array("modulenummer", "modulenaam"));
                 ?>
             </div>
         </div>
@@ -85,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label col-sm-2" for="workshopcompany">Organisatie:</label>
             <div class="col-sm-10">
                 <?php
-                echo selectBox("workshopcompany", "organisatie","organisatienaam");
+                echo selectBox("workshopcompany", "organisatie",array("organisatienaam", 'organisatienummer'), "organisatienummer", array("organisatienaam"));
                 ?>
             </div>
         </div>
@@ -93,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label col-sm-2" for="workshopsector">Sector:</label>
             <div class="col-sm-10">
                 <?php
-                echo selectBox("workshopsector", "sector","sectornaam");
+                echo selectBox("workshopsector", "sector",array("sectornaam"), "sectornaam", array("sectornaam"));
                 ?>
             </div>
         </div>
@@ -131,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label col-sm-2" for="workshopleader">Workshopleider workshop:</label>
             <div class="col-sm-10">
                 <?php
-                echo selectBox("workshopleader", "workshopleider","voornaam");
+                echo selectBox("workshopleader", "workshopleider",array("workshopleider_id","voornaam","achternaam"), 'workshopleider_id', array("voornaam", "achternaam") );
                 ?>
             </div>
         </div>
