@@ -179,10 +179,10 @@ go
 create table ADVISEUR (
    ADVISEUR_ID          int IDENTITY         not null,
    ORGANISATIENUMMER    varchar(15)          not null,
-   VOORNAAM				varchar(256)         not null,
-   ACHTERNAAM			varchar(256)         not null,
-   TELEFOONNUMMER       varchar(256)         null,
-   EMAIL                varchar(256)         null,
+   VOORNAAM				varchar(255)         not null,
+   ACHTERNAAM			varchar(255)         not null,
+   TELEFOONNUMMER       varchar(255)         null,
+   EMAIL                varchar(255)         null,
    constraint PK_ADVISEUR primary key (ADVISEUR_ID)
 )
 go
@@ -205,10 +205,10 @@ go
 create table CONTACTPERSOON (
    CONTACTPERSOON_ID    int IDENTITY         not null,
    ORGANISATIENUMMER    varchar(15)          not null,
-   VOORNAAM             varchar(256)         not null,
-   ACHTERNAAM           varchar(256)         not null,
-   TELEFOONNUMMER       varchar(256)         null,
-   EMAIL                varchar(256)         null,
+   VOORNAAM             varchar(255)         not null,
+   ACHTERNAAM           varchar(255)         not null,
+   TELEFOONNUMMER       varchar(255)         null,
+   EMAIL                varchar(255)         null,
    constraint PK_CONTACTPERSOON primary key (CONTACTPERSOON_ID)
 )
 go
@@ -218,19 +218,19 @@ go
 /*==============================================================*/
 create table DEELNEMER (
    DEELNEMER_ID					int IDENTITY         not null,
-   SECTOR_NAAM					varchar(256)         not null,
+   SECTORNAAM					varchar(255)         not null,
    ORGANISATIENUMMER			varchar(15)          null,
    AANHEF						varchar(4)           not null,
-   VOORNAAM						varchar(256)         not null,
-   ACHTERNAAM					varchar(256)         not null,
+   VOORNAAM						varchar(255)         not null,
+   ACHTERNAAM					varchar(255)         not null,
    GEBOORTEDATUM				datetime             not null,
-   EMAIL						varchar(256)         not null,
-   TELEFOONNUMMER				varchar(256)         not null,
+   EMAIL						varchar(255)         not null,
+   TELEFOONNUMMER				varchar(255)         not null,
    OPLEIDINGSNIVEAU				varchar(11)          not null,
-   ORGANISATIE_VESTIGINGSPLAATS	varchar(256)         not null,
+   ORGANISATIE_VESTIGINGSPLAATS	varchar(255)         not null,
    IS_OPEN_INSCHRIJVING         bit                  not null,
-   GEWENST_BEGELEIDINGSNIVEAU	varchar(256)         null,
-   FUNCTIENAAM					varchar(256)         null,
+   GEWENST_BEGELEIDINGSNIVEAU	varchar(255)         null,
+   FUNCTIENAAM					varchar(255)         null,
    constraint PK_DEELNEMER primary key (DEELNEMER_ID)
 )
 go
@@ -251,9 +251,9 @@ go
 /* Table: MODULE                                                */
 /*==============================================================*/
 create table MODULE (
-   MODULE_NUMMER       int                  not null,
-   MODULE_NAAM         varchar(256)         not null,
-   constraint PK_MODULE primary key (MODULE_NUMMER)
+   MODULENUMMER       int                  not null,
+   MODULENAAM         varchar(255)         not null,
+   constraint PK_MODULE primary key (MODULENUMMER)
 )
 go
 
@@ -261,8 +261,8 @@ go
 /* Table: ORGANISATIE                                           */
 /*==============================================================*/
 create table ORGANISATIE (
-   ORGANISATIENUMMER    varchar(15)          not null,
-   ORGANIATIENAAM       varchar(256)         null,
+   ORGANISATIENUMMER     varchar(15)          not null,
+   ORGANISATIENAAM       varchar(255)         null,
    constraint PK_ORGANISATIE primary key (ORGANISATIENUMMER)
 )
 go
@@ -271,8 +271,8 @@ go
 /* Table: SECTOR                                                */
 /*==============================================================*/
 create table SECTOR (
-   SECTOR_NAAM          varchar(256)         not null,
-   constraint PK_SECTOR primary key (SECTOR_NAAM)
+   SECTORNAAM          varchar(255)         not null,
+   constraint PK_SECTOR primary key (SECTORNAAM)
 )
 go
 
@@ -284,17 +284,16 @@ create table WORKSHOP (
    WORKSHOPLEIDER_ID				int                  null,
    CONTACTPERSOON_ID				int                  null,
    ORGANISATIENUMMER				varchar(15)          null,
-   MODULE_NUMMER					int                  null,
+   MODULENUMMER						int                  null,
    ADVISEUR_ID						int                  null,
-   SECTOR_NAAM						varchar(256)         null,
+   SECTORNAAM						varchar(255)         null,
    DATUM							datetime             null,
    STARTTIJD						datetime             null,
    EINDTIJD							datetime             null,
-   HUISNUMMER						varchar(8)           null,
-   STRAATNAAM						varchar(256)         null,
+   ADRES							varchar(255)         null,
    POSTCODE							varchar(12)          null,
-   PLAATSNAAM						varchar(256)         null,
-   STATUS							varchar(256)         null,
+   PLAATSNAAM						varchar(255)         null,
+   STATUS							varchar(255)         null,
    OPMERKING						varchar(255)         null,
    TYPE								varchar(3)           null,
    VERWERKT_BREIN					datetime             null,
@@ -312,8 +311,9 @@ go
 /*==============================================================*/
 create table WORKSHOPLEIDER (
    WORKSHOPLEIDER_ID    int IDENTITY         not null,
-   VOORNAAM				varchar(256)         not null,
-   ACHTERNAAM			varchar(256)         not null,
+   VOORNAAM				varchar(255)         not null,
+   ACHTERNAAM			varchar(255)         not null,
+   TOEVOEGING			tinyint				 null,
    constraint PK_WORKSHOPLEIDER primary key (WORKSHOPLEIDER_ID)
 )
 go
@@ -339,8 +339,8 @@ alter table DEELNEMER
 go
 
 alter table DEELNEMER
-   add constraint FK_DEELNEMER_ref_SECTOR foreign key (SECTOR_NAAM)
-      references SECTOR (SECTOR_NAAM)
+   add constraint FK_DEELNEMER_ref_SECTOR foreign key (SECTORNAAM)
+      references SECTOR (SECTORNAAM)
 go
 
 alter table DEELNEMER_IN_WORKSHOP
@@ -364,8 +364,8 @@ alter table WORKSHOP
 go
 
 alter table WORKSHOP
-   add constraint FK_WORKSHOP_ref_MODULE foreign key (MODULE_NUMMER)
-      references MODULE (MODULE_NUMMER)
+   add constraint FK_WORKSHOP_ref_MODULE foreign key (MODULENUMMER)
+      references MODULE (MODULENUMMER)
 go
 
 alter table WORKSHOP
@@ -379,6 +379,6 @@ alter table WORKSHOP
 go
 
 alter table WORKSHOP
-   add constraint FK_WORKSHOP_ref_SECTOR foreign key (SECTOR_NAAM)
-      references SECTOR (SECTOR_NAAM)
+   add constraint FK_WORKSHOP_ref_SECTOR foreign key (SECTORNAAM)
+      references SECTOR (SECTORNAAM)
 go
