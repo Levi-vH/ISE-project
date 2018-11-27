@@ -3,6 +3,9 @@
 /* Created on:     26-11-2018 10:42:20                          */
 /*==============================================================*/
 
+USE master
+GO
+
 DROP DATABASE IF EXISTS SBBWorkshopOmgeving
 GO
 
