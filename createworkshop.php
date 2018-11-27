@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <?php include 'header.html';  include 'functions.php'?>
+    <?php include 'header.html';  ?>
 </head>
 <body>
 <?php
@@ -43,13 +43,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-<<<<<<< HEAD
 //mssql_free_statement($sql);
 function selectBox($naamWaarde, $tabelnaam, $kolomnaam){
-=======
+
 $sql = "exec proc_create_workshop(?, ?, ?, ? , ?, ?,?,?,?,?,?,?)";
 $params = array(1, $workshoptype, 2, "");
->>>>>>> 8b680ee76efa9fa50869707136675a534476c2ea
 
     $handler = connectToDB();
     $select = '<select name="'.$naamWaarde.'">';
@@ -97,9 +95,12 @@ $params = array(1, $workshoptype, 2, "");
         <div class="form-group">
             <label class="control-label col-sm-2" for="workshopmodule">Module:</label>
             <div class="col-sm-10">
-                <?php
-                selectBox(workshopmodule, module, modulenaam);
-                ?>
+                <select class="form-control" name="workshopmodule">
+                    <option>Selecteer module...</option>
+                    <option>Module 1: Matching en Voorbereiding</option>
+                    <option>Module 2: Begeleiding tijdens BPV</option>
+                    <option>Module 3: Beoordeling</option>
+                </select>
             </div>
         </div>
         <div class="form-group">
