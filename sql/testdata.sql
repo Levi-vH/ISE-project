@@ -174,17 +174,17 @@ FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER]
 ;WITH orgnum AS -- organizationnumber/organisatienummer
 (
-SELECT TOP 300 ORGANISATIENUMMER, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
+SELECT TOP 250 ORGANISATIENUMMER, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
 FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
 ),
-fname AS -- firstname + honorific + sectorname/voornaam + aanhef + sectornaam
+fname_hon_sector_educ AS -- firstname + honorific + sectorname + education/voornaam + aanhef + sectornaam + opleidingsniveau
 (
-SELECT TOP 300 FirstName, CAST(RAND(CHECKSUM(NEWID()))*2 AS INT) randomhonorific, SECTORNAAM, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
+SELECT TOP 250 FirstName, CAST(RAND(CHECKSUM(NEWID()))*2 AS INT) randomhonorific, SECTORNAAM, CAST(RAND(CHECKSUM(NEWID()))*2 AS INT) randomeducation, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
 FROM [AdventureWorksDW2014].[dbo].[DimCustomer], [SBBWorkshopOmgeving].[dbo].[SECTOR]
 ),
-lname_email AS -- lastname + email/achternaam + email
+lname_email_enroll_guid AS -- lastname + email + is open enrollment + preferred guidance level/achternaam + email + is open inschrijving + gewenst begeleidingsniveau
 (
-SELECT TOP 300 LastName, CAST(RAND(CHECKSUM(NEWID()))*2 AS INT) randomemail, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
+SELECT TOP 250 LastName, CAST(RAND(CHECKSUM(NEWID()))*2 AS INT) randomemail, CAST(RAND(CHECKSUM(NEWID()))*2 AS INT) randomenrollment, CAST(RAND(CHECKSUM(NEWID()))*2 AS INT) randomguidance, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
 FROM [AdventureWorksDW2014].[dbo].[DimCustomer]
 ),
 bdate AS -- birthdate/geboortedatum
@@ -193,7 +193,7 @@ SELECT 1 AS id, CAST(DATEADD(DAY, RAND(CHECKSUM(NEWID())) * DATEDIFF(DAY, '1950-
 UNION ALL
 SELECT id + 1, CAST(DATEADD(DAY, RAND(CHECKSUM(NEWID())) * DATEDIFF(DAY, '1950-01-01', '1998-01-01'), '1950-01-01') AS DATE) AS birthdate
 FROM bdate
-WHERE id < 300 -- amount of rows/hoeveelheid rijen
+WHERE id < 250 -- amount of rows/hoeveelheid rijen
 ),
 phonenum AS -- phonenumber/telefoonnummer
 (
@@ -201,15 +201,35 @@ SELECT 1 AS id, '0' + CAST(CAST(FLOOR((RAND(CHECKSUM(NEWID()))+6)*100000000) AS 
 UNION ALL
 SELECT id + 1, '0' + CAST(CAST(FLOOR((RAND(CHECKSUM(NEWID()))+6)*100000000) AS INT) AS VARCHAR(9)) AS phonenumber
 FROM phonenum
-WHERE id < 300 -- amount of rows/hoeveelheid rijen
+WHERE id < 250 -- amount of rows/hoeveelheid rijen
 ),
--- education/opleidingsniveau
--- organization business location/organisatie vestigingsplaats
--- is open enrollment/is open inschrijving
--- preferred guidance level/gewenst begeleidingsniveau
--- functionname/functienaam
+oblocation AS -- organization business location/organisatie vestigingsplaats
+(
+SELECT TOP 250 City, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
+FROM [AdventureWorks2014].[Person].[Address]
+),
+funcname AS -- functionname/functienaam
+(
+SELECT TOP 250 JobTitle, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
+FROM [AdventureWorks2014].[HumanResources].[Employee]
+)
 INSERT INTO [SBBWorkshopOmgeving].[dbo].[DEELNEMER] (SECTORNAAM, ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIE_VESTIGINGSPLAATS, IS_OPEN_INSCHRIJVING, GEWENST_BEGELEIDINGSNIVEAU, FUNCTIENAAM)
-
+SELECT ORGANISATIENUMMER, FirstName, LastName, phonenumber,
+email =
+CASE
+	WHEN randomemail = 0 THEN
+	LOWER(left(FirstName,1)+LastName)+'@hotmail.com'
+	ELSE 
+	LOWER(left(FirstName,1)+LastName)+'@gmail.com'
+END
+FROM orgnum o, fname_hon_sector_educ fhse, lname_email_enroll_guid leeg, bdate b, phonenum p, oblocation ol, funcname f
+WHERE o.id = fhse.id
+AND o.id = leeg.id
+AND o.id = b.id
+AND o.id = p.id
+AND o.id = ol.id
+AND o.id = f.id
+OPTION(MAXRECURSION 0)
 go
 /*
 SELECT *
