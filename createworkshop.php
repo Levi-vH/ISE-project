@@ -25,22 +25,21 @@ $host = 'localhost';
 $user = 'iseprojectuser';
 $pass = 'iseprojectww';
 
-/*$conn = mssql_connect($host, $user, $pass);
-mssql_select_db('SBBWorkshopOmgeving', $conn);
+$connectionInfo = array( "Database"=>"SQL", "UID"=>"iseprojectuser", "PWD"=>"iseprojectww" );
+$conn = sqlsrv_connect( $host, $connectionInfo);
+if( $conn === false ) {
+     die( print_r( sqlsrv_errors(), true));
+}
 
-// Call a simple query
-$result = mssql_query('SELECT * FROM sometable', $conn);
+$sql = "exec proc_create_workshop(?, ?, ?, ? , ?, ?,?,?,?,?,?)";
+$params = array(1, $workshoptype, 2, "");
 
-// Release the result resource
-mssql_free_result($result);
-
-// Then execute the procedure
-$proc = mssql_init('proccreateworkshop', $conn);
-$proc_result = mssql_execute($proc);
+$stmt = sqlsrv_query( $conn, $sql, $params);
+if( $stmt === false ) {
+     die( print_r( sqlsrv_errors(), true));
+}
 
 mssql_free_statement($proc);
-?>
-*/
 
 function check_input($data) {
   $data = trim($data);
@@ -79,11 +78,33 @@ function check_input($data) {
         <div class="form-group">
             <label class="control-label col-sm-2" for="workshopmodule">Module:</label>
             <div class="col-sm-10">
-                <select class="form-control" id="sel1">
+                <select class="form-control" name="workshopmodule">
                     <option>Selecteer module...</option>
                     <option>Module 1: Matching en Voorbereiding</option>
                     <option>Module 2: Begeleiding tijdens BPV</option>
                     <option>Module 3: Beoordeling</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="workshopcompany">Organisatie:</label>
+            <div class="col-sm-10">
+                <select class="form-control" name="workshopcompany">
+                    <option>Selecteer organisatie...</option>
+                    <option>SBB</option>
+                    <option>NSB</option>
+                    <option>Lageschool van Arnhem en Duisburg</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="workshopsector">Sector:</label>
+            <div class="col-sm-10">
+                <select class="form-control" name="workshopsector">
+                    <option>Selecteer sector...</option>
+                    <option>ZWS</option>
+                    <option>NSB</option>
+                    <option>BSN</option>
                 </select>
             </div>
         </div>
