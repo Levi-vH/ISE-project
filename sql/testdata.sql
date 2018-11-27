@@ -6,7 +6,7 @@ GO
 /*==============================================================*/
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
 INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ORGANISATIE] (ORGANISATIENUMMER, ORGANISATIENAAM)
-SELECT ROW_NUMBER() OVER (ORDER BY S.Name) AS [ORGANISATIENUMMER], S.Name AS [ORGANISATIENAAM]
+SELECT ROW_NUMBER() OVER (ORDER BY S.[Name]) AS [ORGANISATIENUMMER], S.[Name] AS [ORGANISATIENAAM]
 FROM [AdventureWorks2014].[Sales].[Store] S
 go
 /*
@@ -46,10 +46,10 @@ INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ADVISEUR] (ORGANISATIENUMMER, VOORNAAM,
 SELECT ORGANISATIENUMMER, FirstName, LastName, phonenumber,
 email =
 CASE
-	when randomemail = 0 then 
-	lower(left(FirstName,1)+[LastName])+'@hotmail.com'
-	else 
-	lower(left(FirstName,1)+[LastName])+'@gmail.com'
+	WHEN randomemail = 0 THEN
+	LOWER(left(FirstName,1)+LastName)+'@hotmail.com'
+	ELSE 
+	LOWER(left(FirstName,1)+LastName)+'@gmail.com'
 END
 FROM orgnum o, fname f, lname_email le, phonenum p
 WHERE o.id = f.id
@@ -93,10 +93,10 @@ INSERT INTO	[SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON] (ORGANISATIENUMMER, VOO
 SELECT ORGANISATIENUMMER, FirstName, LastName, phonenumber,
 email =
 CASE
-	when randomemail = 0 then 
-	lower(left(FirstName,1)+[LastName])+'@hotmail.com'
-	else 
-	lower(left(FirstName,1)+[LastName])+'@gmail.com'
+	WHEN randomemail = 0 THEN
+	LOWER(left(FirstName,1)+LastName)+'@hotmail.com'
+	ELSE 
+	LOWER(left(FirstName,1)+LastName)+'@gmail.com'
 END
 FROM orgnum o, fname f, lname_email le, phonenum p
 WHERE o.id = f.id
@@ -137,6 +137,12 @@ FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER]
 /* Table: BESCHIKBAARHEID                                       */
 /*==============================================================*/
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID]
+INSERT INTO [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID] (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
+SELECT WORKSHOPLEIDER_ID,
+RAND() AS [quarter], -- quarter/kwartaal
+RAND() AS [year], -- year/jaar
+RAND() AS [hours] -- amount of hours/aantal uur
+FROM WORKSHOPLEIDER
 go
 /*
 SELECT *
