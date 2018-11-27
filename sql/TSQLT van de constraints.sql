@@ -266,6 +266,53 @@ BEGIN
 END
 GO
 
+--========================================================================================
+-- tests if the workshop endtime is after the starting time
+--========================================================================================
+
+-- test for starttime is getdate and endtime is getdate + 30 sec 
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopEndtime 1]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for workshopEndtime 1]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopState';
+
+	EXEC tSQLt.ExpectnoException
+	
+	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, GETDATE(), DATEADD(s, 30, GETDATE()), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
+END
+GO
+
+-- test for starttime is getdate and endtime is getdate - 30 sec 
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopEndtime 2]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for workshopEndtime 2]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopState';
+
+	EXEC tSQLt.ExpectnoException
+	
+	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, GETDATE(), DATEADD(s, -30, GETDATE()), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
+END
+GO
 
 --========================================================================================
 -- tests for the deelnemer table
@@ -289,18 +336,18 @@ BEGIN
 
 	EXEC tSQLt.ExpectException
 	
-	INSERT INTO DEELNEMER ([DEELNEMER_ID], [SECTOR_NAAM], [ORGANISATIENUMMER], [AANHEF], [ATTRIBUTE_25], [ATTRIBUTE_26],
-	 [GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [ORGANISATIE_VESTIGINGSPLAATS], [ATTRIBUTE_58],
-	  [GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM])
+	INSERT INTO DEELNEMER ([DEELNEMER_ID], [SECTORNAAM], [ORGANISATIENUMMER], [AANHEF], [VOORNAAM], [ACHTERNAAM],
+						   [GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [ORGANISATIE_VESTIGINGSPLAATS],
+						   [IS_OPEN_INSCHRIJVING], [GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM])
 	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'henkpieter.nl', NULL, NULL, NULL, NULL, NULL, NULL);  
 END
 GO
 
 -- test for emails without a '.'
-DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer emails 1]
+DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer emails 2]
 GO
 
-CREATE PROCEDURE [testDeelnemer].[test for deelnemer emails 1]
+CREATE PROCEDURE [testDeelnemer].[test for deelnemer emails 2]
 AS
 BEGIN
 
@@ -310,18 +357,18 @@ BEGIN
 
 	EXEC tSQLt.ExpectException
 	
-	INSERT INTO DEELNEMER ([DEELNEMER_ID], [SECTOR_NAAM], [ORGANISATIENUMMER], [AANHEF], [ATTRIBUTE_25], [ATTRIBUTE_26],
-	 [GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [ORGANISATIE_VESTIGINGSPLAATS], [ATTRIBUTE_58],
-	  [GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM])
+	INSERT INTO DEELNEMER ([DEELNEMER_ID], [SECTORNAAM], [ORGANISATIENUMMER], [AANHEF], [VOORNAAM], [ACHTERNAAM],
+						   [GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [ORGANISATIE_VESTIGINGSPLAATS],
+						   [IS_OPEN_INSCHRIJVING], [GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM])
 	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'henk@pieternl', NULL, NULL, NULL, NULL, NULL, NULL); 
 END
 GO
 
 -- test for emails with a '@' and a '.'
-DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer emails 1]
+DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer emails 3]
 GO
 
-CREATE PROCEDURE [testDeelnemer].[test for deelnemer emails 1]
+CREATE PROCEDURE [testDeelnemer].[test for deelnemer emails 3]
 AS
 BEGIN
 
@@ -331,10 +378,57 @@ BEGIN
 
 	EXEC tSQLt.ExpectnoException
 	
-	INSERT INTO DEELNEMER ([DEELNEMER_ID], [SECTOR_NAAM], [ORGANISATIENUMMER], [AANHEF], [ATTRIBUTE_25], [ATTRIBUTE_26],
-	 [GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [ORGANISATIE_VESTIGINGSPLAATS], [ATTRIBUTE_58],
-	  [GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM])
+	INSERT INTO DEELNEMER ([DEELNEMER_ID], [SECTORNAAM], [ORGANISATIENUMMER], [AANHEF], [VOORNAAM], [ACHTERNAAM],
+						   [GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [ORGANISATIE_VESTIGINGSPLAATS],
+						   [IS_OPEN_INSCHRIJVING], [GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM])
 	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'henk@pieter.nl', NULL, NULL, NULL, NULL, NULL, NULL); 
+END
+GO
+
+--======================================================================
+-- Test if the date of birth can't be higher than the current date
+--======================================================================
+
+-- Test for date of birth is current date +20 sec
+
+DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer birthdates 1]
+GO
+
+CREATE PROCEDURE [testDeelnemer].[test for deelnemer birthdates 1]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.DEELNEMER';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_DeelnemerBirthdate';
+
+	EXEC tSQLt.ExpectException
+	
+	INSERT INTO DEELNEMER ([DEELNEMER_ID], [SECTORNAAM], [ORGANISATIENUMMER], [AANHEF], [VOORNAAM], [ACHTERNAAM],
+						   [GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [ORGANISATIE_VESTIGINGSPLAATS],
+						   [IS_OPEN_INSCHRIJVING], [GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, DATEADD(s, 20, GETDATE()), NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
+END
+GO
+
+-- Test for date of birth is current date -20 sec
+DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer birthdates 2]
+GO
+
+CREATE PROCEDURE [testDeelnemer].[test for deelnemer birthdates 2]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.DEELNEMER';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_DeelnemerBirthdate';
+
+	EXEC tSQLt.ExpectnoException
+	
+	INSERT INTO DEELNEMER ([DEELNEMER_ID], [SECTORNAAM], [ORGANISATIENUMMER], [AANHEF], [VOORNAAM], [ACHTERNAAM],
+						   [GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [ORGANISATIE_VESTIGINGSPLAATS],
+						   [IS_OPEN_INSCHRIJVING], [GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, DATEADD(s, -20, GETDATE()), NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
 END
 GO
 
