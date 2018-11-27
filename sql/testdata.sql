@@ -4,7 +4,7 @@ GO
 /*==============================================================*/
 /* Table: ORGANISATIE                                           */
 /*==============================================================*/
-INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
+INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ORGANISATIE] (ORGANISATIENUMMER, ORGANISATIENAAM)
 SELECT ROW_NUMBER() OVER (ORDER BY S.Name) AS [ORGANISATIENUMMER], S.Name AS [ORGANISATIENAAM]
 FROM [AdventureWorks2014].[Sales].[Store] S
 go
@@ -40,7 +40,7 @@ SELECT id + 1, '0' + CAST(CAST(FLOOR((RAND(CHECKSUM(NEWID()))+6)*100000000) AS I
 FROM phonenum
 WHERE id < 300 -- amount of rows/hoeveelheid rijen
 )
-INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ADVISEUR]
+INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ADVISEUR] (ORGANISATIENUMMER, VOORNAAM, ACHTERNAAM, TELEFOONNUMMER, EMAIL)
 SELECT ORGANISATIENUMMER, FirstName, LastName, phonenumber,
 email =
 CASE
@@ -58,7 +58,6 @@ go
 /*
 SELECT *
 FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
-ORDER BY ADVISEUR_ID
 */
 
 /*==============================================================*/
@@ -66,45 +65,85 @@ ORDER BY ADVISEUR_ID
 /*==============================================================*/
 
 go
+/*
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
+*/
 
 /*==============================================================*/
 /* Table: WORKSHOPLEIDER                                        */
 /*==============================================================*/
 
 go
+/*
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER]
+*/
 
 /*==============================================================*/
 /* Table: BESCHIKBAARHEID                                       */
 /*==============================================================*/
 
 go
+/*
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID]
+*/
 
 /*==============================================================*/
 /* Table: SECTOR                                                */
 /*==============================================================*/
-
+INSERT INTO [SBBWorkshopOmgeving].[dbo].[SECTOR] (SECTORNAAM)
+VALUES	('ICTCI'),
+		('MTLM'),
+		('SV'),
+		('TGO'),
+		('VGG'),
+		('ZDV'),
+		('ZWS'),
+		('Handel')
 go
+/*
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
+*/
 
 /*==============================================================*/
 /* Table: DEELNEMER                                             */
 /*==============================================================*/
 
 go
+/*
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER]
+*/
 
 /*==============================================================*/
 /* Table: MODULE                                                */
 /*==============================================================*/
 
 go
+/*
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[MODULE]
+*/
 
 /*==============================================================*/
 /* Table: WORKSHOP                                              */
 /*==============================================================*/
 
 go
+/*
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
+*/
 
 /*==============================================================*/
 /* Table: DEELNEMER_IN_WORKSHOP                                 */
 /*==============================================================*/
 
 go
+/*
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]
+*/
