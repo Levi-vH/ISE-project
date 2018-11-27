@@ -1,14 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Bootstrap Example</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <?php include 'header.html';  include 'functions.php'?>
-</head>
-<body>
 <?php
 // define (empty) variables
 $workshoptype = $workshopdate = $contactinfo = $workshopmodule = $workshopcompany = $workshopsector = $starttime = $endtime =
@@ -18,12 +7,12 @@ $workshopadress = $workshoppostcode = $workshopcity = $workshopleader = $worksho
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $workshoptype = $_POST["workshoptype"];
     $workshopdate = $_POST["workshopdate"];
-   //$contactinfo = check_input($_POST["contactinfo"]);
+    //$contactinfo = check_input($_POST["contactinfo"]);
     $workshopmodule = $_POST["workshopmodule"];
     $workshopcompany = $_POST["workshopcompany"];
     $workshopsector = $_POST["workshopsector"];
-    $starttime = $_POST["starttime"];
-    $endtime = $_POST["endtime"];
+    $starttime = $_POST["workshopstarttime"];
+    $endtime = $_POST["workshopendtime"];
     $workshopadress = check_input($_POST["workshopaddress"]);
     $workshoppostcode = check_input($_POST["workshoppostcode"]);
     $workshopcity = check_input($_POST["workshopcity"]);
@@ -40,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(2, $workshopdate, PDO::PARAM_STR);
     //$stmt->bindParam(3, $contactinfo, PDO::PARAM_STR);
     $stmt->bindParam(3, $workshopmodule, PDO::PARAM_INT);
-    $stmt->bindParam(4, $workshopcompany, PDO::PARAM_STR);
+    $stmt->bindParam(4, $workshopcompany, PDO::PARAM_INT);
     $stmt->bindParam(5, $workshopsector, PDO::PARAM_STR);
     $stmt->bindParam(6, $starttime, PDO::PARAM_STR);
     $stmt->bindParam(7, $endtime, PDO::PARAM_STR);
@@ -50,12 +39,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(11, $workshopleader, PDO::PARAM_STR);
     $stmt->bindParam(12, $workshopnotes, PDO::PARAM_STR);
     $stmt->execute();
-    print("Fetch all of the remaining rows in the result set:\n");
-    $result = $stmt->fetchAll();
-    print_r($result);
 }
 
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <?php include 'header.html';  include 'functions.php'?>
+</head>
+<body>
+
 <div class="container">
     <h2>Maak een nieuwe workshop</h2>
     <form class="form-horizontal" action="createworkshop.php" method="post">
@@ -87,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label col-sm-2" for="workshopmodule">Module:</label>
             <div class="col-sm-10">
                 <?php
-               echo ModuleselectBox("workshopmodule", "module",array("modulenummer", "modulenaam"), "modulenummer");
+               echo moduleselectBox("workshopmodule", "module",array("modulenummer", "modulenaam"), "modulenummer");
                 ?>
             </div>
         </div>
@@ -95,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label col-sm-2" for="workshopcompany">Organisatie:</label>
             <div class="col-sm-10">
                 <?php
-                echo selectBox("workshopcompany", "organisatie","organisatienaam");
+                echo OrganisatieselectBox("workshopcompany", "organisatie",array("organisatienaam", "organisatienummer"), "organisatienummer");
                 ?>
             </div>
         </div>
@@ -141,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label col-sm-2" for="workshopleader">Workshopleider workshop:</label>
             <div class="col-sm-10">
                 <?php
-                echo selectBox("workshopleader", "workshopleider","voornaam");
+                echo WorkshopleiderselectBox("workshopleader", "workshopleider",array("voornaam", "achternaam", "workshopleider_id"), "workshopleider_id");
                 ?>
             </div>
         </div>

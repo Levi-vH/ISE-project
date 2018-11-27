@@ -42,6 +42,39 @@ function ModuleselectBox($naamWaarde, $tabelnaam, $kolomnamen, $kolomvalue){
     return $select;
 }
 
+
+function OrganisatieselectBox($naamWaarde, $tabelnaam, $kolomnamen, $kolomvalue){
+    $handler = connectToDB();
+    $select = '<select class="form-control" name="'.$naamWaarde.'">';
+    $sql ="SELECT $kolomnamen[0], $kolomnamen[1] FROM $tabelnaam";
+
+    $query = $handler->prepare($sql);
+    $query->execute();
+
+    while($resultaat = $query->fetch()){
+        $select.= '<option value="'. $resultaat[$kolomvalue] . '">' . $resultaat[$kolomnamen[0]] . '</option>';
+    }
+    $select .= '</select>';
+
+    return $select;
+}
+
+function WorkshopleiderselectBox($naamWaarde, $tabelnaam, $kolomnamen, $kolomvalue){
+    $handler = connectToDB();
+    $select = '<select class="form-control" name="'.$naamWaarde.'">';
+    $sql ="SELECT $kolomnamen[0], $kolomnamen[1], $kolomnamen[2] FROM $tabelnaam ORDER BY $kolomnamen[1], $kolomnamen[0]";
+
+    $query = $handler->prepare($sql);
+    $query->execute();
+
+    while($resultaat = $query->fetch()){
+        $select.= '<option value="'. $resultaat[$kolomvalue] . '">' . $resultaat[$kolomnamen[1]] . ' , ' . $resultaat[$kolomnamen[0]] . '</option>';
+    }
+    $select .= '</select>';
+
+    return $select;
+}
+
 function selectBox($naamWaarde, $tabelnaam, $kolomnaam){
     $handler = connectToDB();
     $select = '<select class="form-control" name="'.$naamWaarde.'">';
