@@ -80,7 +80,7 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="Town">Plaats:</label>
             <div class="col-sm-10">
-                <input type="date" class="form-control" placeholder="Plaats" name="Town">
+                <input type="text" class="form-control" placeholder="Plaats" name="Town">
             </div>
         </div>
         <h3>Contactpersoon</h3>
