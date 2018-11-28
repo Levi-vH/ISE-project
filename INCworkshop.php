@@ -68,14 +68,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label col-sm-2" for="Organisation_Name">Naam Organisatie:</label>
             <div class="col-sm-10">
                 <?php
-                echo selectBox("Organisation_Name", "Organisatie" ,array("Organisatienaam"), "Organisatienaam", array("Organisatienaam"), "Organisatienaam");
+                echo selectBox("Organisation_Name", "Organisatie" ,array("Organisatienaam"), "Organisatienaam", array("Organisatienaam"), "Organisatienaam", "get_organisatie()");
                 ?>
         </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Organisation_Relationnumber">Relatie nummer:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Relatie nummer" name="Organisation_Relationnumber">
+                <input id=Organisation_Relationnumber" type="text" class="form-control" placeholder="Relatie nummer" name="Organisation_Relationnumber">
             </div>
         </div>
         <div class="form-group">
@@ -184,6 +184,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </html>
 
 <script>
-    var organisatienaam = document.getElementsByName("Organisation_Name");
-    console.log(organisatienaam);
+
+    function get_organisatie() {
+        var organisatienaam = document.getElementById("Organisation_Name");
+        var organisatieValue = organisatienaam.options[organisatienaam.selectedIndex].value;
+        console.log(organisatieValue);
+
+
+
+        document.getElementById("Organisation_Relationnumber").value('hoi');
+
+    }
+
+
 </script>
