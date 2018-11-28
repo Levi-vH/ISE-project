@@ -24,10 +24,10 @@ DELETE FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
 SELECT TOP 300 ORGANISATIENUMMER, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
 FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
 ),
-fname AS -- firstname/voornaam
+fname_sector AS -- firstname + sectorname/voornaam + sectornaam
 (
-SELECT TOP 300 FirstName, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
-FROM [AdventureWorksDW2014].[dbo].[DimCustomer]
+SELECT TOP 300 FirstName, SECTORNAAM, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
+FROM [AdventureWorksDW2014].[dbo].[DimCustomer], [SBBWorkshopOmgeving].[dbo].[SECTOR]
 ),
 lname_email AS -- lastname + email/achternaam + email
 (
@@ -42,8 +42,8 @@ SELECT id + 1, '0' + CAST(CAST(FLOOR((RAND(CHECKSUM(NEWID()))+6)*100000000) AS I
 FROM phonenum
 WHERE id < 300 -- amount of rows/hoeveelheid rijen
 )
-INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ADVISEUR] (ORGANISATIENUMMER, VOORNAAM, ACHTERNAAM, TELEFOONNUMMER, EMAIL)
-SELECT ORGANISATIENUMMER, FirstName, LastName, phonenumber,
+INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ADVISEUR] (ORGANISATIENUMMER, SECTORNAAM, VOORNAAM, ACHTERNAAM, TELEFOONNUMMER, EMAIL)
+SELECT ORGANISATIENUMMER, SECTORNAAM, FirstName, LastName, phonenumber,
 email =
 CASE
 	WHEN randomemail = 0 THEN
@@ -51,8 +51,8 @@ CASE
 	ELSE 
 	LOWER(left(FirstName,1)+LastName)+'@gmail.com'
 END
-FROM orgnum o, fname f, lname_email le, phonenum p
-WHERE o.id = f.id
+FROM orgnum o, fname_sector fs, lname_email le, phonenum p
+WHERE o.id = fs.id
 AND o.id = le.id
 AND o.id = p.id
 OPTION(MAXRECURSION 0)
