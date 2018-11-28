@@ -50,7 +50,7 @@
 //
 //?>
 <div class="container">
-    <h2>Aanvraag INC workshop</h2>
+    <h2 class="text-info text-center">Aanvraag INC workshop</h2>
     <h3>Organisatie</h3>
     <form class="form-horizontal" action="">
         <div class="form-group">
