@@ -182,6 +182,7 @@ go
 create table ADVISEUR (
    ADVISEUR_ID          int IDENTITY         not null,
    ORGANISATIENUMMER    varchar(15)          not null,
+   SECTORNAAM			varchar(255)         not null,
    VOORNAAM				varchar(255)         not null,
    ACHTERNAAM			varchar(255)         not null,
    TELEFOONNUMMER       varchar(255)         null,
@@ -223,7 +224,7 @@ create table DEELNEMER (
    DEELNEMER_ID					int IDENTITY         not null,
    SECTORNAAM					varchar(255)         not null,
    ORGANISATIENUMMER			varchar(15)          null,
-   AANHEF						varchar(4)           not null,
+   AANHEF						varchar(7)           not null,
    VOORNAAM						varchar(255)         not null,
    ACHTERNAAM					varchar(255)         not null,
    GEBOORTEDATUM				date	             not null,
@@ -324,6 +325,11 @@ go
 alter table ADVISEUR
    add constraint FK_ADVISEUR_ref_ORGANISATIE foreign key (ORGANISATIENUMMER)
       references ORGANISATIE (ORGANISATIENUMMER)
+go
+
+alter table ADVISEUR
+   add constraint FK_ADVISEUR_ref_SECTOR foreign key (SECTORNAAM)
+      references SECTOR (SECTORNAAM)
 go
 
 alter table BESCHIKBAARHEID
