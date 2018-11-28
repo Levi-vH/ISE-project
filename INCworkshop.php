@@ -10,45 +10,7 @@
 </head>
 <body>
 <?php
-//// define empty variables
-//$contactinfo = $workshopadress = $workshoppostcode = $workshopcity = $workshopleader = $workshopnotes = "";
-//
-//if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//    $contactinfo = check_input($_POST["contactinfo"]);
-//    $workshopadress = check_input($_POST["workshopaddress"]);
-//    $workshoppostcode = check_input($_POST["workshoppostcode"]);
-//    $workshopcity = check_input($_POST["workshopcity"]);
-//    $workshopleader = check_input($_POST["workshopleader"]);
-//    $workshopnotes = check_input(@$_POST['workshopnotes']);
-//}
-//$host = 'localhost';
-//$user = 'iseprojectuser';
-//$pass = 'iseprojectww';
-//
-//$connectionInfo = array( "Database"=>"SQL", "UID"=>"iseprojectuser", "PWD"=>"iseprojectww" );
-//$conn = sqlsrv_connect( $host, $connectionInfo);
-//if( $conn === false ) {
-//     die( print_r( sqlsrv_errors(), true));
-//}
-//
-//$sql = "exec proc_create_workshop(?, ?, ?, ? , ?, ?,?,?,?,?,?)";
-//$params = array(1, $workshoptype, 2, "");
-//
-//$stmt = sqlsrv_query( $conn, $sql, $params);
-//if( $stmt === false ) {
-//     die( print_r( sqlsrv_errors(), true));
-//}
-//
-//mssql_free_statement($proc);
-//
-//function check_input($data) {
-//  $data = trim($data);
-//  $data = stripslashes($data);
-//  $data = htmlspecialchars($data);
-//  return $data;
-//}
-//
-//?>
+?>
 <div class="container">
     <h2 class="text-info text-center">Aanvraag INC workshop</h2>
     <h3>Organisatie</h3>
