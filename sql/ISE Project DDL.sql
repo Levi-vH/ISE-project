@@ -301,7 +301,7 @@ create table WORKSHOP (
    OPMERKING						varchar(255)         null,
    TYPE								varchar(3)           null,
    VERWERKT_BREIN					date	             null,
-   DEELNEMER_GEGEGEVENS_ONTVANGEN	date	             null,
+   DEELNEMER_GEGEVENS_ONTVANGEN		date	             null,
    OVK_BEVESTIGING					date	             null,
    PRESENTIELIJST_VERSTUURD			date	             null,
    PRESENTIELIJST_ONTVANGEN			date	             null,
