@@ -226,7 +226,7 @@ create table DEELNEMER (
    AANHEF						varchar(4)           not null,
    VOORNAAM						varchar(255)         not null,
    ACHTERNAAM					varchar(255)         not null,
-   GEBOORTEDATUM				datetime             not null,
+   GEBOORTEDATUM				date	             not null,
    EMAIL						varchar(255)         not null,
    TELEFOONNUMMER				varchar(255)         not null,
    OPLEIDINGSNIVEAU				varchar(11)          not null,
