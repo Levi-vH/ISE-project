@@ -55,6 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
@@ -139,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopleader">Workshopleider workshop:</label>
+            <label class="control-label col-sm-2" for="workshopleader">Workshopleider:</label>
             <div class="col-sm-10">
                 <?php
                 echo selectBox("workshopleader", "workshopleider",array("achternaam", "voornaam", "workshopleider_id"), "workshopleider_id", array("achternaam", "voornaam"), "achternaam, voornaam");
@@ -147,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopnotes">Opmerkingen workshop:</label>
+            <label class="control-label col-sm-2" for="workshopnotes">Opmerkingen:</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" placeholder="Opmerkingen" name="workshopnotes">
             </div>
