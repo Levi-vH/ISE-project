@@ -11,6 +11,37 @@ DELETE FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
+GO
+
+/*
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
+
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
+ORDER BY ORGANISATIENAAM
+
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
+
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
+
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER]
+
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID]
+
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER]
+
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[MODULE]
+
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
+*/
 
 /*==============================================================*/
 /* Table: SECTOR                                                */
@@ -25,10 +56,6 @@ VALUES	('ICTCI'),
 		('ZWS'),
 		('Handel')
 go
-/*
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
-*/
 
 /*==============================================================*/
 /* Table: ORGANISATIE                                           */
@@ -58,9 +85,9 @@ WHERE AddressLine1 LIKE '[0-9]%'
 ),
 housenum AS -- housenumber/huisnummer
 (
-SELECT 1 AS id, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(10+90)+1) AS VARCHAR(4)) AS housenumber
+SELECT 1 AS id, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(10+89)+1) AS VARCHAR(4)) AS housenumber
 UNION ALL
-SELECT id + 1, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(10+90)+1) AS VARCHAR(4)) AS housenumber
+SELECT id + 1, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(10+89)+1) AS VARCHAR(4)) AS housenumber
 FROM housenum
 WHERE id < 300 -- amount of rows/hoeveelheid rijen
 ),
@@ -82,11 +109,6 @@ AND o.id = p.id
 AND o.id = pl.id
 OPTION (MAXRECURSION 0)
 go
-/*
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
-ORDER BY ORGANISATIENAAM
-*/
 
 /*==============================================================*/
 /* Table: ADVISEUR                                              */
@@ -129,10 +151,6 @@ AND o.id = le.id
 AND o.id = p.id
 OPTION(MAXRECURSION 0)
 go
-/*
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
-*/
 
 /*==============================================================*/
 /* Table: CONTACTPERSOON                                        */
@@ -175,10 +193,6 @@ AND o.id = le.id
 AND o.id = p.id
 OPTION(MAXRECURSION 0)
 go
-/*
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
-*/
 
 /*==============================================================*/
 /* Table: WORKSHOPLEIDER                                        */
@@ -198,10 +212,6 @@ SELECT firstname, lastname, NULL
 FROM fname f, lname l
 WHERE f.id = l.id
 go
-/*
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER]
-*/
 
 /*==============================================================*/
 /* Table: BESCHIKBAARHEID                                       */
@@ -213,10 +223,6 @@ SELECT	WORKSHOPLEIDER_ID AS workshopleader_id,
 		FLOOR(RAND(CHECKSUM(NEWID()))*(10+20)+30) AS [hours] -- amount of hours/aantal uur
 FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER]
 go
-/*
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID]
-*/
 
 /*==============================================================*/
 /* Table: DEELNEMER                                             */
@@ -311,10 +317,6 @@ AND o.id = ol.id
 AND o.id = f.id
 OPTION(MAXRECURSION 0)
 go
-/*
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER]
-*/
 
 /*==============================================================*/
 /* Table: MODULE                                                */
@@ -324,10 +326,6 @@ VALUES	(1, 'Matching en Voorbereiding'),
 		(2, 'Begeleiding tijdens BPV'),
 		(3, 'Beoordeling')
 go
-/*
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[MODULE]
-*/
 
 /*==============================================================*/
 /* Table: WORKSHOP                                              */
@@ -386,9 +384,9 @@ WHERE AddressLine1 LIKE '[0-9]%'
 ),
 housenum AS -- housenumber/huisnummer
 (
-SELECT 1 AS id, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(10+90)+1) AS VARCHAR(2)) AS housenumber
+SELECT 1 AS id, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(10+89)+1) AS VARCHAR(2)) AS housenumber
 UNION ALL
-SELECT id + 1, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(10+90)+1) AS VARCHAR(2)) AS housenumber
+SELECT id + 1, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(10+89)+1) AS VARCHAR(2)) AS housenumber
 FROM housenum
 WHERE id < 250 -- amount of rows/hoeveelheid rijen
 ),
@@ -417,7 +415,7 @@ SELECT id + 1, CAST(RAND(CHECKSUM(NEWID()))*4+1 AS INT) randomtype
 FROM wtype
 WHERE id < 250 -- amount of rows/hoeveelheid rijen
 )
-INSERT INTO [SBBWorkshopOmgeving].[dbo].[WORKSHOP] (WORKSHOPLEIDER_ID, CONTACTPERSOON_ID, ORGANISATIENUMMER, MODULENUMMER, ADVISEUR_ID, SECTORNAAM, DATUM, STARTTIJD, EINDTIJD, ADRES, POSTCODE, PLAATSNAAM, [STATUS], OPMERKING, TYPE, VERWERKT_BREIN, DEELNEMER_GEGEGEVENS_ONTVANGEN, OVK_BEVESTIGING, PRESENTIELIJST_VERSTUURD, PRESENTIELIJST_ONTVANGEN, BEWIJS_DEELNAME_MAIL_SBB_WSL)
+INSERT INTO [SBBWorkshopOmgeving].[dbo].[WORKSHOP] (WORKSHOPLEIDER_ID, CONTACTPERSOON_ID, ORGANISATIENUMMER, MODULENUMMER, ADVISEUR_ID, SECTORNAAM, DATUM, STARTTIJD, EINDTIJD, ADRES, POSTCODE, PLAATSNAAM, [STATUS], OPMERKING, TYPE, VERWERKT_BREIN, DEELNEMER_GEGEVENS_ONTVANGEN, OVK_BEVESTIGING, PRESENTIELIJST_VERSTUURD, PRESENTIELIJST_ONTVANGEN, BEWIJS_DEELNAME_MAIL_SBB_WSL)
 SELECT	workshopleader_id,
 		contactperson_id,
 		organizationnumber,
@@ -440,7 +438,7 @@ SELECT	workshopleader_id,
 				ELSE 'LA'
 			END,
 		NULL AS VERWERKT_BREIN,
-		NULL AS DEELNEMER_GEGEGEVENS_ONTVANGEN,
+		NULL AS DEELNEMER_GEGEVENS_ONTVANGEN,
 		NULL AS OVK_BEVESTIGING,
 		NULL AS PRESENTIELIJST_VERSTUURD,
 		NULL AS PRESENTIELIJST_ONTVANGEN,
@@ -474,10 +472,6 @@ UPDATE [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
 SET [STATUS] = 'uitgezet'
 WHERE WORKSHOPLEIDER_ID IS NULL
 go
-/*
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
-*/
 
 /*==============================================================*/
 /* Table: DEELNEMER_IN_WORKSHOP                                 */
