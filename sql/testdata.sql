@@ -11,6 +11,7 @@ DELETE FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
+DROP PROCEDURE IF EXISTS Testdata_Deelnemer_IN_Workshop
 GO
 
 /*
@@ -41,6 +42,13 @@ FROM [SBBWorkshopOmgeving].[dbo].[MODULE]
 
 SELECT *
 FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
+
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]
+ORDER BY VOLGNUMMER
+
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[AANVRAAG]
 */
 
 /*==============================================================*/
@@ -476,19 +484,66 @@ go
 /*==============================================================*/
 /* Table: DEELNEMER_IN_WORKSHOP                                 */
 /*==============================================================*/
---INSERT INTO [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP] (WORKSHOP_ID, DEELNEMER_ID, VOLGNUMMER, IS_GOEDGEKEURD)
+CREATE PROCEDURE Testdata_Deelnemer_IN_Workshop
+AS
+BEGIN
+	DECLARE @counter INT = 1
+	WHILE @counter <= 100
+		BEGIN
+			INSERT INTO [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP] (WORKSHOP_ID, DEELNEMER_ID, VOLGNUMMER, IS_GOEDGEKEURD)
+			SELECT TOP 16	workshop_id,
+							DEELNEMER_ID AS deelnemer_id,
+							@counter AS follownumber,
+							0
+			FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER],
+			(SELECT TOP 1 WORKSHOP_ID AS workshop_id FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP] ORDER BY NEWID()) workshop
+			ORDER BY NEWID()
+			SET @counter += 1
+		END
+END
 go
-/*
-SELECT *
+
+EXEC Testdata_Deelnemer_IN_Workshop
+go
+
+DROP PROCEDURE IF EXISTS Testdata_Deelnemer_IN_Workshop
+go
+
+;WITH appr AS
+(
+SELECT VOLGNUMMER
 FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]
-*/
+WHERE VOLGNUMMER IN	(
+					SELECT TOP 50 VOLGNUMMER
+					FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]
+					GROUP BY VOLGNUMMER
+					ORDER BY NEWID()
+					)
+)
+UPDATE [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]
+SET IS_GOEDGEKEURD = 1
+FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP] dw INNER JOIN appr a ON dw.VOLGNUMMER = a.VOLGNUMMER
+go
 
 /*==============================================================*/
 /* Table: AANVRAAG				                                */
 /*==============================================================*/
---INSERT INTO [SBBWorkshopOmgeving].[dbo].[AANVRAAG] (CONTACTPERSOON_ID, ADVISEUR_ID, AANTAL_GROEPEN)
+;WITH ad_id_cp_id AS -- advisor_id + contactperson_id/adviseur_id + contactpersoon_id
+(
+SELECT TOP 20 ADVISEUR_ID AS advisor_id, CONTACTPERSOON_ID AS contactperson_id, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
+FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR] a INNER JOIN [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON] c
+ON a.ORGANISATIENUMMER = c.ORGANISATIENUMMER
+),
+grps AS -- amount of groups/aantal groepen
+(
+SELECT 1 AS id, FLOOR(RAND(CHECKSUM(NEWID()))*(10-8+1)+1) AS groups
+UNION ALL
+SELECT id + 1, FLOOR(RAND(CHECKSUM(NEWID()))*(10-8+1)+1) AS groups
+FROM grps
+WHERE id < 20 -- amount of rows/hoeveelheid rijen
+)
+INSERT INTO [SBBWorkshopOmgeving].[dbo].[AANVRAAG] (CONTACTPERSOON_ID, ADVISEUR_ID, AANTAL_GROEPEN)
+SELECT contactperson_id, advisor_id, groups
+FROM ad_id_cp_id ac, grps g
+WHERE ac.id = g.id
 go
-/*
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[AANVRAAG]
-*/
