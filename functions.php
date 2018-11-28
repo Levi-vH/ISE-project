@@ -27,9 +27,9 @@ function connectToDB(){
 
 
 
-function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayColumns, $order){
+function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayColumns, $order, $function = null){
     $handler = connectToDB();
-    $select = '<select class="form-control" name="'.$naamWaarde.'">';
+    $select = '<select class="form-control" id="'.$naamWaarde.'" name="'.$naamWaarde.'" onchange="'. $function .'">';
 
     $kolomString = $kolommen[0];
 
