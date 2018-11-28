@@ -223,7 +223,7 @@ create table DEELNEMER (
    DEELNEMER_ID					int IDENTITY         not null,
    SECTORNAAM					varchar(255)         not null,
    ORGANISATIENUMMER			varchar(15)          null,
-   AANHEF						varchar(4)           not null,
+   AANHEF						varchar(7)           not null,
    VOORNAAM						varchar(255)         not null,
    ACHTERNAAM					varchar(255)         not null,
    GEBOORTEDATUM				date	             not null,
