@@ -200,6 +200,28 @@ go
 */
 
 /*==============================================================*/
+/* Table: SECTOR                                                */
+/*==============================================================*/
+create table SECTOR (
+   SECTORNAAM          varchar(255)         not null,
+   constraint PK_SECTOR primary key (SECTORNAAM)
+)
+go
+
+/*==============================================================*/
+/* Table: ORGANISATIE                                           */
+/*==============================================================*/
+create table ORGANISATIE (
+   ORGANISATIENUMMER     varchar(15)          not null,
+   ORGANISATIENAAM       varchar(255)         null,
+   ADRES				 varchar(255)         null,
+   POSTCODE				 varchar(12)          null,
+   PLAATSNAAM			 varchar(255)         null,
+   constraint PK_ORGANISATIE primary key (ORGANISATIENUMMER)
+)
+go
+
+/*==============================================================*/
 /* Table: ADVISEUR                                              */
 /*==============================================================*/
 create table ADVISEUR (
@@ -215,18 +237,6 @@ create table ADVISEUR (
 go
 
 /*==============================================================*/
-/* Table: BESCHIKBAARHEID                                       */
-/*==============================================================*/
-create table BESCHIKBAARHEID (
-   WORKSHOPLEIDER_ID    int			         not null,
-   KWARTAAL             char(1)              not null,
-   JAAR                 smallint             not null,
-   AANTAL_UUR           smallint             not null,
-   constraint PK_BESCHIKBAARHEID primary key (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
-)
-go
-
-/*==============================================================*/
 /* Table: CONTACTPERSOON                                        */
 /*==============================================================*/
 create table CONTACTPERSOON (
@@ -237,6 +247,30 @@ create table CONTACTPERSOON (
    TELEFOONNUMMER       varchar(255)         null,
    EMAIL                varchar(255)         null,
    constraint PK_CONTACTPERSOON primary key (CONTACTPERSOON_ID)
+)
+go
+
+/*==============================================================*/
+/* Table: WORKSHOPLEIDER                                        */
+/*==============================================================*/
+create table WORKSHOPLEIDER (
+   WORKSHOPLEIDER_ID    int IDENTITY         not null,
+   VOORNAAM				varchar(255)         not null,
+   ACHTERNAAM			varchar(255)         not null,
+   TOEVOEGING			tinyint				 null,
+   constraint PK_WORKSHOPLEIDER primary key (WORKSHOPLEIDER_ID)
+)
+go
+
+/*==============================================================*/
+/* Table: BESCHIKBAARHEID                                       */
+/*==============================================================*/
+create table BESCHIKBAARHEID (
+   WORKSHOPLEIDER_ID    int			         not null,
+   KWARTAAL             char(1)              not null,
+   JAAR                 smallint             not null,
+   AANTAL_UUR           smallint             not null,
+   constraint PK_BESCHIKBAARHEID primary key (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
 )
 go
 
@@ -263,43 +297,12 @@ create table DEELNEMER (
 go
 
 /*==============================================================*/
-/* Table: DEELNEMER_IN_WORKSHOP                                 */
-/*==============================================================*/
-create table DEELNEMER_IN_WORKSHOP (
-   WORKSHOP_ID          int			         not null,
-   DEELNEMER_ID         int                  not null,
-   VOLGNUMMER           int                  not null,
-   IS_GOEDGEKEURD       bit                  not null	DEFAULT 0,
-   constraint PK_DEELNEMER_IN_WORKSHOP primary key (WORKSHOP_ID, DEELNEMER_ID)
-)
-go
-
-/*==============================================================*/
 /* Table: MODULE                                                */
 /*==============================================================*/
 create table MODULE (
    MODULENUMMER       int                  not null,
    MODULENAAM         varchar(255)         not null,
    constraint PK_MODULE primary key (MODULENUMMER)
-)
-go
-
-/*==============================================================*/
-/* Table: ORGANISATIE                                           */
-/*==============================================================*/
-create table ORGANISATIE (
-   ORGANISATIENUMMER     varchar(15)          not null,
-   ORGANISATIENAAM       varchar(255)         null,
-   constraint PK_ORGANISATIE primary key (ORGANISATIENUMMER)
-)
-go
-
-/*==============================================================*/
-/* Table: SECTOR                                                */
-/*==============================================================*/
-create table SECTOR (
-   SECTORNAAM          varchar(255)         not null,
-   constraint PK_SECTOR primary key (SECTORNAAM)
 )
 go
 
@@ -320,9 +323,9 @@ create table WORKSHOP (
    ADRES							varchar(255)         null,
    POSTCODE							varchar(12)          null,
    PLAATSNAAM						varchar(255)         null,
-   STATUS							varchar(255)         null,
+   [STATUS]							varchar(255)         null,
    OPMERKING						varchar(255)         null,
-   TYPE								varchar(3)           null,
+   [TYPE]							varchar(3)           null,
    VERWERKT_BREIN					date	             null,
    DEELNEMER_GEGEVENS_ONTVANGEN		date	             null,
    OVK_BEVESTIGING					date	             null,
@@ -334,14 +337,14 @@ create table WORKSHOP (
 go
 
 /*==============================================================*/
-/* Table: WORKSHOPLEIDER                                        */
+/* Table: DEELNEMER_IN_WORKSHOP                                 */
 /*==============================================================*/
-create table WORKSHOPLEIDER (
-   WORKSHOPLEIDER_ID    int IDENTITY         not null,
-   VOORNAAM				varchar(255)         not null,
-   ACHTERNAAM			varchar(255)         not null,
-   TOEVOEGING			tinyint				 null,
-   constraint PK_WORKSHOPLEIDER primary key (WORKSHOPLEIDER_ID)
+create table DEELNEMER_IN_WORKSHOP (
+   WORKSHOP_ID          int			         not null,
+   DEELNEMER_ID         int                  not null,
+   VOLGNUMMER           int                  not null,
+   IS_GOEDGEKEURD       bit                  not null	DEFAULT 0,
+   constraint PK_DEELNEMER_IN_WORKSHOP primary key (WORKSHOP_ID, DEELNEMER_ID)
 )
 go
 
