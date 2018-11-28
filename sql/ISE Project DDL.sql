@@ -182,6 +182,7 @@ go
 create table ADVISEUR (
    ADVISEUR_ID          int IDENTITY         not null,
    ORGANISATIENUMMER    varchar(15)          not null,
+   SECTORNAAM			varchar(255)         not null,
    VOORNAAM				varchar(255)         not null,
    ACHTERNAAM			varchar(255)         not null,
    TELEFOONNUMMER       varchar(255)         null,
@@ -223,10 +224,10 @@ create table DEELNEMER (
    DEELNEMER_ID					int IDENTITY         not null,
    SECTORNAAM					varchar(255)         not null,
    ORGANISATIENUMMER			varchar(15)          null,
-   AANHEF						varchar(4)           not null,
+   AANHEF						varchar(7)           not null,
    VOORNAAM						varchar(255)         not null,
    ACHTERNAAM					varchar(255)         not null,
-   GEBOORTEDATUM				datetime             not null,
+   GEBOORTEDATUM				date	             not null,
    EMAIL						varchar(255)         not null,
    TELEFOONNUMMER				varchar(255)         not null,
    OPLEIDINGSNIVEAU				varchar(11)          not null,
@@ -290,21 +291,21 @@ create table WORKSHOP (
    MODULENUMMER						int                  null,
    ADVISEUR_ID						int                  null,
    SECTORNAAM						varchar(255)         null,
-   DATUM							datetime             null,
-   STARTTIJD						datetime             null,
-   EINDTIJD							datetime             null,
+   DATUM							date	             null,
+   STARTTIJD						time	             null,
+   EINDTIJD							time	             null,
    ADRES							varchar(255)         null,
    POSTCODE							varchar(12)          null,
    PLAATSNAAM						varchar(255)         null,
    STATUS							varchar(255)         null,
    OPMERKING						varchar(255)         null,
    TYPE								varchar(3)           null,
-   VERWERKT_BREIN					datetime             null,
-   DEELNEMER_GEGEGEVENS_ONTVANGEN	datetime             null,
-   OVK_BEVESTIGING					datetime             null,
-   PRESENTIELIJST_VERSTUURD			datetime             null,
-   PRESENTIELIJST_ONTVANGEN			datetime             null,
-   BEWIJS_DEELNAME_MAIL_SBB_WSL		datetime             null,
+   VERWERKT_BREIN					date	             null,
+   DEELNEMER_GEGEGEVENS_ONTVANGEN	date	             null,
+   OVK_BEVESTIGING					date	             null,
+   PRESENTIELIJST_VERSTUURD			date	             null,
+   PRESENTIELIJST_ONTVANGEN			date	             null,
+   BEWIJS_DEELNAME_MAIL_SBB_WSL		date	             null,
    constraint PK_WORKSHOP primary key (WORKSHOP_ID)
 )
 go
@@ -324,6 +325,11 @@ go
 alter table ADVISEUR
    add constraint FK_ADVISEUR_ref_ORGANISATIE foreign key (ORGANISATIENUMMER)
       references ORGANISATIE (ORGANISATIENUMMER)
+go
+
+alter table ADVISEUR
+   add constraint FK_ADVISEUR_ref_SECTOR foreign key (SECTORNAAM)
+      references SECTOR (SECTORNAAM)
 go
 
 alter table BESCHIKBAARHEID
