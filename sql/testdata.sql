@@ -1,10 +1,20 @@
 USE SBBWorkshopOmgeving
 GO
 
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[MODULE]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
+
 /*==============================================================*/
 /* Table: ORGANISATIE                                           */
 /*==============================================================*/
-DELETE FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
 INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ORGANISATIE] (ORGANISATIENUMMER, ORGANISATIENAAM)
 SELECT ROW_NUMBER() OVER (ORDER BY S.[Name]) AS [ORGANISATIENUMMER], S.[Name] AS [ORGANISATIENAAM]
 FROM [AdventureWorks2014].[Sales].[Store] S
@@ -18,7 +28,6 @@ ORDER BY ORGANISATIENAAM
 /*==============================================================*/
 /* Table: ADVISEUR                                              */
 /*==============================================================*/
-DELETE FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
 ;WITH orgnum AS -- organizationnumber/organisatienummer
 (
 SELECT TOP 300 ORGANISATIENUMMER, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
@@ -65,7 +74,6 @@ FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
 /*==============================================================*/
 /* Table: CONTACTPERSOON                                        */
 /*==============================================================*/
-DELETE FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
 ;WITH orgnum AS -- organizationnumber/organisatienummer
 (
 SELECT TOP 300 ORGANISATIENUMMER, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
@@ -112,7 +120,6 @@ FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
 /*==============================================================*/
 /* Table: WORKSHOPLEIDER                                        */
 /*==============================================================*/
-DELETE FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER]
 ;WITH fname AS -- firstname/voornaam
 (
 SELECT TOP 300 FirstName, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
@@ -136,7 +143,6 @@ FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER]
 /*==============================================================*/
 /* Table: BESCHIKBAARHEID                                       */
 /*==============================================================*/
-DELETE FROM [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID]
 INSERT INTO [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID] (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
 SELECT WORKSHOPLEIDER_ID,
 FLOOR(RAND(CHECKSUM(NEWID()))*(10-7+1)+1) AS [quarter], -- quarter/kwartaal
@@ -152,7 +158,6 @@ FROM [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID]
 /*==============================================================*/
 /* Table: SECTOR                                                */
 /*==============================================================*/
-DELETE FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
 INSERT INTO [SBBWorkshopOmgeving].[dbo].[SECTOR] (SECTORNAAM)
 VALUES	('ICTCI'),
 		('MTLM'),
@@ -171,7 +176,6 @@ FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
 /*==============================================================*/
 /* Table: DEELNEMER                                             */
 /*==============================================================*/
-DELETE FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER]
 ;WITH orgnum AS -- organizationnumber/organisatienummer
 (
 SELECT TOP 250 ORGANISATIENUMMER, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
@@ -259,13 +263,11 @@ FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER]
 /*==============================================================*/
 /* Table: MODULE                                                */
 /*==============================================================*/
-DELETE FROM [SBBWorkshopOmgeving].[dbo].[MODULE]
 INSERT INTO [SBBWorkshopOmgeving].[dbo].[MODULE] (MODULENUMMER, MODULENAAM)
 VALUES	(1, 'Matching en Voorbereiding'),
 		(2, 'Begeleiding tijdens BPV'),
 		(3, 'Beoordeling')
 go
-
 /*
 SELECT *
 FROM [SBBWorkshopOmgeving].[dbo].[MODULE]
@@ -274,7 +276,6 @@ FROM [SBBWorkshopOmgeving].[dbo].[MODULE]
 /*==============================================================*/
 /* Table: WORKSHOP                                              */
 /*==============================================================*/
-DELETE FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
 ;WITH wl_id_sname AS -- workshopleader_id + sectorname/workshopleider_id + sectornaam
 (
 SELECT TOP 250 WORKSHOPLEIDER_ID, SECTORNAAM, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
@@ -425,7 +426,6 @@ FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
 /*==============================================================*/
 /* Table: DEELNEMER_IN_WORKSHOP                                 */
 /*==============================================================*/
-DELETE FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]
 --INSERT INTO [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]
 go
 /*
