@@ -5,12 +5,30 @@ DELETE FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[MODULE]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER]
-DELETE FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
+
+/*==============================================================*/
+/* Table: SECTOR                                                */
+/*==============================================================*/
+INSERT INTO [SBBWorkshopOmgeving].[dbo].[SECTOR] (SECTORNAAM)
+VALUES	('ICTCI'),
+		('MTLM'),
+		('SV'),
+		('TGO'),
+		('VGG'),
+		('ZDV'),
+		('ZWS'),
+		('Handel')
+go
+/*
+SELECT *
+FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
+*/
 
 /*==============================================================*/
 /* Table: ORGANISATIE                                           */
@@ -153,24 +171,6 @@ go
 /*
 SELECT *
 FROM [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID]
-*/
-
-/*==============================================================*/
-/* Table: SECTOR                                                */
-/*==============================================================*/
-INSERT INTO [SBBWorkshopOmgeving].[dbo].[SECTOR] (SECTORNAAM)
-VALUES	('ICTCI'),
-		('MTLM'),
-		('SV'),
-		('TGO'),
-		('VGG'),
-		('ZDV'),
-		('ZWS'),
-		('Handel')
-go
-/*
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
 */
 
 /*==============================================================*/
