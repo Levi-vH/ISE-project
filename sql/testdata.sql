@@ -265,6 +265,7 @@ VALUES	(1, 'Matching en Voorbereiding'),
 		(2, 'Begeleiding tijdens BPV'),
 		(3, 'Beoordeling')
 go
+
 /*
 SELECT *
 FROM [SBBWorkshopOmgeving].[dbo].[MODULE]
