@@ -6,6 +6,8 @@ GO
 -- check if workshopstate = 'bevestigd' when WORKSHOPLEIDER_ID is not null
 -- ik denk dat het fout gaat omdat de update in de trigger dezelfde trigger nog een keer aanroept 
 -- en dan heeft status wel een waarde waardoor de raiserror 2 altijd voorkomt
+-- de trigger zelf doet zijn werk en alles werkt, maar ik moet testen door waardes te vergelijken met verwachte waardes
+-- niet met het verwachte bericht omdat er dan altijd de 2e raiserror komt 
 --=========================================================================
 DROP TRIGGER IF EXISTS dbo.TRG_workshop_state_bevestigd
 GO
@@ -27,30 +29,37 @@ BEGIN
 	SELECT *
 	FROM DELETED
 
-	IF EXISTS  (SELECT WORKSHOPLEIDER_ID
-				FROM DELETED)
-	RAISERROR ('WORKSHOP status was not changed to bevestigd automatically1', 16,1)
-
-	IF NOT EXISTS  (SELECT WORKSHOPLEIDER_ID
-					FROM DELETED)
-	BEGIN
+	--IF EXISTS  (SELECT WORKSHOPLEIDER_ID
+	--			FROM DELETED)
+	--RETURN
 	
-	IF EXISTS (SELECT STATUS FROM INSERTED)
-	RAISERROR ('WORKSHOP status was not changed to bevestigd automatically2', 16,1)
+	--IF EXISTS (SELECT STATUS FROM INSERTED)
+	--RETURN
 
-	IF EXISTS  (SELECT STATUS FROM DELETED)
-	RAISERROR ('WORKSHOP status was not changed to bevestigd automatically3', 16,1)
-	END
+--	IF EXISTS  (SELECT STATUS FROM DELETED)
+	--RETURN
+	
+			SELECT *
+			FROM WORKSHOP W INNER JOIN inserted i
+			ON W.WORKSHOP_ID = i.WORKSHOP_ID 
+			LEFT JOIN deleted d 
+			ON W.WORKSHOP_ID = d.WORKSHOP_ID 
+			WHERE i.WORKSHOPLEIDER_ID IS NOT NULL
+			AND d.WORKSHOPLEIDER_ID IS NULL
+			AND i.STATUS IS NULL 
 
 	IF UPDATE(WORKSHOPLEIDER_ID)
 	BEGIN 
-		IF NOT EXISTS  (SELECT WORKSHOPLEIDER_ID
-						FROM DELETED)
 		BEGIN TRY
 			UPDATE WORKSHOP
 			SET STATUS = 'bevestigd'
 			FROM WORKSHOP W INNER JOIN inserted i
-			ON W.WORKSHOP_ID = i.WORKSHOP_ID AND i.WORKSHOPLEIDER_ID IS NOT NULL
+			ON W.WORKSHOP_ID = i.WORKSHOP_ID 
+			LEFT JOIN deleted d 
+			ON W.WORKSHOP_ID = d.WORKSHOP_ID 
+			WHERE i.WORKSHOPLEIDER_ID IS NOT NULL
+			AND d.WORKSHOPLEIDER_ID IS NULL
+			AND i.STATUS IS NULL 
 
 			SELECT *
 			FROM WORKSHOP
@@ -61,7 +70,7 @@ BEGIN
 		END CATCH
 
 	END
-	ELSE RAISERROR ('WORKSHOP status was not changed to bevestigd automatically4', 16,1)
+	ELSE RETURN
 END
 GO
 
