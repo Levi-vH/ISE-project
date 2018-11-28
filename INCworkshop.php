@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
             <label class="control-label col-sm-2" for="Organisation_Relationnumber">Relatie nummer:</label>
             <div class="col-sm-10">
-                <input id=Organisation_Relationnumber" type="text" class="form-control" placeholder="Relatie nummer" name="Organisation_Relationnumber">
+                <input id="Organisation_Relationnumber" type="text" class="form-control" placeholder="Relatie nummer" name="Organisation_Relationnumber">
             </div>
         </div>
         <div class="form-group">
@@ -190,9 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         var organisatieValue = organisatienaam.options[organisatienaam.selectedIndex].value;
         console.log(organisatieValue);
 
-
-
-        document.getElementById("Organisation_Relationnumber").value('hoi');
+        $("#Organisation_Relationnumber").val('hoi');
 
     }
 
