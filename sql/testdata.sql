@@ -214,14 +214,34 @@ SELECT TOP 250 JobTitle, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
 FROM [AdventureWorks2014].[HumanResources].[Employee]
 )
 INSERT INTO [SBBWorkshopOmgeving].[dbo].[DEELNEMER] (SECTORNAAM, ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIE_VESTIGINGSPLAATS, IS_OPEN_INSCHRIJVING, GEWENST_BEGELEIDINGSNIVEAU, FUNCTIENAAM)
-SELECT ORGANISATIENUMMER, FirstName, LastName, phonenumber,
+SELECT SECTORNAAM, ORGANISATIENUMMER,
+honorific =
+CASE
+	WHEN randomhonorific = 0 THEN 'meneer'
+	ELSE 'mevrouw'
+END,
+FirstName, LastName, birthdate, -- birthdate nog
 email =
 CASE
 	WHEN randomemail = 0 THEN
 	LOWER(left(FirstName,1)+LastName)+'@hotmail.com'
 	ELSE 
 	LOWER(left(FirstName,1)+LastName)+'@gmail.com'
-END
+END,
+phonenumber,
+education =
+CASE
+	WHEN randomeducation = 0 THEN 'mbo'
+	ELSE 'hbo'
+END,
+City,
+randomenrollment,
+guidance =
+CASE
+	WHEN randomguidance = 0 THEN 'mbo'
+	ELSE 'hbo'
+END,
+JobTitle
 FROM orgnum o, fname_hon_sector_educ fhse, lname_email_enroll_guid leeg, bdate b, phonenum p, oblocation ol, funcname f
 WHERE o.id = fhse.id
 AND o.id = leeg.id
