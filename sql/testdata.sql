@@ -1,4 +1,4 @@
-USE SBBWorkshopOmgeving
+USE master
 GO
 
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]

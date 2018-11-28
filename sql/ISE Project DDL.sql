@@ -15,6 +15,7 @@ GO
 USE SBBWorkshopOmgeving
 GO
 
+/* ONDERSTAANDE IS WELLICHT NIET COMPLEET, DROP DATABASE DOET HETZELFDE, MAAR HET ONDERSTAANDE IS MISSCHIEN BETER?
 if exists (select 1
    from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
    where r.fkeyid = object_id('ADVISEUR') and o.name = 'FK_ADVISEUR_ref_ORGANISATIE')
@@ -107,6 +108,20 @@ alter table WORKSHOP
 go
 
 if exists (select 1
+   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
+   where r.fkeyid = object_id('AANVRAAG') and o.name = 'FK_AANVRAAG_ref_CONTACTPERSOON')
+alter table AANVRAAG
+   drop constraint FK_AANVRAAG_ref_CONTACTPERSOON
+go
+
+if exists (select 1
+   from sys.sysreferences r join sys.sysobjects o on (o.id = r.constid and o.type = 'F')
+   where r.fkeyid = object_id('AANVRAAG') and o.name = 'FK_AANVRAAG_ref_ADVISEUR')
+alter table AANVRAAG
+   drop constraint FK_AANVRAAG_ref_ADVISEUR
+go
+
+if exists (select 1
             from  sysobjects
            where  id = object_id('ADVISEUR')
             and   type = 'U')
@@ -175,6 +190,14 @@ if exists (select 1
             and   type = 'U')
    drop table WORKSHOPLEIDER
 go
+
+if exists (select 1
+            from  sysobjects
+           where  id = object_id('AANVRAAG')
+            and   type = 'U')
+   drop table AANVRAAG
+go
+*/
 
 /*==============================================================*/
 /* Table: ADVISEUR                                              */
@@ -322,6 +345,18 @@ create table WORKSHOPLEIDER (
 )
 go
 
+/*==============================================================*/
+/* Table: AANVRAAG		                                        */
+/*==============================================================*/
+create table AANVRAAG (
+   AANVRAAG_ID		    int IDENTITY         not null,
+   CONTACTPERSOON_ID	int			         not null,
+   ADVISEUR_ID			int			         not null,
+   AANTAL_GROEPEN		tinyint				 not null,
+   constraint PK_AANVRAAG primary key (AANVRAAG_ID)
+)
+go
+
 alter table ADVISEUR
    add constraint FK_ADVISEUR_ref_ORGANISATIE foreign key (ORGANISATIENUMMER)
       references ORGANISATIE (ORGANISATIENUMMER)
@@ -390,4 +425,14 @@ go
 alter table WORKSHOP
    add constraint FK_WORKSHOP_ref_SECTOR foreign key (SECTORNAAM)
       references SECTOR (SECTORNAAM)
+go
+
+alter table AANVRAAG
+   add constraint FK_AANVRAAG_ref_CONTACTPERSOON foreign key (CONTACTPERSOON_ID)
+      references CONTACTPERSOON (CONTACTPERSOON_ID)
+go
+
+alter table AANVRAAG
+   add constraint FK_AANVRAAG_ref_ADVISEUR foreign key (ADVISEUR_ID)
+      references ADVISEUR (ADVISEUR_ID)
 go
