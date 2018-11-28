@@ -1,3 +1,50 @@
+<?php
+include 'header.html';
+include 'functions.php';
+
+// define (empty) variables
+$workshoptype = $workshopdate = $contactinfo = $workshopmodule = $workshopcompany = $workshopsector = $starttime = $endtime =
+$workshopadress = $workshoppostcode = $workshopcity = $workshopleader = $workshopnotes = '';
+
+// The ones that do not get checked are dropdown or select.
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $workshoptype = $_POST["workshoptype"];
+    $workshopdate = $_POST["workshopdate"];
+    //$contactinfo = check_input($_POST["contactinfo"]);
+    $workshopmodule = $_POST["workshopmodule"];
+    $workshopcompany = $_POST["workshopcompany"];
+    $workshopsector = $_POST["workshopsector"];
+    $starttime = $_POST["workshopstarttime"];
+    $endtime = $_POST["workshopendtime"];
+    $workshopadress = check_input($_POST["workshopaddress"]);
+    $workshoppostcode = check_input($_POST["workshoppostcode"]);
+    $workshopcity = check_input($_POST["workshopcity"]);
+    $workshopleader = check_input($_POST["workshopleader"]);
+    $workshopnotes = check_input(@$_POST['workshopnotes']);
+
+    //Try to make connection
+    $conn = connectToDB();
+
+    //Run the stored procedure
+    $sql = "exec proc_create_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $workshoptype, PDO::PARAM_STR);
+    $stmt->bindParam(2, $workshopdate, PDO::PARAM_STR);
+    //$stmt->bindParam(3, $contactinfo, PDO::PARAM_STR);
+    $stmt->bindParam(3, $workshopmodule, PDO::PARAM_INT);
+    $stmt->bindParam(4, $workshopcompany, PDO::PARAM_INT);
+    $stmt->bindParam(5, $workshopsector, PDO::PARAM_STR);
+    $stmt->bindParam(6, $starttime, PDO::PARAM_STR);
+    $stmt->bindParam(7, $endtime, PDO::PARAM_STR);
+    $stmt->bindParam(8, $workshopadress, PDO::PARAM_STR);
+    $stmt->bindParam(9, $workshoppostcode, PDO::PARAM_STR);
+    $stmt->bindParam(10, $workshopcity, PDO::PARAM_STR);
+    $stmt->bindParam(11, $workshopleader, PDO::PARAM_STR);
+    $stmt->bindParam(12, $workshopnotes, PDO::PARAM_STR);
+    $stmt->execute();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,138 +53,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <?php include 'header.html';  ?>
 </head>
 <body>
-<?php
-?>
 <div class="container">
-    <h2 class="text-info text-center">Aanvraag INC workshop</h2>
+
+    <h2 class="text-info text-center" >Aanvraag INC workshop</h2>
+    <br>
+
     <h3>Organisatie</h3>
     <form class="form-horizontal" action="">
         <div class="form-group">
-            <label class="control-label col-sm-2" for="Organisationname">Naam Organisatie:</label>
+            <label class="control-label col-sm-2" for="Organisation_Name">Naam Organisatie:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Naam organisatie" name="Organisationname">
+                <input type="text" class="form-control" placeholder="Naam organisatie" name="Organisation_Name">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="Relationnumber">Relatie nummer:</label>
+            <label class="control-label col-sm-2" for="Organisation_Relationnumber">Relatie nummer:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Relatie nummer" name="Relationnumber">
+                <input type="text" class="form-control" placeholder="Relatie nummer" name="Organisation_Relationnumber">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="address">Adres:</label>
+            <label class="control-label col-sm-2" for="Organisation_Address">Adres:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Adres" name="address">
+                <input type="text" class="form-control" placeholder="Adres organisatie" name="Organisation_Address">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="Postcode">Postcode:</label>
+            <label class="control-label col-sm-2" for="Organisation_Postcode">Postcode:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Postcode" name="Postcode">
+                <input type="text" class="form-control" placeholder="Postcode organisatie" name="Organisation_Postcode">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="Town">Plaats:</label>
+            <label class="control-label col-sm-2" for="Organisation_Town">Plaats:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Plaats" name="Town">
+                <input type="text" class="form-control" placeholder="Plaats organisatie" name="Organisation_Town">
             </div>
         </div>
-        <h3>Contactpersoon</h3>
+        <br>
+
+        <h3>Contactpersoon Organisatie</h3>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="contact_name">Contactpersoon:</label>
+            <label class="control-label col-sm-2" for="Contact_Name">Contactpersoon:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="naam" name="contact_name">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="contact_telephonenumber">Telefoonnummer:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Telefoonnummer" name="contact_telephonenumber">
+                <input type="text" class="form-control" placeholder="Naam contactpersoon" name="Contact_Name">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="contact_Email">Email:</label>
+            <label class="control-label col-sm-2" for="Contact_Telephonenumber">Telefoonnummer:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Email" name="contact_Email">
+                <input type="text" class="form-control" placeholder="Telefoonnummer contactpersoon" name="Contact_Telephonenumber">
             </div>
         </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="Contact_Email">Email:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" placeholder="Email contactpersoon" name="Contact_Email">
+            </div>
+        </div>
+        <br>
+
         <h3>Coördinatie SBB</h3>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopmodule">Module:</label>
+            <label class="control-label col-sm-2" for="Coordination_Contact">Contactpersoon:</label>
             <div class="col-sm-10">
-                <select class="form-control" name="workshopmodule">
-                    <option>Selecteer module...</option>
-                    <option>Module 1: Matching en Voorbereiding</option>
-                    <option>Module 2: Begeleiding tijdens BPV</option>
-                    <option>Module 3: Beoordeling</option>
+                <select class="form-control" name="Coordination_Contact">
+                    <option>Selecteer Contactpersoon Coördinatie...</option>
+                    <option>D. Krom</option>
+                    <option>R. Ates</option>
+                    <option>G.Gültekin</option>
+                    <option>K. deBruijn</option>
                 </select>
             </div>
         </div>
+        <br>
+
+        <h3>Adviseur SBB</h3>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopcompany">Organisatie:</label>
+            <label class="control-label col-sm-2" for="Advisor_practical_learning">Adviseur praktijkleren:</label>
             <div class="col-sm-10">
-                <select class="form-control" name="workshopcompany">
-                    <option>Selecteer organisatie...</option>
-                    <option>SBB</option>
-                    <option>NSB</option>
-                    <option>Lageschool van Arnhem en Duisburg</option>
-                </select>
+                <input type="text" class="form-control" placeholder="Adviseur praktijkleren" name="Advisor_practical_learning">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopsector">Sector:</label>
+            <label class="control-label col-sm-2" for="Advisor_Email">Email:</label>
             <div class="col-sm-10">
-                <select class="form-control" name="workshopsector">
-                    <option>Selecteer sector...</option>
-                    <option>ZWS</option>
-                    <option>NSB</option>
-                    <option>BSN</option>
-                </select>
+                <input type="text" class="form-control" placeholder="Email adviseur" name="Advisor_Email">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopstarttime">Begintijd workshop:</label>
+            <label class="control-label col-sm-2" for="Advisor_Telephonenumber">Telefoonnummer:</label>
             <div class="col-sm-10">
-                <input type="time" class="form-control" placeholder="Begintijd" name="workshopstarttime">
+                <input type="text" class="form-control" placeholder="Telefoonnummer adviseur" name="Advisor_Telephonenumber">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopendtime">Eindtijd workshop:</label>
+            <label class="control-label col-sm-2" for="Advisor_Sector">Sector:</label>
             <div class="col-sm-10">
-                <input type="time" class="form-control" placeholder="Eindtijd" name="workshopendtime">
+                <?php
+                echo selectBox("workshopsector", "sector",array("sectornaam"), "sectornaam", array("sectornaam"), "sectornaam");
+                ?>
+            </div>
+        </div>
+        <br>
+
+        <h3>Groepen</h3>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="Groups">Aantal groepen:</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" name="Groups">
             </div>
         </div>
 
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshoppostcode">Postcode workshop:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Postcode" name="workshoppostcode">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopcity">Plaats workshop:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Plaats" name="workshopcity">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopleader">Workshopleider workshop:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Workshopleider" name="workshopleader">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopnotes">Opmerkingen workshop:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Opmerkingen" name="workshopnotes">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">Submit</button>
+            <div class="col-sm-offset-5 col-sm-10">
+                <button type="submit" class="btn btn-success btn-lg">Vraag Incompany Workshop Aan</button>
             </div>
         </div>
     </form>
@@ -146,3 +178,5 @@
 </body>
 <?php include 'footer.html'; ?>
 </html>
+
+
