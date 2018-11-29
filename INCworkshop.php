@@ -76,25 +76,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
             <label class="control-label col-sm-2" for="Organisation_Relationnumber">Relatie nummer:</label>
             <div class="col-sm-10">
-                <input id="Organisation_Relationnumber" type="text" class="form-control" placeholder="Relatie nummer" name="Organisation_Relationnumber">
+                <input id="Organisation_Relationnumber" type="text" class="form-control" placeholder="Relatie nummer" name="Organisation_Relationnumber" disabled>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Organisation_Address">Adres:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Adres organisatie" name="Organisation_Address">
+                <input id="Organisation_Address" type="text" class="form-control" placeholder="Adres organisatie" name="Organisation_Address" disabled>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Organisation_Postcode">Postcode:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Postcode organisatie" name="Organisation_Postcode">
+                <input id="Organisation_Postcode" type="text" class="form-control" placeholder="Postcode organisatie" name="Organisation_Postcode" disabled>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Organisation_Town">Plaats:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Plaats organisatie" name="Organisation_Town">
+                <input id="Organisation_Town" type="text" class="form-control" placeholder="Plaats organisatie" name="Organisation_Town" disabled>
             </div>
         </div>
         <br>
@@ -103,7 +103,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
             <label class="control-label col-sm-2" for="Contact_Name">Contactpersoon:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Naam contactpersoon" name="Contact_Name">
+                <select id= "Contact_Name" class="form-control" name="Contact_Name">
+                    <option>Selecteer Contactpersoon Coördinatie...</option>
+                </select>
             </div>
         </div>
         <div class="form-group">
@@ -189,20 +191,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     function get_organisatie() {
         var organisatienaam = document.getElementById("Organisation_Name");
         var organisatieValue = organisatienaam.options[organisatienaam.selectedIndex].value;
-        console.log(organisatieValue);
-
+        var organisatie_number = '';
         $.ajax({
             url: "autofill.php",
             method: "POST",
             data: { organisation : organisatieValue },
-            dataType: "html"
-        }).done(function( html ) {
-            $("#Organisation_Relationnumber").val(html);
-        });
+            dataType: "json"
+        }).done(function( organisation ) {
+            $("#Organisation_Relationnumber").val(organisation['ORGANISATIENUMMER']);
+            $("#Organisation_Address").val(organisation['ADRES']);
+            $("#Organisation_Postcode").val(organisation['POSTCODE']);
+            $("#Organisation_Town").val(organisation['PLAATSNAAM']);
 
+            get_contactpersons(organisation['ORGANISATIENUMMER']);
+        });
 
 
     }
 
+    function get_contactpersons(relationnumber) {
+        console.log('hoi');
+
+        $.ajax({
+            url: "autofill_contact.php",
+            method: "POST",
+            data: {organisation_number : relationnumber},
+            dataType: "json"
+        }).done(function (contactpersons) {
+            console.log('hoi2');
+            console.log(contactpersons);
+
+            var sel = document.getElementById('Contact_Name');
+            for (var i = 0; i < contactpersons.length; i++) {
+                var opt = document.createElement('option');
+                opt.innerHTML = contactpersons[i];
+                opt.value = contactpersons[i];
+                sel.appendChild(opt);
+            }
+        });
+    }
 
 </script>

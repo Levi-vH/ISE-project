@@ -7,10 +7,10 @@
  */
 include 'functions.php';
 $handler = connectToDB();
-$organisation = check_input($_POST['organisation']);
-$sql = "SELECT * FROM organisatie WHERE ORGANISATIENAAM = ?";
+$organisation_number = check_input($_POST['organisation_number']);
+$sql = "SELECT * FROM contactperson WHERE ORGANISATIENUMBER = ?";
 $stmt = $handler->prepare($sql);
-$stmt->bindParam( 1, $organisation, PDO::PARAM_STR);
+$stmt->bindParam( 1, $organisation_number, PDO::PARAM_STR);
 $stmt->execute();
 
 while($resultaat = $stmt->fetch(PDO::FETCH_ASSOC)) {
