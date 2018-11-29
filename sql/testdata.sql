@@ -45,7 +45,6 @@ FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
 
 SELECT *
 FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]
-ORDER BY VOLGNUMMER
 
 SELECT *
 FROM [SBBWorkshopOmgeving].[dbo].[AANVRAAG]
@@ -484,20 +483,24 @@ go
 /*==============================================================*/
 /* Table: DEELNEMER_IN_WORKSHOP                                 */
 /*==============================================================*/
-CREATE PROCEDURE Testdata_Deelnemer_IN_Workshop
+CREATE OR ALTER PROCEDURE Testdata_Deelnemer_IN_Workshop
 AS
 BEGIN
 	DECLARE @counter INT = 1
 	WHILE @counter <= 100
 		BEGIN
-			INSERT INTO [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP] (WORKSHOP_ID, DEELNEMER_ID, VOLGNUMMER, IS_GOEDGEKEURD)
+			;WITH [1group] AS
+			(
 			SELECT TOP 16	workshop_id,
 							DEELNEMER_ID AS deelnemer_id,
-							@counter AS follownumber,
-							0
+							0 AS is_goedgekeurd
 			FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER],
 			(SELECT TOP 1 WORKSHOP_ID AS workshop_id FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP] ORDER BY NEWID()) workshop
 			ORDER BY NEWID()
+			)
+			INSERT INTO [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP] (WORKSHOP_ID, DEELNEMER_ID, VOLGNUMMER, IS_GOEDGEKEURD)
+			SELECT workshop_id, deelnemer_id, ROW_NUMBER() OVER (ORDER BY deelnemer_id) AS follownumber, is_goedgekeurd
+			FROM [1group]
 			SET @counter += 1
 		END
 END
