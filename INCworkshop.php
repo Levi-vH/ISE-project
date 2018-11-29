@@ -191,13 +191,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     function get_organisatie() {
         var organisatienaam = document.getElementById("Organisation_Name");
         var organisatieValue = organisatienaam.options[organisatienaam.selectedIndex].value;
-        var organisatie_number = '';
         $.ajax({
             url: "autofill.php",
             method: "POST",
             data: { organisation : organisatieValue },
             dataType: "json"
         }).done(function( organisation ) {
+            removeOptions(document.getElementById('Contact_Name'));
             $("#Organisation_Relationnumber").val(organisation['ORGANISATIENUMMER']);
             $("#Organisation_Address").val(organisation['ADRES']);
             $("#Organisation_Postcode").val(organisation['POSTCODE']);
@@ -205,30 +205,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             get_contactpersons(organisation['ORGANISATIENUMMER']);
         });
-
-
     }
 
     function get_contactpersons(relationnumber) {
-        console.log('hoi');
-
         $.ajax({
             url: "autofill_contact.php",
             method: "POST",
-            data: {organisation_number : relationnumber},
-            dataType: "json"
-        }).done(function (contactpersons) {
-            console.log('hoi2');
-            console.log(contactpersons);
+            data: { organisation_number : relationnumber },
+            dateType : "json"
+        }).done(function ( html ) {
+            console.log(JSON.parse(html));
+            contactpersons = (JSON.parse(html));
 
             var sel = document.getElementById('Contact_Name');
-            for (var i = 0; i < contactpersons.length; i++) {
+            $.each(contactpersons, function (index, value) {
                 var opt = document.createElement('option');
-                opt.innerHTML = contactpersons[i];
-                opt.value = contactpersons[i];
+                var full_name = value['VOORNAAM'] + ' ' + value['ACHTERNAAM'];
+                opt.innerHTML = full_name;
+                opt.value = value['CONTACTPERSOON_ID'];
                 sel.appendChild(opt);
-            }
+            });
         });
     }
+
+    function removeOptions(selectbox){
+        var i;
+        for(i=selectbox.options.length - 1; i>=1; i--){
+            selectbox.remove(i);
+        }
+    }
+
+
 
 </script>

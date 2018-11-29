@@ -8,13 +8,13 @@
 include 'functions.php';
 $handler = connectToDB();
 $organisation_number = check_input($_POST['organisation_number']);
-$sql = "SELECT * FROM contactperson WHERE ORGANISATIENUMBER = ?";
+$sql = "SELECT * FROM contactpersoon WHERE ORGANISATIENUMMER = ?";
 $stmt = $handler->prepare($sql);
 $stmt->bindParam( 1, $organisation_number, PDO::PARAM_STR);
 $stmt->execute();
-
+$rows = array();
 while($resultaat = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    echo json_encode($resultaat);
+    $rows[] = $resultaat;
 }
 
-
+echo json_encode($rows, JSON_FORCE_OBJECT);
