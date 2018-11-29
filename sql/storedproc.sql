@@ -7,11 +7,23 @@ GO
 
 CREATE OR ALTER PROC proc_getWorkshops
 (
-@orderby		VARCHAR(40) = 'W.WORKSHOP_ID',
-@orderdirection	VARCHAR(4) = 'ASC'
+@orderby		VARCHAR(40) = null,
+@orderdirection	VARCHAR(4) = null,
+@where			INT = null
 )
 AS
 BEGIN
+
+IF(@orderby IS NULL)
+	BEGIN
+		SET @orderby = 'W.WORKSHOP_ID'
+	END
+
+IF(@orderdirection IS NULL)
+	BEGIN
+		SET @orderdirection = 'ASC'
+	END
+
 
 DECLARE @query VARCHAR(2040)
 SET @query = '
@@ -26,13 +38,24 @@ INNER JOIN ORGANISATIE O ON W.ORGANISATIENUMMER = O.ORGANISATIENUMMER
 INNER JOIN MODULE M ON W.MODULENUMMER = M.MODULENUMMER
 LEFT JOIN WORKSHOPLEIDER WL ON  W.WORKSHOPLEIDER_ID = WL.WORKSHOPLEIDER_ID
 INNER JOIN ADVISEUR A ON W.ADVISEUR_ID = A.ADVISEUR_ID
-INNER JOIN CONTACTPERSOON C ON W.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
-ORDER BY ' + @orderby + ' ' + @orderdirection
+INNER JOIN CONTACTPERSOON C ON W.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID'
+
+IF(@where IS NOT null)
+BEGIN
+	SET @query = @query + ' WHERE WORKSHOP_ID =' + CAST(@where AS VARCHAR(5))
+END
+
+
+SET @query = @query + ' ORDER BY ' + @orderby + ' ' + @orderdirection
+
+PRINT @query
 
 EXEC(@query)
 
 END
 GO
+
+EXEC proc_getWorkshops @where = 5
 
 /*
 SELECT * FROM WORKSHOP
