@@ -13,6 +13,7 @@ CREATE OR ALTER PROC proc_getWorkshops
 )
 AS
 BEGIN
+	SET NOCOUNT ON
 
 	IF(@orderby IS NULL)
 		BEGIN
