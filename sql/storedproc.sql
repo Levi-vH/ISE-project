@@ -34,13 +34,6 @@ EXEC(@query)
 END
 GO
 
--- Test examples
-EXEC proc_getWorkshops STATUS, 'ASC'
-GO
-
-EXEC proc_getWorkshops
-GO
-
 /*
 SELECT * FROM WORKSHOP
 	The inserts below are test-data
