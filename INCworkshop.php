@@ -103,21 +103,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
             <label class="control-label col-sm-2" for="Contact_Name">Contactpersoon:</label>
             <div class="col-sm-10">
-                <select id= "Contact_Name" class="form-control" name="Contact_Name">
-                    <option>Selecteer Contactpersoon Coördinatie...</option>
+                <select id= "Contact_Name" class="form-control" name="Contact_Name" onchange="get_contact_details()">
+                    <option value="">Selecteer Contactpersoon Coördinatie...</option>
                 </select>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Contact_Telephonenumber">Telefoonnummer:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Telefoonnummer contactpersoon" name="Contact_Telephonenumber">
+                <input id="Contact_Telephonenumber" type="text" class="form-control" placeholder="Telefoonnummer contactpersoon" name="Contact_Telephonenumber" disabled>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Contact_Email">Email:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Email contactpersoon" name="Contact_Email">
+                <input id="Contact_Email" type="text" class="form-control" placeholder="Email contactpersoon" name="Contact_Email" disabled>
             </div>
         </div>
         <br>
@@ -141,27 +141,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
             <label class="control-label col-sm-2" for="Advisor_practical_learning">Adviseur praktijkleren:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Adviseur praktijkleren" name="Advisor_practical_learning">
+                <select id= "Advisor_practical_learning" class="form-control" name="Advisor_practical_learning" onchange="get_advisor_details()">
+                    <option value="">Selecteer Adviseur praktijkleren...</option>
+                </select>
             </div>
         </div>
+
         <div class="form-group">
             <label class="control-label col-sm-2" for="Advisor_Email">Email:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Email adviseur" name="Advisor_Email">
+                <input id="Advisor_Email" type="text" class="form-control" placeholder="Email adviseur" name="Advisor_Email" disabled>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Advisor_Telephonenumber">Telefoonnummer:</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" placeholder="Telefoonnummer adviseur" name="Advisor_Telephonenumber">
+                <input id="Advisor_Telephonenumber" type="text" class="form-control" placeholder="Telefoonnummer adviseur" name="Advisor_Telephonenumber" disabled>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Advisor_Sector">Sector:</label>
             <div class="col-sm-10">
-                <?php
-                echo selectBox("workshopsector", "sector",array("sectornaam"), "sectornaam", array("sectornaam"), "sectornaam");
-                ?>
+                <input id="Advisor_Sector" type="text" class="form-control" placeholder="Telefoonnummer adviseur" name="Advisor_Sector" disabled>
             </div>
         </div>
         <br>
@@ -192,18 +193,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         var organisatienaam = document.getElementById("Organisation_Name");
         var organisatieValue = organisatienaam.options[organisatienaam.selectedIndex].value;
         $.ajax({
-            url: "autofill.php",
+            url: "autofill_organisation.php",
             method: "POST",
             data: { organisation : organisatieValue },
             dataType: "json"
         }).done(function( organisation ) {
             removeOptions(document.getElementById('Contact_Name'));
+            removeOptions(document.getElementById('Advisor_practical_learning'));
             $("#Organisation_Relationnumber").val(organisation['ORGANISATIENUMMER']);
             $("#Organisation_Address").val(organisation['ADRES']);
             $("#Organisation_Postcode").val(organisation['POSTCODE']);
             $("#Organisation_Town").val(organisation['PLAATSNAAM']);
 
             get_contactpersons(organisation['ORGANISATIENUMMER']);
+            $("#Contact_Telephonenumber").val('');
+            $("#Contact_Email").val('');
+            $("#Advisor_Telephonenumber").val('');
+            $("#Advisor_Email").val('');
+            $("#Advisor_Sector").val('');
+            get_advisor(organisation['ORGANISATIENUMMER']);
         });
     }
 
@@ -214,9 +222,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             data: { organisation_number : relationnumber },
             dateType : "json"
         }).done(function ( html ) {
-            console.log(JSON.parse(html));
             contactpersons = (JSON.parse(html));
-
             var sel = document.getElementById('Contact_Name');
             $.each(contactpersons, function (index, value) {
                 var opt = document.createElement('option');
@@ -228,13 +234,78 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         });
     }
 
+    function get_contact_details(){
+        var contactname = document.getElementById("Contact_Name");
+        var contactValue = contactname.options[contactname.selectedIndex].value;
+
+        if (contactValue == ''){
+            $("#Contact_Telephonenumber").val('');
+            $("#Contact_Email").val('');
+            return;
+        }
+
+        $.ajax({
+            url: "autofill_contact_details.php",
+            method: "POST",
+            data: { contact_id : contactValue },
+            dateType : "json"
+        }).done(function ( html ) {
+            contact_details = (JSON.parse(html));
+            $("#Contact_Telephonenumber").val(contact_details[0]['TELEFOONNUMMER']);
+            $("#Contact_Email").val(contact_details[0]['EMAIL']);
+        });
+    }
+
+
+    function get_advisor(relationnumber) {
+        $.ajax({
+            url: "autofill_advisor.php",
+            method: "POST",
+            data: { organisation_number : relationnumber },
+            dateType : "json"
+        }).done(function ( html ) {
+            contactpersons = (JSON.parse(html));
+            var sel = document.getElementById('Advisor_practical_learning');
+            $.each(contactpersons, function (index, value) {
+                var opt = document.createElement('option');
+                var full_name = value['VOORNAAM'] + ' ' + value['ACHTERNAAM'];
+                opt.innerHTML = full_name;
+                opt.value = value['ADVISEUR_ID'];
+                sel.appendChild(opt);
+            });
+        });
+    }
+
+    function get_advisor_details(){
+        var advisorname = document.getElementById("Advisor_practical_learning");
+        var advisorValue = advisorname.options[advisorname.selectedIndex].value;
+
+        if (advisorValue == ''){
+            $("#Advisor_Telephonenumber").val('');
+            $("#Advisor_Email").val('');
+            $("#Advisor_Sector").val('');
+            return;
+        }
+
+        $.ajax({
+            url: "autofill_advisor_details.php",
+            method: "POST",
+            data: { advisor_id : advisorValue },
+            dateType : "json"
+        }).done(function ( html ) {
+            advisor_details = (JSON.parse(html));
+            $("#Advisor_Telephonenumber").val(advisor_details[0]['TELEFOONNUMMER']);
+            $("#Advisor_Email").val(advisor_details[0]['EMAIL']);
+            $("#Advisor_Sector").val(advisor_details[0]['SECTORNAAM']);
+        });
+    }
+
+
     function removeOptions(selectbox){
         var i;
         for(i=selectbox.options.length - 1; i>=1; i--){
             selectbox.remove(i);
         }
     }
-
-
 
 </script>
