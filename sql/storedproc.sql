@@ -99,6 +99,23 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROC proc_request_approved_workshop_participants
+(
+@workshop_id INT
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	SELECT		VOLGNUMMER, VOORNAAM, ACHTERNAAM
+	FROM		DEELNEMER_IN_WORKSHOP DW INNER JOIN DEELNEMER D
+	ON			DW.DEELNEMER_ID = D.DEELNEMER_ID
+	WHERE		WORKSHOP_ID = @workshop_id
+	AND			IS_GOEDGEKEURD = 1
+	ORDER BY	VOLGNUMMER
+END
+GO
+
 /*==============================================================*/
 /* SP Type: INSERT                                              */
 /*==============================================================*/
