@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <br>
 
     <h3>Organisatie</h3>
-    <form class="form-horizontal" action="">
+    <form class="form-horizontal" action="" method="post">
         <div class="form-group">
             <label class="control-label col-sm-2" for="Organisation_Name">Naam Organisatie:</label>
             <div class="col-sm-10">
