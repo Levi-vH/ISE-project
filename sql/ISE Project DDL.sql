@@ -203,9 +203,11 @@ go
 /* Table: PLANNER                                                */
 /*==============================================================*/
 CREATE TABLE PLANNER(
-	NAAM VARCHAR(50) NOT NULL
-	CONSTRAINT pk_planners PRIMARY KEY (NAAM)
+	NAAM VARCHAR(50) NOT NULL,
+
+	CONSTRAINT PK_planners PRIMARY KEY (NAAM)
 )
+go
 
 /*==============================================================*/
 /* Table: SECTOR                                                */

@@ -662,3 +662,12 @@ FROM ad_id_cp_id ac, grps g
 WHERE ac.id = g.id
 go
 */
+
+/*==============================================================*/
+/* Table: planner				                                */
+/*==============================================================*/
+insert into planner values
+('D. Krom'),
+('R. Ates'),
+('G. Gültekin'),
+('K. deBruijn')
