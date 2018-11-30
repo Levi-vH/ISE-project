@@ -54,31 +54,6 @@ BEGIN
 END
 GO
 
-
-/*
-SELECT * FROM WORKSHOP
-	The inserts below are test-data
-
-INSERT INTO WORKSHOP VALUES (1,1,1,1,1,'Handel', GETDATE() , '12:00:00', '14:00:00', 'Wegstraat 1','5123 XD', 'Nijmegen', 'uitgezet', null, 'INC', null,null,null,null,null,null)
-
-INSERT INTO WORKSHOP VALUES (2,2,2,2,2,'Handel', GETDATE() , '12:00:00', '14:00:00', 'Wegstraat 1','5123 XD', 'Nijmegen', 'uitgezet', null, 'INC', null,null,null,null,null,null)
-
-INSERT INTO WORKSHOP
-VALUES (NULL,4,4,1,4,'Handel', GETDATE() , '12:00:00', '14:00:00', 'Wegstraat 1','5123 XD', 'Nijmegen', 'uitgezet', null, 'INC', null,null,null,null,null,null)
-
-INSERT INTO DEELNEMER_IN_WORKSHOP
-			VALUES
-			(1,2,1,1),
-			(1,5,2,1),
-			(1,151,3,1),
-			(1,65,4,1),
-			(1,213,5,1),
-			(1,88,6,1),
-			(1,25,7,0),
-			(1,41,8,0)
-
-*/
-
 CREATE OR ALTER PROC proc_request_workshop_participants
 (
 @workshop_id INT
