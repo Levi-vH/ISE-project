@@ -1,6 +1,14 @@
 USE SBBWorkshopOmgeving
 GO
 
+/*
+Procedure order:
+- SELECT procedures
+- INSERT procedures
+- UPDATE procedures
+- DELETE procedures
+*/
+
 /*==============================================================*/
 /* SP Type: SELECT                                              */
 /*==============================================================*/
@@ -202,3 +210,7 @@ BEGIN
 	END CATCH
 END
 GO
+
+/*==============================================================*/
+/* SP Type: DELETE                                              */
+/*==============================================================*/
