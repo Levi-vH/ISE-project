@@ -368,6 +368,7 @@ create table AANVRAAG (
    ADVISEUR_ID			int			         not null,
    SBB_PLANNER			VARCHAR(50)			 not null,
    AANTAL_GROEPEN		tinyint				 not null,
+   AANVRAAG_DATUM		DATETIME			 DEFAULT GETDATE(),
    constraint PK_AANVRAAG primary key (AANVRAAG_ID)
    
 

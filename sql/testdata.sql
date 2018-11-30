@@ -661,7 +661,7 @@ go
 /*==============================================================*/
 /* Table: planner				                                */
 /*==============================================================*/
-insert into planner values
+insert into [SBBWorkshopOmgeving].[dbo].planner values
 ('D. Krom'),
 ('R. Ates'),
 ('G. Gültekin'),
