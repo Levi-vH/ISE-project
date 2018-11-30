@@ -62,6 +62,33 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROC proc_getWorkshopRequest
+(
+@aanvrag_id INT = NULL
+)
+AS
+BEGIN
+
+DECLARE @query VARCHAR(400)
+
+SET @query = 'SELECT * FROM AANVRAAG A
+INNER JOIN ORGANISATIE O ON A.ORGANISATIE_ID = O.ORGANISATIENUMMER
+INNER JOIN CONTACTPERSOON C ON A.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
+INNER JOIN ADVISEUR AD ON A.ADVISEUR_ID = AD.ADVISEUR_ID
+'
+
+IF(@aanvrag_id IS NOT NULL)
+	BEGIN
+		SET @query = @query + 'WHERE AANVRAAG_ID = ' + CAST(@aanvrag_id AS varchar(10))
+	END
+
+PRINT @query
+
+EXEC(@query)
+
+END
+GO
+
 CREATE OR ALTER PROC proc_request_approved_workshop_participants
 (
 @workshop_id INT
@@ -170,23 +197,6 @@ GO
 /*==============================================================*/
 /* SP Type: UPDATE                                              */
 /*==============================================================*/
-
-CREATE OR ALTER PROC proc_approve_workshop_participants
-(
-@workshop_id	INT,
-@volgnummer		INT
-)
-AS
-BEGIN
-	SET NOCOUNT ON
-
-	UPDATE DEELNEMER_IN_WORKSHOP
-	SET IS_GOEDGEKEURD = 1
-	WHERE WORKSHOP_ID = @workshop_id
-	AND VOLGNUMMER = @volgnummer
-END
-GO
-
 CREATE OR ALTER PROC proc_approve_workshop_participants
 (
 @workshop_id	INT,
@@ -215,35 +225,17 @@ GO
 /*==============================================================*/
 /* SP Type: DELETE                                              */
 /*==============================================================*/
-
-
-/*==============================================================*/
-/* SP Type: SELECT                                              */
-/*==============================================================*/
-
-CREATE OR ALTER PROC proc_getWorkshopRequest
+CREATE OR ALTER PROC proc_disapprove_workshop_participants
 (
-@aanvrag_id INT = NULL
+@workshop_id	INT,
+@volgnummer		INT
 )
 AS
 BEGIN
+	SET NOCOUNT ON
 
-DECLARE @query VARCHAR(400)
-
-SET @query = 'SELECT * FROM AANVRAAG A
-INNER JOIN ORGANISATIE O ON A.ORGANISATIE_ID = O.ORGANISATIENUMMER
-INNER JOIN CONTACTPERSOON C ON A.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
-INNER JOIN ADVISEUR AD ON A.ADVISEUR_ID = AD.ADVISEUR_ID
-'
-
-IF(@aanvrag_id IS NOT NULL)
-	BEGIN
-		SET @query = @query + 'WHERE AANVRAAG_ID = ' + CAST(@aanvrag_id AS varchar(10))
-	END
-
-PRINT @query
-
-EXEC(@query)
-
+	DELETE FROM DEELNEMER_IN_WORKSHOP
+	WHERE WORKSHOP_ID = @workshop_id
+	AND VOLGNUMMER = @volgnummer
 END
 GO
