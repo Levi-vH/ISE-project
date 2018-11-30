@@ -215,3 +215,35 @@ GO
 /*==============================================================*/
 /* SP Type: DELETE                                              */
 /*==============================================================*/
+
+
+/*==============================================================*/
+/* SP Type: SELECT                                              */
+/*==============================================================*/
+
+CREATE OR ALTER PROC proc_getWorkshopRequest
+(
+@aanvrag_id INT = NULL
+)
+AS
+BEGIN
+
+DECLARE @query VARCHAR(400)
+
+SET @query = 'SELECT * FROM AANVRAAG A
+INNER JOIN ORGANISATIE O ON A.ORGANISATIE_ID = O.ORGANISATIENUMMER
+INNER JOIN CONTACTPERSOON C ON A.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
+INNER JOIN ADVISEUR AD ON A.ADVISEUR_ID = AD.ADVISEUR_ID
+'
+
+IF(@aanvrag_id IS NOT NULL)
+	BEGIN
+		SET @query = @query + 'WHERE AANVRAAG_ID = ' + CAST(@aanvrag_id AS varchar(10))
+	END
+
+PRINT @query
+
+EXEC(@query)
+
+END
+GO
