@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Bootstrap Example</title>
+    <title>maak workshop</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -56,13 +56,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link
 </head>
 <body>
 <div class="container">
     <h2 class="text-info text-center">Maak een nieuwe workshop</h2>
     <form class="form-horizontal" action="createworkshop.php" method="post">
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshoptype">Type workshop:</label>
+            <label class="control-label col-sm-2 font-weight-bold" for="workshoptype">Type workshop:</label>
             <div class="col-sm-10">
                 <select class="form-control" name="workshoptype">
                     <option>TYPE...</option>
@@ -74,19 +75,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopdate">Datum workshop:</label>
+            <label class="control-label col-sm-2 font-weight-bold" for="workshopdate">Datum workshop:</label>
             <div class="col-sm-10">
                 <input type="date" class="form-control" placeholder="Enter password" name="workshopdate">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="contactinfo">Contactpersoon:</label>
+            <label class="control-label col-sm-2 font-weight-bold" for="contactinfo">Contactpersoon:</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" placeholder="Contactpersoon gegevens" name="contactinfo">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopmodule">Module:</label>
+            <label class="control-label col-sm-2 font-weight-bold" for="workshopmodule">Module:</label>
             <div class="col-sm-10">
                 <?php
              echo selectBox("workshopmodule", "module",array("modulenummer", "modulenaam"), "modulenummer", array("modulenummer", "modulenaam"), "modulenummer");
@@ -94,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopcompany">Organisatie:</label>
+            <label class="control-label col-sm-2 font-weight-bold" for="workshopcompany">Organisatie:</label>
             <div class="col-sm-10">
                 <?php
                 echo selectBox("workshopcompany", "organisatie",array("organisatienaam", "organisatienummer"), "organisatienummer", array("organisatienaam"), "organisatienaam");
@@ -102,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopsector">Sector:</label>
+            <label class="control-label col-sm-2 font-weight-bold" for="workshopsector">Sector:</label>
             <div class="col-sm-10">
                 <?php
                echo selectBox("workshopsector", "sector",array("sectornaam"), "sectornaam", array("sectornaam"), "sectornaam");
@@ -110,37 +111,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopstarttime">Begintijd workshop:</label>
+            <label class="control-label col-sm-2 font-weight-bold" for="workshopstarttime">Begintijd workshop:</label>
             <div class="col-sm-10">
                 <input type="time" class="form-control" placeholder="Begintijd" name="workshopstarttime">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopendtime">Eindtijd workshop:</label>
+            <label class="control-label col-sm-2 font-weight-bold" for="workshopendtime">Eindtijd workshop:</label>
             <div class="col-sm-10">
                 <input type="time" class="form-control" placeholder="Eindtijd" name="workshopendtime">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopaddress">Adres workshop:</label>
+            <label class="control-label col-sm-2 font-weight-bold" for="workshopaddress">Adres workshop:</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" placeholder="Adres" name="workshopaddress">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshoppostcode">Postcode workshop:</label>
+            <label class="control-label col-sm-2 font-weight-bold" for="workshoppostcode">Postcode workshop:</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" placeholder="Postcode" name="workshoppostcode">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopcity">Plaats workshop:</label>
+            <label class="control-label col-sm-2 font-weight-bold" for="workshopcity">Plaats workshop:</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" placeholder="Plaats" name="workshopcity">
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopleader">Workshopleider:</label>
+            <label class="control-label col-sm-2 font-weight-bold" for="workshopleader">Workshopleider:</label>
             <div class="col-sm-10">
                 <?php
                 echo selectBox("workshopleader", "workshopleider",array("achternaam", "voornaam", "workshopleider_id"), "workshopleider_id", array("achternaam", "voornaam"), "achternaam, voornaam");
@@ -148,7 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="workshopnotes">Opmerkingen:</label>
+            <label class="control-label col-sm-2 font-weight-bold" for="workshopnotes">Opmerkingen:</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" placeholder="Opmerkingen" name="workshopnotes">
             </div>

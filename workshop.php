@@ -8,7 +8,7 @@ $id = $_GET['id'];
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Bootstrap Example</title>
+    <title>workshop</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -26,19 +26,19 @@ $id = $_GET['id'];
                 <ul class="list">
                     <h5><strong>Workshop Opties</strong></h5>
                     <li>
-                        <a href="allworkshops.php">Alle workshops</a>
+                        <a href="participants.php?id=<?php echo $id?>">Inzien deelnemers</a>
                     </li>
                     <li>
-                        <a href="createworkshop.php">Maak workshop aan</a>
+                        <a href="editworkshop.php?id=<?php echo $id?>">Wijzig workshop</a>
                     </li>
                     <li>
-                        <a href="INCworkshop.php">Incompany aanvraag</a>
+                        <a href="INCworkshop.php">K</a>
                     </li>
                     <li>
-                        <a href="allworkshops.php">GAYLORDS</a>
+                        <a href="allworkshops.php">P</a>
                     </li>
                     <li>
-                        <a href="allworkshops.php">HUEEEEEEEE</a>
+                        <a href="allworkshops.php">H</a>
                     </li>
                 </ul>
 
@@ -47,8 +47,8 @@ $id = $_GET['id'];
         </div>
         <div class="col-md-10 col-sm-8 main-content">
             <!--Main content code to be written here -->
-            <h1>HALLO DAMES :)</h1>
-            <h3>Je zit nu in het huis van nummer <?php echo $id?></h3>
+            <h1>HALLO WORLD</h1>
+            <h3>workshopnummer<?php echo $id?></h3>
             <p>ggggggggggggggggggg</p>
         </div>
     </div>
