@@ -59,25 +59,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
             <label class="control-label col-sm-2" for="Organisation_Relationnumber">Relatie nummer:</label>
             <div class="col-sm-10">
-                <input id="Organisation_Relationnumber" type="text" class="form-control" placeholder="Relatie nummer" name="Organisation_Relationnumber" disabled>
+                <input id="Organisation_Relationnumber" type="text" class="form-control" placeholder="Relatie nummer" name="Organisation_Relationnumber" readonly>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Organisation_Address">Adres:</label>
             <div class="col-sm-10">
-                <input id="Organisation_Address" type="text" class="form-control" placeholder="Adres organisatie" name="Organisation_Address" disabled>
+                <input id="Organisation_Address" type="text" class="form-control" placeholder="Adres organisatie" name="Organisation_Address" readonly>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Organisation_Postcode">Postcode:</label>
             <div class="col-sm-10">
-                <input id="Organisation_Postcode" type="text" class="form-control" placeholder="Postcode organisatie" name="Organisation_Postcode" disabled>
+                <input id="Organisation_Postcode" type="text" class="form-control" placeholder="Postcode organisatie" name="Organisation_Postcode" readonly>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Organisation_Town">Plaats:</label>
             <div class="col-sm-10">
-                <input id="Organisation_Town" type="text" class="form-control" placeholder="Plaats organisatie" name="Organisation_Town" disabled>
+                <input id="Organisation_Town" type="text" class="form-control" placeholder="Plaats organisatie" name="Organisation_Town" readonly>
             </div>
         </div>
         <br>
@@ -94,13 +94,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
             <label class="control-label col-sm-2" for="Contact_Telephonenumber">Telefoonnummer:</label>
             <div class="col-sm-10">
-                <input id="Contact_Telephonenumber" type="text" class="form-control" placeholder="Telefoonnummer contactpersoon" name="Contact_Telephonenumber" disabled>
+                <input id="Contact_Telephonenumber" type="text" class="form-control" placeholder="Telefoonnummer contactpersoon" name="Contact_Telephonenumber" readonly>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Contact_Email">Email:</label>
             <div class="col-sm-10">
-                <input id="Contact_Email" type="text" class="form-control" placeholder="Email contactpersoon" name="Contact_Email" disabled>
+                <input id="Contact_Email" type="text" class="form-control" placeholder="Email contactpersoon" name="Contact_Email" readonly>
             </div>
         </div>
         <br>
@@ -133,19 +133,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
             <label class="control-label col-sm-2" for="Advisor_Email">Email:</label>
             <div class="col-sm-10">
-                <input id="Advisor_Email" type="text" class="form-control" placeholder="Email adviseur" name="Advisor_Email" disabled>
+                <input id="Advisor_Email" type="text" class="form-control" placeholder="Email adviseur" name="Advisor_Email" readonly>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Advisor_Telephonenumber">Telefoonnummer:</label>
             <div class="col-sm-10">
-                <input id="Advisor_Telephonenumber" type="text" class="form-control" placeholder="Telefoonnummer adviseur" name="Advisor_Telephonenumber" disabled>
+                <input id="Advisor_Telephonenumber" type="text" class="form-control" placeholder="Telefoonnummer adviseur" name="Advisor_Telephonenumber" readonly>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Advisor_Sector">Sector:</label>
             <div class="col-sm-10">
-                <input id="Advisor_Sector" type="text" class="form-control" placeholder="Telefoonnummer adviseur" name="Advisor_Sector" disabled>
+                <input id="Advisor_Sector" type="text" class="form-control" placeholder="Telefoonnummer adviseur" name="Advisor_Sector" readonly>
             </div>
         </div>
         <br>
