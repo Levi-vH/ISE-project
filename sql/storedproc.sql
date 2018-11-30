@@ -143,6 +143,22 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROC proc_insert_aanvraag
+(
+@organisatie_ID INT,
+@contactpersoon_ID INT,
+@adviseur_ID INT,
+@SBB_planner VARCHAR(50),
+@aantal_groepen INT
+)
+AS
+BEGIN
+
+	INSERT INTO AANVRAAG VALUES (@organisatie_ID, @contactpersoon_ID,@adviseur_ID,@SBB_planner,@aantal_groepen)
+
+END
+GO
+
 /*==============================================================*/
 /* SP Type: UPDATE                                              */
 /*==============================================================*/
@@ -163,21 +179,26 @@ BEGIN
 END
 GO
 
-/*==============================================================*/
-/* SP Type: INSERT                                              */
-/*==============================================================*/
-
-CREATE OR ALTER PROC proc_insert_aanvraag(
-@organisatie_ID INT,
-@contactpersoon_ID INT,
-@adviseur_ID INT,
-@SBB_planner VARCHAR(50),
-@aantal_groepen INT
+CREATE OR ALTER PROC proc_approve_workshop_participants
+(
+@workshop_id	INT,
+@volgnummer		INT
 )
 AS
 BEGIN
+	SET NOCOUNT ON
 
-	INSERT INTO AANVRAAG VALUES (@organisatie_ID, @contactpersoon_ID,@adviseur_ID,@SBB_planner,@aantal_groepen)
+	BEGIN TRY
+		IF () >= 16
+			RAISERROR('This workshop already has 16 participants which is the max amount.', 16, 1)
 
+		UPDATE DEELNEMER_IN_WORKSHOP
+		SET IS_GOEDGEKEURD = 1
+		WHERE WORKSHOP_ID = @workshop_id
+		AND VOLGNUMMER = @volgnummer
+	END TRY
+	BEGIN CATCH
+		THROW
+	END CATCH
 END
 GO
