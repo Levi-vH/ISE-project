@@ -12,10 +12,23 @@ DELETE FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
-DROP PROCEDURE IF EXISTS Testdata_Deelnemer_IN_Workshop
 GO
 
 /*
+-- organizations that have more than one advisor
+SELECT ORGANISATIENUMMER
+FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
+GROUP BY ORGANISATIENUMMER
+HAVING COUNT(*) > 1
+ORDER BY ORGANISATIENUMMER
+
+-- organizations that have more than one contactperson
+SELECT ORGANISATIENUMMER
+FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
+GROUP BY ORGANISATIENUMMER
+HAVING COUNT(*) > 1
+ORDER BY ORGANISATIENUMMER
+
 SELECT *
 FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
 
@@ -121,6 +134,54 @@ go
 /*==============================================================*/
 /* Table: ADVISEUR                                              */
 /*==============================================================*/
+CREATE OR ALTER PROCEDURE Testdata_Adviseur
+AS
+BEGIN
+	SELECT ORGANISATIENUMMER INTO #tempTable FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
+	DECLARE @amount INT -- amount of advisors per organization
+	DECLARE @organizationnumber INT
+	DECLARE @organizations INT = (SELECT COUNT(*) FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]) -- amount of organizations
+	DECLARE @counter INT = 1
+	DECLARE @counter2 INT
+	WHILE @counter <= @organizations
+		BEGIN
+			SET @organizationnumber = (SELECT TOP 1 * FROM #tempTable)
+			SET @amount = FLOOR(RAND(CHECKSUM(NEWID()))*(1+2)+1)
+			SET @counter2 = 1
+			WHILE @counter2 <= @amount
+				BEGIN
+					;WITH fname_lname_email AS
+					(
+					SELECT	(SELECT TOP 1 FirstName FROM [AdventureWorksDW2014].[dbo].[DimCustomer] ORDER BY NEWID()) AS firstname,
+							(SELECT TOP 1 LastName FROM [AdventureWorksDW2014].[dbo].[DimCustomer] ORDER BY NEWID()) AS lastname,
+							CAST(RAND(CHECKSUM(NEWID()))*2 AS INT) randomemail
+					)
+					INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ADVISEUR] (ORGANISATIENUMMER, SECTORNAAM, VOORNAAM, ACHTERNAAM, TELEFOONNUMMER, EMAIL)
+					SELECT	@organizationnumber,
+							(SELECT TOP 1 SECTORNAAM FROM [SBBWorkshopOmgeving].[dbo].[SECTOR] ORDER BY NEWID()) AS sectorname,
+							firstname,
+							lastname,
+							'0' + CAST(CAST(FLOOR((RAND(CHECKSUM(NEWID()))+6)*100000000) AS INT) AS VARCHAR(9)) AS phonenumber,
+							email =
+								CASE
+									WHEN randomemail = 0 THEN
+									LOWER(left(firstname,1)+lastname)+'@hotmail.com'
+									ELSE 
+									LOWER(left(firstname,1)+lastname)+'@gmail.com'
+								END
+					FROM fname_lname_email
+					SET @counter2 += 1
+				END
+			DELETE FROM #tempTable WHERE ORGANISATIENUMMER = @organizationnumber
+			SET @counter += 1
+		END
+END
+go
+
+EXEC Testdata_Adviseur
+go
+
+/* OLD CODE (KEEP FOR SAFETY)
 ;WITH orgnum AS -- organizationnumber/organisatienummer
 (
 SELECT TOP 300 ORGANISATIENUMMER AS organizationnumber, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
@@ -159,10 +220,58 @@ AND o.id = le.id
 AND o.id = p.id
 OPTION(MAXRECURSION 0)
 go
+*/
 
 /*==============================================================*/
 /* Table: CONTACTPERSOON                                        */
 /*==============================================================*/
+CREATE OR ALTER PROCEDURE Testdata_Contactpersoon
+AS
+BEGIN
+	SELECT ORGANISATIENUMMER INTO #tempTable FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
+	DECLARE @amount INT -- amount of contactpersons per organization
+	DECLARE @organizationnumber INT
+	DECLARE @organizations INT = (SELECT COUNT(*) FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]) -- amount of organizations
+	DECLARE @counter INT = 1
+	DECLARE @counter2 INT
+	WHILE @counter <= @organizations
+		BEGIN
+			SET @organizationnumber = (SELECT TOP 1 * FROM #tempTable)
+			SET @amount = FLOOR(RAND(CHECKSUM(NEWID()))*(1+2)+1)
+			SET @counter2 = 1
+			WHILE @counter2 <= @amount
+				BEGIN
+					;WITH fname_lname_email AS
+					(
+					SELECT	(SELECT TOP 1 FirstName FROM [AdventureWorksDW2014].[dbo].[DimCustomer] ORDER BY NEWID()) AS firstname,
+							(SELECT TOP 1 LastName FROM [AdventureWorksDW2014].[dbo].[DimCustomer] ORDER BY NEWID()) AS lastname,
+							CAST(RAND(CHECKSUM(NEWID()))*2 AS INT) randomemail
+					)
+					INSERT INTO	[SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON] (ORGANISATIENUMMER, VOORNAAM, ACHTERNAAM, TELEFOONNUMMER, EMAIL)
+					SELECT	@organizationnumber,
+							firstname,
+							lastname,
+							'0' + CAST(CAST(FLOOR((RAND(CHECKSUM(NEWID()))+6)*100000000) AS INT) AS VARCHAR(9)) AS phonenumber,
+							email =
+								CASE
+									WHEN randomemail = 0 THEN
+									LOWER(left(firstname,1)+lastname)+'@hotmail.com'
+									ELSE 
+									LOWER(left(firstname,1)+lastname)+'@gmail.com'
+								END
+					FROM fname_lname_email
+					SET @counter2 += 1
+				END
+			DELETE FROM #tempTable WHERE ORGANISATIENUMMER = @organizationnumber
+			SET @counter += 1
+		END
+END
+go
+
+EXEC Testdata_Contactpersoon
+go
+
+/* OLD CODE (KEEP FOR SAFETY)
 ;WITH orgnum AS -- organizationnumber/organisatienummer
 (
 SELECT TOP 300 ORGANISATIENUMMER AS organizationnumber, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
@@ -201,6 +310,7 @@ AND o.id = le.id
 AND o.id = p.id
 OPTION(MAXRECURSION 0)
 go
+*/
 
 /*==============================================================*/
 /* Table: WORKSHOPLEIDER                                        */
@@ -487,10 +597,11 @@ go
 CREATE OR ALTER PROCEDURE Testdata_Deelnemer_IN_Workshop
 AS
 BEGIN
+	DECLARE @amount INT -- amount of people per group
 	DECLARE @counter INT = 1
 	WHILE @counter <= 100
 		BEGIN
-			DECLARE @amount INT = FLOOR(RAND(CHECKSUM(NEWID()))*(10+24)+12) -- amount of people per group
+			SET @amount = FLOOR(RAND(CHECKSUM(NEWID()))*(10+24)+12)
 			;WITH [1group] AS
 			(
 			SELECT TOP (@amount)	workshop_id,
@@ -509,9 +620,6 @@ END
 go
 
 EXEC Testdata_Deelnemer_IN_Workshop
-go
-
-DROP PROCEDURE IF EXISTS Testdata_Deelnemer_IN_Workshop
 go
 
 ;WITH appr AS
