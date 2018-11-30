@@ -237,6 +237,43 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROC proc_update_workshop
+(
+@workshop_id		INT,
+@workshoptype		VARCHAR(3),
+@workshopdate		varchar(10),
+@modulenummer		INT,
+@organisatienummer	VARCHAR(15),
+@workshopsector		VARCHAR(255),
+@workshopstarttime	varchar(10),
+@workshopendtime	varchar(10),
+@workshopaddress	varchar(10),
+@workshoppostcode	VARCHAR(12),
+@workshopcity		VARCHAR(255),
+@workshopleader		VARCHAR(100),
+@workshopNote		VARCHAR(255)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	UPDATE WORKSHOP
+	SET	[TYPE] = @workshoptype,		
+	DATUM]= @workshopdate,		
+	MODULENUMMER = @modulenummer,		
+	ORGANISATIENUMMER = @organisatienummer,	
+	SECTORNAAM = @workshopsector,		
+	STARTTIJD = @workshopstarttime,	
+	EINDTIJD = @workshopendtime,	
+	ADRES = @workshopaddress,	
+	POSTCODE = @workshoppostcode,	
+	PLAATSNAAM = @workshopcity,		
+	WORKSHOPLEIDER_ID = @workshopleader,		
+	OPMERKING = @workshopNote		
+	WHERE WORKSHOP_ID = @workshop_id
+END
+GO
+
 /*==============================================================*/
 /* SP Type: DELETE                                              */
 /*==============================================================*/
