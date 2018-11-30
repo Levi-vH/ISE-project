@@ -3,44 +3,27 @@ include 'header.html';
 include 'functions.php';
 
 // define (empty) variables
-$workshoptype = $workshopdate = $contactinfo = $workshopmodule = $workshopcompany = $workshopsector = $starttime = $endtime =
-$workshopadress = $workshoppostcode = $workshopcity = $workshopleader = $workshopnotes = '';
+$Organisation_Relationnumber = $Contact_ID = $SBB_Planner = $Advisor_practical_learning = $Groups = '';
 
 // The ones that do not get checked are dropdown or select.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $workshoptype = $_POST["workshoptype"];
-    $workshopdate = $_POST["workshopdate"];
-    //$contactinfo = check_input($_POST["contactinfo"]);
-    $workshopmodule = $_POST["workshopmodule"];
-    $workshopcompany = $_POST["workshopcompany"];
-    $workshopsector = $_POST["workshopsector"];
-    $starttime = $_POST["workshopstarttime"];
-    $endtime = $_POST["workshopendtime"];
-    $workshopadress = check_input($_POST["workshopaddress"]);
-    $workshoppostcode = check_input($_POST["workshoppostcode"]);
-    $workshopcity = check_input($_POST["workshopcity"]);
-    $workshopleader = check_input($_POST["workshopleader"]);
-    $workshopnotes = check_input(@$_POST['workshopnotes']);
+    $Organisation_Relationnumber = check_input($_POST["Organisation_Relationnumber"]);
+    $Contact_ID = check_input($_POST["Contact_Name"]);
+    $SBB_Planner = check_input($_POST["Coordination_Contact"]);
+    $Advisor_practical_learning = check_input($_POST["Advisor_practical_learning"]);
+    $Groups = check_input($_POST["Groups"]);
 
     //Try to make connection
     $conn = connectToDB();
 
     //Run the stored procedure
-    $sql = "exec proc_create_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+    $sql = "exec proc_insert_aanvraag ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(1, $workshoptype, PDO::PARAM_STR);
-    $stmt->bindParam(2, $workshopdate, PDO::PARAM_STR);
-    //$stmt->bindParam(3, $contactinfo, PDO::PARAM_STR);
-    $stmt->bindParam(3, $workshopmodule, PDO::PARAM_INT);
-    $stmt->bindParam(4, $workshopcompany, PDO::PARAM_INT);
-    $stmt->bindParam(5, $workshopsector, PDO::PARAM_STR);
-    $stmt->bindParam(6, $starttime, PDO::PARAM_STR);
-    $stmt->bindParam(7, $endtime, PDO::PARAM_STR);
-    $stmt->bindParam(8, $workshopadress, PDO::PARAM_STR);
-    $stmt->bindParam(9, $workshoppostcode, PDO::PARAM_STR);
-    $stmt->bindParam(10, $workshopcity, PDO::PARAM_STR);
-    $stmt->bindParam(11, $workshopleader, PDO::PARAM_STR);
-    $stmt->bindParam(12, $workshopnotes, PDO::PARAM_STR);
+    $stmt->bindParam(1, $Organisation_Relationnumber, PDO::PARAM_INT);
+    $stmt->bindParam(2, $Contact_ID, PDO::PARAM_INT);
+    $stmt->bindParam(3, $Advisor_practical_learning, PDO::PARAM_INT);
+    $stmt->bindParam(4, $SBB_Planner, PDO::PARAM_STR);
+    $stmt->bindParam(5, $Groups, PDO::PARAM_INT);
     $stmt->execute();
 }
 ?>
