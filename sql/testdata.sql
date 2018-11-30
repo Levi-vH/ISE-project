@@ -638,10 +638,10 @@ SET IS_GOEDGEKEURD = 1
 FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP] dw INNER JOIN appr a ON dw.VOLGNUMMER = a.VOLGNUMMER
 go
 
+/*
 /*==============================================================*/
 /* Table: AANVRAAG				                                */
 /*==============================================================*/
-/*
 ;WITH ad_id_cp_id AS -- advisor_id + contactperson_id/adviseur_id + contactpersoon_id
 (
 SELECT TOP 20 ADVISEUR_ID AS advisor_id, CONTACTPERSOON_ID AS contactperson_id, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
@@ -662,3 +662,12 @@ FROM ad_id_cp_id ac, grps g
 WHERE ac.id = g.id
 go
 */
+
+/*==============================================================*/
+/* Table: planner				                                */
+/*==============================================================*/
+insert into planner values
+('D. Krom'),
+('R. Ates'),
+('G. Gültekin'),
+('K. deBruijn')

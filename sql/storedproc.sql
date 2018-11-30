@@ -170,7 +170,7 @@ CREATE OR ALTER PROC proc_insert_aanvraag(
 @organisatie_ID INT,
 @contactpersoon_ID INT,
 @adviseur_ID INT,
-@SBB_planner INT,
+@SBB_planner VARCHAR(50),
 @aantal_groepen INT
 )
 AS
