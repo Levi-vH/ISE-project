@@ -259,7 +259,7 @@ BEGIN
 
 	UPDATE WORKSHOP
 	SET	[TYPE] = @workshoptype,		
-	DATUM]= @workshopdate,		
+	DATUM = @workshopdate,		
 	MODULENUMMER = @modulenummer,		
 	ORGANISATIENUMMER = @organisatienummer,	
 	SECTORNAAM = @workshopsector,		
