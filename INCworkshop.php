@@ -109,13 +109,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
             <label class="control-label col-sm-2" for="Coordination_Contact">Contactpersoon:</label>
             <div class="col-sm-10">
-                <select class="form-control" name="Coordination_Contact">
-                    <option>Selecteer Contactpersoon Coördinatie...</option>
-                    <option>D. Krom</option>
-                    <option>R. Ates</option>
-                    <option>G. Gültekin</option>
-                    <option>K. deBruijn</option>
-                </select>
+            <?php    echo selectBox("Coordination_Contact", "planner" ,array("naam"), "naam", array("naam"), "naam"); ?>
             </div>
         </div>
         <br>
@@ -150,13 +144,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <br>
 
-        <h3>Groepen</h3>
+        <h3>Workshop informatie</h3>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Groups">Aantal groepen:</label>
             <div class="col-sm-10">
-                <input type="number" class="form-control" name="Groups">
+                <input type="number" class="form-control" name="Groups" onchange="accordion(value)">
             </div>
         </div>
+
+        <div id="hidden_accordion">
+
+        </div>
+
+
+
 
         <div class="form-group">
             <div class="col-sm-offset-5 col-sm-10">
@@ -288,6 +289,122 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         var i;
         for(i=selectbox.options.length - 1; i>=1; i--){
             selectbox.remove(i);
+        }
+    }
+
+
+
+    function accordion(amount_of_groups){
+        $html =  '<div class="accordion" id="accordionGroups">';
+
+
+        for(var i = 1; i<=amount_of_groups; i++){
+        $html += ' <div class="card">\n' +
+            '        <div class="card-header" id="heading' + i + '">\n' +
+            '        <h5 class="mb-0">\n' +
+            '            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse' + i + '" aria-expanded="false" aria-controls="collapse'+ i + '">\n' +
+            '             Groep ' + i + ' \n' +
+            '        </button>\n' +
+            '        </h5>\n' +
+            '        </div>\n' +
+            '\n' +
+            '        <div id="collapse' + i + '" class="panel-collapse collapse in" aria-labelledby="heading' + i + '" data-parent="#accordionGroups">\n' +
+            '            <div class="card-body">\n' +
+            '            <div class="form-group">\n' +
+            '            <label class="control-label col-sm-2" for="group_' + i +'_module">Modules:</label>\n' +
+            '        <div class="col-sm-10">\n' +
+            '            <input type="checkbox" name="group_' + i +'_module" value="1" onchange="checked_module1(' + i + ', this)"> Module 1: Matching en voorbereiding <br>\n' +
+            '        <input type="checkbox" name="group_' + i +'_module" value="2" onchange="checked_module2(' + i + ', this)"> Module 2: Begeleiden <br>\n' +
+            '        <input type="checkbox" name="group_' + i +'_module" value="3" onchange="checked_module3(' + i + ', this)"> Module 3: Beoordelen <br>\n' +
+            '        </div>\n' +
+            '        </div>\n' +
+            '        <div id="hidden_voorkeur_module1_group_' + i + '" class="d-none">\n'  +
+            '        <div class="form-group">\n' +
+            '            <label class="control-label col-sm-2" for="group_' + i +'_module1">Voorkeur module 1:</label>\n' +
+            '        <div class="col-sm-10">\n' +
+            '            <input type="checkbox" name="group_' + i +'_module1" value="ochtend"> ochtend <br>\n' +
+            '            <input type="checkbox" name="group_' + i +'_module1" value="middag"> middag <br>\n' +
+            '            </div>\n' +
+            '            </div>\n' +
+            '           </div>\n' +
+            '        <div id="hidden_voorkeur_module2_group_' + i + '" class="d-none">\n'  +
+            '            <div class="form-group">\n' +
+            '            <label class="control-label col-sm-2" for="group_' + i +'_module2">Voorkeur module 2:</label>\n' +
+            '        <div class="col-sm-10">\n' +
+            '            <input type="checkbox" name="group_' + i +'_module2" value="ochtend"> ochtend <br>\n' +
+            '            <input type="checkbox" name="group_' + i +'_module2" value="middag"> middag <br>\n' +
+            '            </div>\n' +
+            '            </div>\n' +
+            '           </div>\n' +
+            '        <div id="hidden_voorkeur_module3_group_' + i + '" class="d-none">\n'  +
+            '            <div class="form-group">\n' +
+            '            <label class="control-label col-sm-2" for="group_' + i +'_module3">Voorkeur module 3:</label>\n' +
+            '        <div class="col-sm-10">\n' +
+            '            <input type="checkbox" name="group_' + i +'_module3" value="ochtend"> ochtend <br>\n' +
+            '            <input type="checkbox" name="group_' + i +'_module3" value="middag"> middag <br>\n' +
+            '            </div>\n' +
+            '            </div>\n' +
+            '           </div>\n' +
+            '<div class="form-group">\n' +
+            '<label class="control-label col-sm-2" for="Workshop_Address">Adres:</label>\n' +
+            '<div class="col-sm-10">\n'+
+            '    <input id="Workshop_Address" type="text" class="form-control" placeholder="Adres Workshop" name="Organisation_Address">\n'+
+            '</div>\n' +
+            '</div>\n'+
+            '<div class="form-group">\n' +
+            '<label class="control-label col-sm-2" for="Workshop_contactpersoon">Adres:</label>\n' +
+            '<div class="col-sm-10">\n'+
+            '    <input id="Workshop_Address" type="text" class="form-control" placeholder="Adres Workshop" name="Organisation_Address">\n'+
+            '</div>\n' +
+            '</div>\n'+
+            '<div class="form-group">\n' +
+            '<label class="control-label col-sm-2" for="Workshop_Address">Adres:</label>\n' +
+            '<div class="col-sm-10">\n'+
+            '    <input id="Workshop_Address" type="text" class="form-control" placeholder="Adres Workshop" name="Organisation_Address">\n'+
+            '</div>\n' +
+            '</div>\n'+
+            '<div class="form-group">\n' +
+            '<label class="control-label col-sm-2" for="Workshop_Address">Adres:</label>\n' +
+            '<div class="col-sm-10">\n'+
+            '    <input id="Workshop_Address" type="text" class="form-control" placeholder="Adres Workshop" name="Organisation_Address">\n'+
+            '</div>\n' +
+            '</div>\n'+
+            '\n' +
+            '            </div>\n' +
+            '            </div>\n' +
+            '            </div>' ;
+        }
+
+        $html += '</div><br>';
+
+        $("#hidden_accordion").html($html);
+    }
+
+    function checked_module1(i, input){
+        if($(input).is(":checked")){
+            $("#hidden_voorkeur_module1_group_" + i +"").removeClass("d-none");
+    }
+    else{
+            $("#hidden_voorkeur_module1_group_" + i +"").addClass("d-none");
+        }
+    }
+
+
+    function checked_module2(i, input){
+        if($(input).is(":checked")){
+            $("#hidden_voorkeur_module2_group_" + i +"").removeClass("d-none");
+        }
+        else{
+            $("#hidden_voorkeur_module2_group_" + i +"").addClass("d-none");
+        }
+    }
+
+    function checked_module3(i, input){
+        if($(input).is(":checked")){
+            $("#hidden_voorkeur_module3_group_" + i +"").removeClass("d-none");
+        }
+        else{
+            $("#hidden_voorkeur_module3_group_" + i +"").addClass("d-none");
         }
     }
 
