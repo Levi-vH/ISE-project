@@ -145,6 +145,7 @@ GO
 /*==============================================================*/
 /* SP Type: UPDATE                                              */
 /*==============================================================*/
+
 CREATE OR ALTER PROC proc_approve_workshop_participants
 (
 @workshop_id	INT,
@@ -158,5 +159,23 @@ BEGIN
 	SET IS_GOEDGEKEURD = 1
 	WHERE WORKSHOP_ID = @workshop_id
 	AND VOLGNUMMER = @volgnummer
+END
+GO
+
+/*==============================================================*/
+/* SP Type: INSERT                                              */
+/*==============================================================*/
+
+CREATE OR ALTER PROC proc_insert_aanvraag(
+@contactpersoon_ID INT,
+@adviseur_ID INT,
+@SBB_planner INT,
+@aantal_groepen INT
+)
+AS
+BEGIN
+
+	INSERT INTO AANVRAAG VALUES (@contactpersoon_ID,@adviseur_ID,@SBB_planner,@aantal_groepen)
+
 END
 GO

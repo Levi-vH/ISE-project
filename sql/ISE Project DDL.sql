@@ -200,6 +200,14 @@ go
 */
 
 /*==============================================================*/
+/* Table: PLANNER                                                */
+/*==============================================================*/
+CREATE TABLE PLANNER(
+	NAAM VARCHAR(50) NOT NULL
+	CONSTRAINT pk_planners PRIMARY KEY (NAAM)
+)
+
+/*==============================================================*/
 /* Table: SECTOR                                                */
 /*==============================================================*/
 create table SECTOR (
@@ -355,8 +363,11 @@ create table AANVRAAG (
    AANVRAAG_ID		    int IDENTITY         not null,
    CONTACTPERSOON_ID	int			         not null,
    ADVISEUR_ID			int			         not null,
+   SBB_PLANNER			VARCHAR(50)			 not null,
    AANTAL_GROEPEN		tinyint				 not null,
    constraint PK_AANVRAAG primary key (AANVRAAG_ID)
+   
+
 )
 go
 
@@ -438,4 +449,9 @@ go
 alter table AANVRAAG
    add constraint FK_AANVRAAG_ref_ADVISEUR foreign key (ADVISEUR_ID)
       references ADVISEUR (ADVISEUR_ID)
+go
+
+alter table AANVRAAG
+	add CONSTRAINT FK_SBB_PLANNER foreign key (SBB_PLANNER) 
+	REFERENCES PLANNER(NAAM)
 go
