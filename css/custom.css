@@ -51,6 +51,11 @@ a:hover{
     padding-left: 35px;
 }
 
+.active-page {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ff0b00;
+}
+
 .main-content {
     text-align: center;
 }

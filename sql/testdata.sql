@@ -1,6 +1,7 @@
 USE master
 GO
 
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[AANVRAAG]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[MODULE]
@@ -489,11 +490,12 @@ BEGIN
 	DECLARE @counter INT = 1
 	WHILE @counter <= 100
 		BEGIN
+			DECLARE @amount INT = FLOOR(RAND(CHECKSUM(NEWID()))*(10+24)+12) -- amount of people per group
 			;WITH [1group] AS
 			(
-			SELECT TOP 16	workshop_id,
-							DEELNEMER_ID AS deelnemer_id,
-							0 AS is_goedgekeurd
+			SELECT TOP (@amount)	workshop_id,
+									DEELNEMER_ID AS deelnemer_id,
+									0 AS is_goedgekeurd
 			FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER],
 			(SELECT TOP 1 WORKSHOP_ID AS workshop_id FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP] ORDER BY NEWID()) workshop
 			ORDER BY NEWID()
