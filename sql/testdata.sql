@@ -638,6 +638,7 @@ SET IS_GOEDGEKEURD = 1
 FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP] dw INNER JOIN appr a ON dw.VOLGNUMMER = a.VOLGNUMMER
 go
 
+/*
 /*==============================================================*/
 /* Table: AANVRAAG				                                */
 /*==============================================================*/
@@ -660,3 +661,4 @@ SELECT contactperson_id, advisor_id, groups
 FROM ad_id_cp_id ac, grps g
 WHERE ac.id = g.id
 go
+*/

@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn = connectToDB();
 
     //Run the stored procedure
-    $sql = "exec proc_insert_aanvraag ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+    $sql = "exec proc_insert_aanvraag ?, ?, ?, ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $Organisation_Relationnumber, PDO::PARAM_INT);
     $stmt->bindParam(2, $Contact_ID, PDO::PARAM_INT);
