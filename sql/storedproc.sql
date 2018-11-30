@@ -170,3 +170,22 @@ BEGIN
 			@workshopNote, @workshoptype ,null,null,null,null,null,null)
 END
 GO
+
+/*==============================================================*/
+/* SP Type: UPDATE                                              */
+/*==============================================================*/
+CREATE OR ALTER PROC proc_approve_workshop_participants
+(
+@workshop_id	INT,
+@volgnummer		INT
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	UPDATE DEELNEMER_IN_WORKSHOP
+	SET IS_GOEDGEKEURD = 1
+	WHERE WORKSHOP_ID = @workshop_id
+	AND VOLGNUMMER = @volgnummer
+END
+GO
