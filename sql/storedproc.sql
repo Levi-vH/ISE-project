@@ -197,9 +197,10 @@ BEGIN
 	SET NOCOUNT ON
 
 	BEGIN TRY
-		IF () >= 16
-			RAISERROR('This workshop already has 16 participants which is the max amount.', 16, 1)
-
+		IF (SELECT COUNT(*) FROM DEELNEMER_IN_WORKSHOP WHERE WORKSHOP_ID = @workshop_id AND IS_GOEDGEKEURD = 1) >= 16
+			BEGIN
+				RAISERROR('This workshop already has 16 participants which is the max amount.', 16, 1)
+			END
 		UPDATE DEELNEMER_IN_WORKSHOP
 		SET IS_GOEDGEKEURD = 1
 		WHERE WORKSHOP_ID = @workshop_id
