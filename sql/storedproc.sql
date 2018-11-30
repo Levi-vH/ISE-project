@@ -167,6 +167,7 @@ GO
 /*==============================================================*/
 
 CREATE OR ALTER PROC proc_insert_aanvraag(
+@organisatie_ID INT,
 @contactpersoon_ID INT,
 @adviseur_ID INT,
 @SBB_planner INT,
@@ -175,7 +176,9 @@ CREATE OR ALTER PROC proc_insert_aanvraag(
 AS
 BEGIN
 
-	INSERT INTO AANVRAAG VALUES (@contactpersoon_ID,@adviseur_ID,@SBB_planner,@aantal_groepen)
+	INSERT INTO AANVRAAG VALUES (@organisatie_ID, @contactpersoon_ID,@adviseur_ID,@SBB_planner,@aantal_groepen)
 
 END
 GO
+
+SELECT * FROM AANVRAAG

@@ -361,6 +361,7 @@ go
 /*==============================================================*/
 create table AANVRAAG (
    AANVRAAG_ID		    int IDENTITY         not null,
+   ORGANISATIE_ID		int					 not null,
    CONTACTPERSOON_ID	int			         not null,
    ADVISEUR_ID			int			         not null,
    SBB_PLANNER			VARCHAR(50)			 not null,
