@@ -259,18 +259,18 @@ BEGIN
 
 	UPDATE WORKSHOP
 	SET	[TYPE] = @workshoptype,		
-	DATUM = @workshopdate,		
-	MODULENUMMER = @modulenummer,		
-	ORGANISATIENUMMER = @organisatienummer,	
-	SECTORNAAM = @workshopsector,		
-	STARTTIJD = @workshopstarttime,	
-	EINDTIJD = @workshopendtime,	
-	ADRES = @workshopaddress,	
-	POSTCODE = @workshoppostcode,	
-	PLAATSNAAM = @workshopcity,		
-	WORKSHOPLEIDER_ID = @workshopleader,		
-	OPMERKING = @workshopNote		
-	WHERE WORKSHOP_ID = @workshop_id
+		DATUM = @workshopdate,		
+		MODULENUMMER = @modulenummer,		
+		ORGANISATIENUMMER = @organisatienummer,	
+		SECTORNAAM = @workshopsector,		
+		STARTTIJD = @workshopstarttime,	
+		EINDTIJD = @workshopendtime,	
+		ADRES = @workshopaddress,	
+		POSTCODE = @workshoppostcode,	
+		PLAATSNAAM = @workshopcity,		
+		WORKSHOPLEIDER_ID = @workshopleader,		
+		OPMERKING = @workshopNote		
+		WHERE WORKSHOP_ID = @workshop_id
 END
 GO
 
