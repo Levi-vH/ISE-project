@@ -17,14 +17,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn = connectToDB();
 
     //Run the stored procedure
-    $sql = "exec proc_insert_aanvraag ?, ?, ?, ?, ?";
+    $sql = "exec proc_insert_aanvraag ?, ?, ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $Organisation_Relationnumber, PDO::PARAM_INT);
     $stmt->bindParam(2, $Contact_ID, PDO::PARAM_INT);
     $stmt->bindParam(3, $Advisor_practical_learning, PDO::PARAM_INT);
     $stmt->bindParam(4, $SBB_Planner, PDO::PARAM_STR);
-    $stmt->bindParam(5, $Groups, PDO::PARAM_INT);
     $stmt->execute();
+
+    //ophalen aanvraagID
+    $sql2 = "SELECT SCOPE_IDENTITY() FROM AANVRAAG";
+    $stmt2 = $conn->prepare($sql);
+    $stmt2->execute();
+
+    while($resultaat = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+        $Aanvraag_ID = $resultaat;
+    }
+
+    for($i = 0; $i<$Groups; $i++){
+        $Group_Module1 = check_input($_POST["group_" . $i . "_module1"]);
+        $Group_Modele2 = check_input($_POST["group_" . $i . "_module2"]);
+        $Group_Module3 = check_input($_POST["group_" . $i . "_module3"]);
+        $Adress = check_input($_POST["Workshop_Address"]);
+        $Contact_Person = check_input($_POST["Aanwezig_Contactpersoon"]);
+        $Contact_Telephone = check_input($_POST["Aanwezig_Telephone"]);
+        $Contact_Email = check_input($_POST["Aanwezig_Email"]);
+
+        //Run the stored procedure
+        $sql3 = "exec proc_insert_aanvraag ?, ?, ?, ?, ?";
+        $stmt3 = $conn->prepare($sql);
+        $stmt3->bindParam(1, $Organisation_Relationnumber, PDO::PARAM_INT);
+        $stmt3->bindParam(2, $Contact_ID, PDO::PARAM_INT);
+        $stmt3->bindParam(3, $Advisor_practical_learning, PDO::PARAM_INT);
+        $stmt3->bindParam(4, $SBB_Planner, PDO::PARAM_STR);
+        $stmt3->execute();
+}
+
 }
 ?>
 
@@ -344,7 +372,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             '        <input type="checkbox" name="group_' + i +'_module" value="3" onchange="checked_module3(' + i + ', this)"> Module 3: Beoordelen <br>\n' +
             '        <div id="hidden_voorkeur_module3_group_' + i + '" class="d-none">\n'  +
             '            <div class="form-group">\n' +
-            '            <label class="control-label" for="group_' + i +'_module1">Voorkeur module 3:</label>\n' +
+            '            <label class="control-label" for="group_' + i +'_module3">Voorkeur module 3:</label>\n' +
             '<div class="form-check form-check-inline">\n' +
             '  <input class="form-check-input" type="radio" name="group_' + i +'_module3" id="group_' + i +'_module3_ochtend" value="ochtend">\n' +
             '  <label class="form-check-label" for="group_' + i +'_module3_ochtend">ochtend</label>\n' +

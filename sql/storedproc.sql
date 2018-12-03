@@ -206,13 +206,41 @@ CREATE OR ALTER PROC proc_insert_aanvraag
 @organisatie_ID INT,
 @contactpersoon_ID INT,
 @adviseur_ID INT,
-@SBB_planner VARCHAR(50),
-@aantal_groepen INT
+@SBB_planner VARCHAR(50)
 )
 AS
 BEGIN
 
-	INSERT INTO AANVRAAG VALUES (@organisatie_ID, @contactpersoon_ID,@adviseur_ID,@SBB_planner,@aantal_groepen)
+	INSERT INTO AANVRAAG VALUES (@organisatie_ID, @contactpersoon_ID,@adviseur_ID,@SBB_planner)
+
+END
+GO
+
+CREATE OR ALTER PROC proc_insert_aanvraag_groepen
+(
+        $Group_Module1 = check_input($_POST["group_" . $i . "_module1"]);
+        $Group_Modele2 = check_input($_POST["group_" . $i . "_module2"]);
+        $Group_Module3 = check_input($_POST["group_" . $i . "_module3"]);
+        $Adress = check_input($_POST["Workshop_Address"]);
+        $Contact_Person = check_input($_POST["Aanwezig_Contactpersoon"]);
+        $Contact_Telephone = check_input($_POST["Aanwezig_Telephone"]);
+        $Contact_Email = check_input($_POST["Aanwezig_Email"]);
+
+
+@aanvraag_ID INT,
+@Module1 INT,
+@Module2 INT,
+@Module3 INT,
+@adress varchar(255),
+@contactperson varchar(255),
+@telephone varchar,
+@email varchar,
+
+)
+AS
+BEGIN
+
+	
 
 END
 GO
