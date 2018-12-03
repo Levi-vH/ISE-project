@@ -10,7 +10,7 @@ EXEC tSQLt.NewTestClass 'testDeelnemer';
 --==============================================================
 -- tests for the check on the automatic update on status
 --==============================================================
-EXEC [tSQLt].[Run] '[testWorkshop]'
+--EXEC [tSQLt].[Run] '[testWorkshop]'
 --test with workhop_id = 1 and type = 'afgehandeld'
 
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 1]
@@ -32,7 +32,6 @@ BEGIN
 	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
 	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
 	VALUES(1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'afgehandeld', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
-
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
 
@@ -464,6 +463,78 @@ BEGIN
 	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, GETDATE(), DATEADD(s, -30, GETDATE()), NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL); 
 END
 GO
+
+--=====================================================================================================================
+-- Tests if a workshop that received VERWERKT_BREIN, DEELNEMER_GEGEGEVENS_ONTVANGEN, OVK_BEVESTIGING, PRESENTIELIJST_VERSTUURD,
+-- PRESENTIELIJST_ONTVANGEN, BEWIJS_DEELNAME_MAIL_SBB_WSL has status 'afgehandeld'
+--=====================================================================================================================
+
+-- test for status is bevestigd with all columns NOT NULL
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopConcluded 1]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for workshopConcluded 1]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopConcluded';
+
+	EXEC tSQLt.ExpectException
+	
+	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'bevestigd', NULL, NULL, 'received', 'received', 'received', 'received', 'received', 'received'); 
+END
+GO
+
+-- test for status is bevestigd with one column on NULL
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopConcluded 2]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for workshopConcluded 2]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopConcluded';
+
+	EXEC tSQLt.ExpectnoException
+	
+	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'bevestigd', NULL, NULL, 'received', 'received', 'received', 'received', 'received', NULL); 
+END
+GO
+
+-- test for status is afgehandeld with all columns NOT NULL
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopConcluded 3]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for workshopConcluded 3]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopConcluded';
+
+	EXEC tSQLt.ExpectnoException
+	
+	insert into WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
+	 [MODULE_NUMMER], [ADVISEUR_ID], [SECTOR_NAAM], [DATUM], [STARTTIJD], [EINDTIJD], [HUISNUMMER], [STRAATNAAM],
+	  [POSTCODE], [PLAATSNAAM], [STATUS], [OPMERKING], [TYPE], [VERWERKT_BREIN], [DEELNEMER_GEGEGEVENS_ONTVANGEN],
+	   [OVK_BEVESTIGING], [PRESENTIELIJST_VERSTUURD], [PRESENTIELIJST_ONTVANGEN], [BEWIJS_DEELNAME_MAIL_SBB_WSL])
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'bevestigd', NULL, NULL, 'received', 'received', 'received', 'received', 'received', NULL); 
+END
+GO
+
 
 --========================================================================================
 -- tests for the deelnemer table

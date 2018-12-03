@@ -1,13 +1,11 @@
 USE [SBBWorkshopOmgeving]
 GO
-
+--=========================================================================
+-- WORKSHOP constraints
+--=========================================================================
 
 --=========================================================================
--- check if workshopstate = 'bevestigd' when WORKSHOPLEIDER_ID is not null
--- ik denk dat het fout gaat omdat de update in de trigger dezelfde trigger nog een keer aanroept 
--- en dan heeft status wel een waarde waardoor de raiserror 2 altijd voorkomt
--- de trigger zelf doet zijn werk en alles werkt, maar ik moet testen door waardes te vergelijken met verwachte waardes
--- niet met het verwachte bericht omdat er dan altijd de 2e raiserror komt 
+-- Check if workshopstate = 'bevestigd' when WORKSHOPLEIDER_ID is not null
 --=========================================================================
 DROP TRIGGER IF EXISTS dbo.TRG_workshop_state_bevestigd
 GO
@@ -20,33 +18,11 @@ BEGIN
 	IF @@ROWCOUNT = 0
 		RETURN
 
-	--IF EXISTS	(SELECT STATUS FROM inserted)
-	--RETURN
-
 	SELECT *
 	FROM INSERTED
 
 	SELECT *
 	FROM DELETED
-
-	--IF EXISTS  (SELECT WORKSHOPLEIDER_ID
-	--			FROM DELETED)
-	--RETURN
-	
-	--IF EXISTS (SELECT STATUS FROM INSERTED)
-	--RETURN
-
---	IF EXISTS  (SELECT STATUS FROM DELETED)
-	--RETURN
-	
-			SELECT *
-			FROM WORKSHOP W INNER JOIN inserted i
-			ON W.WORKSHOP_ID = i.WORKSHOP_ID 
-			LEFT JOIN deleted d 
-			ON W.WORKSHOP_ID = d.WORKSHOP_ID 
-			WHERE i.WORKSHOPLEIDER_ID IS NOT NULL
-			AND d.WORKSHOPLEIDER_ID IS NULL
-			AND i.STATUS IS NULL 
 
 	IF UPDATE(WORKSHOPLEIDER_ID)
 	BEGIN 
@@ -74,9 +50,19 @@ BEGIN
 END
 GO
 
+--=====================================================================================================================
+-- A workshop that received VERWERKT_BREIN, DEELNEMER_GEGEGEVENS_ONTVANGEN, OVK_BEVESTIGING, PRESENTIELIJST_VERSTUURD,
+-- PRESENTIELIJST_ONTVANGEN, BEWIJS_DEELNAME_MAIL_SBB_WSL has to have status 'afgehandeld'
+--=====================================================================================================================
+ALTER TABLE WORKSHOP
+DROP CONSTRAINT IF EXISTS CK_WorkshopConcluded
+GO
 
+ALTER TABLE WORKSHOP
+ADD CONSTRAINT CK_WorkshopConcluded CHECK((VERWERKT_BREIN IS NOT NULL AND DEELNEMER_GEGEVENS_ONTVANGEN IS NOT NULL AND OVK_BEVESTIGING IS NOT NULL AND
+PRESENTIELIJST_VERSTUURD IS NOT NULL AND BEWIJS_DEELNAME_MAIL_SBB_WSL IS NOT NULL) OR STATUS != 'afgehandeld')
 --==============================================
--- check if workshop type = INC, IND etc.
+-- Check if workshop type = INC, IND etc.
 --==============================================
 ALTER TABLE WORKSHOP
 DROP CONSTRAINT IF EXISTS CK_WorkshopTypes
@@ -86,7 +72,7 @@ ALTER TABLE WORKSHOP
 ADD CONSTRAINT CK_WorkshopTypes	CHECK(TYPE IN ('INC', 'IND', 'COM', 'ROC', 'LA'))
 
 --===============================================
--- check if adviseur is not null when type = INC
+-- Check if adviseur is not null when type = INC
 --===============================================
 
 ALTER TABLE WORKSHOP
@@ -97,7 +83,7 @@ ALTER TABLE WORKSHOP
 ADD CONSTRAINT CK_WorkshopAdvisor CHECK(ADVISEUR_ID IS NOT NULL OR TYPE != 'INC')
 
 --========================================================================
--- check if the workshopdate is later than the date the workshop is added
+-- Check if the workshopdate is later than the date the workshop is added
 --========================================================================
 
 ALTER TABLE WORKSHOP
@@ -108,7 +94,7 @@ ALTER TABLE WORKSHOP
 ADD CONSTRAINT CK_WorkshopDate CHECK(DATUM > GETDATE())
 
 --========================================================================================
--- check if the workshopstatus is 'uitgezet', 'bevestigd', 'geannuleerd' or 'afgehandeld'
+-- Check if the workshopstatus is 'uitgezet', 'bevestigd', 'geannuleerd' or 'afgehandeld'
 --========================================================================================
 
 ALTER TABLE WORKSHOP
@@ -128,8 +114,13 @@ GO
 
 ALTER TABLE WORKSHOP
 ADD CONSTRAINT CK_WorkshopEndtime CHECK (STARTTIJD < EINDTIJD)
+
+--=========================================================================
+-- DEELNEMER constraints
+--=========================================================================
+
 --========================================================================================
--- check if the e-mail contains a '@' and a '.'
+-- Check if the e-mail contains a '@' and a '.'
 --========================================================================================
 
 ALTER TABLE DEELNEMER
@@ -153,4 +144,5 @@ ADD CONSTRAINT CK_DeelnemerBirthdate CHECK (GEBOORTEDATUM < GETDATE())
 
 
 DELETE FROM WORKSHOP WHERE WORKSHOP_ID = 1
+
 
