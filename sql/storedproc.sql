@@ -224,7 +224,7 @@ GO
 CREATE OR ALTER PROC proc_approve_workshop_participants
 (
 @workshop_id	INT,
-@volgnummer		INT
+@deelnemer_id	INT
 )
 AS
 BEGIN
@@ -233,7 +233,7 @@ BEGIN
 	UPDATE DEELNEMER_IN_WORKSHOP
 	SET IS_GOEDGEKEURD = 1
 	WHERE WORKSHOP_ID = @workshop_id
-	AND VOLGNUMMER = @volgnummer
+	AND DEELNEMER_ID = @deelnemer_id
 END
 GO
 
@@ -280,7 +280,7 @@ GO
 CREATE OR ALTER PROC proc_disapprove_workshop_participants
 (
 @workshop_id	INT,
-@volgnummer		INT
+@deelnemer_id	INT
 )
 AS
 BEGIN
@@ -288,6 +288,6 @@ BEGIN
 
 	DELETE FROM DEELNEMER_IN_WORKSHOP
 	WHERE WORKSHOP_ID = @workshop_id
-	AND VOLGNUMMER = @volgnummer
+	AND DEELNEMER_ID = @deelnemer_id
 END
 GO
