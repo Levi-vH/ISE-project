@@ -156,6 +156,8 @@ CREATE OR ALTER PROC proc_create_workshop
 @workshoptype		VARCHAR(3),
 @workshopdate		varchar(10),
 @modulenummer		INT,
+@contactpersoon_ID  INT,
+@adviseur_ID		INT,
 @organisatienummer	VARCHAR(15),
 @workshopsector		VARCHAR(255),
 @workshopstarttime	varchar(10),
@@ -191,11 +193,8 @@ BEGIN
 		END
 
 	INSERT INTO WORKSHOP
-	VALUES	(@workshopleader,
-			(SELECT CONTACTPERSOON_ID FROM CONTACTPERSOON WHERE ORGANISATIENUMMER = @organisatienummer)
-			,@organisatienummer,@modulenummer
-			,(SELECT ADVISEUR_ID FROM ADVISEUR WHERE ORGANISATIENUMMER = @organisatienummer),
-			@workshopsector, @workshopdate,@workshopstarttime,
+	VALUES	(@workshopleader,@contactpersoon_ID,@organisatienummer
+			,@modulenummer,@adviseur_ID,@workshopsector, @workshopdate,@workshopstarttime,
 			@workshopendtime, @workshopaddress,@workshoppostcode,
 			@workshopcity,@status,
 			@workshopNote, @workshoptype ,null,null,null,null,null,null)
