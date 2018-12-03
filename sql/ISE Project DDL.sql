@@ -367,13 +367,44 @@ create table AANVRAAG (
    CONTACTPERSOON_ID	int			         not null,
    ADVISEUR_ID			int			         not null,
    SBB_PLANNER			VARCHAR(50)			 not null,
-   AANTAL_GROEPEN		tinyint				 not null,
    AANVRAAG_DATUM		DATETIME			 DEFAULT GETDATE(),
    constraint PK_AANVRAAG primary key (AANVRAAG_ID)
-   
-
 )
 go
+
+/*==============================================================*/
+/* Table: GROEP		                                        */
+/*==============================================================*/
+create table GROEP (
+   GROEP_ID		    int IDENTITY			 not null,
+   ADRES			VARCHAR(255)			 not null,
+   TELEFOONNUMMER	VARCHAR(255)			 not null,
+   EMAIL			VARCHAR(255)		     not null,
+   constraint PK_GROEP primary key (GROEP_ID)
+)
+go
+
+/*==============================================================*/
+/* Table: AANVRAAG_VAN_GROEP		                                        */
+/*==============================================================*/
+create table AANVRAAG_VAN_GROEP (
+   AANVRAAG_ID		    int 				 not null,
+   GROEP_ID				int					 not null,
+   constraint PK_AANVRAAG_VAN_GROEP primary key (AANVRAAG_ID,GROEP_ID)
+)
+go
+
+/*==============================================================*/
+/* Table: MODULE_VAN_GROEP		                                */
+/*==============================================================*/
+create table MODULE_VAN_GROEP (
+   GROEP_ID				int					 not null,
+   MODULENUMMER			int					 not null,
+   VOORKEUR				VARCHAR(50)			 not null,
+   constraint PK_MODULE_VAN_GROEP primary key (GROEP_ID, MODULENUMMER)
+)
+go
+
 
 alter table ADVISEUR
    add constraint FK_ADVISEUR_ref_ORGANISATIE foreign key (ORGANISATIENUMMER)
@@ -458,4 +489,24 @@ go
 alter table AANVRAAG
 	add CONSTRAINT FK_SBB_PLANNER foreign key (SBB_PLANNER) 
 	REFERENCES PLANNER(NAAM)
+go
+
+alter table AANVRAAG_VAN_GROEP
+	add CONSTRAINT FK_AANVRAAG_VAN_GROEP_ref_AANVRAAG foreign key (AANVRAAG_ID) 
+	REFERENCES AANVRAAG(AANVRAAG_ID)
+go
+
+alter table AANVRAAG_VAN_GROEP
+	add CONSTRAINT FK_AANVRAAG_VAN_GROEP_ref_GROEP foreign key (GROEP_ID) 
+	REFERENCES GROEP(GROEP_ID)
+go
+
+alter table MODULE_VAN_GROEP
+	add CONSTRAINT FK_MODULE_VAN_GROEP_ref_MODULE foreign key (MODULENUMMER) 
+	REFERENCES MODULE(MODULENUMMER)
+go
+
+alter table MODULE_VAN_GROEP
+	add CONSTRAINT FK_MODULE_VAN_GROEP_ref_GROEP foreign key (GROEP_ID) 
+	REFERENCES GROEP(GROEP_ID)
 go
