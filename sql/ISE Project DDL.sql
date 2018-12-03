@@ -202,7 +202,7 @@ go
 /*==============================================================*/
 /* Table: PLANNER                                                */
 /*==============================================================*/
-CREATE TABLE PLANNER(
+CREATE TABLE PLANNER (
 	NAAM VARCHAR(50) NOT NULL,
 
 	CONSTRAINT PK_planners PRIMARY KEY (NAAM)
@@ -373,7 +373,7 @@ create table AANVRAAG (
 go
 
 /*==============================================================*/
-/* Table: GROEP		                                        */
+/* Table: GROEP													*/
 /*==============================================================*/
 create table GROEP (
    GROEP_ID		    int IDENTITY			 not null,
@@ -385,12 +385,12 @@ create table GROEP (
 go
 
 /*==============================================================*/
-/* Table: AANVRAAG_VAN_GROEP		                                        */
+/* Table: AANVRAAG_VAN_GROEP		                            */
 /*==============================================================*/
 create table AANVRAAG_VAN_GROEP (
    AANVRAAG_ID		    int 				 not null,
    GROEP_ID				int					 not null,
-   constraint PK_AANVRAAG_VAN_GROEP primary key (AANVRAAG_ID,GROEP_ID)
+   constraint PK_AANVRAAG_VAN_GROEP primary key (AANVRAAG_ID, GROEP_ID)
 )
 go
 
