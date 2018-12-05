@@ -89,7 +89,7 @@ EXEC(@query)
 END
 GO
 
-CREATE OR ALTER PROC proc_request_approved_workshop_participants
+CREATE OR ALTER PROC proc_request_approved_workshop_participants -- reference number M1
 (
 @workshop_id INT
 )
@@ -106,7 +106,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROC proc_request_approved_workshop_participants_reservelist
+CREATE OR ALTER PROC proc_request_approved_workshop_participants_reservelist -- reference number M2
 (
 @workshop_id INT
 )
@@ -130,7 +130,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROC proc_request_not_approved_workshop_participants
+CREATE OR ALTER PROC proc_request_not_approved_workshop_participants -- reference number M3
 (
 @workshop_id INT
 )
@@ -248,7 +248,7 @@ GO
 /*==============================================================*/
 /* SP Type: UPDATE                                              */
 /*==============================================================*/
-CREATE OR ALTER PROC proc_approve_workshop_participants
+CREATE OR ALTER PROC proc_approve_workshop_participants -- reference number M4
 (
 @workshop_id	INT,
 @deelnemer_id	INT
@@ -264,7 +264,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROC proc_update_workshop
+CREATE OR ALTER PROC proc_update_workshop -- reference number M5
 (
 @workshop_id		INT,
 @workshoptype		VARCHAR(3),
@@ -304,7 +304,7 @@ GO
 /*==============================================================*/
 /* SP Type: DELETE                                              */
 /*==============================================================*/
-CREATE OR ALTER PROC proc_disapprove_workshop_participants
+CREATE OR ALTER PROC proc_disapprove_workshop_participants -- reference number M6
 (
 @workshop_id	INT,
 @deelnemer_id	INT
