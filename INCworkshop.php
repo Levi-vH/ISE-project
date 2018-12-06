@@ -25,7 +25,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(3, $Advisor_practical_learning, PDO::PARAM_INT);
     $stmt->bindParam(4, $SBB_Planner, PDO::PARAM_STR);
     $stmt->execute();
-
     //ophalen aanvraagID
     $sql2 = "SELECT IDENT_CURRENT('AANVRAAG') AS LAATSTE_INDEX";
     $stmt2 = $conn->prepare($sql2);
@@ -59,8 +58,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $Contact_Person = check_input($_POST["group_" . $i . "Aanwezig_Contactpersoon"]);
 //        $Contact_Telephone = check_input($_POST["group_" . $i . "Aanwezig_Telephone"]);
 //        $Contact_Email = check_input($_POST["group_" . $i . "Aanwezig_Email"]);
-        if((isset($Group_Module1) || isset($Group_Module2) || isset($Group_Module3))) {
-            if (isset($Contact_Person) && isset($Adress)){
+        if((isset($Group_Module1) && isset($Group_Module1_voorkeur))|| (isset($Group_Module2) && isset($Group_Module2_voorkeur)) || (isset($Group_Module3) && isset($Group_Module3_voorkeur))) {
+
+            if (!is_null($Contact_Person) && !is_null($Adress)){
                 //Run the stored procedure
                 $sql3 = "exec proc_insert_aanvraag_groepen ?, ?, ?, ?, ?, ?, ?, ?, ?";
                 $stmt3 = $conn->prepare($sql3);
@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
         else{
-            echo "er moet een module gekozen worden";
+            echo "er moet een module gekozen worden en voor elke module moet een voorkeur worden opgegeven";
         }
 }
 
