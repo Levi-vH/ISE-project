@@ -68,7 +68,7 @@ CREATE OR ALTER PROC proc_getWorkshopRequest
 )
 AS
 BEGIN
-
+SET NOCOUNT ON
 DECLARE @query VARCHAR(400)
 
 SET @query = 'SELECT *, (
