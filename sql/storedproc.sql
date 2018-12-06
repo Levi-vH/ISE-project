@@ -259,7 +259,7 @@ CREATE OR ALTER PROC proc_insert_incompany_participants
 AS
 BEGIN
 
-	INSERT INTO DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER)
+	INSERT INTO DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER, IS_OPEN_INSCHRIJVING)
 		VALUES	(
 				@voornaam,
 				@achternaam,
@@ -267,7 +267,8 @@ BEGIN
 				@email,
 				@telefoonnummer,
 				@opleidingsniveau,
-				@organisatienummer
+				@organisatienummer,
+				0
 				)
 
 	DECLARE @deelnemer_id INT = (SELECT VOLGNUMMER FROM inserted)
