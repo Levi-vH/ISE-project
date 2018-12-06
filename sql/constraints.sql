@@ -184,10 +184,24 @@ GO
 ALTER TABLE DEELNEMER
 ADD CONSTRAINT CK_DeelnemerBirthdate CHECK (GEBOORTEDATUM < GETDATE())
 
+--========================================================================================
+-- If IS_OPEN_INSCHRIJVING is 1 then GEWENST_BEGELEIDINGSNIVEAU, FUNCTIENAAM 
+-- and SECTORNAAM have to be NOT NULL
+--========================================================================================
+
+ALTER TABLE DEELNEMER
+DROP CONSTRAINT IF EXISTS CK_OpenInschrijvingValues
+GO
+
+ALTER TABLE DEELNEMER
+ADD CONSTRAINT CK_OpenInschrijvingValues CHECK (IS_OPEN_INSCHRIJVING != 1 OR (GEWENST_BEGELEIDINGSNIVEAU IS NOT NULL
+AND FUNCTIENAAM IS NOT NULL AND SECTORNAAM IS NOT NULL))
 
 
 
-
+-- Deze code wordt gebruikt om de eerste 2 triggers te testen, aangezien deze vaak kapot gaan hou ik
+-- de test code nog even hier.
+/*
 SELECT *
 INTO #tempWorkshop
 FROM workshop
@@ -215,3 +229,4 @@ FROM WORKSHOP W LEFT JOIN #tempWorkshop i
 ON W.WORKSHOP_ID = i.WORKSHOP_ID 
 WHERE i.WORKSHOPLEIDER_ID IS NOT NULL
 AND i.STATUS IS NULL 
+*/
