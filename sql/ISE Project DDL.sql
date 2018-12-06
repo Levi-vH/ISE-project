@@ -204,7 +204,6 @@ go
 /*==============================================================*/
 CREATE TABLE PLANNER (
 	NAAM	VARCHAR(52)		NOT NULL,
-
 	CONSTRAINT PK_PLANNER PRIMARY KEY (NAAM)
 )
 GO
