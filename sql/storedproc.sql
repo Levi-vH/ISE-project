@@ -272,7 +272,6 @@ BEGIN
 
 	DECLARE @deelnemer_id INT = (SELECT VOLGNUMMER FROM inserted)
 	DECLARE @volgnummer INT
-	--IF geen volgnummer maak er 1 van anders pak hoogste + 1
 	IF NOT EXISTS (SELECT * FROM DEELNEMER_IN_WORKSHOP WHERE WORKSHOP_ID = @workshop_id)
 		BEGIN
 			SET @volgnummer = 1
