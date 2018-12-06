@@ -37,30 +37,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     for($i = 1; $i<=$Groups; $i++){
-        $Group_Module1 = check_input($_POST["group_" . $i . "_module1"]);
-        $Group_Modele2 = check_input($_POST["group_" . $i . "_module2"]);
-        $Group_Module3 = check_input($_POST["group_" . $i . "_module3"]);
-        $Group_Module1_voorkeur = check_input($_POST["group_" . $i . "_module1_Voorkeur"]);
-        $Group_Modele2_voorkeur = check_input($_POST["group_" . $i . "_module2_Voorkeur"]);
-        $Group_Module3_voorkeur = check_input($_POST["group_" . $i . "_module3_Voorkeur"]);
+        if(isset($_POST["group_" . $i . "_module1"])){
+            $Group_Module1 = check_input($_POST["group_" . $i . "_module1"]);
+        }
+        if(isset($_POST["group_" . $i . "_module2"])){
+            $Group_Module2 = check_input($_POST["group_" . $i . "_module2"]);
+        }
+        if(isset($_POST["group_" . $i . "_module3"])){
+            $Group_Module3 = check_input($_POST["group_" . $i . "_module3"]);
+        }
+        if(isset($_POST["group_" . $i . "_module1_Voorkeur"])){
+            $Group_Module1_voorkeur = check_input($_POST["group_" . $i . "_module1_Voorkeur"]);
+        }
+        if(isset($_POST["group_" . $i . "_module2_Voorkeur"])){
+            $Group_Module2_voorkeur = check_input($_POST["group_" . $i . "_module2_Voorkeur"]);
+        }
+        if(isset($_POST["group_" . $i . "_module3_Voorkeur"])){
+            $Group_Module3_voorkeur = check_input($_POST["group_" . $i . "_module3_Voorkeur"]);
+        }
         $Adress = check_input($_POST["group_" . $i . "Workshop_Address"]);
         $Contact_Person = check_input($_POST["group_" . $i . "Aanwezig_Contactpersoon"]);
 //        $Contact_Telephone = check_input($_POST["group_" . $i . "Aanwezig_Telephone"]);
 //        $Contact_Email = check_input($_POST["group_" . $i . "Aanwezig_Email"]);
-
-        //Run the stored procedure
-        $sql3 = "exec proc_insert_aanvraag_groepen ?, ?, ?, ?, ?, ?, ?, ?, ?";
-        $stmt3 = $conn->prepare($sql3);
-        $stmt3->bindParam(1, $Aanvraag_ID, PDO::PARAM_INT);
-        $stmt3->bindParam(2, $Group_Module1, PDO::PARAM_INT);
-        $stmt3->bindParam(3, $Group_Modele2, PDO::PARAM_INT);
-        $stmt3->bindParam(4, $Group_Module3, PDO::PARAM_INT);
-        $stmt3->bindParam(5, $Group_Module1_voorkeur, PDO::PARAM_STR);
-        $stmt3->bindParam(6, $Group_Modele2_voorkeur, PDO::PARAM_STR);
-        $stmt3->bindParam(7, $Group_Module3_voorkeur, PDO::PARAM_STR);
-        $stmt3->bindParam(8, $Adress, PDO::PARAM_STR);
-        $stmt3->bindParam(9, $Contact_Person, PDO::PARAM_STR);
-        $stmt3->execute();
+        if((isset($Group_Module1) || isset($Group_Module2) || isset($Group_Module3))) {
+            if (isset($Contact_Person) && isset($Adress)){
+                //Run the stored procedure
+                $sql3 = "exec proc_insert_aanvraag_groepen ?, ?, ?, ?, ?, ?, ?, ?, ?";
+                $stmt3 = $conn->prepare($sql3);
+                $stmt3->bindParam(1, $Aanvraag_ID, PDO::PARAM_INT);
+                $stmt3->bindParam(2, $Group_Module1, PDO::PARAM_INT);
+                $stmt3->bindParam(3, $Group_Module2, PDO::PARAM_INT);
+                $stmt3->bindParam(4, $Group_Module3, PDO::PARAM_INT);
+                $stmt3->bindParam(5, $Group_Module1_voorkeur, PDO::PARAM_STR);
+                $stmt3->bindParam(6, $Group_Module2_voorkeur, PDO::PARAM_STR);
+                $stmt3->bindParam(7, $Group_Module3_voorkeur, PDO::PARAM_STR);
+                $stmt3->bindParam(8, $Adress, PDO::PARAM_STR);
+                $stmt3->bindParam(9, $Contact_Person, PDO::PARAM_STR);
+                $stmt3->execute();
+            }
+            else{
+                echo "een contactpersoon & een adres zijn verplicht";
+            }
+        }
+        else{
+            echo "er moet een module gekozen worden";
+        }
 }
 
 }
@@ -186,8 +207,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
             <label class="control-label col-sm-2" for="Groups">Aantal groepen:</label>
             <div class="col-sm-10">
-<!--                max groepen-->
-                <input type="number" class="form-control" name="Groups" onchange="accordion(value)">
+                <input id="Groups" type="number" class="form-control" name="Groups" onchange="accordion(value)" min="0" max="15">
             </div>
         </div>
 
@@ -234,10 +254,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $("#Advisor_Telephonenumber").val('');
             $("#Advisor_Email").val('');
             $("#Advisor_Sector").val('');
+            $("#Groups").val('');
+            accordion(0);
             get_advisor(organisation['ORGANISATIENUMMER']);
         });
     }
 
+    var contactpersons = null;
     function get_contactpersons(relationnumber) {
         $.ajax({
             url: "autofill_contact.php",
@@ -287,9 +310,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             data: { organisation_number : relationnumber },
             dateType : "json"
         }).done(function ( html ) {
-            contactpersons = (JSON.parse(html));
+            advisor = (JSON.parse(html));
             var sel = document.getElementById('Advisor_practical_learning');
-            $.each(contactpersons, function (index, value) {
+            $.each(advisor, function (index, value) {
                 var opt = document.createElement('option');
                 var full_name = value['VOORNAAM'] + ' ' + value['ACHTERNAAM'];
                 opt.innerHTML = full_name;
@@ -335,7 +358,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     function accordion(amount_of_groups){
         $html =  '<div class="accordion" id="accordionGroups">';
-
 
         for(var i = 1; i<=amount_of_groups; i++){
         $html += ' <div class="card">\n' +
@@ -411,13 +433,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             '                   </div>\n' +
             '           </div>\n' +
             //CONTACTPERSOON
-            '           <div class="form-group">\n' +
-            '               <label class="control-label" for=group_' + i + 'Aanwezig_Contactpersoon">Aanwezig contactpersoon:</label>\n' +
-            '                   <div class="col-sm-10">\n' +
-            '                       <input id="group_' + i + 'Aanwezig_Contactpersoon" type="text" class="form-control" placeholder="Aanwezig contactpesoon" name="group_' + i + 'Aanwezig_Contactpersoon">\n'+
-            '                   </div>\n' +
-            '           </div>\n' +
-//            //TELEFOONNUMMER
+            '   <div class="form-group">\n' +
+            '            <label class="control-label col-sm-2" for=group_' + i + 'Aanwezig_Contactpersoon"> Aanwezig Contactpersoon:</label>\n' +
+            '            <div class="col-sm-10">\n' +
+            '                <select id= "group_' + i + 'Aanwezig_Contactpersoon" class="form-control" name="group_' + i + 'Aanwezig_Contactpersoon">\n' +
+            '                    <option value="">Selecteer Contactpersoon Coördinatie...</option>\n' +
+            '                </select>\n' +
+            '            </div>\n' +
+            '        </div>        ' +
+
+
+            //            //TELEFOONNUMMER
 //            '           <div class="form-group">\n' +
 //            '               <label class="control-label" for="group_' + i + 'Aanwezig_Telephone">Telefoonnummer:</label>\n' +
 //            '                   <div class="col-sm-10">\n' +
@@ -439,7 +465,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $html += '</div><br>';
 
         $("#hidden_accordion").html($html);
+
+        group_Contactpersons (amount_of_groups);
     }
+
+
+function group_Contactpersons (amount_of_groups) {
+    for (var i = 1; i <= amount_of_groups; i++) {
+        var sel = document.getElementById('group_' + i + 'Aanwezig_Contactpersoon');
+
+        $.each(contactpersons, function (index, value) {
+            var opt = document.createElement('option');
+            var full_name = value['VOORNAAM'] + ' ' + value['ACHTERNAAM'];
+            opt.innerHTML = full_name;
+            opt.value = value['CONTACTPERSOON_ID'];
+            sel.appendChild(opt);
+            console.log(sel);
+        });
+    }
+}
+
+
 
     function checked_module1(i, input){
         if($(input).is(":checked")){
