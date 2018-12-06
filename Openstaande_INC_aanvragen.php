@@ -21,8 +21,8 @@ include 'functions.php';
     <div>
         <table class='table table-striped table-hover'>
             <tr>
-                <th>organisatie</th>
-                <th>aantal groepen</th>
+                <th>Organisatie</th>
+                <th>Aantal groepen</th>
                 <th>Datum aanvraag</th>
             </tr>
             <?php
@@ -31,38 +31,24 @@ include 'functions.php';
 
             //Run the stored procedure
             // $sql = "SELECT * FROM VW_WORKSHOPS";
-            $sql = "EXEC proc_getWorkshops";
+            $sql = "exec proc_getWorkshopRequest";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $html = '';
-                //$row[\'WORKSHOP_ID\']'
-                $link = $row['WORKSHOP_ID'];
-                $html .= "<tr onclick=\"window.location='workshop.php?id=$link'\">";
-                $html .= '<td class="align-middle">';
-                $html .= $row['TYPE'];
-                $html .= '</td>';
-                $html .= '<td class="align-middle">';
-                $html .= $row['MODULENAAM'];
-                $html .= '</td>';
-                $html .= '<td class="align-middle">';
-                $html .= date('j F Y', strtotime($row['DATUM']));
-                $html .= '</td>';
-                $html .= '<td class="align-middle">';
-                $html .= substr($row['STARTTIJD'],0,5);
-                $html .= '</td>';
-                $html .= '<td class="align-middle">';
-                $html .= substr($row['EINDTIJD'],0,5);
-                $html .= '</td>';
+                //$link = $row['WORKSHOP_ID'];
+                $html .= '<tr>';
+                $html .= "<tr>";
                 $html .= '<td class="align-middle">';
                 $html .= $row['ORGANISATIENAAM'];
                 $html .= '</td>';
                 $html .= '<td class="align-middle">';
-                $html .= $row['AANTAL_DEELNEMER_AANVRAAG'] . '/16';
+                $html .= $row['AANTAL_GROEPEN'];
                 $html .= '</td>';
-                $html .= '</tr>';
-
+                $html .= '<td class="align-middle">';
+                $html .= $row['AANVRAAG_DATUM'];
+                $html .= '</td>';
                 echo $html;
             }
             ?>
