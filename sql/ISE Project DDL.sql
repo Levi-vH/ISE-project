@@ -213,7 +213,7 @@ go
 /* Table: SECTOR                                                */
 /*==============================================================*/
 create table SECTOR (
-   SECTORNAAM          varchar(255)         not null,
+   SECTORNAAM          varchar(20)         not null,
    constraint PK_SECTOR primary key (SECTORNAAM)
 )
 go
@@ -222,11 +222,11 @@ go
 /* Table: ORGANISATIE                                           */
 /*==============================================================*/
 create table ORGANISATIE (
-   ORGANISATIENUMMER     varchar(15)          not null,
-   ORGANISATIENAAM       varchar(255)         null,
-   ADRES				 varchar(255)         null,
-   POSTCODE				 varchar(12)          null,
-   PLAATSNAAM			 varchar(255)         null,
+   ORGANISATIENUMMER     int		         not null,
+   ORGANISATIENAAM       varchar(60)         not null,
+   ADRES				 varchar(60)         not null,
+   POSTCODE				 varchar(20)         not null,
+   PLAATSNAAM			 varchar(60)         not null,
    constraint PK_ORGANISATIE primary key (ORGANISATIENUMMER)
 )
 go
