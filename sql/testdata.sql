@@ -12,6 +12,7 @@ DELETE FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[PLANNER]
 GO
 
 /*
@@ -77,7 +78,7 @@ VALUES	('ICTCI'),
 		('ZDV'),
 		('ZWS'),
 		('Handel')
-go
+GO
 
 /*==============================================================*/
 /* Table: ORGANISATIE                                           */
@@ -130,7 +131,7 @@ AND o.id = h.id
 AND o.id = p.id
 AND o.id = pl.id
 OPTION (MAXRECURSION 0)
-go
+GO
 
 /*==============================================================*/
 /* Table: ADVISEUR                                              */
@@ -177,10 +178,10 @@ BEGIN
 			SET @counter += 1
 		END
 END
-go
+GO
 
 EXEC Testdata_Adviseur
-go
+GO
 
 /* OLD CODE (KEEP FOR SAFETY)
 ;WITH orgnum AS -- organizationnumber/organisatienummer
@@ -220,7 +221,7 @@ WHERE o.id = fs.id
 AND o.id = le.id
 AND o.id = p.id
 OPTION(MAXRECURSION 0)
-go
+GO
 */
 
 /*==============================================================*/
@@ -267,10 +268,10 @@ BEGIN
 			SET @counter += 1
 		END
 END
-go
+GO
 
 EXEC Testdata_Contactpersoon
-go
+GO
 
 /* OLD CODE (KEEP FOR SAFETY)
 ;WITH orgnum AS -- organizationnumber/organisatienummer
@@ -310,7 +311,7 @@ WHERE o.id = f.id
 AND o.id = le.id
 AND o.id = p.id
 OPTION(MAXRECURSION 0)
-go
+GO
 */
 
 /*==============================================================*/
@@ -330,7 +331,7 @@ INSERT INTO [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER] (VOORNAAM, ACHTERNAAM, 
 SELECT firstname, lastname, NULL
 FROM fname f, lname l
 WHERE f.id = l.id
-go
+GO
 
 /*==============================================================*/
 /* Table: BESCHIKBAARHEID                                       */
@@ -341,7 +342,7 @@ SELECT	WORKSHOPLEIDER_ID AS workshopleader_id,
 		FLOOR(RAND(CHECKSUM(NEWID()))*(10-5+1)+2020) AS [year], -- year/jaar
 		FLOOR(RAND(CHECKSUM(NEWID()))*(10+20)+30) AS [hours] -- amount of hours/aantal uur
 FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER]
-go
+GO
 
 /*==============================================================*/
 /* Table: DEELNEMER                                             */
@@ -435,7 +436,7 @@ AND o.id = p.id
 AND o.id = ol.id
 AND o.id = f.id
 OPTION(MAXRECURSION 0)
-go
+GO
 
 /*==============================================================*/
 /* Table: MODULE                                                */
@@ -444,7 +445,7 @@ INSERT INTO [SBBWorkshopOmgeving].[dbo].[MODULE] (MODULENUMMER, MODULENAAM)
 VALUES	(1, 'Matching en Voorbereiding'),
 		(2, 'Begeleiding tijdens BPV'),
 		(3, 'Beoordeling')
-go
+GO
 
 /*==============================================================*/
 /* Table: WORKSHOP                                              */
@@ -575,7 +576,7 @@ AND ws.id = p.id
 AND ws.id = pl.id
 AND ws.id = wo.id
 OPTION (MAXRECURSION 0)
-go
+GO
 
 ;WITH randomworkshops AS
 (
@@ -585,12 +586,12 @@ FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
 UPDATE [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
 SET WORKSHOPLEIDER_ID = NULL
 FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP] w INNER JOIN randomworkshops r ON w.WORKSHOP_ID = r.WORKSHOP_ID
-go
+GO
 
 UPDATE [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
 SET [STATUS] = 'uitgezet'
 WHERE WORKSHOPLEIDER_ID IS NULL
-go
+GO
 
 /*==============================================================*/
 /* Table: DEELNEMER_IN_WORKSHOP                                 */
@@ -618,10 +619,10 @@ BEGIN
 			SET @counter += 1
 		END
 END
-go
+GO
 
 EXEC Testdata_Deelnemer_IN_Workshop
-go
+GO
 
 ;WITH appr AS
 (
@@ -632,12 +633,12 @@ ORDER BY NEWID()
 UPDATE [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]
 SET IS_GOEDGEKEURD = 1
 FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP] dw INNER JOIN appr a ON dw.VOLGNUMMER = a.VOLGNUMMER
-go
+GO
 
-/*
 /*==============================================================*/
 /* Table: AANVRAAG				                                */
 /*==============================================================*/
+/*
 ;WITH ad_id_cp_id AS -- advisor_id + contactperson_id/adviseur_id + contactpersoon_id
 (
 SELECT TOP 20 ADVISEUR_ID AS advisor_id, CONTACTPERSOON_ID AS contactperson_id, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
@@ -656,14 +657,15 @@ INSERT INTO [SBBWorkshopOmgeving].[dbo].[AANVRAAG] (CONTACTPERSOON_ID, ADVISEUR_
 SELECT contactperson_id, advisor_id, groups
 FROM ad_id_cp_id ac, grps g
 WHERE ac.id = g.id
-go
+GO
 */
 
 /*==============================================================*/
-/* Table: planner				                                */
+/* Table: PLANNER				                                */
 /*==============================================================*/
-insert into [SBBWorkshopOmgeving].[dbo].planner values
-('D. Krom'),
-('R. Ates'),
-('G. Gültekin'),
-('K. deBruijn')
+INSERT INTO [SBBWORKSHOPOMGEVING].[DBO].[PLANNER]
+VALUES	('D. Krom'),
+		('R. Ates'),
+		('G. Gültekin'),
+		('K. deBruijn')
+GO

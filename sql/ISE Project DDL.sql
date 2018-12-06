@@ -203,310 +203,316 @@ go
 /* Table: PLANNER                                                */
 /*==============================================================*/
 CREATE TABLE PLANNER (
-	NAAM VARCHAR(50) NOT NULL,
+	NAAM	VARCHAR(52)		NOT NULL,
 
-	CONSTRAINT PK_planners PRIMARY KEY (NAAM)
+	CONSTRAINT PK_PLANNER PRIMARY KEY (NAAM)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: SECTOR                                                */
 /*==============================================================*/
-create table SECTOR (
-   SECTORNAAM          varchar(20)         not null,
-   constraint PK_SECTOR primary key (SECTORNAAM)
+CREATE TABLE SECTOR (
+   SECTORNAAM          VARCHAR(20)         NOT NULL,
+   CONSTRAINT PK_SECTOR PRIMARY KEY (SECTORNAAM)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: ORGANISATIE                                           */
 /*==============================================================*/
-create table ORGANISATIE (
-   ORGANISATIENUMMER     int		         not null,
-   ORGANISATIENAAM       varchar(60)         not null,
-   ADRES				 varchar(60)         not null,
-   POSTCODE				 varchar(20)         not null,
-   PLAATSNAAM			 varchar(60)         not null,
-   constraint PK_ORGANISATIE primary key (ORGANISATIENUMMER)
+CREATE TABLE ORGANISATIE (
+   ORGANISATIENUMMER     INT		         NOT NULL,
+   ORGANISATIENAAM       VARCHAR(60)         NOT NULL,
+   ADRES				 VARCHAR(60)         NOT NULL,
+   POSTCODE				 VARCHAR(20)         NOT NULL,
+   PLAATSNAAM			 VARCHAR(60)         NOT NULL,
+   CONSTRAINT PK_ORGANISATIE PRIMARY KEY (ORGANISATIENUMMER)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: ADVISEUR                                              */
 /*==============================================================*/
-create table ADVISEUR (
-   ADVISEUR_ID          int IDENTITY         not null,
-   ORGANISATIENUMMER    varchar(15)          not null,
-   SECTORNAAM			varchar(255)         not null,
-   VOORNAAM				varchar(255)         not null,
-   ACHTERNAAM			varchar(255)         not null,
-   TELEFOONNUMMER       varchar(255)         null,
-   EMAIL                varchar(255)         null,
-   constraint PK_ADVISEUR primary key (ADVISEUR_ID)
+CREATE TABLE ADVISEUR (
+   ADVISEUR_ID          INT IDENTITY         NOT NULL,
+   ORGANISATIENUMMER    INT			         NOT NULL,
+   SECTORNAAM			VARCHAR(20)	         NOT NULL,
+   VOORNAAM				VARCHAR(30)          NOT NULL,
+   ACHTERNAAM			VARCHAR(50)	         NOT NULL,
+   TELEFOONNUMMER       VARCHAR(12)          NULL,
+   EMAIL                VARCHAR(100)         NULL,
+   CONSTRAINT PK_ADVISEUR PRIMARY KEY (ADVISEUR_ID)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: CONTACTPERSOON                                        */
 /*==============================================================*/
-create table CONTACTPERSOON (
-   CONTACTPERSOON_ID    int IDENTITY         not null,
-   ORGANISATIENUMMER    varchar(15)          not null,
-   VOORNAAM             varchar(255)         not null,
-   ACHTERNAAM           varchar(255)         not null,
-   TELEFOONNUMMER       varchar(255)         null,
-   EMAIL                varchar(255)         null,
-   constraint PK_CONTACTPERSOON primary key (CONTACTPERSOON_ID)
+CREATE TABLE CONTACTPERSOON (
+   CONTACTPERSOON_ID    INT IDENTITY         NOT NULL,
+   ORGANISATIENUMMER    INT			         NOT NULL,
+   VOORNAAM             VARCHAR(30)          NOT NULL,
+   ACHTERNAAM           VARCHAR(50)          NOT NULL,
+   TELEFOONNUMMER       VARCHAR(12)          NULL,
+   EMAIL                VARCHAR(100)         NULL,
+   CONSTRAINT PK_CONTACTPERSOON PRIMARY KEY (CONTACTPERSOON_ID)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: WORKSHOPLEIDER                                        */
 /*==============================================================*/
-create table WORKSHOPLEIDER (
-   WORKSHOPLEIDER_ID    int IDENTITY         not null,
-   VOORNAAM				varchar(255)         not null,
-   ACHTERNAAM			varchar(255)         not null,
-   TOEVOEGING			tinyint				 null,
-   constraint PK_WORKSHOPLEIDER primary key (WORKSHOPLEIDER_ID)
+CREATE TABLE WORKSHOPLEIDER (
+   WORKSHOPLEIDER_ID    INT IDENTITY         NOT NULL,
+   VOORNAAM				VARCHAR(30)          NOT NULL,
+   ACHTERNAAM			VARCHAR(50)          NOT NULL,
+   TOEVOEGING			TINYINT				 NULL,
+   CONSTRAINT PK_WORKSHOPLEIDER PRIMARY KEY (WORKSHOPLEIDER_ID)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: BESCHIKBAARHEID                                       */
 /*==============================================================*/
-create table BESCHIKBAARHEID (
-   WORKSHOPLEIDER_ID    int			         not null,
-   KWARTAAL             char(1)              not null,
-   JAAR                 smallint             not null,
-   AANTAL_UUR           smallint             not null,
-   constraint PK_BESCHIKBAARHEID primary key (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
+CREATE TABLE BESCHIKBAARHEID (
+   WORKSHOPLEIDER_ID    INT			         NOT NULL,
+   KWARTAAL             CHAR(1)              NOT NULL,
+   JAAR                 SMALLINT             NOT NULL,
+   AANTAL_UUR           SMALLINT             NOT NULL,
+   CONSTRAINT PK_BESCHIKBAARHEID PRIMARY KEY (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: DEELNEMER                                             */
 /*==============================================================*/
-create table DEELNEMER (
-   DEELNEMER_ID					int IDENTITY         not null,
-   SECTORNAAM					varchar(255)         not null,
-   ORGANISATIENUMMER			varchar(15)          null,
-   AANHEF						varchar(7)           not null,
-   VOORNAAM						varchar(255)         not null,
-   ACHTERNAAM					varchar(255)         not null,
-   GEBOORTEDATUM				date	             not null,
-   EMAIL						varchar(255)         not null,
-   TELEFOONNUMMER				varchar(255)         not null,
-   OPLEIDINGSNIVEAU				varchar(11)          not null,
-   ORGANISATIE_VESTIGINGSPLAATS	varchar(255)         not null,
-   IS_OPEN_INSCHRIJVING         bit                  not null,
-   GEWENST_BEGELEIDINGSNIVEAU	varchar(255)         null,
-   FUNCTIENAAM					varchar(255)         null,
-   constraint PK_DEELNEMER primary key (DEELNEMER_ID)
+CREATE TABLE DEELNEMER (
+   DEELNEMER_ID					INT IDENTITY         NOT NULL,
+   SECTORNAAM					VARCHAR(20)          NULL,
+   ORGANISATIENUMMER			INT			         NOT NULL,
+   AANHEF						VARCHAR(7)           NOT NULL,
+   VOORNAAM						VARCHAR(30)          NOT NULL,
+   ACHTERNAAM					VARCHAR(50)          NOT NULL,
+   GEBOORTEDATUM				DATE	             NOT NULL,
+   EMAIL						VARCHAR(100)         NULL,
+   TELEFOONNUMMER				VARCHAR(12)          NULL,
+   OPLEIDINGSNIVEAU				VARCHAR(100)         NOT NULL,
+   ORGANISATIE_VESTIGINGSPLAATS	VARCHAR(60)          NOT NULL,
+   IS_OPEN_INSCHRIJVING         BIT                  NOT NULL,
+   GEWENST_BEGELEIDINGSNIVEAU	VARCHAR(100)         NULL,
+   FUNCTIENAAM					VARCHAR(100)         NULL,
+   CONSTRAINT PK_DEELNEMER PRIMARY KEY (DEELNEMER_ID)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: MODULE                                                */
 /*==============================================================*/
-create table MODULE (
-   MODULENUMMER       int                  not null,
-   MODULENAAM         varchar(255)         not null,
-   constraint PK_MODULE primary key (MODULENUMMER)
+CREATE TABLE MODULE (
+   MODULENUMMER       INT                  NOT NULL,
+   MODULENAAM         VARCHAR(100)         NOT NULL,
+   CONSTRAINT PK_MODULE PRIMARY KEY (MODULENUMMER)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: WORKSHOP                                              */
 /*==============================================================*/
-create table WORKSHOP (
-   WORKSHOP_ID						int IDENTITY         not null,
-   WORKSHOPLEIDER_ID				int                  null,
-   CONTACTPERSOON_ID				int                  null,
-   ORGANISATIENUMMER				varchar(15)          null,
-   MODULENUMMER						int                  null,
-   ADVISEUR_ID						int                  null,
-   SECTORNAAM						varchar(255)         null,
-   DATUM							date	             null,
-   STARTTIJD						time	             null,
-   EINDTIJD							time	             null,
-   ADRES							varchar(255)         null,
-   POSTCODE							varchar(12)          null,
-   PLAATSNAAM						varchar(255)         null,
-   [STATUS]							varchar(255)         null,
-   OPMERKING						varchar(255)         null,
-   [TYPE]							varchar(3)           null,
-   VERWERKT_BREIN					date	             null,
-   DEELNEMER_GEGEVENS_ONTVANGEN		date	             null,
-   OVK_BEVESTIGING					date	             null,
-   PRESENTIELIJST_VERSTUURD			date	             null,
-   PRESENTIELIJST_ONTVANGEN			date	             null,
-   BEWIJS_DEELNAME_MAIL_SBB_WSL		date	             null,
-   constraint PK_WORKSHOP primary key (WORKSHOP_ID)
+CREATE TABLE WORKSHOP (
+   WORKSHOP_ID						INT IDENTITY         NOT NULL,
+   WORKSHOPLEIDER_ID				INT                  NULL,
+   CONTACTPERSOON_ID				INT                  NULL,
+   ORGANISATIENUMMER				INT			         NULL,
+   MODULENUMMER						INT                  NULL,
+   ADVISEUR_ID						INT                  NULL,
+   SECTORNAAM						VARCHAR(20)          NULL,
+   DATUM							DATE	             NULL,
+   STARTTIJD						TIME	             NULL,
+   EINDTIJD							TIME	             NULL,
+   ADRES							VARCHAR(60)          NULL,
+   POSTCODE							VARCHAR(7)           NULL,
+   PLAATSNAAM						VARCHAR(60)          NULL,
+   [STATUS]							VARCHAR(20)          NULL,
+   OPMERKING						VARCHAR(255)         NULL,
+   [TYPE]							VARCHAR(3)           NULL,
+   VERWERKT_BREIN					DATE	             NULL,
+   DEELNEMER_GEGEVENS_ONTVANGEN		DATE	             NULL,
+   OVK_BEVESTIGING					DATE	             NULL,
+   PRESENTIELIJST_VERSTUURD			DATE	             NULL,
+   PRESENTIELIJST_ONTVANGEN			DATE	             NULL,
+   BEWIJS_DEELNAME_MAIL_SBB_WSL		DATE	             NULL,
+   CONSTRAINT PK_WORKSHOP PRIMARY KEY (WORKSHOP_ID)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: DEELNEMER_IN_WORKSHOP                                 */
 /*==============================================================*/
-create table DEELNEMER_IN_WORKSHOP (
-   WORKSHOP_ID          int			         not null,
-   DEELNEMER_ID         int                  not null,
-   VOLGNUMMER           int                  not null,
-   IS_GOEDGEKEURD       bit                  not null,
-   constraint PK_DEELNEMER_IN_WORKSHOP primary key (WORKSHOP_ID, DEELNEMER_ID, VOLGNUMMER)
+CREATE TABLE DEELNEMER_IN_WORKSHOP (
+   WORKSHOP_ID          INT			         NOT NULL,
+   DEELNEMER_ID         INT                  NOT NULL,
+   VOLGNUMMER           INT                  NOT NULL,
+   IS_GOEDGEKEURD       BIT                  NOT NULL,
+   CONSTRAINT PK_DEELNEMER_IN_WORKSHOP PRIMARY KEY (WORKSHOP_ID, DEELNEMER_ID, VOLGNUMMER)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: AANVRAAG		                                        */
 /*==============================================================*/
-create table AANVRAAG (
-   AANVRAAG_ID		    int IDENTITY         not null,
-   ORGANISATIE_ID		int					 not null,
-   CONTACTPERSOON_ID	int			         not null,
-   ADVISEUR_ID			int			         not null,
-   SBB_PLANNER			VARCHAR(50)			 not null,
+CREATE TABLE AANVRAAG (
+   AANVRAAG_ID		    INT IDENTITY         NOT NULL,
+   ORGANISATIE_ID		INT					 NOT NULL,
+   CONTACTPERSOON_ID	INT			         NOT NULL,
+   ADVISEUR_ID			INT			         NOT NULL,
+   SBB_PLANNER			VARCHAR(52)			 NOT NULL,
    AANVRAAG_DATUM		DATETIME			 DEFAULT GETDATE(),
-   constraint PK_AANVRAAG primary key (AANVRAAG_ID)
+   CONSTRAINT PK_AANVRAAG PRIMARY KEY (AANVRAAG_ID)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: GROEP													*/
 /*==============================================================*/
-create table GROEP (
-   GROEP_ID		    int IDENTITY			 not null,
-   ADRES			VARCHAR(255)			 not null,
-   TELEFOONNUMMER	VARCHAR(255)			 not null,
-   EMAIL			VARCHAR(255)		     not null,
-   constraint PK_GROEP primary key (GROEP_ID)
+CREATE TABLE GROEP (
+   GROEP_ID				INT IDENTITY			 NOT NULL,
+   CONTACTPERSOON_ID	INT						 NOT NULL,
+   ADRES				VARCHAR(60)				 NOT NULL,
+   TELEFOONNUMMER		VARCHAR(12)				 NOT NULL,
+   EMAIL				VARCHAR(100)			 NOT NULL,
+   CONSTRAINT PK_GROEP PRIMARY KEY (GROEP_ID)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: AANVRAAG_VAN_GROEP		                            */
 /*==============================================================*/
-create table AANVRAAG_VAN_GROEP (
-   AANVRAAG_ID		    int 				 not null,
-   GROEP_ID				int					 not null,
-   constraint PK_AANVRAAG_VAN_GROEP primary key (AANVRAAG_ID, GROEP_ID)
+CREATE TABLE AANVRAAG_VAN_GROEP (
+   AANVRAAG_ID		    INT 				 NOT NULL,
+   GROEP_ID				INT					 NOT NULL,
+   CONSTRAINT PK_AANVRAAG_VAN_GROEP PRIMARY KEY (AANVRAAG_ID, GROEP_ID)
 )
-go
+GO
 
 /*==============================================================*/
 /* Table: MODULE_VAN_GROEP		                                */
 /*==============================================================*/
-create table MODULE_VAN_GROEP (
-   GROEP_ID				int					 not null,
-   MODULENUMMER			int					 not null,
-   VOORKEUR				VARCHAR(50)			 not null,
-   constraint PK_MODULE_VAN_GROEP primary key (GROEP_ID, MODULENUMMER)
+CREATE TABLE MODULE_VAN_GROEP (
+   GROEP_ID				INT					 NOT NULL,
+   MODULENUMMER			INT					 NOT NULL,
+   VOORKEUR				VARCHAR(20)			 NOT NULL,
+   CONSTRAINT PK_MODULE_VAN_GROEP PRIMARY KEY (GROEP_ID, MODULENUMMER)
 )
-go
+GO
 
 
-alter table ADVISEUR
-   add constraint FK_ADVISEUR_ref_ORGANISATIE foreign key (ORGANISATIENUMMER)
-      references ORGANISATIE (ORGANISATIENUMMER)
-go
+ALTER TABLE ADVISEUR
+   ADD CONSTRAINT FK_ADVISEUR_ref_ORGANISATIE FOREIGN KEY (ORGANISATIENUMMER)
+      REFERENCES ORGANISATIE (ORGANISATIENUMMER)
+GO
 
-alter table ADVISEUR
-   add constraint FK_ADVISEUR_ref_SECTOR foreign key (SECTORNAAM)
-      references SECTOR (SECTORNAAM)
-go
+ALTER TABLE ADVISEUR
+   ADD CONSTRAINT FK_ADVISEUR_ref_SECTOR FOREIGN KEY (SECTORNAAM)
+      REFERENCES SECTOR (SECTORNAAM)
+GO
 
-alter table BESCHIKBAARHEID
-   add constraint FK_BESCHIKBAARHEID_ref_WORKSHOPLEIDER foreign key (WORKSHOPLEIDER_ID)
-      references WORKSHOPLEIDER (WORKSHOPLEIDER_ID)
-go
+ALTER TABLE BESCHIKBAARHEID
+   ADD CONSTRAINT FK_BESCHIKBAARHEID_ref_WORKSHOPLEIDER FOREIGN KEY (WORKSHOPLEIDER_ID)
+      REFERENCES WORKSHOPLEIDER (WORKSHOPLEIDER_ID)
+GO
 
-alter table CONTACTPERSOON
-   add constraint FK_CONTACTPERSOON_ref_ORGANISATIE foreign key (ORGANISATIENUMMER)
-      references ORGANISATIE (ORGANISATIENUMMER)
-go
+ALTER TABLE CONTACTPERSOON
+   ADD CONSTRAINT FK_CONTACTPERSOON_ref_ORGANISATIE FOREIGN KEY (ORGANISATIENUMMER)
+      REFERENCES ORGANISATIE (ORGANISATIENUMMER)
+GO
 
-alter table DEELNEMER
-   add constraint FK_DEELNEMER_ref_ORGANISATIE foreign key (ORGANISATIENUMMER)
-      references ORGANISATIE (ORGANISATIENUMMER)
-go
+ALTER TABLE DEELNEMER
+   ADD CONSTRAINT FK_DEELNEMER_ref_ORGANISATIE FOREIGN KEY (ORGANISATIENUMMER)
+      REFERENCES ORGANISATIE (ORGANISATIENUMMER)
+GO
 
-alter table DEELNEMER
-   add constraint FK_DEELNEMER_ref_SECTOR foreign key (SECTORNAAM)
-      references SECTOR (SECTORNAAM)
-go
+ALTER TABLE DEELNEMER
+   ADD CONSTRAINT FK_DEELNEMER_ref_SECTOR FOREIGN KEY (SECTORNAAM)
+      REFERENCES SECTOR (SECTORNAAM)
+GO
 
-alter table DEELNEMER_IN_WORKSHOP
-   add constraint FK_DEELNEMER_IN_WORKSHOP_ref_DEELNEMER foreign key (DEELNEMER_ID)
-      references DEELNEMER (DEELNEMER_ID)
-go
+ALTER TABLE DEELNEMER_IN_WORKSHOP
+   ADD CONSTRAINT FK_DEELNEMER_IN_WORKSHOP_ref_DEELNEMER FOREIGN KEY (DEELNEMER_ID)
+      REFERENCES DEELNEMER (DEELNEMER_ID)
+GO
 
-alter table DEELNEMER_IN_WORKSHOP
-   add constraint FK_DEELNEMER_IN_WORKSHOP_ref_WORKSHOP foreign key (WORKSHOP_ID)
-      references WORKSHOP (WORKSHOP_ID)
-go
+ALTER TABLE DEELNEMER_IN_WORKSHOP
+   ADD CONSTRAINT FK_DEELNEMER_IN_WORKSHOP_ref_WORKSHOP FOREIGN KEY (WORKSHOP_ID)
+      REFERENCES WORKSHOP (WORKSHOP_ID)
+GO
 
-alter table WORKSHOP
-   add constraint FK_WORKSHOP_ref_ADVISEUR foreign key (ADVISEUR_ID)
-      references ADVISEUR (ADVISEUR_ID)
-go
+ALTER TABLE WORKSHOP
+   ADD CONSTRAINT FK_WORKSHOP_ref_ADVISEUR FOREIGN KEY (ADVISEUR_ID)
+      REFERENCES ADVISEUR (ADVISEUR_ID)
+GO
 
-alter table WORKSHOP
-   add constraint FK_WORKSHOP_ref_CONTACTPERSOON foreign key (CONTACTPERSOON_ID)
-      references CONTACTPERSOON (CONTACTPERSOON_ID)
-go
+ALTER TABLE WORKSHOP
+   ADD CONSTRAINT FK_WORKSHOP_ref_CONTACTPERSOON FOREIGN KEY (CONTACTPERSOON_ID)
+      REFERENCES CONTACTPERSOON (CONTACTPERSOON_ID)
+GO
 
-alter table WORKSHOP
-   add constraint FK_WORKSHOP_ref_MODULE foreign key (MODULENUMMER)
-      references MODULE (MODULENUMMER)
-go
+ALTER TABLE WORKSHOP
+   ADD CONSTRAINT FK_WORKSHOP_ref_MODULE FOREIGN KEY (MODULENUMMER)
+      REFERENCES MODULE (MODULENUMMER)
+GO
 
-alter table WORKSHOP
-   add constraint FK_WORKSHOP_ref_ORGANISATIE foreign key (ORGANISATIENUMMER)
-      references ORGANISATIE (ORGANISATIENUMMER)
-go
+ALTER TABLE WORKSHOP
+   ADD CONSTRAINT FK_WORKSHOP_ref_ORGANISATIE FOREIGN KEY (ORGANISATIENUMMER)
+      REFERENCES ORGANISATIE (ORGANISATIENUMMER)
+GO
 
-alter table WORKSHOP
-   add constraint FK_WORKSHOP_ref_WORKSHOPLEIDER foreign key (WORKSHOPLEIDER_ID)
-      references WORKSHOPLEIDER (WORKSHOPLEIDER_ID)
-go
+ALTER TABLE WORKSHOP
+   ADD CONSTRAINT FK_WORKSHOP_ref_WORKSHOPLEIDER FOREIGN KEY (WORKSHOPLEIDER_ID)
+      REFERENCES WORKSHOPLEIDER (WORKSHOPLEIDER_ID)
+GO
 
-alter table WORKSHOP
-   add constraint FK_WORKSHOP_ref_SECTOR foreign key (SECTORNAAM)
-      references SECTOR (SECTORNAAM)
-go
+ALTER TABLE WORKSHOP
+   ADD CONSTRAINT FK_WORKSHOP_ref_SECTOR FOREIGN KEY (SECTORNAAM)
+      REFERENCES SECTOR (SECTORNAAM)
+GO
 
-alter table AANVRAAG
-   add constraint FK_AANVRAAG_ref_CONTACTPERSOON foreign key (CONTACTPERSOON_ID)
-      references CONTACTPERSOON (CONTACTPERSOON_ID)
-go
+ALTER TABLE GROEP
+   ADD CONSTRAINT FK_GROEP_ref_CONTACTPERSOON FOREIGN KEY (CONTACTPERSOON_ID)
+      REFERENCES CONTACTPERSOON (CONTACTPERSOON_ID)
+GO
 
-alter table AANVRAAG
-   add constraint FK_AANVRAAG_ref_ADVISEUR foreign key (ADVISEUR_ID)
-      references ADVISEUR (ADVISEUR_ID)
-go
+ALTER TABLE AANVRAAG
+   ADD CONSTRAINT FK_AANVRAAG_ref_CONTACTPERSOON FOREIGN KEY (CONTACTPERSOON_ID)
+      REFERENCES CONTACTPERSOON (CONTACTPERSOON_ID)
+GO
 
-alter table AANVRAAG
-	add CONSTRAINT FK_SBB_PLANNER foreign key (SBB_PLANNER) 
+ALTER TABLE AANVRAAG
+   ADD CONSTRAINT FK_AANVRAAG_ref_ADVISEUR FOREIGN KEY (ADVISEUR_ID)
+      REFERENCES ADVISEUR (ADVISEUR_ID)
+GO
+
+ALTER TABLE AANVRAAG
+	ADD CONSTRAINT FK_AANVRAAG_ref_PLANNER FOREIGN KEY (SBB_PLANNER) 
 	REFERENCES PLANNER(NAAM)
-go
+GO
 
-alter table AANVRAAG_VAN_GROEP
-	add CONSTRAINT FK_AANVRAAG_VAN_GROEP_ref_AANVRAAG foreign key (AANVRAAG_ID) 
+ALTER TABLE AANVRAAG_VAN_GROEP
+	ADD CONSTRAINT FK_AANVRAAG_VAN_GROEP_ref_AANVRAAG FOREIGN KEY (AANVRAAG_ID) 
 	REFERENCES AANVRAAG(AANVRAAG_ID)
-go
+GO
 
-alter table AANVRAAG_VAN_GROEP
-	add CONSTRAINT FK_AANVRAAG_VAN_GROEP_ref_GROEP foreign key (GROEP_ID) 
+ALTER TABLE AANVRAAG_VAN_GROEP
+	ADD CONSTRAINT FK_AANVRAAG_VAN_GROEP_ref_GROEP FOREIGN KEY (GROEP_ID) 
 	REFERENCES GROEP(GROEP_ID)
-go
+GO
 
-alter table MODULE_VAN_GROEP
-	add CONSTRAINT FK_MODULE_VAN_GROEP_ref_MODULE foreign key (MODULENUMMER) 
+ALTER TABLE MODULE_VAN_GROEP
+	ADD CONSTRAINT FK_MODULE_VAN_GROEP_ref_MODULE FOREIGN KEY (MODULENUMMER) 
 	REFERENCES MODULE(MODULENUMMER)
-go
+GO
 
-alter table MODULE_VAN_GROEP
-	add CONSTRAINT FK_MODULE_VAN_GROEP_ref_GROEP foreign key (GROEP_ID) 
+ALTER TABLE MODULE_VAN_GROEP
+	ADD CONSTRAINT FK_MODULE_VAN_GROEP_ref_GROEP FOREIGN KEY (GROEP_ID) 
 	REFERENCES GROEP(GROEP_ID)
-go
+GO
