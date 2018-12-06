@@ -245,9 +245,58 @@ VALUES(@groepsID, @Module1, @VOORKEUR1),
 END
 GO
 
+CREATE OR ALTER PROC proc_insert_incompany_participants
+(
+@workshop_id		INT,
+@voornaam			VARCHAR(30),
+@achternaam			VARCHAR(50),
+@geboortedatum		DATE,
+@email				VARCHAR(100),
+@telefoonnummer		VARCHAR(12),
+@organisatienummer	INT,
+@opleidingsniveau	VARCHAR(100)
+)
+AS
+BEGIN
+
+	INSERT INTO DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER)
+		VALUES	(
+				@voornaam,
+				@achternaam,
+				@geboortedatum,
+				@email,
+				@telefoonnummer,
+				@opleidingsniveau,
+				@organisatienummer
+				)
+
+	DECLARE @deelnemer_id INT = (SELECT VOLGNUMMER FROM inserted)
+	DECLARE @volgnummer INT
+	--IF geen volgnummer maak er 1 van anders pak hoogste + 1
+	IF NOT EXISTS (SELECT * FROM DEELNEMER_IN_WORKSHOP WHERE WORKSHOP_ID = @workshop_id)
+		BEGIN
+			SET @volgnummer = 1
+		END
+	ELSE
+		BEGIN
+			SET @volgnummer = (SELECT TOP 1 VOLGNUMMER FROM DEELNEMER_IN_WORKSHOP WHERE WORKSHOP_ID = @workshop_id ORDER BY VOLGNUMMER DESC) + 1
+		END
+
+	INSERT INTO DEELNEMER_IN_WORKSHOP(WORKSHOP_ID, DEELNEMER_ID, VOLGNUMMER, IS_GOEDGEKEURD)
+		VALUES	(
+				@workshop_id,
+				@deelnemer_id,
+				@volgnummer,
+				1
+				)
+
+END
+GO
+
 /*==============================================================*/
 /* SP Type: UPDATE                                              */
 /*==============================================================*/
+
 CREATE OR ALTER PROC proc_approve_workshop_participants -- reference number M4
 (
 @workshop_id	INT,
@@ -304,6 +353,7 @@ GO
 /*==============================================================*/
 /* SP Type: DELETE                                              */
 /*==============================================================*/
+
 CREATE OR ALTER PROC proc_disapprove_workshop_participants -- reference number M6
 (
 @workshop_id	INT,
