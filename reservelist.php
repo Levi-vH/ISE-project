@@ -35,7 +35,7 @@ $workshoptype = getWorkshopType($id);
                 <ul class="list">
                     <h5><strong>Workshop Opties</strong></h5>
                     <li>
-                        <a class="active-page">Inzien deelnemers</a>
+                        <a href="participants.php?id=<?php echo $id?>">Inzien deelnemers</a>
                     </li>
                     <?php
                     if($workshoptype != 'INC') {
@@ -43,7 +43,7 @@ $workshoptype = getWorkshopType($id);
                         echo  '<a href="open_registrations.php?id='.$id.'">Openstaande inschrijvingen</a>';
                         echo '</li>';
                         echo '<li>';
-                        echo  '<a href="reservelist.php?id='.$id.'">Reservelijst</a>';
+                        echo  '<a class="active-page">Reservelijst</a>';
                         echo '</li>';
                     }
                     ?>
@@ -78,7 +78,7 @@ $workshoptype = getWorkshopType($id);
                     $conn = connectToDB();
 
                     //Run the stored procedure
-                    $sql = "exec proc_request_approved_workshop_participants ?";
+                    $sql = "exec proc_request_approved_workshop_participants_reservelist ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $id, PDO::PARAM_INT);
                     $stmt->execute();
@@ -99,19 +99,22 @@ $workshoptype = getWorkshopType($id);
                         $html .= $row['ACHTERNAAM'];
                         $html .= '</td>';
                         $html .= '<td>';
-                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="participants.php?id='.$id.'&participant_id='.$row['DEELNEMER_ID'].'&deleteUser=true"></a>';
+                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="reservelist.php?id='.$id.'&participant_id='.$row['DEELNEMER_ID'].'&deleteUser=true"></a>';
                         $html .= '</td>';
                         $html .= '</tr>';
-
                         echo $html;
+                    }
 
-                    }
                     if(isset($_GET['deleteUser'])) {
-                        deleteUser($id, $_GET['participant_id']);
-                        updatePage($_SERVER['PHP_SELF'].'?id='.$id);
+
+                    deleteUser($id, $_GET['participant_id']);
+                    updatePage($_SERVER['PHP_SELF'].'?id='.$id);
                     }
+
+
 
                     ?>
+
                 </table>
             </div>
         </div>

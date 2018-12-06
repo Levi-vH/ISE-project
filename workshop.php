@@ -3,6 +3,10 @@ include 'header.html';
 include 'functions.php';
 
 $id = $_GET['id'];
+$workshoptype = getWorkshopType($id);
+
+
+
 
 ?>
 <!DOCTYPE html>
@@ -28,28 +32,34 @@ $id = $_GET['id'];
                     <li>
                         <a href="participants.php?id=<?php echo $id?>">Inzien deelnemers</a>
                     </li>
+                    <?php
+                        if($workshoptype != 'INC') {
+                            echo '<li>';
+                            echo  '<a href="open_registrations.php?id='.$id.'">Openstaande inschrijvingen</a>';
+                            echo '</li>';
+                            echo '<li>';
+                            echo  '<a href="reservelist.php?id='.$id.'">Reservelijst</a>';
+                            echo '</li>';
+                        }
+                        ?>
                     <li>
                         <a href="editworkshop.php?id=<?php echo $id?>">Wijzig workshop</a>
                     </li>
-                    <li>
-                        <a href="INCworkshop.php">K</a>
-                    </li>
-                    <li>
-                        <a href="allworkshops.php">P</a>
-                    </li>
-                    <li>
-                        <a href="allworkshops.php">H</a>
-                    </li>
+                    <?php
+                    if($workshoptype == 'INC') {
+                        echo '<li>';
+                        echo  '<a href="addparticipant.php?id='.$id.'">Voeg deelnemers toe</a>';
+                        echo '</li>';
+                    }
+                    ?>
                 </ul>
-
                 <br>
             </div>
         </div>
         <div class="col-md-10 col-sm-8 main-content">
             <!--Main content code to be written here -->
-            <h1>HALLO WORLD</h1>
-            <h3>workshopnummer<?php echo $id?></h3>
-            <p>ggggggggggggggggggg</p>
+            <h1>WORKSHOP DETAILS</h1>
+            <h3>workshopnummer<?php echo $id .'type = '. $workshoptype ?></h3>
         </div>
     </div>
 </body>

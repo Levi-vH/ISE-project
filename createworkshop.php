@@ -10,7 +10,7 @@ $workshopadress = $workshoppostcode = $workshopcity = $workshopleader = $worksho
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $workshoptype = $_POST["workshoptype"];
     $workshopdate = $_POST["workshopdate"];
-    //$contactinfo = check_input($_POST["contactinfo"]);
+    $contactinfo = check_input($_POST["contactinfo"]);
     $workshopmodule = $_POST["workshopmodule"];
     $workshopcompany = $_POST["workshopcompany"];
     $workshopsector = $_POST["workshopsector"];
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshoptype, PDO::PARAM_STR);
     $stmt->bindParam(2, $workshopdate, PDO::PARAM_STR);
-    //$stmt->bindParam(3, $contactinfo, PDO::PARAM_STR);
+    $stmt->bindParam(3, $contactinfo, PDO::PARAM_STR);
     $stmt->bindParam(3, $workshopmodule, PDO::PARAM_INT);
     $stmt->bindParam(4, $workshopcompany, PDO::PARAM_INT);
     $stmt->bindParam(5, $workshopsector, PDO::PARAM_STR);
@@ -67,7 +67,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="col-sm-10">
                 <select class="form-control" name="workshoptype">
                     <option>TYPE...</option>
-                    <option>INCOMPANY</option>
                     <option>INDIVIDUEEL</option>
                     <option>LARGE ACCOUNTS</option>
                     <option>COM</option>

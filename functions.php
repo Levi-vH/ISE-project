@@ -76,3 +76,64 @@ function pre_r($input){
     print_r($input);
     echo '</pre>';
 }
+
+function deleteUser($workshop_id, $participant_id) {
+    $conn = connectToDB();
+
+    //Run the stored procedure
+    $sql = "exec proc_disapprove_workshop_participants ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
+    $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+function addUser($workshop_id, $participant_id) {
+    $conn = connectToDB();
+
+    //Run the stored procedure
+    $sql = "exec proc_approve_workshop_participants ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
+    $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+function updatePage($pagina) {
+    ?>
+    <script type="text/javascript">
+        window.location.href = '<?php echo $pagina ?>';
+    </script>
+    <?php
+}
+
+function getModuleNummer($id) {
+    $conn = connectToDB();
+
+    //Run the stored procedure
+    $sql = "exec proc_getWorkshops @where = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $modulenummer = $row['MODULENUMMER'];
+
+    return $modulenummer;
+}
+
+function getWorkshopType($id) {
+    $conn = connectToDB();
+
+
+    $sql = "SELECT TYPE FROM WORKSHOP WHERE WORKSHOP_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $workshoptype = $row['TYPE'];
+
+    return $workshoptype;
+
+}

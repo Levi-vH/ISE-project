@@ -3,6 +3,7 @@ include 'header.html';
 include 'functions.php';
 
 $id = $_GET['id'];
+$workshoptypeget = getWorkshopType($id);
 
 // define (empty) variables
 $workshoptype = $workshopdate = $contactinfo = $workshopmodule = $workshopcompany = $workshopsector = $starttime = $endtime =
@@ -33,27 +34,40 @@ $workshopcity = $row['PLAATSNAAM'];
 //$workshopleader = $row['WORKSHOPLEIDER_VOORNAAM'];
 $workshopnotes = $row['OPMERKING'];
 
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $workshoptype = $_POST["workshoptype"];
+        $workshopdate = $_POST["workshopdate"];
+        //$contactinfo = check_input($_POST["contactinfo"]);
+        $workshopmodule = $_POST["workshopmodule"];
+        $workshopcompany = $_POST["workshopcompany"];
+        $workshopsector = $_POST["workshopsector"];
+        $starttime = $_POST["workshopstarttime"];
+        $endtime = $_POST["workshopendtime"];
+        $workshopadress = check_input($_POST["workshopaddress"]);
+        $workshoppostcode = check_input($_POST["workshoppostcode"]);
+        $workshopcity = check_input($_POST["workshopcity"]);
+        $workshopleader = check_input($_POST["workshopleader"]);
+        $workshopnotes = check_input(@$_POST['workshopnotes']);
 
-//Try to make connection
-//$conn = connectToDB();
-
-//Run the stored procedure
-//$sql = "exec proc_create_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
-//$stmt = $conn->prepare($sql);
-//$stmt->bindParam(1, $workshoptype, PDO::PARAM_STR);
-//$stmt->bindParam(2, $workshopdate, PDO::PARAM_STR);
-////$stmt->bindParam(3, $contactinfo, PDO::PARAM_STR);
-//$stmt->bindParam(3, $workshopmodule, PDO::PARAM_INT);
-//$stmt->bindParam(4, $workshopcompany, PDO::PARAM_INT);
-//$stmt->bindParam(5, $workshopsector, PDO::PARAM_STR);
-//$stmt->bindParam(6, $starttime, PDO::PARAM_STR);
-//$stmt->bindParam(7, $endtime, PDO::PARAM_STR);
-//$stmt->bindParam(8, $workshopadress, PDO::PARAM_STR);
-//$stmt->bindParam(9, $workshoppostcode, PDO::PARAM_STR);
-//$stmt->bindParam(10, $workshopcity, PDO::PARAM_STR);
-//$stmt->bindParam(11, $workshopleader, PDO::PARAM_STR);
-//$stmt->bindParam(12, $workshopnotes, PDO::PARAM_STR);
-//$stmt->execute();
+        //Run the stored procedure
+        $sql = "exec proc_update_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(1, $id, PDO::PARAM_STR);
+        $stmt->bindParam(2, $workshoptype, PDO::PARAM_STR);
+        $stmt->bindParam(3, $workshopdate, PDO::PARAM_STR);
+        //$stmt->bindParam(3, $contactinfo, PDO::PARAM_STR);
+        $stmt->bindParam(4, $workshopmodule, PDO::PARAM_INT);
+        $stmt->bindParam(5, $workshopcompany, PDO::PARAM_INT);
+        $stmt->bindParam(6, $workshopsector, PDO::PARAM_STR);
+        $stmt->bindParam(7, $starttime, PDO::PARAM_STR);
+        $stmt->bindParam(8, $endtime, PDO::PARAM_STR);
+        $stmt->bindParam(9, $workshopadress, PDO::PARAM_STR);
+        $stmt->bindParam(10, $workshoppostcode, PDO::PARAM_STR);
+        $stmt->bindParam(11, $workshopcity, PDO::PARAM_STR);
+        $stmt->bindParam(12, $workshopleader, PDO::PARAM_STR);
+        $stmt->bindParam(13, $workshopnotes, PDO::PARAM_STR);
+        $stmt->execute();
+    }
 
 ?>
 <!DOCTYPE html>
@@ -85,29 +99,36 @@ $workshopnotes = $row['OPMERKING'];
                 <ul class="list">
                     <h5><strong>Workshop Opties</strong></h5>
                     <li>
-                        <a href="participants.php?id=<?php echo $id ?>">Inzien deelnemers</a>
+                        <a href="participants.php?id=<?php echo $id?>">Inzien deelnemers</a>
                     </li>
+                    <?php
+                    if($workshoptypeget != 'INC') {
+                        echo '<li>';
+                        echo  '<a href="open_registrations.php?id='.$id.'">Openstaande inschrijvingen</a>';
+                        echo '</li>';
+                        echo '<li>';
+                        echo  '<a href="reservelist.php?id='.$id.'">Reservelijst</a>';
+                        echo '</li>';
+                    }
+                    ?>
                     <li>
                         <a class="active-page">Wijzig workshop</a>
                     </li>
-                    <li>
-                        <a href="INCworkshop.php">K</a>
-                    </li>
-                    <li>
-                        <a href="allworkshops.php">P</a>
-                    </li>
-                    <li>
-                        <a href="allworkshops.php">H</a>
-                    </li>
+                    <?php
+                    if($workshoptypeget == 'INC') {
+                        echo '<li>';
+                        echo  '<a href="addparticipant.php?id='.$id.'">Voeg deelnemers toe</a>';
+                        echo '</li>';
+                    }
+                    ?>
                 </ul>
-
                 <br>
             </div>
         </div>
 
         <div class="container">
             <h2 class="text-info text-center">Wijzig workshop <?php echo $id ?></h2>
-            <form class="form-horizontal" action="createworkshop.php" method="post">
+            <form class="form-horizontal" action="editworkshop.php?id=<?php echo $id ?>" method="post">
                 <div class="form-group">
                     <label class="control-label col-sm-2 font-weight-bold" for="workshoptype">Type workshop:</label>
                     <div class="col-sm-10">
@@ -140,6 +161,12 @@ $workshopnotes = $row['OPMERKING'];
                         <?php
                         echo selectBox("workshopmodule", "module", array("modulenummer", "modulenaam"), "modulenummer", array("modulenummer", "modulenaam"), "modulenummer");
                         ?>
+                        <script href="text/javascript">
+                        var sel = document.getElementById("workshopmodule");
+                        var modulenummer;
+                        modulenummer = <?php echo getModuleNummer($id)?> -1;
+                        sel.selectedIndex =  modulenummer;
+                        </script>
                     </div>
                 </div>
                 <div class="form-group">
@@ -213,7 +240,7 @@ $workshopnotes = $row['OPMERKING'];
                 </div>
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-default">Submit</button>
+                        <button type="submit" class="btn btn-default">Update workshop</button>
                     </div>
                 </div>
             </form>

@@ -56,6 +56,14 @@ a:hover{
     color: #ff0b00;
 }
 
-.main-content {
+.headcenter {
     text-align: center;
 }
+
+#approvebutton {
+    color: green;
+}
+#denybutton {
+    color: red;
+}
+

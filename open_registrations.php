@@ -35,12 +35,12 @@ $workshoptype = getWorkshopType($id);
                 <ul class="list">
                     <h5><strong>Workshop Opties</strong></h5>
                     <li>
-                        <a class="active-page">Inzien deelnemers</a>
+                        <a href="participants.php?id=<?php echo $id?>">Inzien deelnemers</a>
                     </li>
                     <?php
                     if($workshoptype != 'INC') {
                         echo '<li>';
-                        echo  '<a href="open_registrations.php?id='.$id.'">Openstaande inschrijvingen</a>';
+                        echo  '<a class="active-page">Openstaande inschrijvingen</a>';
                         echo '</li>';
                         echo '<li>';
                         echo  '<a href="reservelist.php?id='.$id.'">Reservelijst</a>';
@@ -71,14 +71,15 @@ $workshoptype = getWorkshopType($id);
                         <th>Nummer</th>
                         <th>Voornaam</th>
                         <th>Achternaam</th>
-                        <th>Afmelden</th>
+                        <th>Goedkeuren</th>
+                        <th>Afkeuren</th>
                     </tr>
                     <?php
                     //Try to make connection
                     $conn = connectToDB();
 
                     //Run the stored procedure
-                    $sql = "exec proc_request_approved_workshop_participants ?";
+                    $sql = "exec proc_request_not_approved_workshop_participants ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $id, PDO::PARAM_INT);
                     $stmt->execute();
@@ -99,15 +100,22 @@ $workshoptype = getWorkshopType($id);
                         $html .= $row['ACHTERNAAM'];
                         $html .= '</td>';
                         $html .= '<td>';
-                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="participants.php?id='.$id.'&participant_id='.$row['DEELNEMER_ID'].'&deleteUser=true"></a>';
+                        $html .= '<a class="fas fa-check" id="approvebutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt toevoegen?\')" href="open_registrations.php?id='.$id.'&participant_id='.$row['DEELNEMER_ID'].'&addUser=true"></a>';
+                        $html .= '</td>';
+                        $html .= '<td>';
+                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="open_registrations.php?id='.$id.'&participant_id='.$row['DEELNEMER_ID'].'&deleteUser=true"></a>';
                         $html .= '</td>';
                         $html .= '</tr>';
-
                         echo $html;
-
                     }
+
                     if(isset($_GET['deleteUser'])) {
                         deleteUser($id, $_GET['participant_id']);
+                        updatePage($_SERVER['PHP_SELF'].'?id='.$id);
+                    }
+
+                    if(isset($_GET['addUser'])) {
+                        addUser($id, $_GET['participant_id']);
                         updatePage($_SERVER['PHP_SELF'].'?id='.$id);
                     }
 
