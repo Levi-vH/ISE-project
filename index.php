@@ -19,7 +19,7 @@
     <h1 class="text-center">Welcome to ISE-PROJECT SBB</h1>
     <br>
 
-    <img class="rounded mx-auto d-block" src="Images/construction.png" alt="construction">
+    <img class="rounded mx-auto d-block" src="Images/construction.png" alt="construction" width="500" height="500">
 
 </body>
 </html>
