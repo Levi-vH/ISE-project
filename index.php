@@ -17,14 +17,11 @@
 
 <body>
 <div class="align-content-center">
-    <h1>Welcome to ISE </h1>
-    <h2>Web Site Main Ingredients:</h2>
-</div>
+    <h1 class="text-center">Welcome to ISE </h1>
+
 <div class="align-content-md-center">
-    <p>Pages (HTML)</p>
-    <p>Style Sheets (CSS)</p>
-    <p>Computer Code (JavaScript)</p>
-    <p>Live Data (Files and Databases)</p>
+    <img class="image_center" src="Images/construction.png" alt="construction">
+</div>
 </div>
 </body>
 </html>

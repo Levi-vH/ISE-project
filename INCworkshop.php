@@ -7,7 +7,7 @@ $Organisation_Relationnumber = $Contact_ID = $SBB_Planner = $Advisor_practical_l
 
 // The ones that do not get checked are dropdown or select.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    pre_r($_POST);
+//    pre_r($_POST);
     $Organisation_Relationnumber = check_input($_POST["Organisation_Relationnumber"]);
     $Contact_ID = check_input($_POST["Contact_Name"]);
     $SBB_Planner = check_input($_POST["Coordination_Contact"]);
@@ -168,7 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
             <label class="control-label col-sm-2" for="Coordination_Contact">Contactpersoon:</label>
             <div class="col-sm-10">
-            <?php    echo selectBox("Coordination_Contact", "planner" ,array("naam"), "naam", array("naam"), "naam"); ?>
+            <?php    echo selectBox("Coordination_Contact", "planner" ,array("plannernaam"), "plannernaam", array("plannernaam"), "plannernaam"); ?>
             </div>
         </div>
         <br>

@@ -67,3 +67,6 @@ a:hover{
     color: red;
 }
 
+.image_center{
+    display: block;
+}
