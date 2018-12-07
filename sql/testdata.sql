@@ -386,17 +386,12 @@ SELECT id + 1, '0' + CAST(CAST(FLOOR((RAND(CHECKSUM(NEWID()))+6)*100000000) AS I
 FROM phonenum
 WHERE id < 250 -- amount of rows/hoeveelheid rijen
 ),
-oblocation AS -- organization business location/organisatie vestigingsplaats
-(
-SELECT TOP 250 City AS placename, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
-FROM [AdventureWorks2014].[Person].[Address]
-),
 funcname AS -- functionname/functienaam
 (
 SELECT TOP 250 JobTitle AS functionname, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
 FROM [AdventureWorks2014].[HumanResources].[Employee]
 )
-INSERT INTO [SBBWorkshopOmgeving].[dbo].[DEELNEMER] (SECTORNAAM, ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIE_VESTIGINGSPLAATS, IS_OPEN_INSCHRIJVING, GEWENST_BEGELEIDINGSNIVEAU, FUNCTIENAAM)
+INSERT INTO [SBBWorkshopOmgeving].[dbo].[DEELNEMER] (SECTORNAAM, ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, IS_OPEN_INSCHRIJVING, GEWENST_BEGELEIDINGSNIVEAU, FUNCTIENAAM)
 SELECT	sectorname,
 		organizationnumber,
 		honorific =
@@ -420,7 +415,6 @@ SELECT	sectorname,
 				WHEN randomeducation = 0 THEN 'mbo'
 				ELSE 'hbo'
 			END,
-		placename,
 		enrollment,
 		guidance =
 			CASE
@@ -428,7 +422,7 @@ SELECT	sectorname,
 				ELSE 'hbo'
 			END,
 		functionname
-FROM orgnum o, fname_hon_sector_educ fhse, lname_email_enroll_guid leeg, bdate b, phonenum p, oblocation ol, funcname f
+FROM orgnum o, fname_hon_sector_educ fhse, lname_email_enroll_guid leeg, bdate b, phonenum p, funcname f
 WHERE o.id = fhse.id
 AND o.id = leeg.id
 AND o.id = b.id
