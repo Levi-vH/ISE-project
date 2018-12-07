@@ -1,7 +1,7 @@
 <?php include 'header.html'; ?>
 <!DOCTYPE html>
 <html>
-<title>Bootstrap Example</title>
+<title>Bètadi</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -16,13 +16,11 @@
 </head>
 
 <body>
-<div class="align-content-center">
-    <h1 class="text-center">Welcome to ISE </h1>
+    <h1 class="text-center">Welcome to ISE-PROJECT SBB</h1>
+    <br>
 
-<div class="align-content-md-center">
-    <img class="image_center" src="Images/construction.png" alt="construction">
-</div>
-</div>
+    <img class="rounded mx-auto d-block" src="Images/construction.png" alt="construction">
+
 </body>
 </html>
 <?php include 'footer.html'; ?>
