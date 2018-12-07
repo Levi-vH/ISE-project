@@ -427,7 +427,6 @@ WHERE o.id = fhse.id
 AND o.id = leeg.id
 AND o.id = b.id
 AND o.id = p.id
-AND o.id = ol.id
 AND o.id = f.id
 OPTION(MAXRECURSION 0)
 GO
