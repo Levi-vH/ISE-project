@@ -237,13 +237,11 @@ CREATE OR ALTER PROC proc_insert_aanvraag_groepen
 AS
 BEGIN
 
-INSERT INTO GROEP(CONTACTPERSOON_ID, ADRES)
-VALUES (@contactperson, @adress)
+INSERT INTO GROEP(AANVRAAG_ID, CONTACTPERSOON_ID, ADRES)
+VALUES (@aanvraag_ID, @contactperson, @adress)
 
 Declare @groepsID INT = (SELECT IDENT_CURRENT('GROEP'))
 
-INSERT INTO AANVRAAG_VAN_GROEP(AANVRAAG_ID, GROEP_ID) -- aanvraag van groep bestaat dus niet meer (in ddl code nog wel laten staan in commentaar voor zekerheid)
-VALUES (@aanvraag_ID, @groepsID)
 
 INSERT MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
 VALUES(@groepsID, @Module1, @VOORKEUR1),
