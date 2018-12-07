@@ -47,7 +47,7 @@ include 'functions.php';
                 $html .= $row['AANTAL_GROEPEN'];
                 $html .= '</td>';
                 $html .= '<td class="align-middle">';
-                $html .= $row['AANVRAAG_DATUM'];
+                $html .=  date('j F Y', strtotime($row['AANVRAAG_DATUM']));
                 $html .= '</td>';
                 echo $html;
             }

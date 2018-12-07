@@ -63,7 +63,7 @@ $workshoptype = getWorkshopType($id);
         </div>
         <div class="col-md-10 col-sm-8 main-content">
             <!--Main content code to be written here -->
-            <h1>Deelnemers</h1>
+            <h1>Reservelijst</h1>
             <h3>workshopnummer<?php echo $id ?></h3>
             <div>
                 <table class='table table-striped table-hover'>
