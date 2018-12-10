@@ -371,16 +371,6 @@ CREATE TABLE AANVRAAG (
 GO
 
 /*==============================================================*/
-/* Table: DEELNEMER_IN_AANVRAAG                                 */
-/*==============================================================*/
-CREATE TABLE DEELNEMER_IN_AANVRAAG (
-   AANVRAAG_ID          INT			         NOT NULL,
-   DEELNEMER_ID         INT                  NOT NULL,
-   CONSTRAINT PK_DEELNEMER_IN_AANVRAAG PRIMARY KEY (AANVRAAG_ID, DEELNEMER_ID)
-)
-GO
-
-/*==============================================================*/
 /* Table: GROEP													*/
 /*==============================================================*/
 CREATE TABLE GROEP (
@@ -393,39 +383,15 @@ CREATE TABLE GROEP (
 GO
 
 /*==============================================================*/
-/* Table: DEELNEMER_IN_GROEP                                    */
+/* Table: DEELNEMER_IN_AANVRAAG                                 */
 /*==============================================================*/
-CREATE TABLE DEELNEMER_IN_GROEP (
-   GROEP_ID				INT			         NOT NULL,
+CREATE TABLE DEELNEMER_IN_AANVRAAG (
+   AANVRAAG_ID          INT			         NOT NULL,
    DEELNEMER_ID         INT                  NOT NULL,
-   CONSTRAINT PK_DEELNEMER_IN_GROEP PRIMARY KEY (GROEP_ID, DEELNEMER_ID)
+   GROEP_ID				INT					 NULL
+   CONSTRAINT PK_DEELNEMER_IN_AANVRAAG PRIMARY KEY (AANVRAAG_ID, DEELNEMER_ID)
 )
 GO
-
-/*==============================================================*/
-/* Table: GROEP													*/
-/*==============================================================*/
-/*
-CREATE TABLE GROEP (
-   GROEP_ID				INT IDENTITY			 NOT NULL,
-   CONTACTPERSOON_ID	INT						 NOT NULL,
-   ADRES				VARCHAR(60)				 NOT NULL,
-   CONSTRAINT PK_GROEP PRIMARY KEY (GROEP_ID)
-)
-GO
-*/
-
-/*==============================================================*/
-/* Table: AANVRAAG_VAN_GROEP		                            */
-/*==============================================================*/
-/*
-CREATE TABLE AANVRAAG_VAN_GROEP (
-   AANVRAAG_ID		    INT 				 NOT NULL,
-   GROEP_ID				INT					 NOT NULL,
-   CONSTRAINT PK_AANVRAAG_VAN_GROEP PRIMARY KEY (AANVRAAG_ID, GROEP_ID)
-)
-GO
-*/
 
 /*==============================================================*/
 /* Table: MODULE_VAN_GROEP		                                */
@@ -437,7 +403,6 @@ CREATE TABLE MODULE_VAN_GROEP (
    CONSTRAINT PK_MODULE_VAN_GROEP PRIMARY KEY (GROEP_ID, MODULENUMMER)
 )
 GO
-
 
 ALTER TABLE ADVISEUR
    ADD CONSTRAINT FK_ADVISEUR_ref_ORGANISATIE FOREIGN KEY (ORGANISATIENUMMER)
@@ -549,27 +514,10 @@ ALTER TABLE DEELNEMER_IN_AANVRAAG
 	REFERENCES DEELNEMER(DEELNEMER_ID)
 GO
 
-ALTER TABLE DEELNEMER_IN_GROEP
-	ADD CONSTRAINT FK_DEELNEMER_IN_GROEP_ref_GROEP FOREIGN KEY (GROEP_ID) 
+ALTER TABLE DEELNEMER_IN_AANVRAAG
+	ADD CONSTRAINT FK_DEELNEMER_IN_AANVRAAG_ref_GROEP FOREIGN KEY (GROEP_ID) 
 	REFERENCES GROEP(GROEP_ID)
 GO
-
-ALTER TABLE DEELNEMER_IN_GROEP
-	ADD CONSTRAINT FK_DEELNEMER_IN_GROEP_ref_DEELNEMER FOREIGN KEY (DEELNEMER_ID) 
-	REFERENCES DEELNEMER(DEELNEMER_ID)
-GO
-
-/*
-ALTER TABLE AANVRAAG_VAN_GROEP
-	ADD CONSTRAINT FK_AANVRAAG_VAN_GROEP_ref_AANVRAAG FOREIGN KEY (AANVRAAG_ID) 
-	REFERENCES AANVRAAG(AANVRAAG_ID)
-GO
-
-ALTER TABLE AANVRAAG_VAN_GROEP
-	ADD CONSTRAINT FK_AANVRAAG_VAN_GROEP_ref_GROEP FOREIGN KEY (GROEP_ID) 
-	REFERENCES GROEP(GROEP_ID)
-GO
-*/
 
 ALTER TABLE MODULE_VAN_GROEP
 	ADD CONSTRAINT FK_MODULE_VAN_GROEP_ref_MODULE FOREIGN KEY (MODULENUMMER) 

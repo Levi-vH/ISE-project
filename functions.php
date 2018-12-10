@@ -77,13 +77,24 @@ function pre_r($input){
     echo '</pre>';
 }
 
-function deleteUser($workshop_id, $participant_id) {
+function deleteUserWorkshop($workshop_id, $participant_id) {
     $conn = connectToDB();
 
     //Run the stored procedure
     $sql = "exec proc_disapprove_workshop_participants ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
+    $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+function deleteUserAanvraag($aanvraag_id, $participant_id) {
+    $conn = connectToDB();
+
+    //Run the stored procedure
+    $sql = "exec proc_delete_aanvraag_deelnemers ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);
     $stmt->execute();
 }

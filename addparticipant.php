@@ -25,9 +25,9 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $educational_attainment = check_input(@$_POST['educational_attainment']);
 
         //Run the stored procedure
-        $sql = "exec proc_insert_incompany_participants ?, ?, ?, ?, ?, ?, ?, ?";
+        $sql = "exec proc_insert_aanvraag_deelnemers ?, ?, ?, ?, ?, ?, ?, ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(1, $id, PDO::PARAM_INT);
+        $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
         $stmt->bindParam(2, $name, PDO::PARAM_STR);
         $stmt->bindParam(3, $surname, PDO::PARAM_STR);
         $stmt->bindParam(4, $dateofbirth, PDO::PARAM_STR);
@@ -36,6 +36,8 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $stmt->bindParam(7, $organisation, PDO::PARAM_INT);
         $stmt->bindParam(8, $educational_attainment, PDO::PARAM_STR);
         $stmt->execute();
+
+
     }
     ?>
     <!DOCTYPE html>
@@ -67,9 +69,9 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
             <div class="col-md-2 col-sm-4 sidebar1">
                 <div class="left-navigation">
                     <ul class="list">
-                        <h5><strong>Workshop Opties</strong></h5>
+                        <h5><strong>Aanvraag Opties</strong></h5>
                         <li>
-                            <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id ?>">Inzien deelnemers</a>
+                            <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id ?>">Deelnemers en Groepen</a>
                         </li>
                         <li>
                             <a class="active-page">Voeg deelnemers toe</a>
@@ -83,7 +85,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                 <!--Main content code to be written here -->
                 <h1 class="headcenter">Voeg deelnemers toe</h1>
                 <div>
-                    <form class="form-group" action="addparticipant.php?id=<?php echo $id ?>" method="post">
+                    <form class="form-group" action="addparticipant.php?aanvraag_id=<?php echo $aanvraag_id ?>" method="post">
                         <div class="form-group">
                             <label class="control-label col-sm-2 font-weight-bold" for="name">Voornaam:</label>
                             <div class="col-sm-4">

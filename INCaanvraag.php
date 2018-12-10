@@ -27,7 +27,7 @@ $aanvraag_id = $_GET['aanvraag_id'];
                 <ul class="list">
                     <h5><strong>Aanvraag Opties</strong></h5>
                     <li>
-                        <a href="participants.php?id=<?php echo $id?>">Inzien deelnemers</a>
+                        <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id?>">Deelnemers en Groepen</a>
                     </li>
                     <li>
                         <a href="addparticipant.php?aanvraag_id=<?php echo $aanvraag_id?>">Voeg deelnemers toe</a>

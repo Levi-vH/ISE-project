@@ -40,7 +40,7 @@ $aanvraag_id = $_GET['aanvraag_id'];
                 <ul class="list">
                     <h5><strong>Aanvraag Opties</strong></h5>
                     <li>
-                        <a class="active-page">Inzien deelnemers</a>
+                        <a class="active-page">Deelnemers en Groepen</a>
                     </li>
                     <li>
                         <a href="addparticipant.php?aanvraag_id=<?php echo $aanvraag_id?>">Voeg deelnemers toe</a>
@@ -52,7 +52,6 @@ $aanvraag_id = $_GET['aanvraag_id'];
         <div class="col-md-10 col-sm-8 main-content">
             <!--Main content code to be written here -->
             <h1>Deelnemers</h1>
-            <h3>Aanvraagnummer<?php echo $aanvraag_id ?></h3>
             <div>
                 <table class='table table-striped table-hover'>
                     <tr>
@@ -66,9 +65,9 @@ $aanvraag_id = $_GET['aanvraag_id'];
                     $conn = connectToDB();
 
                     //Run the stored procedure
-                    $sql = "exec proc_request_approved_workshop_participants ?";
+                    $sql = "exec proc_request_deelnemer_in_aanvraag ?";
                     $stmt = $conn->prepare($sql);
-                    $stmt->bindParam(1, $id, PDO::PARAM_INT);
+                    $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                     $stmt->execute();
 
                     $nummer = 0;
@@ -87,7 +86,7 @@ $aanvraag_id = $_GET['aanvraag_id'];
                         $html .= $row['ACHTERNAAM'];
                         $html .= '</td>';
                         $html .= '<td>';
-                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt afmelden? Zijn of haar gegevens worden niet opgeslagen\')" href="participants.php?id='.$id.'&participant_id='.$row['DEELNEMER_ID'].'&deleteUser=true"></a>';
+                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt afmelden? Zijn of haar gegevens worden niet opgeslagen\')" href="participants.php?aanvraag_id='.$aanvraag_id.'&participant_id='.$row['DEELNEMER_ID'].'&deleteUser=true"></a>';
                         $html .= '</td>';
                         $html .= '</tr>';
 
@@ -95,13 +94,62 @@ $aanvraag_id = $_GET['aanvraag_id'];
 
                     }
                     if(isset($_GET['deleteUser'])) {
-                        deleteUser($aanvraag_id, $_GET['participant_id']);
+                        deleteUserAanvraag($aanvraag_id, $_GET['participant_id']);
                         updatePage($_SERVER['PHP_SELF'].'?aanvraag_id='.$aanvraag_id);
                     }
 
                     ?>
                 </table>
             </div>
+            <h1>Groepen</h1>
+            <table class='table table-striped table-hover'>
+                <tr>
+                    <th>Nummer</th>
+                    <th>Contactpersoon</th>
+                    <th>Adres</th>
+                    <th>Aantal deelnemers</th>
+                </tr>
+                <?php
+                //Try to make connection
+                $conn = connectToDB();
+
+                //Run the stored procedure
+                $sql = "exec proc_request_groups ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
+
+                $stmt->execute();
+
+                $nummer = 0;
+
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $nummer++;
+                    $html = '';
+                    $html .= '<tr>';
+                    $html .= '<td>';
+                    $html .= $nummer;
+                    $html .= '</td>';
+                    $html .= '<td>';
+                    $html .= $row['VOORNAAM'].' '.$row['ACHTERNAAM'];
+                    $html .= '</td>';
+                    $html .= '<td>';
+                    $html .= $row['ADRES'];
+                    $html .= '</td>';
+                    $html .= '<td>';
+                    $html .= $row['AANTAL_DEELNEMERS'].'/16';
+                    $html .= '</td>';
+                    $html .= '</tr>';
+
+                    echo $html;
+
+                }
+                if(isset($_GET['deleteUser'])) {
+                    deleteUserAanvraag($aanvraag_id, $_GET['participant_id']);
+                    updatePage($_SERVER['PHP_SELF'].'?aanvraag_id='.$aanvraag_id);
+                }
+
+                ?>
+            </table>
         </div>
     </div>
 </div>

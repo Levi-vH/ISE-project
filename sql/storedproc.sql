@@ -71,12 +71,12 @@ BEGIN
 SET NOCOUNT ON
 DECLARE @query VARCHAR(400)
 
-SET @query = 'SELECT *, (
-						SELECT COUNT(AANVRAAG_ID)
+SET @query = 'SELECT *, ISNULL((
+						SELECT COUNT(*)
 						FROM GROEP G
 						WHERE G.AANVRAAG_ID = A.AANVRAAG_ID
 						GROUP BY AANVRAAG_ID
-						) AS AANTAL_GROEPEN
+						), 0) AS AANTAL_GROEPEN
 FROM AANVRAAG A
 INNER JOIN ORGANISATIE O ON A.ORGANISATIENUMMER = O.ORGANISATIENUMMER
 INNER JOIN CONTACTPERSOON C ON A.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
@@ -88,9 +88,41 @@ IF(@aanvraag_id IS NOT NULL)
 		SET @query = @query + 'WHERE AANVRAAG_ID = ' + CAST(@aanvraag_id AS varchar(10))
 	END
 
-PRINT @query
+--PRINT @query
 
 EXEC(@query)
+
+END
+GO
+
+CREATE OR ALTER PROC proc_request_groups
+(
+@aanvraag_id	INT = NULL
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	DECLARE @query VARCHAR(400)
+
+	SET @query = 'SELECT *, ISNULL((
+							SELECT COUNT(*)
+							FROM DEELNEMER_IN_AANVRAAG DA
+							WHERE DA.AANVRAAG_ID = G.AANVRAAG_ID
+							GROUP BY DEELNEMER_ID
+							), 0) AS AANTAL_DEELNEMERS
+	FROM GROEP G
+	INNER JOIN CONTACTPERSOON C ON G.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
+	'
+
+	IF(@aanvraag_id IS NOT NULL)
+		BEGIN
+			SET @query = @query + 'WHERE AANVRAAG_ID = ' + CAST(@aanvraag_id AS varchar(10))
+		END
+
+	PRINT @query
+
+	EXEC(@query)
 
 END
 GO
@@ -178,9 +210,10 @@ BEGIN
 	SET NOCOUNT ON
 
 	SELECT		D.DEELNEMER_ID, VOORNAAM, ACHTERNAAM
-	FROM		DEELNEMER_IN_GROEP DG INNER JOIN DEELNEMER D
-	ON			DG.DEELNEMER_ID = D.DEELNEMER_ID
-	WHERE		GROEP_ID = @groep_id
+	FROM		DEELNEMER_IN_AANVRAAG DA INNER JOIN DEELNEMER D
+	ON			DA.DEELNEMER_ID = D.DEELNEMER_ID
+	WHERE		AANVRAAG_ID = @aanvraag_id
+	AND			GROEP_ID = @groep_id
 END
 GO
 
@@ -318,23 +351,6 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROC proc_insert_groep_deelnemers
-(
-@groep_id		INT,
-@deelnemer_id	INT
-)
-AS
-BEGIN
-
-	INSERT INTO DEELNEMER_IN_GROEP (GROEP_ID, DEELNEMER_ID)
-		VALUES	(
-				@groep_id,
-				@deelnemer_id
-				)
-
-END
-GO
-
 /*
 CREATE OR ALTER PROC proc_insert_incompany_participants
 (
@@ -442,6 +458,34 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROC proc_add_groep_deelnemers
+(
+@aanvraag_id	INT,
+@groep_id		INT,
+@deelnemer_id	INT
+)
+AS
+BEGIN
+
+	UPDATE DEELNEMER_IN_AANVRAAG SET GROEP_ID = @groep_id WHERE AANVRAAG_ID = @aanvraag_ID AND DEELNEMER_ID = @deelnemer_id
+
+END
+GO
+
+CREATE OR ALTER PROC proc_remove_groep_deelnemers
+(
+@aanvraag_id	INT,
+@groep_id		INT,
+@deelnemer_id	INT
+)
+AS
+BEGIN
+
+	UPDATE DEELNEMER_IN_AANVRAAG SET GROEP_ID = NULL WHERE AANVRAAG_ID = @aanvraag_id AND DEELNEMER_ID = @deelnemer_id
+
+END
+GO
+
 /*==============================================================*/
 /* SP Type: DELETE                                              */
 /*==============================================================*/
@@ -461,15 +505,15 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROC proc_delete_groep_deelnemers
+CREATE OR ALTER PROC proc_delete_aanvraag_deelnemers
 (
-@groep_id		INT,
+@aanvraag_id	INT,
 @deelnemer_id	INT
 )
 AS
 BEGIN
 
-	DELETE FROM DEELNEMER_IN_GROEP WHERE GROEP_ID = @groep_id AND DEELNEMER_ID = @deelnemer_id
+	DELETE FROM DEELNEMER_IN_AANVRAAG WHERE AANVRAAG_ID = @aanvraag_id AND DEELNEMER_ID = @deelnemer_id
 
 END
 GO
