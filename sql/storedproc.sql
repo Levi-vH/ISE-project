@@ -164,13 +164,13 @@ CREATE OR ALTER PROC proc_create_workshop
 @modulenummer		INT,
 @contactpersoon_ID  INT,
 @adviseur_ID		INT,
-@organisatienummer	VARCHAR(15),
-@workshopsector		VARCHAR(255),
+@organisatienummer	INT,
+@workshopsector		VARCHAR(20),
 @workshopstarttime	varchar(10),
 @workshopendtime	varchar(10),
-@workshopaddress	varchar(10),
-@workshoppostcode	VARCHAR(12),
-@workshopcity		VARCHAR(255),
+@workshopaddress	varchar(60),
+@workshoppostcode	VARCHAR(7),
+@workshopcity		VARCHAR(60),
 @workshopleader		VARCHAR(100),
 @workshopNote		VARCHAR(255)
 )
