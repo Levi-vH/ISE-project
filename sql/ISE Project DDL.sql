@@ -371,6 +371,16 @@ CREATE TABLE AANVRAAG (
 GO
 
 /*==============================================================*/
+/* Table: DEELNEMER_IN_AANVRAAG                                 */
+/*==============================================================*/
+CREATE TABLE DEELNEMER_IN_AANVRAAG (
+   AANVRAAG_ID          INT			         NOT NULL,
+   DEELNEMER_ID         INT                  NOT NULL,
+   CONSTRAINT PK_DEELNEMER_IN_AANVRAAG PRIMARY KEY (AANVRAAG_ID, DEELNEMER_ID)
+)
+GO
+
+/*==============================================================*/
 /* Table: GROEP													*/
 /*==============================================================*/
 CREATE TABLE GROEP (
@@ -517,6 +527,16 @@ GO
 ALTER TABLE AANVRAAG
 	ADD CONSTRAINT FK_AANVRAAG_ref_ORGANISATIE FOREIGN KEY (ORGANISATIENUMMER) 
 	REFERENCES ORGANISATIE(ORGANISATIENUMMER)
+GO
+
+ALTER TABLE DEELNEMER_IN_AANVRAAG
+	ADD CONSTRAINT FK_DEELNEMER_IN_AANVRAAG_ref_AANVRAAG FOREIGN KEY (AANVRAAG_ID) 
+	REFERENCES AANVRAAG(AANVRAAG_ID)
+GO
+
+ALTER TABLE DEELNEMER_IN_AANVRAAG
+	ADD CONSTRAINT FK_DEELNEMER_IN_AANVRAAG_ref_DEELNEMER FOREIGN KEY (DEELNEMER_ID) 
+	REFERENCES DEELNEMER(DEELNEMER_ID)
 GO
 
 /*
