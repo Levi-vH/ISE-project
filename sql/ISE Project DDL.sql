@@ -393,6 +393,16 @@ CREATE TABLE GROEP (
 GO
 
 /*==============================================================*/
+/* Table: DEELNEMER_IN_GROEP                                    */
+/*==============================================================*/
+CREATE TABLE DEELNEMER_IN_GROEP (
+   GROEP_ID				INT			         NOT NULL,
+   DEELNEMER_ID         INT                  NOT NULL,
+   CONSTRAINT PK_DEELNEMER_IN_GROEP PRIMARY KEY (GROEP_ID, DEELNEMER_ID)
+)
+GO
+
+/*==============================================================*/
 /* Table: GROEP													*/
 /*==============================================================*/
 /*
@@ -536,6 +546,16 @@ GO
 
 ALTER TABLE DEELNEMER_IN_AANVRAAG
 	ADD CONSTRAINT FK_DEELNEMER_IN_AANVRAAG_ref_DEELNEMER FOREIGN KEY (DEELNEMER_ID) 
+	REFERENCES DEELNEMER(DEELNEMER_ID)
+GO
+
+ALTER TABLE DEELNEMER_IN_GROEP
+	ADD CONSTRAINT FK_DEELNEMER_IN_GROEP_ref_GROEP FOREIGN KEY (GROEP_ID) 
+	REFERENCES GROEP(GROEP_ID)
+GO
+
+ALTER TABLE DEELNEMER_IN_GROEP
+	ADD CONSTRAINT FK_DEELNEMER_IN_GROEP_ref_DEELNEMER FOREIGN KEY (DEELNEMER_ID) 
 	REFERENCES DEELNEMER(DEELNEMER_ID)
 GO
 
