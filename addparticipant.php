@@ -71,7 +71,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     <ul class="list">
                         <h5><strong>Aanvraag Opties</strong></h5>
                         <li>
-                            <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id ?>">Inzien deelnemers</a>
+                            <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id ?>">Deelnemers en Groepen</a>
                         </li>
                         <li>
                             <a class="active-page">Voeg deelnemers toe</a>
