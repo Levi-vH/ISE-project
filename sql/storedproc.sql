@@ -153,6 +153,38 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROC proc_request_deelnemer_in_aanvraag
+(
+@aanvraag_id INT
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	SELECT		D.DEELNEMER_ID, VOORNAAM, ACHTERNAAM
+	FROM		DEELNEMER_IN_AANVRAAG DA INNER JOIN DEELNEMER D
+	ON			DA.DEELNEMER_ID = D.DEELNEMER_ID
+	WHERE		AANVRAAG_ID = @aanvraag_id
+END
+GO
+
+CREATE OR ALTER PROC proc_request_deelnemer_in_groep
+(
+@aanvraag_id	INT,
+@groep_id		INT
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	SELECT		D.DEELNEMER_ID, VOORNAAM, ACHTERNAAM
+	FROM		DEELNEMER_IN_GROEP DG INNER JOIN DEELNEMER D
+	ON			DG.DEELNEMER_ID = D.DEELNEMER_ID
+	WHERE		AANVRAAG_ID = @aanvraag_id
+	AND			GROEP_ID = @groep_id
+END
+GO
+
 /*==============================================================*/
 /* SP Type: INSERT                                              */
 /*==============================================================*/
