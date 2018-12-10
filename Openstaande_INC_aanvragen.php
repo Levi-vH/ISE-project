@@ -1,6 +1,12 @@
 <?php
-include 'header.html';
+if (!isset($_SESSION)) {
+    session_start();
+}
+
+include 'header.php';
 include 'functions.php';
+
+if ($_SESSION['username'] == 'planner') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,5 +62,8 @@ include 'functions.php';
     </div>
 </div>
 </body>
-<?php include 'footer.html'; ?>
 </html>
+<?php } else {
+    echo '<h1> Alleen planners kunnen deze pagina bezoeken</h1>';
+}
+include 'footer.html';

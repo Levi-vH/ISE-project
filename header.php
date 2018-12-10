@@ -15,18 +15,35 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="createworkshop.php">Maak nieuwe workshop</a>
+                <?php
+                if(!isset($_SESSION))
+                {
+                    session_start();
+                }
+                if($_SESSION['username'] == 'planner') { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="createworkshop.php">Maak nieuwe workshop</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="INCworkshop.php">INC inschrijving</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="Openstaande_INC_aanvragen.php">Openstaande INC aanvragen</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="allworkshops.php">Alle workshops</a>
+                    </li>
+                <?php
+                }
+                else if ($_SESSION['username'] == 'contactpersoon') { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="allworkshops.php">Alle workshops</a>
+                    </li>
+                <?php } ?>
+                <li class="nav-item">
+                    <a class="nav-link" ><?php echo $_SESSION['username'] ?></a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="INCworkshop.php">INC inschrijving</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="allworkshops.php">Alle workshops</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="Openstaande_INC_aanvragen.php">Openstaande INC aanvragen</a>
-                </li>
+
             </ul>
         </div>
     </nav>

@@ -1,38 +1,44 @@
 <?php
-include 'header.html';
+if (!isset($_SESSION)) {
+    session_start();
+}
+
+include 'header.php';
 include 'functions.php';
 
-$id = $_GET['id'];
-$workshoptypeget = getWorkshopType($id);
+if ($_SESSION['username'] == 'planner') {
+
+    $id = $_GET['id'];
+    $workshoptypeget = getWorkshopType($id);
 
 // define (empty) variables
-$workshoptype = $workshopdate = $contactinfo = $workshopmodule = $workshopcompany = $workshopsector = $starttime = $endtime =
-$workshopadress = $workshoppostcode = $workshopcity = $workshopleader = $workshopnotes = '';
+    $workshoptype = $workshopdate = $contactinfo = $workshopmodule = $workshopcompany = $workshopsector = $starttime = $endtime =
+    $workshopadress = $workshoppostcode = $workshopcity = $workshopleader = $workshopnotes = '';
 
 //Try to make connection
-$conn = connectToDB();
+    $conn = connectToDB();
 
 //Run the stored procedure
 // $sql = "SELECT * FROM VW_WORKSHOPS";
-$sql = "exec proc_getWorkshops @where = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bindParam(1, $id, PDO::PARAM_INT);
-$stmt->execute();
+    $sql = "exec proc_getWorkshops @where = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $id, PDO::PARAM_INT);
+    $stmt->execute();
 
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
-$workshoptype = $row['TYPE'];
-$workshopdate = $row['DATUM'];
-$contactinfo = $row['CONTACTPERSOON_VOORNAAM'].' '.$row['CONTACTPERSOON_ACHTERNAAM'];
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $workshoptype = $row['TYPE'];
+    $workshopdate = $row['DATUM'];
+    $contactinfo = $row['CONTACTPERSOON_VOORNAAM'] . ' ' . $row['CONTACTPERSOON_ACHTERNAAM'];
 //$workshopmodule = $row['MODULENAAM'];
 //$workshopcompany = $row['ORGANISATIENAAM'];
 //$workshopsector = $row['WORKSHOP_SECTOR'];
-$starttime = substr($row['STARTTIJD'], 0, 5);
-$endtime = substr($row['EINDTIJD'], 0, 5);
-$workshopaddress = $row['ADRES'];
-$workshoppostcode = $row['POSTCODE'];
-$workshopcity = $row['PLAATSNAAM'];
+    $starttime = substr($row['STARTTIJD'], 0, 5);
+    $endtime = substr($row['EINDTIJD'], 0, 5);
+    $workshopaddress = $row['ADRES'];
+    $workshoppostcode = $row['POSTCODE'];
+    $workshopcity = $row['PLAATSNAAM'];
 //$workshopleader = $row['WORKSHOPLEIDER_VOORNAAM'];
-$workshopnotes = $row['OPMERKING'];
+    $workshopnotes = $row['OPMERKING'];
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $workshoptype = $_POST["workshoptype"];
@@ -69,184 +75,195 @@ $workshopnotes = $row['OPMERKING'];
         $stmt->execute();
     }
 
-?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>maak workshop</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-            crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-            crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
-          integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/custom.css">
-</head>
-<body>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-2 col-sm-4 sidebar1">
-            <div class="left-navigation">
-                <ul class="list">
-                    <h5><strong>Workshop Opties</strong></h5>
-                    <li>
-                        <a href="participants.php?id=<?php echo $id?>">Inzien deelnemers</a>
-                    </li>
-                    <?php
-                    if($workshoptypeget != 'INC') {
-                        echo '<li>';
-                        echo  '<a href="open_registrations.php?id='.$id.'">Openstaande inschrijvingen</a>';
-                        echo '</li>';
-                        echo '<li>';
-                        echo  '<a href="reservelist.php?id='.$id.'">Reservelijst</a>';
-                        echo '</li>';
-                    }
-                    ?>
-                    <li>
-                        <a class="active-page">Wijzig workshop</a>
-                    </li>
-                    <?php
-                    if($workshoptypeget == 'INC') {
-                        echo '<li>';
-                        echo  '<a href="addparticipant.php?id='.$id.'">Voeg deelnemers toe</a>';
-                        echo '</li>';
-                    }
-                    ?>
-                </ul>
-                <br>
+    ?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <title>maak workshop</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+              integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+              crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+                integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+                crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+                integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+                crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+              integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+              crossorigin="anonymous">
+        <link rel="stylesheet" href="css/custom.css">
+    </head>
+    <body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 col-sm-4 sidebar1">
+                <div class="left-navigation">
+                    <ul class="list">
+                        <h5><strong>Workshop Opties</strong></h5>
+                        <li>
+                            <a href="participants.php?id=<?php echo $id ?>">Inzien deelnemers</a>
+                        </li>
+                        <?php
+                        if ($workshoptypeget != 'INC') {
+                            echo '<li>';
+                            echo '<a href="open_registrations.php?id=' . $id . '">Openstaande inschrijvingen</a>';
+                            echo '</li>';
+                            echo '<li>';
+                            echo '<a href="reservelist.php?id=' . $id . '">Reservelijst</a>';
+                            echo '</li>';
+                        }
+                        ?>
+                        <li>
+                            <a class="active-page">Wijzig workshop</a>
+                        </li>
+                        <?php
+                        if ($workshoptypeget == 'INC') {
+                            echo '<li>';
+                            echo '<a href="addparticipant.php?id=' . $id . '">Voeg deelnemers toe</a>';
+                            echo '</li>';
+                        }
+                        ?>
+                    </ul>
+                    <br>
+                </div>
+            </div>
+
+            <div class="container">
+                <h2 class="text-info text-center">Wijzig workshop <?php echo $id ?></h2>
+                <form class="form-horizontal" action="editworkshop.php?id=<?php echo $id ?>" method="post">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 font-weight-bold" for="workshoptype">Type workshop:</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" name="workshoptype">
+                                <option>TYPE...</option>
+                                <option>INCOMPANY</option>
+                                <option>INDIVIDUEEL</option>
+                                <option>LARGE ACCOUNTS</option>
+                                <option>COM</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 font-weight-bold" for="workshopdate">Datum
+                            workshop:</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" placeholder="Enter password" name="workshopdate"
+                                   value="<?php echo $workshopdate ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 font-weight-bold" for="contactinfo">Contactpersoon:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="Contactpersoon gegevens"
+                                   name="contactinfo"
+                                   value="<?php echo $contactinfo ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 font-weight-bold" for="workshopmodule">Module:</label>
+                        <div class="col-sm-10">
+                            <?php
+                            echo selectBox("workshopmodule", "module", array("modulenummer", "modulenaam"), "modulenummer", array("modulenummer", "modulenaam"), "modulenummer");
+                            ?>
+                            <script href="text/javascript">
+                                var sel = document.getElementById("workshopmodule");
+                                var modulenummer;
+                                modulenummer = <?php echo getModuleNummer($id)?> -1;
+                                sel.selectedIndex = modulenummer;
+                            </script>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 font-weight-bold"
+                               for="workshopcompany">Organisatie:</label>
+                        <div class="col-sm-10">
+                            <?php
+                            echo selectBox("workshopcompany", "organisatie", array("organisatienaam", "organisatienummer"), "organisatienummer", array("organisatienaam"), "organisatienaam");
+                            ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 font-weight-bold" for="workshopsector">Sector:</label>
+                        <div class="col-sm-10">
+                            <?php
+                            echo selectBox("workshopsector", "sector", array("sectornaam"), "sectornaam", array("sectornaam"), "sectornaam");
+                            ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 font-weight-bold" for="workshopstarttime">Begintijd
+                            workshop:</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" placeholder="Begintijd" name="workshopstarttime"
+                                   value="<?php echo $starttime ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 font-weight-bold" for="workshopendtime">Eindtijd
+                            workshop:</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control" placeholder="Eindtijd" name="workshopendtime"
+                                   value="<?php echo $endtime ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 font-weight-bold" for="workshopaddress">Adres
+                            workshop:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="Adres" name="workshopaddress"
+                                   value="<?php echo $workshopaddress ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 font-weight-bold" for="workshoppostcode">Postcode
+                            workshop:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="Postcode" name="workshoppostcode"
+                                   value="<?php echo $workshoppostcode ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 font-weight-bold" for="workshopcity">Plaats
+                            workshop:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="Plaats" name="workshopcity"
+                                   value="<?php echo $workshopcity ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 font-weight-bold"
+                               for="workshopleader">Workshopleider:</label>
+                        <div class="col-sm-10">
+                            <?php
+                            echo selectBox("workshopleader", "workshopleider", array("achternaam", "voornaam", "workshopleider_id"), "workshopleider_id", array("achternaam", "voornaam"), "achternaam, voornaam");
+                            ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2 font-weight-bold" for="workshopnotes">Opmerkingen:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="Opmerkingen" name="workshopnotes"
+                                   value="<?php echo $workshopnotes ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default">Update workshop</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-
-        <div class="container">
-            <h2 class="text-info text-center">Wijzig workshop <?php echo $id ?></h2>
-            <form class="form-horizontal" action="editworkshop.php?id=<?php echo $id ?>" method="post">
-                <div class="form-group">
-                    <label class="control-label col-sm-2 font-weight-bold" for="workshoptype">Type workshop:</label>
-                    <div class="col-sm-10">
-                        <select class="form-control" name="workshoptype">
-                            <option>TYPE...</option>
-                            <option>INCOMPANY</option>
-                            <option>INDIVIDUEEL</option>
-                            <option>LARGE ACCOUNTS</option>
-                            <option>COM</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2 font-weight-bold" for="workshopdate">Datum workshop:</label>
-                    <div class="col-sm-10">
-                        <input type="date" class="form-control" placeholder="Enter password" name="workshopdate"
-                               value="<?php echo $workshopdate ?>">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2 font-weight-bold" for="contactinfo">Contactpersoon:</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="Contactpersoon gegevens" name="contactinfo"
-                               value="<?php echo $contactinfo ?>">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2 font-weight-bold" for="workshopmodule">Module:</label>
-                    <div class="col-sm-10">
-                        <?php
-                        echo selectBox("workshopmodule", "module", array("modulenummer", "modulenaam"), "modulenummer", array("modulenummer", "modulenaam"), "modulenummer");
-                        ?>
-                        <script href="text/javascript">
-                        var sel = document.getElementById("workshopmodule");
-                        var modulenummer;
-                        modulenummer = <?php echo getModuleNummer($id)?> -1;
-                        sel.selectedIndex =  modulenummer;
-                        </script>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2 font-weight-bold" for="workshopcompany">Organisatie:</label>
-                    <div class="col-sm-10">
-                        <?php
-                        echo selectBox("workshopcompany", "organisatie", array("organisatienaam", "organisatienummer"), "organisatienummer", array("organisatienaam"), "organisatienaam");
-                        ?>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2 font-weight-bold" for="workshopsector">Sector:</label>
-                    <div class="col-sm-10">
-                        <?php
-                        echo selectBox("workshopsector", "sector", array("sectornaam"), "sectornaam", array("sectornaam"), "sectornaam");
-                        ?>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2 font-weight-bold" for="workshopstarttime">Begintijd
-                        workshop:</label>
-                    <div class="col-sm-10">
-                        <input type="time" class="form-control" placeholder="Begintijd" name="workshopstarttime"
-                               value="<?php echo $starttime ?>">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2 font-weight-bold" for="workshopendtime">Eindtijd
-                        workshop:</label>
-                    <div class="col-sm-10">
-                        <input type="time" class="form-control" placeholder="Eindtijd" name="workshopendtime"
-                               value="<?php echo $endtime ?>">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2 font-weight-bold" for="workshopaddress">Adres workshop:</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="Adres" name="workshopaddress"
-                               value="<?php echo $workshopaddress ?>">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2 font-weight-bold" for="workshoppostcode">Postcode
-                        workshop:</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="Postcode" name="workshoppostcode"
-                               value="<?php echo $workshoppostcode ?>">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2 font-weight-bold" for="workshopcity">Plaats workshop:</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="Plaats" name="workshopcity"
-                               value="<?php echo $workshopcity ?>">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2 font-weight-bold" for="workshopleader">Workshopleider:</label>
-                    <div class="col-sm-10">
-                        <?php
-                        echo selectBox("workshopleader", "workshopleider", array("achternaam", "voornaam", "workshopleider_id"), "workshopleider_id", array("achternaam", "voornaam"), "achternaam, voornaam");
-                        ?>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-sm-2 font-weight-bold" for="workshopnotes">Opmerkingen:</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" placeholder="Opmerkingen" name="workshopnotes"
-                               value="<?php echo $workshopnotes ?>">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-default">Update workshop</button>
-                    </div>
-                </div>
-            </form>
-        </div>
     </div>
-</div>
-</body>
-<?php include 'footer.html'; ?>
-</html>
+    </body>
+    </html>
+<?php } else {
+    echo '<h1> Alleen planners kunnen deze pagina bezoeken</h1>';
+}
+include 'footer.html';

@@ -1,7 +1,12 @@
 <?php
-include 'header.html';
+if (!isset($_SESSION)) {
+    session_start();
+}
+
+include 'header.php';
 include 'functions.php';
 
+if ($_SESSION['username'] == 'planner') {
 $id = $_GET['id'];
 $workshoptype = getWorkshopType($id);
 
@@ -127,6 +132,9 @@ $workshoptype = getWorkshopType($id);
 </div>
 </body>
 </html>
-<?php include 'footer.html'; ?>
+<?php } else {
+    echo '<h1> Alleen planners kunnen deze pagina bezoeken</h1>';
+}
+include 'footer.html';
 
 
