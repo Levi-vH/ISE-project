@@ -66,9 +66,9 @@ $aanvraag_id = $_GET['aanvraag_id'];
                     $conn = connectToDB();
 
                     //Run the stored procedure
-                    $sql = "exec proc_request_approved_workshop_participants ?";
+                    $sql = "exec proc_request_deelnemer_in_aanvraag ?";
                     $stmt = $conn->prepare($sql);
-                    $stmt->bindParam(1, $id, PDO::PARAM_INT);
+                    $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                     $stmt->execute();
 
                     $nummer = 0;
@@ -87,7 +87,7 @@ $aanvraag_id = $_GET['aanvraag_id'];
                         $html .= $row['ACHTERNAAM'];
                         $html .= '</td>';
                         $html .= '<td>';
-                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt afmelden? Zijn of haar gegevens worden niet opgeslagen\')" href="participants.php?id='.$id.'&participant_id='.$row['DEELNEMER_ID'].'&deleteUser=true"></a>';
+                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt afmelden? Zijn of haar gegevens worden niet opgeslagen\')" href="participants.php?aanvraag_id='.$aanvraag_id.'&participant_id='.$row['DEELNEMER_ID'].'&deleteUser=true"></a>';
                         $html .= '</td>';
                         $html .= '</tr>';
 
@@ -95,7 +95,7 @@ $aanvraag_id = $_GET['aanvraag_id'];
 
                     }
                     if(isset($_GET['deleteUser'])) {
-                        deleteUser($aanvraag_id, $_GET['participant_id']);
+                        deleteUserAanvraag($aanvraag_id, $_GET['participant_id']);
                         updatePage($_SERVER['PHP_SELF'].'?aanvraag_id='.$aanvraag_id);
                     }
 

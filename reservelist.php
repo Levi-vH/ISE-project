@@ -113,7 +113,7 @@ $workshoptype = getWorkshopType($id);
 
                     if(isset($_GET['deleteUser'])) {
 
-                    deleteUser($id, $_GET['participant_id']);
+                    deleteUserWorkshop($id, $_GET['participant_id']);
                     updatePage($_SERVER['PHP_SELF'].'?id='.$id);
                     }
 
