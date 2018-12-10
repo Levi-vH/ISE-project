@@ -250,6 +250,44 @@ VALUES(@groepsID, @Module1, @VOORKEUR1),
 END
 GO
 
+CREATE OR ALTER PROC proc_insert_aanvraag_deelnemers
+(
+@aanvraag_id		INT,
+@voornaam			VARCHAR(30),
+@achternaam			VARCHAR(50),
+@geboortedatum		DATE,
+@email				VARCHAR(100),
+@telefoonnummer		VARCHAR(12),
+@organisatienummer	INT,
+@opleidingsniveau	VARCHAR(100)
+)
+AS
+BEGIN
+
+	INSERT INTO DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER, IS_OPEN_INSCHRIJVING)
+		VALUES	(
+				@voornaam,
+				@achternaam,
+				@geboortedatum,
+				@email,
+				@telefoonnummer,
+				@opleidingsniveau,
+				@organisatienummer,
+				0
+				)
+
+	DECLARE @deelnemer_id INT = (SELECT DEELNEMER_ID FROM inserted)
+
+	INSERT INTO DEELNEMER_IN_AANVRAAG (AANVRAAG_ID, DEELNEMER_ID)
+		VALUES	(
+				@aanvraag_id,
+				@deelnemer_id
+				)
+
+END
+GO
+
+/*
 CREATE OR ALTER PROC proc_insert_incompany_participants
 (
 @workshop_id		INT,
@@ -276,7 +314,7 @@ BEGIN
 				0
 				)
 
-	DECLARE @deelnemer_id INT = (SELECT VOLGNUMMER FROM inserted)
+	DECLARE @deelnemer_id INT = (SELECT DEELNEMER_ID FROM inserted)
 	DECLARE @volgnummer INT
 	IF NOT EXISTS (SELECT * FROM DEELNEMER_IN_WORKSHOP WHERE WORKSHOP_ID = @workshop_id)
 		BEGIN
@@ -287,7 +325,7 @@ BEGIN
 			SET @volgnummer = (SELECT TOP 1 VOLGNUMMER FROM DEELNEMER_IN_WORKSHOP WHERE WORKSHOP_ID = @workshop_id ORDER BY VOLGNUMMER DESC) + 1
 		END
 
-	INSERT INTO DEELNEMER_IN_WORKSHOP(WORKSHOP_ID, DEELNEMER_ID, VOLGNUMMER, IS_GOEDGEKEURD)
+	INSERT INTO DEELNEMER_IN_WORKSHOP (WORKSHOP_ID, DEELNEMER_ID, VOLGNUMMER, IS_GOEDGEKEURD)
 		VALUES	(
 				@workshop_id,
 				@deelnemer_id,
@@ -297,6 +335,7 @@ BEGIN
 
 END
 GO
+*/
 
 /*==============================================================*/
 /* SP Type: UPDATE                                              */
