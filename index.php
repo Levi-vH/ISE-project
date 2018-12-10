@@ -37,7 +37,7 @@ $userinfo = array(
 );
 
 if (isset($_GET['logout'])) {
-    $_SESSION['username'] = '';
+    unset($_SESSION['username']);
     header('Location:  ' . $_SERVER['PHP_SELF']);
 }
 
