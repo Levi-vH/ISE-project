@@ -217,7 +217,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
             <label class="control-label col-sm-2" for="Advisor_Sector">Sector:</label>
             <div class="col-sm-10">
-                <input id="Advisor_Sector" type="text" class="form-control" placeholder="Telefoonnummer adviseur"
+                <input id="Advisor_Sector" type="text" class="form-control" placeholder="Sector"
                        name="Advisor_Sector" readonly>
             </div>
         </div>
