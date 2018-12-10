@@ -287,6 +287,23 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROC proc_insert_groep_deelnemers
+(
+@groep_id		INT,
+@deelnemer_id	INT
+)
+AS
+BEGIN
+
+	INSERT INTO DEELNEMER_IN_GROEP (GROEP_ID, DEELNEMER_ID)
+		VALUES	(
+				@groep_id,
+				@deelnemer_id
+				)
+
+END
+GO
+
 /*
 CREATE OR ALTER PROC proc_insert_incompany_participants
 (
@@ -410,5 +427,18 @@ BEGIN
 	DELETE FROM DEELNEMER_IN_WORKSHOP
 	WHERE WORKSHOP_ID = @workshop_id
 	AND DEELNEMER_ID = @deelnemer_id
+END
+GO
+
+CREATE OR ALTER PROC proc_delete_groep_deelnemers
+(
+@groep_id		INT,
+@deelnemer_id	INT
+)
+AS
+BEGIN
+
+	DELETE FROM DEELNEMER_IN_GROEP WHERE GROEP_ID = @groep_id AND DEELNEMER_ID = @deelnemer_id
+
 END
 GO
