@@ -6,7 +6,7 @@ if (!isset($_SESSION)) {
 include 'header.php';
 include 'functions.php';
 
-if ($_SESSION['username'] == 'planner') {
+if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactpersoon') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,6 +64,6 @@ if ($_SESSION['username'] == 'planner') {
 </body>
 </html>
 <?php } else {
-    echo '<h1> Alleen planners kunnen deze pagina bezoeken</h1>';
+    echo '<h1> U mag deze pagina niet bezoeken</h1>';
 }
 include 'footer.html';

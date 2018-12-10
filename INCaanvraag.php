@@ -25,12 +25,12 @@ $aanvraag_id = $_GET['aanvraag_id'];
         <div class="col-md-2 col-sm-4 sidebar1">
             <div class="left-navigation">
                 <ul class="list">
-                    <h5><strong>Workshop Opties</strong></h5>
+                    <h5><strong>Aanvraag Opties</strong></h5>
                     <li>
                         <a href="participants.php?id=<?php echo $id?>">Inzien deelnemers</a>
                     </li>
                     <li>
-                        <a href="editworkshop.php?id=<?php echo $id?>">Wijzig workshop</a>
+                        <a href="addparticipant.php?aanvraag_id=<?php echo $aanvraag_id?>">Voeg deelnemers toe</a>
                     </li>
                 </ul>
                 <br>

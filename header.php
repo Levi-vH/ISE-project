@@ -33,7 +33,6 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="createworkshop.php">Maak nieuwe workshop</a>
                         </li>
-
                         <li class="nav-item active">
                             <a class="nav-link" href="Openstaande_INC_aanvragen.php">Openstaande INC aanvragen</a>
                         </li>
@@ -44,6 +43,9 @@
                     } else if ($_SESSION['username'] == 'contactpersoon') { ?>
                         <li class="nav-item active">
                             <a class="nav-link" href="INCworkshop.php">INC inschrijving</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="Openstaande_INC_aanvragen.php">Openstaande INC aanvragen</a>
                         </li>
                     <?php }
                 } ?>

@@ -6,12 +6,11 @@ if (!isset($_SESSION)) {
 include 'header.php';
 include 'functions.php';
 
-if ($_SESSION['username'] == 'planner') {
+if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactpersoon') {
 
-    $id = $_GET['id'];
-    $workshoptype = getWorkshopType($id);
+    $aanvraag_id = $_GET['aanvraag_id'];
 
-    $name = $surname = $dateofbirth = $email = $phonenumber = '';
+    $name = $surname = $dateofbirth = $email = $phonenumber = $organisation  = $educational_attainment = '';
 
     $conn = connectToDB();
 
@@ -70,28 +69,12 @@ if ($_SESSION['username'] == 'planner') {
                     <ul class="list">
                         <h5><strong>Workshop Opties</strong></h5>
                         <li>
-                            <a href="participants.php?id=<?php echo $id ?>">Inzien deelnemers</a>
+                            <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id ?>">Inzien deelnemers</a>
                         </li>
-                        <?php
-                        if ($workshoptype != 'INC') {
-                            echo '<li>';
-                            echo '<a href="open_registrations.php?id=' . $id . '">Openstaande inschrijvingen</a>';
-                            echo '</li>';
-                            echo '<li>';
-                            echo '<a href="reservelist.php?id=' . $id . '">Reservelijst</a>';
-                            echo '</li>';
-                        }
-                        ?>
                         <li>
-                            <a href="editworkshop.php?id=<?php echo $id ?>">Wijzig workshop</a>
+                            <a class="active-page">Voeg deelnemers toe</a>
                         </li>
-                        <?php
-                        if ($workshoptype == 'INC') {
-                            echo '<li>';
-                            echo '<a class="active-page">Voeg deelnemers toe</a>';
-                            echo '</li>';
-                        }
-                        ?>
+
                     </ul>
                     <br>
                 </div>
