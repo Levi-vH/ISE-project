@@ -318,23 +318,6 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROC proc_insert_groep_deelnemers
-(
-@groep_id		INT,
-@deelnemer_id	INT
-)
-AS
-BEGIN
-
-	INSERT INTO DEELNEMER_IN_GROEP (GROEP_ID, DEELNEMER_ID)
-		VALUES	(
-				@groep_id,
-				@deelnemer_id
-				)
-
-END
-GO
-
 /*
 CREATE OR ALTER PROC proc_insert_incompany_participants
 (
@@ -442,6 +425,34 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROC proc_add_groep_deelnemers
+(
+@aanvraag_id	INT,
+@groep_id		INT,
+@deelnemer_id	INT
+)
+AS
+BEGIN
+
+	UPDATE DEELNEMER_IN_AANVRAAG SET GROEP_ID = @groep_id WHERE AANVRAAG_ID = @aanvraag_ID AND DEELNEMER_ID = @deelnemer_id
+
+END
+GO
+
+CREATE OR ALTER PROC proc_remove_groep_deelnemers
+(
+@aanvraag_id	INT,
+@groep_id		INT,
+@deelnemer_id	INT
+)
+AS
+BEGIN
+
+	UPDATE DEELNEMER_IN_AANVRAAG SET GROEP_ID = NULL WHERE AANVRAAG_ID = @aanvraag_id AND DEELNEMER_ID = @deelnemer_id
+
+END
+GO
+
 /*==============================================================*/
 /* SP Type: DELETE                                              */
 /*==============================================================*/
@@ -470,19 +481,6 @@ AS
 BEGIN
 
 	DELETE FROM DEELNEMER_IN_AANVRAAG WHERE AANVRAAG_ID = @aanvraag_id AND DEELNEMER_ID = @deelnemer_id
-
-END
-GO
-
-CREATE OR ALTER PROC proc_delete_groep_deelnemers
-(
-@groep_id		INT,
-@deelnemer_id	INT
-)
-AS
-BEGIN
-
-	DELETE FROM DEELNEMER_IN_GROEP WHERE GROEP_ID = @groep_id AND DEELNEMER_ID = @deelnemer_id
 
 END
 GO
