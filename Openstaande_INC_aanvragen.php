@@ -43,9 +43,8 @@ if ($_SESSION['username'] == 'planner') {
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $html = '';
-                //$link = $row['WORKSHOP_ID'];
-                $html .= '<tr>';
-                $html .= "<tr>";
+                $link = $row['AANVRAAG_ID'];
+                $html .= "<tr onclick=\"window.location='INCaanvraag.php?aanvraag_id=$link'\">";
                 $html .= '<td class="align-middle">';
                 $html .= $row['ORGANISATIENAAM'];
                 $html .= '</td>';
@@ -55,6 +54,7 @@ if ($_SESSION['username'] == 'planner') {
                 $html .= '<td class="align-middle">';
                 $html .=  date('j F Y', strtotime($row['AANVRAAG_DATUM']));
                 $html .= '</td>';
+                $html .= '</tr>';
                 echo $html;
             }
             ?>

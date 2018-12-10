@@ -6,7 +6,7 @@ if (!isset($_SESSION)) {
 include 'header.php';
 include 'functions.php';
 
-if ($_SESSION['username'] == 'planner') {
+if ($_SESSION['username'] == 'contactpersoon') {
 
 // define (empty) variables
 $Organisation_Relationnumber = $Contact_ID = $SBB_Planner = $Advisor_practical_learning = $Groups = $Aanvraag_ID = $Group_Module1 = $Group_Module2 = $Group_Module3 = $Group_Module1_voorkeur = $Group_Module2_voorkeur = $Group_Module3_voorkeur = $Adress = $Contact_Person = '';
@@ -247,7 +247,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </body>
 <?php } else {
-    echo '<h1> Alleen planners kunnen deze pagina bezoeken</h1>';
+    echo '<h1> Alleen contactpersonen kunnen deze pagina bezoeken</h1>';
 }
 include 'footer.html';
 ?>
