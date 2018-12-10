@@ -20,6 +20,7 @@
                 {
                     session_start();
                 }
+                if(isset($_SESSION['username'])){
                 if($_SESSION['username'] == 'planner') { ?>
                     <li class="nav-item active">
                         <a class="nav-link" href="createworkshop.php">Maak nieuwe workshop</a>
@@ -39,9 +40,9 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="allworkshops.php">Alle workshops</a>
                     </li>
-                <?php } ?>
+                <?php }} ?>
                 <li class="nav-item">
-                    <a class="nav-link" ><?php echo $_SESSION['username'] ?></a>
+                    <a class="nav-link" ><?php if (isset($_SESSION['username'])){ echo $_SESSION['username']; } ?></a>
                 </li>
 
             </ul>

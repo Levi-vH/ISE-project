@@ -50,10 +50,10 @@ if (isset($_POST['planner'])) {
 }
 ?>
 <h1 class="text-center">Login als planner of contactpersoon</h1>
-<?php if ($_SESSION['username']): ?>
+<?php if (isset($_SESSION['username'])){ ?>
     <p class="text-center">Je bent ingelogt als <?= $_SESSION['username'] ?></p>
     <p class="text-center"><a href="?logout=1">Logout</a></p>
-<?php endif; ?>
+<?php } ?>
 <form class="form-horizontal" name="login" action="" method="post">
     <input align="right" type="submit" name="planner" value="Planner"/>
     <input class="text-center" type="submit" name="contactpersoon" value="Contactpersoon"/>
