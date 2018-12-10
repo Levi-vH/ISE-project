@@ -95,10 +95,9 @@ EXEC(@query)
 END
 GO
 
-CREATE OR ALTER PROC proc_getWorkshopRequest
+CREATE OR ALTER PROC proc_request_groups
 (
 @aanvraag_id	INT = NULL,
-@groep_id		INT
 )
 AS
 BEGIN
