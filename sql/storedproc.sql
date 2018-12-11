@@ -94,8 +94,11 @@ BEGIN
 						ORGANISATIE O ON A.ORGANISATIENUMMER = O.ORGANISATIENUMMER INNER JOIN
 						CONTACTPERSOON C ON A.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID INNER JOIN
 						ADVISEUR AD ON A.ADVISEUR_ID = AD.ADVISEUR_ID
-				WHERE	A.AANVRAAG_ID = @aanvraag_id
 				'
+	IF(@aanvraag_id IS NOT NULL)
+		BEGIN
+			SET @sql +=	N'WHERE	A.AANVRAAG_ID = @aanvraag_id'
+		END
 	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
 END
 GO
@@ -307,21 +310,23 @@ BEGIN
 							NULL, NULL, NULL, NULL, NULL, NULL
 							)
 				'
-	EXEC sp_executesql @sql, N'	@workshopleader,
-								@contactpersoon_ID,
-								@organisatienummer,
-								@modulenummer,
-								@adviseur_ID,
-								@workshopsector,
-								@workshopdate,
-								@workshopstarttime,
-								@workshopendtime,
-								@workshopaddress,
-								@workshoppostcode,
-								@workshopcity,
-								@status,
-								@workshopnote,
-								@workshoptype',
+	EXEC sp_executesql @sql,	N'
+								@workshopleader		NVARCHAR(100),
+								@contactpersoon_ID	INT,
+								@organisatienummer	INT,
+								@modulenummer		INT,
+								@adviseur_ID		INT,
+								@workshopsector		NVARCHAR(20),
+								@workshopdate		NVARCHAR(10),
+								@workshopstarttime	NVARCHAR(10),
+								@workshopendtime	NVARCHAR(10),
+								@workshopaddress	NVARCHAR(60),
+								@workshoppostcode	NVARCHAR(7),
+								@workshopcity		NVARCHAR(60),
+								@status				NVARCHAR(40),
+								@workshopnote		NVARCHAR(255),
+								@workshoptype		NVARCHAR(3)
+								',
 								@workshopleader,
 								@contactpersoon_ID,
 								@organisatienummer,
@@ -329,7 +334,15 @@ BEGIN
 								@adviseur_ID,
 								@workshopsector,
 								@workshopdate,
-								@workshop
+								@workshop,
+								@workshopstarttime,
+								@workshopendtime,
+								@workshopaddress,
+								@workshoppostcode,
+								@workshopcity,
+								@status,
+								@workshopnote,
+								@workshoptype
 END
 GO
 
@@ -338,41 +351,53 @@ CREATE OR ALTER PROC proc_insert_aanvraag
 @organisatienummer	INT,
 @contactpersoon_ID	INT,
 @adviseur_ID		INT,
-@plannernaam		VARCHAR(52)
+@plannernaam		NVARCHAR(52)
 )
 AS
 BEGIN
-
-	INSERT INTO AANVRAAG ([ORGANISATIENUMMER],[CONTACTPERSOON_ID],[ADVISEUR_ID],[PLANNERNAAM]) VALUES (@organisatienummer, @contactpersoon_ID, @adviseur_ID, @plannernaam)
-
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				INSERT INTO	AANVRAAG(ORGANISATIENUMMER, CONTACTPERSOON_ID, ADVISEUR_ID, PLANNERNAAM)
+				VALUES		(
+							@organisatienummer,
+							@contactpersoon_ID,
+							@adviseur_ID,
+							@plannernaam
+							)
+				'
+	EXEC sp_executesql @sql,	N'@organisatienummer INT, @contactpersoon_ID INT, @adviseur_ID INT, @plannernaam NVARCHAR(52)',
+								@organisatienummer, @contactpersoon_ID, @adviseur_ID, @plannernaam
 END
 GO
 
 CREATE OR ALTER PROC proc_insert_aanvraag_groepen
 (
-@aanvraag_ID INT,
-@Module1 INT,
-@Module2 INT,
-@Module3 INT,
-@Voorkeur1 VARCHAR(20),
-@Voorkeur2 VARCHAR(20),
-@Voorkeur3 VARCHAR(20),
-@adress VARCHAR(60),
-@contactperson INT
+@aanvraag_ID	INT,
+@Module1		INT,
+@Module2		INT,
+@Module3		INT,
+@Voorkeur1		NVARCHAR(20),
+@Voorkeur2		NVARCHAR(20),
+@Voorkeur3		NVARCHAR(20),
+@address			NVARCHAR(60),
+@contactperson	INT
 )
 AS
 BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	DECLARE @sql2 NVARCHAR(4000)
+	INSERT INTO GROEP(AANVRAAG_ID, CONTACTPERSOON_ID, ADRES)
+	VALUES (@aanvraag_ID, @contactperson, @address)
 
-INSERT INTO GROEP(AANVRAAG_ID, CONTACTPERSOON_ID, ADRES)
-VALUES (@aanvraag_ID, @contactperson, @adress)
-
-Declare @groepsID INT = (SELECT IDENT_CURRENT('GROEP'))
+	DECLARE @groepsID INT = (SELECT IDENT_CURRENT('GROEP'))
 
 
-INSERT MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
-VALUES(@groepsID, @Module1, @VOORKEUR1),
-	  (@groepsID, @Module2, @VOORKEUR2),
-	  (@groepsID, @Module3, @VOORKEUR3)
+	INSERT MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
+	VALUES(@groepsID, @Module1, @VOORKEUR1),
+		  (@groepsID, @Module2, @VOORKEUR2),
+		  (@groepsID, @Module3, @VOORKEUR3)
 END
 GO
 
