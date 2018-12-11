@@ -15,17 +15,14 @@ Procedure order:
 
 CREATE OR ALTER PROC proc_get_workshops
 (
-@orderby		VARCHAR(40) = NULL,
-@orderdirection	VARCHAR(4) = NULL,
+@orderby		NVARCHAR(40) = NULL,
+@orderdirection	NVARCHAR(4) = NULL,
 @where			INT = NULL
 )
 AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
-	DECLARE @orderby2 NVARCHAR(40)
-	DECLARE @orderdirection2 NVARCHAR(4)
-	DECLARE @where2 INT
 	SET @sql =	N'
 				SELECT		W.WORKSHOP_ID,
 							W.TYPE,W.DATUM,
@@ -64,27 +61,18 @@ BEGIN
 							WORKSHOPLEIDER WL ON W.WORKSHOPLEIDER_ID = WL.WORKSHOPLEIDER_ID INNER JOIN
 							ADVISEUR A ON W.ADVISEUR_ID = A.ADVISEUR_ID INNER JOIN
 							CONTACTPERSOON C ON W.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
-				WHERE		W.WORKSHOP_ID = @where2
-				ORDER BY	@orderby2 @orderdirection2
+				WHERE		W.WORKSHOP_ID = @where
+				ORDER BY	@orderby @orderdirection
 				'
 	IF(@orderby IS NULL)
 		BEGIN
-			SET @orderby2 = 'W.WORKSHOP_ID'
-		END
-	ELSE
-		BEGIN
-			SET @orderby2 = @orderby
+			SET @orderby = 'W.WORKSHOP_ID'
 		END
 	IF(@orderdirection IS NULL)
 		BEGIN
-			SET @orderdirection2 = 'ASC'
+			SET @orderdirection = 'ASC'
 		END
-	ELSE
-		BEGIN
-			SET @orderdirection2 = @orderdirection
-		END
-	SET @where2 = @where
-	EXEC sp_executesql @sql, N'@orderby2 NVARCHAR(40), @orderdirection2 NVARCHAR(4), @where2 INT', @orderby2, @orderdirection2, @where2
+	EXEC sp_executesql @sql, N'@orderby NVARCHAR(40), @orderdirection NVARCHAR(4), @where INT', @orderby, @orderdirection, @where
 END
 GO
 
@@ -96,7 +84,6 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
-	DECLARE @aanvraag_id2 INT
 	SET @sql =	N'
 				SELECT	C.VOORNAAM,
 						C.ACHTERNAAM,
@@ -107,10 +94,9 @@ BEGIN
 						ORGANISATIE O ON A.ORGANISATIENUMMER = O.ORGANISATIENUMMER INNER JOIN
 						CONTACTPERSOON C ON A.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID INNER JOIN
 						ADVISEUR AD ON A.ADVISEUR_ID = AD.ADVISEUR_ID
-				WHERE	A.AANVRAAG_ID = @aanvraag_id2
+				WHERE	A.AANVRAAG_ID = @aanvraag_id
 				'
-	SET @aanvraag_id2 = @aanvraag_id
-	EXEC sp_executesql @sql, N'@aanvraag_id2 INT', @aanvraag_id2
+	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
 END
 GO
 
@@ -122,7 +108,6 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
-	DECLARE @aanvraag_id2 INT
 	SET @sql =	N'
 				SELECT	C.VOORNAAM,
 						C.ACHTERNAAM,
@@ -134,10 +119,9 @@ BEGIN
 								), 0) AS AANTAL_DEELNEMERS
 				FROM	GROEP G INNER JOIN
 						CONTACTPERSOON C ON G.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
-				WHERE	G.AANVRAAG_ID = @aanvraag_id2
+				WHERE	G.AANVRAAG_ID = @aanvraag_id
 				'
-	SET @aanvraag_id2 = @aanvraag_id
-	EXEC sp_executesql @sql, N'@aanvraag_id2 INT', @aanvraag_id2
+	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
 END
 GO
 
@@ -149,19 +133,17 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
-	DECLARE @workshop_id2 INT
 	SET @sql =	N'
 				SELECT TOP 16	D.DEELNEMER_ID,
 								D.VOORNAAM,
 								D.ACHTERNAAM
 				FROM			DEELNEMER_IN_WORKSHOP DW INNER JOIN
 								DEELNEMER D ON DW.DEELNEMER_ID = D.DEELNEMER_ID
-				WHERE			DW.WORKSHOP_ID = @workshop_id2
+				WHERE			DW.WORKSHOP_ID = @workshop_id
 				AND				IS_GOEDGEKEURD = 1
 				ORDER BY		DW.VOLGNUMMER
 				'
-	SET @workshop_id2 = @workshop_id
-	EXEC sp_executesql @sql, N'@workshop_id2 INT', @workshop_id2
+	EXEC sp_executesql @sql, N'@workshop_id INT', @workshop_id
 END
 GO
 
@@ -173,26 +155,24 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
-	DECLARE @workshop_id2 INT
 	SET @sql =	N'
 				SELECT		D.DEELNEMER_ID,
 							D.VOORNAAM,
 							D.ACHTERNAAM
 				FROM		DEELNEMER_IN_WORKSHOP DW INNER JOIN
 							DEELNEMER D ON DW.DEELNEMER_ID = D.DEELNEMER_ID
-				WHERE		DW.WORKSHOP_ID = @workshop_id2
+				WHERE		DW.WORKSHOP_ID = @workshop_id
 				AND			IS_GOEDGEKEURD = 1
 				AND			VOLGNUMMER NOT IN	(
 												SELECT TOP 16	DW2.VOLGNUMMER
 												FROM			DEELNEMER_IN_WORKSHOP DW2 INNER JOIN
 																DEELNEMER D2 ON DW2.DEELNEMER_ID = D2.DEELNEMER_ID
-												WHERE			DW2.WORKSHOP_ID = @workshop_id2
+												WHERE			DW2.WORKSHOP_ID = @workshop_id
 												AND				IS_GOEDGEKEURD = 1
 												)
 				ORDER BY	DW.VOLGNUMMER
 				'
-	SET @workshop_id2 = @workshop_id
-	EXEC sp_executesql @sql, N'@workshop_id2 INT', @workshop_id2
+	EXEC sp_executesql @sql, N'@workshop_id INT', @workshop_id
 END
 GO
 
@@ -204,19 +184,17 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
-	DECLARE @workshop_id2 INT
 	SET @sql =	N'
 				SELECT		D.DEELNEMER_ID,
 							D.VOORNAAM,
 							D.ACHTERNAAM
 				FROM		DEELNEMER_IN_WORKSHOP DW INNER JOIN
 							DEELNEMER D ON DW.DEELNEMER_ID = D.DEELNEMER_ID
-				WHERE		DW.WORKSHOP_ID = @workshop_id2
+				WHERE		DW.WORKSHOP_ID = @workshop_id
 				AND			IS_GOEDGEKEURD = 0
 				ORDER BY	DW.VOLGNUMMER
 				'
-	SET @workshop_id2 = @workshop_id
-	EXEC sp_executesql @sql, N'@workshop_id2 INT', @workshop_id2
+	EXEC sp_executesql @sql, N'@workshop_id INT', @workshop_id
 END
 GO
 
@@ -228,7 +206,6 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
-	DECLARE @aanvraag_id2 INT
 	SET @sql =	N'
 				SELECT		D.DEELNEMER_ID,
 							D.VOORNAAM,
@@ -239,14 +216,13 @@ BEGIN
 							D.TELEFOONNUMMER
 				FROM		DEELNEMER_IN_AANVRAAG DA INNER JOIN
 							DEELNEMER D ON DA.DEELNEMER_ID = D.DEELNEMER_ID
-				WHERE		DA.AANVRAAG_ID = @aanvraag_id2
+				WHERE		DA.AANVRAAG_ID = @aanvraag_id
 				'
-	SET @aanvraag_id2 = @aanvraag_id
-	EXEC sp_executesql @sql, N'@aanvraag_id2 INT', @aanvraag_id2
+	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
 END
 GO
 
-CREATE OR ALTER PROC proc_request_deelnemer_in_groep
+CREATE OR ALTER PROC proc_request_deelnemers_van_groep
 (
 @aanvraag_id	INT,
 @groep_id		INT
@@ -255,20 +231,16 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
-	DECLARE @aanvraag_id2 INT
-	DECLARE @groep_id2 INT
 	SET @sql =	N'
 				SELECT		D.DEELNEMER_ID,
 							D.VOORNAAM,
 							D.ACHTERNAAM
 				FROM		DEELNEMER_IN_AANVRAAG DA INNER JOIN
 							DEELNEMER D ON DA.DEELNEMER_ID = D.DEELNEMER_ID
-				WHERE		DA.AANVRAAG_ID = @aanvraag_id2
-				AND			DA.GROEP_ID = @groep_id2
+				WHERE		DA.AANVRAAG_ID = @aanvraag_id
+				AND			DA.GROEP_ID = @groep_id
 				'
-	SET @aanvraag_id2 = @aanvraag_id
-	SET @groep_id2 = @groep_id
-	EXEC sp_executesql @sql, N'@aanvraag_id2 INT, @groep_id2 INT', @aanvraag_id2, @groep_id2
+	EXEC sp_executesql @sql, N'@aanvraag_id INT, @groep_id INT', @aanvraag_id, @groep_id
 END
 GO
 
@@ -299,6 +271,7 @@ BEGIN
 
 	-- Create a workshop based on the given parameters
 
+	DECLARE @sql NVARCHAR(4000)
 	DECLARE @status VARCHAR(40) = 'uitgezet'
 
 	IF(@workshopleader IS NOT NULL)
@@ -312,13 +285,27 @@ BEGIN
 		BEGIN
 			RAISERROR('Een workshop met type IND MOET een workshopsector hebben',16,1)
 		END
-
-	INSERT INTO WORKSHOP
-	VALUES	(@workshopleader,@contactpersoon_ID,@organisatienummer
-			,@modulenummer,@adviseur_ID,@workshopsector, @workshopdate,@workshopstarttime,
-			@workshopendtime, @workshopaddress,@workshoppostcode,
-			@workshopcity,@status,
-			@workshopNote, @workshoptype, NULL, NULL, NULL, NULL, NULL, NULL)
+	SET @sql =	N'
+				INSERT INTO	WORKSHOP
+				VALUES		(
+							@workshopleader,
+							@contactpersoon_ID,
+							@organisatienummer,
+							@modulenummer,
+							@adviseur_ID,
+							@workshopsector,
+							@workshopdate,
+							@workshopstarttime,
+							@workshopendtime,
+							@workshopaddress,
+							@workshoppostcode,
+							@workshopcity,
+							@status,
+							@workshopNote,
+							@workshoptype,
+							NULL, NULL, NULL, NULL, NULL, NULL
+							)
+				'
 END
 GO
 
