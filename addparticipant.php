@@ -9,7 +9,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
 
     $aanvraag_id = $_GET['aanvraag_id'];
 
-    $name = $surname = $dateofbirth = $email = $phonenumber = $organisation  = $educational_attainment = '';
+    $name = $surname = $dateofbirth = $email = $phonenumber = $organisation = $educational_attainment = '';
 
     $conn = connectToDB();
 
@@ -50,21 +50,74 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     <ul class="list">
                         <h5><strong>Aanvraag Opties</strong></h5>
                         <li>
+                            <a href="INCaanvraag.php?aanvraag_id=<?php echo $aanvraag_id ?>">Details</a>
+                        </li>
+                        <li>
                             <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id ?>">Deelnemers en Groepen</a>
                         </li>
                         <li>
-                            <a class="active-page">Voeg deelnemers toe</a>
+                            <a class="active-page">Deelnemers toevoegen</a>
                         </li>
-
                     </ul>
-                    <br>
                 </div>
             </div>
             <div class="col-md-10 col-sm-8 main-content">
-                <!--Main content code to be written here -->
+                <h1>Deelnemers</h1>
+                <table class='table table-striped table-hover'>
+                    <tr>
+                        <th>Naam</th>
+                        <th>Geboortedatum</th>
+                        <th>Opleidingsniveau</th>
+                        <th>Email</th>
+                        <th>Telefoonnummer</th>
+                    </tr>
+                    <?php
+                    //Try to make connection
+                    $conn = connectToDB();
+
+                    //Run the stored procedure
+                    $sql = "exec proc_request_deelnemer_in_aanvraag ?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    $nummer = 0;
+
+                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        $nummer++;
+                        $html = '';
+                        $html .= '<tr>';
+                        $html .= '<td>';
+                        $html .= $row['VOORNAAM'] . $row['ACHTERNAAM'];
+                        $html .= '</td>';
+                        $html .= '<td>';
+                        $html .= $row['GEBOORTEDATUM'];
+                        $html .= '</td>';
+                        $html .= '<td>';
+                        $html .= $row['OPLEIDINGSNIVEAU'];
+                        $html .= '</td>';
+                        $html .= '<td>';
+                        $html .= $row['EMAIL'];
+                        $html .= '</td>';
+                        $html .= '<td>';
+                        $html .= $row['TELEFOONNUMMER'];
+                        $html .= '</td>';
+                        $html .= '</tr>';
+
+                        echo $html;
+
+                    }
+                    if (isset($_GET['deleteUser'])) {
+                        deleteUserAanvraag($aanvraag_id, $_GET['participant_id']);
+                        updatePage($_SERVER['PHP_SELF'] . '?aanvraag_id=' . $aanvraag_id);
+                    }
+
+                    ?>
+                </table>
                 <h1 class="headcenter">Voeg deelnemers toe</h1>
                 <div>
-                    <form class="form-group" action="addparticipant.php?aanvraag_id=<?php echo $aanvraag_id ?>" method="post">
+                    <form class="form-group" action="addparticipant.php?aanvraag_id=<?php echo $aanvraag_id ?>"
+                          method="post">
                         <div class="form-group">
                             <label class="control-label col-sm-2 font-weight-bold" for="name">Voornaam:</label>
                             <div class="col-sm-4">
@@ -81,7 +134,8 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                             <label class="control-label col-sm-2 font-weight-bold"
                                    for="dateofbirth">Geboortedatum:</label>
                             <div class="col-sm-4">
-                                <input type="date" class="form-control" placeholder="Geboortedatum" name="dateofbirth">
+                                <input type="date" class="form-control" placeholder="Geboortedatum"
+                                       name="dateofbirth">
                             </div>
                         </div>
                         <div class="form-group">
@@ -102,7 +156,8 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                             <label class="control-label col-sm-2 font-weight-bold"
                                    for="organisation">Organisatie:</label>
                             <div class="col-sm-4">
-                                <input type="text" class="form-control" placeholder="Organisatie" name="organisation">
+                                <input type="text" class="form-control" placeholder="Organisatie"
+                                       name="organisation">
                             </div>
                         </div>
                         <div class="form-group">

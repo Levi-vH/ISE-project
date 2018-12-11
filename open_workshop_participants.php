@@ -41,38 +41,34 @@ $workshoptype = getWorkshopType($workshop_id);
                 <ul class="list">
                     <h5><strong>Workshop Opties</strong></h5>
                     <li>
-                        <a href="workshop.php?workshop_id=<?php echo $workshop_id?>">Details</a>
+                        <a href="workshop.php?workshop_id=<?php echo $workshop_id ?>">Details</a>
                     </li>
                     <li>
-                        <a href="open_workshop_participants.php?workshop_id=<?php echo $workshop_id?>">Inzien deelnemers</a>
+                        <a class="active-page">Inzien deelnemers</a>
                     </li>
+<!--                    <li>-->
+<!--                        <a href="addparticipant.php?workshop_id=--><?php //echo $workshop_id ?><!--">Voeg deelnemers toe</a>-->
+<!--                    </li>-->
                     <?php
                     if($workshoptype != 'INC') {
                         echo '<li>';
                         echo  '<a href="open_registrations.php?workshop_id='.$workshop_id.'">Openstaande inschrijvingen</a>';
                         echo '</li>';
                         echo '<li>';
-                        echo  '<a class="active-page">Reservelijst</a>';
+                        echo  '<a href="reservelist.php?workshop_id='.$workshop_id.'">Reservelijst</a>';
                         echo '</li>';
                     }
                     ?>
                     <li>
                         <a href="editworkshop.php?workshop_id=<?php echo $workshop_id?>">Wijzig workshop</a>
                     </li>
-<!--                    --><?php
-//                    if($workshoptype == 'INC') {
-//                        echo '<li>';
-//                        echo  '<a href="addparticipant.php?workshop_id='.$id.'">Voeg deelnemers toe</a>';
-//                        echo '</li>';
-//                    }
-//                    ?>
                 </ul>
                 <br>
             </div>
         </div>
         <div class="col-md-10 col-sm-8 main-content">
             <!--Main content code to be written here -->
-            <h1>Reservelijst</h1>
+            <h1>Deelnemers</h1>
             <div>
                 <table class='table table-striped table-hover'>
                     <tr>
@@ -86,7 +82,7 @@ $workshoptype = getWorkshopType($workshop_id);
                     $conn = connectToDB();
 
                     //Run the stored procedure
-                    $sql = "exec proc_request_approved_workshop_participants_reservelist ?";
+                    $sql = "proc_request_approved_workshop_participants ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
                     $stmt->execute();
@@ -107,22 +103,19 @@ $workshoptype = getWorkshopType($workshop_id);
                         $html .= $row['ACHTERNAAM'];
                         $html .= '</td>';
                         $html .= '<td>';
-                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="reservelist.php?workshop_id='.$workshop_id.'&participant_id='.$row['DEELNEMER_ID'].'&deleteUser=true"></a>';
+                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt afmelden? Zijn of haar gegevens worden niet opgeslagen\')" href="open_workshop_participants.php?workshop_id=' . $workshop_id . '&participant_id=' . $row['DEELNEMER_ID'] . '&deleteUser=true"></a>';
                         $html .= '</td>';
                         $html .= '</tr>';
+
                         echo $html;
+
                     }
-
-                    if(isset($_GET['deleteUser'])) {
-
-                    deleteUserWorkshop($workshop_id, $_GET['participant_id']);
-                    updatePage($_SERVER['PHP_SELF'].'?workshop_id='.$workshop_id);
-                    }
-
-
+                    if (isset($_GET['deleteUser'])) {
+                        deleteUserWorkshop($workshop_id, $_GET['participant_id']);
+                        updatePage($_SERVER['PHP_SELF'] . '?workshop_id=' . $workshop_id);
+                    }}
 
                     ?>
-
                 </table>
             </div>
         </div>
@@ -130,9 +123,3 @@ $workshoptype = getWorkshopType($workshop_id);
 </div>
 </body>
 </html>
-<?php } else {
-    echo '<h1> U mag deze pagina niet bezoeken</h1>';
-}
-include 'footer.html';
-
-

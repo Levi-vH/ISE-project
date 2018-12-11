@@ -1,8 +1,8 @@
 <?php
 include 'functions.php';
 
-$id = $_GET['id'];
-$workshoptype = getWorkshopType($id);
+$workshop_id = $_GET['workshop_id'];
+$workshoptype = getWorkshopType($workshop_id);
 
 
 $conn = connectToDB();
@@ -32,35 +32,36 @@ generate_header('Workshop Details Pagina');
                 <ul class="list">
                     <h5><strong>Workshop Opties</strong></h5>
                     <li>
-                        <a href="participants.php?id=<?php echo $id?>">Inzien deelnemers</a>
-                    </li>
-                    <?php
-                        if($workshoptype != 'INC') {
-                            echo '<li>';
-                            echo  '<a href="open_registrations.php?id='.$id.'">Openstaande inschrijvingen</a>';
-                            echo '</li>';
-                            echo '<li>';
-                            echo  '<a href="reservelist.php?id='.$id.'">Reservelijst</a>';
-                            echo '</li>';
-                        }
-                        ?>
-                    <li>
-                        <a href="editworkshop.php?id=<?php echo $id?>">Wijzig workshop</a>
+                        <a class="active-page">Details</a>
                     </li>
                     <?php
                     if($workshoptype == 'INC') {
                         echo '<li>';
-                        echo  '<a href="addparticipant.php?id='.$id.'">Voeg deelnemers toe</a>';
+                        echo '<a href="participants.php?workshop_id='.$workshop_id.'">Deelnemers en Groepen</a>';
                         echo '</li>';
-                    }
-                    ?>
+//                        echo '<li>';
+//                        echo  '<a href="addparticipant.php?id='.$workshop_id.'">Voeg deelnemers toe</a>';
+//                        echo '</li>';
+                    } elseif($workshoptype != 'INC') {
+                        echo '<li>';
+                        echo '<a href="open_workshop_participants.php?workshop_id='.$workshop_id.'">Deelnemers</a>';
+                        echo '<li>';
+                        echo '<a href="open_registrations.php?workshop_id='.$workshop_id.'">Openstaande inschrijvingen</a>';
+                        echo '</li>';
+                        echo '<li>';
+                        echo  '<a href="reservelist.php?workshop_id='.$workshop_id.'">Reservelijst</a>';
+                        echo '</li>';
+                        }
+                        ?>
+                    <li>
+                        <a href="editworkshop.php?workshop_id=<?php echo $workshop_id?>">Wijzig workshop</a>
+                    </li>
                 </ul>
-                <br>
             </div>
         </div>
+        <h1>Reservelijst</h1>
         <div class="col-md-10 col-sm-8 main-content">
             <!--Main content code to be written here -->
-            <h1>WORKSHOP DETAILS</h1>
                 <div class="details-container">
                     <div class="workshop-details details">
                         <h3> Workshop Details</h3>

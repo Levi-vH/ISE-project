@@ -7,8 +7,8 @@ include 'functions.php';
 
 if ($_SESSION['username'] == 'planner') {
 
-    $id = $_GET['id'];
-    $workshoptypeget = getWorkshopType($id);
+    $workshop_id = $_GET['workshop_id'];
+    $workshoptypeget = getWorkshopType($workshop_id);
 
 // define (empty) variables
     $workshoptype = $workshopdate = $contactinfo = $workshopmodule = $workshopcompany = $workshopsector = $starttime = $endtime =
@@ -21,7 +21,7 @@ if ($_SESSION['username'] == 'planner') {
 // $sql = "SELECT * FROM VW_WORKSHOPS";
     $sql = "exec proc_getWorkshops @where = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bindParam(1, $id, PDO::PARAM_INT);
+    $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
     $stmt->execute();
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -57,7 +57,7 @@ if ($_SESSION['username'] == 'planner') {
         //Run the stored procedure
         $sql = "exec proc_update_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(1, $id, PDO::PARAM_STR);
+        $stmt->bindParam(1, $workshop_id, PDO::PARAM_STR);
         $stmt->bindParam(2, $workshoptype, PDO::PARAM_STR);
         $stmt->bindParam(3, $workshopdate, PDO::PARAM_STR);
         //$stmt->bindParam(3, $contactinfo, PDO::PARAM_STR);
@@ -85,15 +85,18 @@ if ($_SESSION['username'] == 'planner') {
                     <ul class="list">
                         <h5><strong>Workshop Opties</strong></h5>
                         <li>
-                            <a href="participants.php?id=<?php echo $id ?>">Inzien deelnemers</a>
+                            <a href="workshop.php?workshop_id=<?php echo $workshop_id ?>">Details</a>
+                        </li>
+                        <li>
+                            <a href="open_workshop_participants.php?workshop_id=<?php echo $workshop_id ?>">Inzien deelnemers</a>
                         </li>
                         <?php
                         if ($workshoptypeget != 'INC') {
                             echo '<li>';
-                            echo '<a href="open_registrations.php?id=' . $id . '">Openstaande inschrijvingen</a>';
+                            echo '<a href="open_registrations.php?workshop_id=' . $workshop_id . '">Openstaande inschrijvingen</a>';
                             echo '</li>';
                             echo '<li>';
-                            echo '<a href="reservelist.php?id=' . $id . '">Reservelijst</a>';
+                            echo '<a href="reservelist.php?workshop_id=' . $workshop_id . '">Reservelijst</a>';
                             echo '</li>';
                         }
                         ?>
@@ -103,7 +106,7 @@ if ($_SESSION['username'] == 'planner') {
                         <?php
                         if ($workshoptypeget == 'INC') {
                             echo '<li>';
-                            echo '<a href="addparticipant.php?id=' . $id . '">Voeg deelnemers toe</a>';
+                            echo '<a href="addparticipant.php?workshop_id=' . $workshop_id . '">Voeg deelnemers toe</a>';
                             echo '</li>';
                         }
                         ?>
@@ -113,8 +116,8 @@ if ($_SESSION['username'] == 'planner') {
             </div>
 
             <div class="container">
-                <h2 class="text-info text-center">Wijzig workshop <?php echo $id ?></h2>
-                <form class="form-horizontal" action="editworkshop.php?id=<?php echo $id ?>" method="post">
+                <h2 class="text-info text-center">Wijzig workshop <?php echo $workshop_id ?></h2>
+                <form class="form-horizontal" action="editworkshop.php?id=<?php echo $workshop_id ?>" method="post">
                     <div class="form-group">
                         <label class="control-label col-sm-2 font-weight-bold" for="workshoptype">Type workshop:</label>
                         <div class="col-sm-10">
@@ -152,7 +155,7 @@ if ($_SESSION['username'] == 'planner') {
                             <script href="text/javascript">
                                 var sel = document.getElementById("workshopmodule");
                                 var modulenummer;
-                                modulenummer = <?php echo getModuleNummer($id)?> -1;
+                                modulenummer = <?php echo getModuleNummer($workshop_id)?> -1;
                                 sel.selectedIndex = modulenummer;
                             </script>
                         </div>

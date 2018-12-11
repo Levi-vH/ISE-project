@@ -31,7 +31,7 @@ generate_header('Workshop overzicht');
                 $html = '';
                 //$row[\'WORKSHOP_ID\']'
                 $link = $row['WORKSHOP_ID'];
-                $html .= "<tr onclick=\"window.location='workshop.php?id=$link'\">";
+                $html .= "<tr onclick=\"window.location='workshop.php?workshop_id=$link'\">";
                 $html .= '<td class="align-middle">';
                 $html .= $row['TYPE'];
                 $html .= '</td>';

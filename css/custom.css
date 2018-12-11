@@ -62,8 +62,19 @@ a:hover{
     color: #ff0b00;
 }
 
+.participantstable {
+    display: inline-block;
+    width: 50%;
+    float: left;
+    padding-right: 40px;
+}
+
 .headcenter {
     text-align: center;
+}
+
+.participantsheader {
+    width: 50%;
 }
 
 #approvebutton {
