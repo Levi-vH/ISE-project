@@ -2,328 +2,64 @@ USE SBBWorkshopOmgeving
 GO
 
 
-/*==============================================================*/
-/* Table: PLANNER_History                                       */
-/*==============================================================*/
-CREATE TABLE History_PLANNER (
-	NAAM VARCHAR(50) NOT NULL,
-)
-go
-
-/*==============================================================*/
-/* Table: SECTOR_History                                        */
-/*==============================================================*/
-create table History_SECTOR (
-   SECTORNAAM          varchar(255)         not null,
-)
-go
-
-/*==============================================================*/
-/* Table: ORGANISATIE_History                                   */
-/*==============================================================*/
-create table History_ORGANISATIE (
-   ORGANISATIENUMMER     varchar(15)          not null,
-   ORGANISATIENAAM       varchar(255)         null,
-   ADRES				 varchar(255)         null,
-   POSTCODE				 varchar(12)          null,
-   PLAATSNAAM			 varchar(255)         null,
-)
-go
-
-/*==============================================================*/
-/* Table: ADVISEUR_History                                      */
-/*==============================================================*/
-create table History_ADVISEUR (
-   ADVISEUR_ID          int			         not null,
-   ORGANISATIENUMMER    varchar(15)          not null,
-   SECTORNAAM			varchar(255)         not null,
-   VOORNAAM				varchar(255)         not null,
-   ACHTERNAAM			varchar(255)         not null,
-   TELEFOONNUMMER       varchar(255)         null,
-   EMAIL                varchar(255)         null,
-)
-go
-
-/*==============================================================*/
-/* Table: CONTACTPERSOON_History                                */
-/*==============================================================*/
-create table History_CONTACTPERSOON (
-   CONTACTPERSOON_ID    int			         not null,
-   ORGANISATIENUMMER    varchar(15)          not null,
-   VOORNAAM             varchar(255)         not null,
-   ACHTERNAAM           varchar(255)         not null,
-   TELEFOONNUMMER       varchar(255)         null,
-   EMAIL                varchar(255)         null,
-)
-go
-
-/*==============================================================*/
-/* Table: WORKSHOPLEIDER_History                                */
-/*==============================================================*/
-create table History_WORKSHOPLEIDER (
-   WORKSHOPLEIDER_ID    int			         not null,
-   VOORNAAM				varchar(255)         not null,
-   ACHTERNAAM			varchar(255)         not null,
-   TOEVOEGING			tinyint				 null,
-)
-go
-
-/*==============================================================*/
-/* Table: BESCHIKBAARHEID_History                               */
-/*==============================================================*/
-create table History_BESCHIKBAARHEID (
-   WORKSHOPLEIDER_ID    int			         not null,
-   KWARTAAL             char(1)              not null,
-   JAAR                 smallint             not null,
-   AANTAL_UUR           smallint             not null,
-)
-go
-
-/*==============================================================*/
-/* Table: DEELNEMER_History                                     */
-/*==============================================================*/
-create table History_DEELNEMER (
-   DEELNEMER_ID					int			         not null,
-   SECTORNAAM					varchar(255)         not null,
-   ORGANISATIENUMMER			varchar(15)          null,
-   AANHEF						varchar(7)           not null,
-   VOORNAAM						varchar(255)         not null,
-   ACHTERNAAM					varchar(255)         not null,
-   GEBOORTEDATUM				date	             not null,
-   EMAIL						varchar(255)         not null,
-   TELEFOONNUMMER				varchar(255)         not null,
-   OPLEIDINGSNIVEAU				varchar(11)          not null,
-   ORGANISATIE_VESTIGINGSPLAATS	varchar(255)         not null,
-   IS_OPEN_INSCHRIJVING         bit                  not null,
-   GEWENST_BEGELEIDINGSNIVEAU	varchar(255)         null,
-   FUNCTIENAAM					varchar(255)         null,
-)
-go
-
-/*==============================================================*/
-/* Table: MODULE_History                                        */
-/*==============================================================*/
-create table History_MODULE (
-   MODULENUMMER       int                  not null,
-   MODULENAAM         varchar(255)         not null,
-)
-go
-
-/*==============================================================*/
-/* Table: WORKSHOP_History                                      */
-/*==============================================================*/
-create table History_WORKSHOP (
-   WORKSHOP_ID						int			         not null,
-   WORKSHOPLEIDER_ID				int                  null,
-   CONTACTPERSOON_ID				int                  null,
-   ORGANISATIENUMMER				varchar(15)          null,
-   MODULENUMMER						int                  null,
-   ADVISEUR_ID						int                  null,
-   SECTORNAAM						varchar(255)         null,
-   DATUM							date	             null,
-   STARTTIJD						time	             null,
-   EINDTIJD							time	             null,
-   ADRES							varchar(255)         null,
-   POSTCODE							varchar(12)          null,
-   PLAATSNAAM						varchar(255)         null,
-   [STATUS]							varchar(255)         null,
-   OPMERKING						varchar(255)         null,
-   [TYPE]							varchar(3)           null,
-   VERWERKT_BREIN					date	             null,
-   DEELNEMER_GEGEVENS_ONTVANGEN		date	             null,
-   OVK_BEVESTIGING					date	             null,
-   PRESENTIELIJST_VERSTUURD			date	             null,
-   PRESENTIELIJST_ONTVANGEN			date	             null,
-   BEWIJS_DEELNAME_MAIL_SBB_WSL		date	             null,
-)
-go
-
-/*==============================================================*/
-/* Table: DEELNEMER_IN_WORKSHOP_History                         */
-/*==============================================================*/
-create table History_DEELNEMER_IN_WORKSHOP (
-   WORKSHOP_ID          int			         not null,
-   DEELNEMER_ID         int                  not null,
-   VOLGNUMMER           int                  not null,
-   IS_GOEDGEKEURD       bit                  not null,
-)
-go
-
-/*==============================================================*/
-/* Table: AANVRAAG_History                                      */
-/*==============================================================*/
-create table History_AANVRAAG (
-   AANVRAAG_ID		    int			         not null,
-   ORGANISATIE_ID		int					 not null,
-   CONTACTPERSOON_ID	int			         not null,
-   ADVISEUR_ID			int			         not null,
-   SBB_PLANNER			VARCHAR(50)			 not null,
-   AANVRAAG_DATUM		DATETIME			 not null,
-)
-go
-
-/*==============================================================*/
-/* Table: GROEP_History 										*/
-/*==============================================================*/
-create table History_GROEP (
-   GROEP_ID		    int						 not null,
-   ADRES			VARCHAR(255)			 not null,
-   TELEFOONNUMMER	VARCHAR(255)			 not null,
-   EMAIL			VARCHAR(255)		     not null,
-)
-go
-
-/*==============================================================*/
-/* Table: AANVRAAG_VAN_GROEP_History                            */
-/*==============================================================*/
-create table History_AANVRAAG_VAN_GROEP (
-   AANVRAAG_ID		    int 				 not null,
-   GROEP_ID				int					 not null,
-)
-go
-
-/*==============================================================*/
-/* Table: MODULE_VAN_GROEP_History                              */
-/*==============================================================*/
-create table History_MODULE_VAN_GROEP (
-   GROEP_ID				int					 not null,
-   MODULENUMMER			int					 not null,
-   VOORKEUR				VARCHAR(50)			 not null,
-)
-go
-
-
 /*
-;WITH asdf AS
-(SELECT DISTINCT(COLUMN_NAME)
-FROM INFORMATION_SCHEMA.COLUMNS IC INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS IT
-ON IC.TABLE_NAME = IT.TABLE_NAME
-WHERE IC.TABLE_NAME = 'ADVISEUR')
-SELECT * INTO #testtabel FROM asdf WHERE 1=0 
-SELECT * FROM #testtabel
 
-SELECT DISTINCT(COLUMN_NAME)
-FROM INFORMATION_SCHEMA.COLUMNS IC INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS IT
-ON IC.TABLE_NAME = IT.TABLE_NAME
-WHERE IC.TABLE_NAME = 'ADVISEUR'
+Select all the tables that can are not history tables and prefix the execution of the stored procedure
 
+SELECT  'EXEC proc_generate_history_table ' + TABLE_NAME
+FROM	INFORMATION_SCHEMA.TABLES
+WHERE	TABLE_TYPE = 'BASE TABLE'
+AND		TABLE_NAME NOT LIKE ('History_%')
 
+*/
 
-DROP PROCEDURE IF EXISTS SP_createhistorytable
-
+/*==============================================================*/
+/* Create history tables based on given parameter               */
+/*==============================================================*/
 GO
-CREATE PROCEDURE SP_createHistoryTable
-@tablename	VARCHAR(256)
+CREATE OR ALTER PROC proc_generate_history_table
+(@name VARCHAR(50)
+)
 AS
 BEGIN
+DECLARE @query VARCHAR(3000)
+DECLARE @firstColumn VARCHAR(60)
+DECLARE @columns VARCHAR(800)
+SELECT @columns =
+CASE  DATA_TYPE
+	WHEN  'varchar'
+	THEN COALESCE(@columns + ' ' + COLUMN_NAME + ' ' + DATA_TYPE + '(' + CAST(CHARACTER_MAXIMUM_LENGTH AS VARCHAR(50)) + ') NULL ,', '')
+	WHEN  'char'
+	THEN COLUMN_NAME + ' ' + DATA_TYPE + '(' + CAST(CHARACTER_MAXIMUM_LENGTH AS VARCHAR(50)) + ') NULL ,'
+	ELSE COALESCE(@columns + ' ' + COLUMN_NAME + ' ' + DATA_TYPE + ' NULL ,', '')
+END
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = @name
 
-	DECLARE @tableSchema VARCHAR(256)
-	DECLARE @IDcolumnName VARCHAR(256)
-	DECLARE @query VARCHAR(1000)
-	DECLARE @dataType VARCHAR(100)
-	DECLARE @firstRun BIT
+SET @firstColumn = (SELECT
+					CASE  DATA_TYPE
+						WHEN  'varchar'
+						THEN COLUMN_NAME + ' ' + DATA_TYPE + '(' + CAST(CHARACTER_MAXIMUM_LENGTH AS VARCHAR(50)) + ') NULL ,'
+						WHEN  'char'
+						THEN COLUMN_NAME + ' ' + DATA_TYPE + '(' + CAST(CHARACTER_MAXIMUM_LENGTH AS VARCHAR(50)) + ') NULL ,'
+						ELSE COLUMN_NAME + ' ' + DATA_TYPE + ' NULL ,'
+					END
+					FROM INFORMATION_SCHEMA.COLUMNS 
+					WHERE TABLE_NAME = @name 
+					AND ORDINAL_POSITION = '1')
 
-	SET @firstRun = 0
+SET @columns = + @firstColumn + ' ' + @columns
 
-	/*
-	SELECT	COLUMN_NAME
-	INTO	#TempCreate
-	FROM	INFORMATION_SCHEMA.COLUMNS
-	WHERE	TABLE_NAME = @tablename
-	AND		COLUMN_NAME NOT IN (SELECT COLUMN_NAME
-		FROM INFORMATION_SCHEMA.COLUMNS IC INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS IT
-		ON IC.TABLE_NAME = IT.TABLE_NAME
-		WHERE COLUMN_NAME IN (
-		SELECT COLUMN_NAME
-		FROM INFORMATION_SCHEMA.COLUMNS 
-		WHERE COLUMNPROPERTY(object_id(IC.TABLE_SCHEMA+'.'+IC.TABLE_NAME), IC.COLUMN_NAME, 'IsIdentity') = 1)
-		AND CONSTRAINT_TYPE = 'PRIMARY KEY')
-		*/
-
-	-- select the ID column from the table that as an identity on it.
-	SET @IDcolumnName = (SELECT IC.COLUMN_NAME
-	FROM INFORMATION_SCHEMA.COLUMNS IC INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS IT
-	ON IC.TABLE_NAME = IT.TABLE_NAME
-	WHERE COLUMN_NAME IN (
-	SELECT COLUMN_NAME
-	FROM INFORMATION_SCHEMA.COLUMNS 
-	WHERE COLUMNPROPERTY(object_id(IC.TABLE_SCHEMA+'.'+IC.TABLE_NAME), IC.COLUMN_NAME, 'IsIdentity') = 1)
-	AND CONSTRAINT_TYPE = 'PRIMARY KEY'
-	AND IC.TABLE_NAME = @tablename)
-
-	--WHILE EXISTS (SELECT * FROM #TempCreate)
-	--	BEGIN
-
-		-- select the datatype of the ID column
-		SET @dataType = (SELECT IC.DATA_TYPE
-		FROM INFORMATION_SCHEMA.COLUMNS IC INNER JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS IT
-		ON IC.TABLE_NAME = IT.TABLE_NAME
-		WHERE COLUMN_NAME IN (
-		SELECT COLUMN_NAME
-		FROM INFORMATION_SCHEMA.COLUMNS 
-		WHERE COLUMNPROPERTY(object_id(IC.TABLE_SCHEMA+'.'+IC.TABLE_NAME), IC.COLUMN_NAME, 'IsIdentity') = 1)
-		AND CONSTRAINT_TYPE = 'PRIMARY KEY'
-		AND IC.TABLE_NAME = @tablename)
-
-		SET @TableSchema = (SELECT TABLE_SCHEMA
-		FROM INFORMATION_SCHEMA.TABLES
-		WHERE TABLE_NAME = @tablename)
-
-		PRINT 'TSET'
-
-		-- create a history table with every column a table has except for the ID column
-		SET @query = ('SELECT * 
-		INTO History_' + @tablename +
-		' FROM ' + @tablename +
-		' WHERE 1= 0')
-
-		PRINT 'TEST 2'
-		
-		EXECUTE (@query)
-
-		PRINT 'DEZE QUERY'
-		IF (@IDcolumnName IS NOT NULL)
-		BEGIN
-			SET @query = ('ALTER TABLE History_' + @tablename +
-						  ' DROP COLUMN ' + @IDcolumnName)
-
-			EXECUTE (@query)
-
-			PRINT 'TSET 3'
-			SET @query = (SELECT 'ALTER TABLE History_' + @tablename + ' ADD ' + @IDcolumnName + ' ' + @dataType)
-
-			EXECUTE (@query)
-			PRINT 'TEST 4'
-		END
-		 
+SET @columns = SUBSTRING(@columns, 1, (len(@columns) - 1))
 
 
-		/*
-		SELECT * 
-		INTO History_ADVISEUR 
-		 FROM (SELECT *
-				FROM   ADVISEUR 
-				EXCEPT 
-				SELECT   ADVISEUR_ID
-				 FROM   ADVISEUR ) t */
 
-
-		/*
-		IF (@firstRun = 0)
-		BEGIN
-			SET @query = (SELECT 'CREATE TABLE History_' + @tablename + '( ' + @columnName + ' ' + @dataType + ' )') 
-			SET @firstRun = 1
-		END
-		ELSE
-			SET @columnName = (SELECT TOP 1 FROM #TempCreate)
-			SET @query = (SELECT 'ALTER TALBE History_' + @tablename + ' ADD ' + @columnName + ' ' + @dataType + ' )')
-		EXECUTE (@query)
-	END
-	*/
+SET @query = 'CREATE TABLE HISTORY_' + @name + '(
+' + @columns + ')'
+EXEC(@query)
 END
 GO
 
-*/
 DROP PROCEDURE IF EXISTS SP_createHistoryTableTrigger
 GO
 
@@ -349,7 +85,7 @@ BEGIN
 				IF EXISTS (SELECT * FROM inserted) AND NOT EXISTS (SELECT * FROM deleted)
 					BEGIN
 						INSERT INTO History_' + @tablename + '
-						SELECT *, ''I'', GETDATE()
+						SELECT *, ''I'', CURRENT_TIMESTAMP
 						FROM inserted
 					END
 
@@ -357,14 +93,14 @@ BEGIN
 					IF NOT EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted)
 						BEGIN
 							INSERT INTO History_' + @tablename + '
-							SELECT *, ''D'', GETDATE()
+							SELECT *, ''D'', CURRENT_TIMESTAMP
 							FROM deleted
 						END
 		
 					ELSE -- If an update has been made U etc...
 						BEGIN
 							INSERT INTO History_' + @tablename + '
-							SELECT *, ''U'', GETDATE()
+							SELECT *, ''U'', CURRENT_TIMESTAMP
 							FROM deleted 	
 						END
 			END TRY
@@ -408,7 +144,7 @@ BEGIN
 
 			EXEC  ('ALTER TABLE History_' + @tablenameTemp + ' 
 					ADD action	VARCHAR(2)	NOT NULL,
-					timestamp	DATETIME	NOT NULL')
+					timestamp	DATETIME DEFAULT CURRENT_TIMESTAMP')
 
 			PRINT @tablenameTemp
 			EXEC SP_createHistoryTableTrigger @tablename = @tablenameTemp
@@ -419,67 +155,54 @@ END
 GO
 
 
+DROP TRIGGER IF EXISTS TRG_MODULE_History
+DROP TRIGGER IF EXISTS TRG_DEELNEMER_IN_WORKSHOP_History
+DROP TRIGGER IF EXISTS TRG_GROEP_History
+DROP TRIGGER IF EXISTS TRG_DEELNEMER_IN_AANVRAAG_History
+DROP TRIGGER IF EXISTS TRG_MODULE_VAN_GROEP_History
+DROP TRIGGER IF EXISTS TRG_PLANNER_History
+DROP TRIGGER IF EXISTS TRG_SECTOR_History
+DROP TRIGGER IF EXISTS TRG_ORGANISATIE_History
+DROP TRIGGER IF EXISTS TRG_ADVISEUR_History
+DROP TRIGGER IF EXISTS TRG_CONTACTPERSOON_History
+DROP TRIGGER IF EXISTS TRG_WORKSHOPLEIDER_History
+DROP TRIGGER IF EXISTS TRG_BESCHIKBAARHEID_History
+DROP TRIGGER IF EXISTS TRG_DEELNEMER_History
+DROP TRIGGER IF EXISTS TRG_WORKSHOP_History
+DROP TRIGGER IF EXISTS TRG_AANVRAAG_History
 
+DROP TABLE IF EXISTS dbo.HISTORY_AANVRAAG
+DROP TABLE IF EXISTS dbo.HISTORY_ADVISEUR
+DROP TABLE IF EXISTS dbo.HISTORY_BESCHIKBAARHEID
+DROP TABLE IF EXISTS dbo.HISTORY_CONTACTPERSOON
+DROP TABLE IF EXISTS dbo.HISTORY_DEELNEMER
+DROP TABLE IF EXISTS dbo.HISTORY_DEELNEMER_IN_AANVRAAG
+DROP TABLE IF EXISTS dbo.HISTORY_DEELNEMER_IN_WORKSHOP
+DROP TABLE IF EXISTS dbo.HISTORY_GROEP
+DROP TABLE IF EXISTS dbo.HISTORY_MODULE
+DROP TABLE IF EXISTS dbo.HISTORY_MODULE_VAN_GROEP
+DROP TABLE IF EXISTS dbo.HISTORY_ORGANISATIE
+DROP TABLE IF EXISTS dbo.HISTORY_PLANNER
+DROP TABLE IF EXISTS dbo.HISTORY_SECTOR
+DROP TABLE IF EXISTS dbo.HISTORY_WORKSHOP
+DROP TABLE IF EXISTS dbo.HISTORY_WORKSHOPLEIDER
 
-			ALTER TABLE ADVISEUR DROP CONSTRAINT PK_ADVISEUR
-
-			ALTER TABLE WORKSHOP DROP CONSTRAINT FK_WORKSHOP_ref_ADVISEUR
-			ALTER TABLE AANVRAAG DROP CONSTRAINT FK_AANVRAAG_ref_ADVISEUR
-
-			ALTER TABLE ADVISEUR
-			DROP COLUMN ADVISEUR_ID
-
-			DECLARE @test VARCHAR(20) = 'ADVISEUR'
-			SELECT 'History_' + @test
-		
-
-			EXEC  ('ALTER TABLE History_' + 'ADVISEUR' + ' 
-					ADD action	VARCHAR(2)	NOT NULL,
-					timestamp	DATETIME	NOT NULL')
-
-
-			SET IDENTITY_INSERT SBBWorkshopOmgeving.[dbo].[History_ADVISEUR] ON
-			EXEC SP_createHistoryTableTrigger @tablename = 'ADVISEUR'
-
-			DROP TRIGGER TRG_ADVISEUR_History
-
+EXEC proc_generate_history_table PLANNER
+EXEC proc_generate_history_table SECTOR
+EXEC proc_generate_history_table ORGANISATIE
+EXEC proc_generate_history_table ADVISEUR
+EXEC proc_generate_history_table CONTACTPERSOON
+EXEC proc_generate_history_table WORKSHOPLEIDER
+EXEC proc_generate_history_table BESCHIKBAARHEID
+EXEC proc_generate_history_table DEELNEMER
+EXEC proc_generate_history_table MODULE
+EXEC proc_generate_history_table WORKSHOP
+EXEC proc_generate_history_table DEELNEMER_IN_WORKSHOP
+EXEC proc_generate_history_table AANVRAAG
+EXEC proc_generate_history_table GROEP
+EXEC proc_generate_history_table DEELNEMER_IN_AANVRAAG
+EXEC proc_generate_history_table MODULE_VAN_GROEP
 
 
 
 EXEC SP_executeCreateHistoryTableProcedures
-
--- creating a drop table query for each history table
-/*
-SELECT  'DROP TABLE ' + TABLE_SCHEMA + '.' + TABLE_NAME
-FROM	INFORMATION_SCHEMA.TABLES
-WHERE	TABLE_TYPE = 'BASE TABLE'
-AND		TABLE_NAME LIKE ('History_%')
-
-DROP TABLE dbo.History_AANVRAAG
-DROP TABLE dbo.History_ADVISEUR
-DROP TABLE dbo.History_BESCHIKBAARHEID
-DROP TABLE dbo.History_CONTACTPERSOON
-DROP TABLE dbo.History_DEELNEMER
-DROP TABLE dbo.History_DEELNEMER_IN_WORKSHOP
-DROP TABLE dbo.History_MODULE
-DROP TABLE dbo.History_ORGANISATIE
-DROP TABLE dbo.History_SECTOR
-DROP TABLE dbo.History_WORKSHOP
-DROP TABLE dbo.History_WORKSHOPLEIDER
-*/
-
-BEGIN TRAN
-INSERT INTO ADVISEUR([ORGANISATIENUMMER], [SECTORNAAM], [VOORNAAM], [ACHTERNAAM], [TELEFOONNUMMER], [EMAIL])
-VALUES (1, 'naam', 'bart', 'polman', 0612345678, 'BartPolman@live.nl')
-SELECT *
-FROM ADVISEUR
-
-UPDATE ADVISEUR
-SET VOORNAAM = 'Mark'
-WHERE ADVISEUR_ID = 14
-
-SELECT *
-FROM History_ADVISEUR
-
-select * FROM ADVISEUR
-ROLLBACK TRAN
