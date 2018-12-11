@@ -6,10 +6,12 @@ if (!isset($_SESSION)) {
 include 'header.php';
 include 'functions.php';
 
+$error_message = NULL;
 if ($_SESSION['username'] == 'contactpersoon') {
 
 // define (empty) variables
-$Organisation_Relationnumber = $Contact_ID = $SBB_Planner = $Advisor_practical_learning = $Groups = $Aanvraag_ID = $Group_Module1 = $Group_Module2 = $Group_Module3 = $Group_Module1_voorkeur = $Group_Module2_voorkeur = $Group_Module3_voorkeur = $Adress = $Contact_Person = '';
+//$Organisation_Relationnumber = $Contact_ID = $SBB_Planner = $Advisor_practical_learning = $Groups = $Aanvraag_ID = $Group_Module1 = $Group_Module2 = $Group_Module3 = $Group_Module1_voorkeur = $Group_Module2_voorkeur = $Group_Module3_voorkeur = $Adress = $Contact_Person = '';
+
 
 // The ones that do not get checked are dropdown or select.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -23,70 +25,88 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //Try to make connection
     $conn = connectToDB();
 
-    //Run the stored procedure
-    $sql = "exec proc_insert_aanvraag ?, ?, ?, ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(1, $Organisation_Relationnumber, PDO::PARAM_INT);
-    $stmt->bindParam(2, $Contact_ID, PDO::PARAM_INT);
-    $stmt->bindParam(3, $Advisor_practical_learning, PDO::PARAM_INT);
-    $stmt->bindParam(4, $SBB_Planner, PDO::PARAM_STR);
-    $stmt->execute();
-    //ophalen aanvraagID
-    $sql2 = "SELECT IDENT_CURRENT('AANVRAAG') AS LAATSTE_INDEX";
-    $stmt2 = $conn->prepare($sql2);
-    $stmt2->execute();
+    if (($Organisation_Relationnumber !== "")) {
+        if (($Contact_ID) !== "") {
+            if (($Advisor_practical_learning !== "")) {
+                //Run the stored procedure
 
-    while ($resultaat = $stmt2->fetch(PDO::FETCH_ASSOC)) {
-        $Aanvraag_ID = $resultaat['LAATSTE_INDEX'];
+                $sql = "exec proc_insert_aanvraag ?, ?, ?, ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(1, $Organisation_Relationnumber, PDO::PARAM_INT);
+                $stmt->bindParam(2, $Contact_ID, PDO::PARAM_INT);
+                $stmt->bindParam(3, $Advisor_practical_learning, PDO::PARAM_INT);
+                $stmt->bindParam(4, $SBB_Planner, PDO::PARAM_STR);
+                $stmt->execute();
 
-    }
+                //get aanvraagID
+                $sql2 = "SELECT IDENT_CURRENT('AANVRAAG') AS LAATSTE_INDEX";
+                $stmt2 = $conn->prepare($sql2);
+                $stmt2->execute();
 
-    for ($i = 1; $i <= $Groups; $i++) {
-        if (isset($_POST["group_" . $i . "_module1"])) {
-            $Group_Module1 = check_input($_POST["group_" . $i . "_module1"]);
-        }
-        if (isset($_POST["group_" . $i . "_module2"])) {
-            $Group_Module2 = check_input($_POST["group_" . $i . "_module2"]);
-        }
-        if (isset($_POST["group_" . $i . "_module3"])) {
-            $Group_Module3 = check_input($_POST["group_" . $i . "_module3"]);
-        }
-        if (isset($_POST["group_" . $i . "_module1_Voorkeur"])) {
-            $Group_Module1_voorkeur = check_input($_POST["group_" . $i . "_module1_Voorkeur"]);
-        }
-        if (isset($_POST["group_" . $i . "_module2_Voorkeur"])) {
-            $Group_Module2_voorkeur = check_input($_POST["group_" . $i . "_module2_Voorkeur"]);
-        }
-        if (isset($_POST["group_" . $i . "_module3_Voorkeur"])) {
-            $Group_Module3_voorkeur = check_input($_POST["group_" . $i . "_module3_Voorkeur"]);
-        }
-        $Adress = check_input($_POST["group_" . $i . "Workshop_Address"]);
-        $Contact_Person = check_input($_POST["group_" . $i . "Aanwezig_Contactpersoon"]);
+                while ($resultaat = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+                    $Aanvraag_ID = $resultaat['LAATSTE_INDEX'];
+
+                }
+                // if ($Groups > 1) {
+                for ($i = 1; $i <= $Groups; $i++) {
+                    if (isset($_POST["group_" . $i . "_module1"])) {
+                        $Group_Module1 = check_input($_POST["group_" . $i . "_module1"]);
+                    }
+                    if (isset($_POST["group_" . $i . "_module2"])) {
+                        $Group_Module2 = check_input($_POST["group_" . $i . "_module2"]);
+                    }
+                    if (isset($_POST["group_" . $i . "_module3"])) {
+                        $Group_Module3 = check_input($_POST["group_" . $i . "_module3"]);
+                    }
+                    if (isset($_POST["group_" . $i . "_module1_Voorkeur"])) {
+                        $Group_Module1_voorkeur = check_input($_POST["group_" . $i . "_module1_Voorkeur"]);
+                    }
+                    if (isset($_POST["group_" . $i . "_module2_Voorkeur"])) {
+                        $Group_Module2_voorkeur = check_input($_POST["group_" . $i . "_module2_Voorkeur"]);
+                    }
+                    if (isset($_POST["group_" . $i . "_module3_Voorkeur"])) {
+                        $Group_Module3_voorkeur = check_input($_POST["group_" . $i . "_module3_Voorkeur"]);
+                    }
+                    $Adress = check_input($_POST["group_" . $i . "Workshop_Address"]);
+                    $Contact_Person = check_input($_POST["group_" . $i . "Aanwezig_Contactpersoon"]);
 //        $Contact_Telephone = check_input($_POST["group_" . $i . "Aanwezig_Telephone"]);
 //        $Contact_Email = check_input($_POST["group_" . $i . "Aanwezig_Email"]);
-        if ((isset($Group_Module1) && isset($Group_Module1_voorkeur)) || (isset($Group_Module2) && isset($Group_Module2_voorkeur)) || (isset($Group_Module3) && isset($Group_Module3_voorkeur))) {
 
-            if (!is_null($Contact_Person) && !is_null($Adress)) {
-                //Run the stored procedure
-                $sql3 = "exec proc_insert_aanvraag_groepen ?, ?, ?, ?, ?, ?, ?, ?, ?";
-                $stmt3 = $conn->prepare($sql3);
-                $stmt3->bindParam(1, $Aanvraag_ID, PDO::PARAM_INT);
-                $stmt3->bindParam(2, $Group_Module1, PDO::PARAM_INT);
-                $stmt3->bindParam(3, $Group_Module2, PDO::PARAM_INT);
-                $stmt3->bindParam(4, $Group_Module3, PDO::PARAM_INT);
-                $stmt3->bindParam(5, $Group_Module1_voorkeur, PDO::PARAM_STR);
-                $stmt3->bindParam(6, $Group_Module2_voorkeur, PDO::PARAM_STR);
-                $stmt3->bindParam(7, $Group_Module3_voorkeur, PDO::PARAM_STR);
-                $stmt3->bindParam(8, $Adress, PDO::PARAM_STR);
-                $stmt3->bindParam(9, $Contact_Person, PDO::PARAM_STR);
-                $stmt3->execute();
+                    if ((isset($Group_Module1) && isset($Group_Module1_voorkeur)) || (isset($Group_Module2) && isset($Group_Module2_voorkeur)) || (isset($Group_Module3) && isset($Group_Module3_voorkeur))) {
+
+                        if (!is_null($Contact_Person) && !is_null($Adress)) {
+                            //Run the stored procedure
+                            $sql3 = "exec proc_insert_aanvraag_groepen ?, ?, ?, ?, ?, ?, ?, ?, ?";
+                            $stmt3 = $conn->prepare($sql3);
+                            $stmt3->bindParam(1, $Aanvraag_ID, PDO::PARAM_INT);
+                            $stmt3->bindParam(2, $Group_Module1, PDO::PARAM_INT);
+                            $stmt3->bindParam(3, $Group_Module2, PDO::PARAM_INT);
+                            $stmt3->bindParam(4, $Group_Module3, PDO::PARAM_INT);
+                            $stmt3->bindParam(5, $Group_Module1_voorkeur, PDO::PARAM_STR);
+                            $stmt3->bindParam(6, $Group_Module2_voorkeur, PDO::PARAM_STR);
+                            $stmt3->bindParam(7, $Group_Module3_voorkeur, PDO::PARAM_STR);
+                            $stmt3->bindParam(8, $Adress, PDO::PARAM_STR);
+                            $stmt3->bindParam(9, $Contact_Person, PDO::PARAM_STR);
+                            $stmt3->execute();
+                        } else {
+                            $error_message = "een contactpersoon & een adres zijn verplicht";
+                        }
+                    } else {
+                        $error_message = "er moet een module gekozen worden en voor elke module moet een voorkeur worden opgegeven";
+                    }
+                }
+
             } else {
-                echo "een contactpersoon & een adres zijn verplicht";
+                $error_message = 'De adviseur moet worden ingevoerd.';
             }
         } else {
-            echo "er moet een module gekozen worden en voor elke module moet een voorkeur worden opgegeven";
+            $error_message = 'De contact_ID moet worden ingevoerd.';
         }
+    } else {
+        $error_message = 'De organisatie moet worden ingevoerd.';
     }
+
+    //  }
 
 }
 ?>
@@ -111,10 +131,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 <div class="container">
-
     <h2 class="text-info text-center">Aanvraag INC workshop</h2>
     <br>
-
+    <?php     if ($error_message !== NULL){
+        echo '<div class ="container"> <p>' . $error_message .'</p> </div>';
+    } ?>
     <h3>Organisatie</h3>
     <form class="form-horizontal" action="" method="post">
         <div class="form-group">
