@@ -13,11 +13,11 @@ Procedure order:
 /* SP Type: SELECT                                              */
 /*==============================================================*/
 
-CREATE OR ALTER PROC proc_getWorkshops
+CREATE OR ALTER PROC proc_get_workshops
 (
-@orderby		VARCHAR(40) = null,
-@orderdirection	VARCHAR(4) = null,
-@where			INT = null
+@orderby		VARCHAR(40) = NULL,
+@orderdirection	VARCHAR(4) = NULL,
+@where			INT = NULL
 )
 AS
 BEGIN
@@ -54,44 +54,33 @@ BEGIN
 		SET @query = @query + ' WHERE WORKSHOP_ID =' + CAST(@where AS VARCHAR(5))
 	END
 
-
 	SET @query = @query + ' ORDER BY ' + @orderby + ' ' + @orderdirection
 
 	EXEC(@query)
-
 END
 GO
 
-CREATE OR ALTER PROC proc_getWorkshopRequest
+CREATE OR ALTER PROC proc_get_workshoprequests
 (
 @aanvraag_id INT = NULL
 )
 AS
 BEGIN
-SET NOCOUNT ON
-DECLARE @query VARCHAR(400)
-
-SET @query = 'SELECT *, ISNULL((
-						SELECT COUNT(*)
-						FROM GROEP G
-						WHERE G.AANVRAAG_ID = A.AANVRAAG_ID
-						GROUP BY AANVRAAG_ID
-						), 0) AS AANTAL_GROEPEN
-FROM AANVRAAG A
-INNER JOIN ORGANISATIE O ON A.ORGANISATIENUMMER = O.ORGANISATIENUMMER
-INNER JOIN CONTACTPERSOON C ON A.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
-INNER JOIN ADVISEUR AD ON A.ADVISEUR_ID = AD.ADVISEUR_ID
-'
-
-IF(@aanvraag_id IS NOT NULL)
-	BEGIN
-		SET @query = @query + 'WHERE AANVRAAG_ID = ' + CAST(@aanvraag_id AS varchar(10))
-	END
-
---PRINT @query
-
-EXEC(@query)
-
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	DECLARE @aanvraag_id2 INT
+	SET @sql =	N'
+				SELECT	(C.VOORNAAM + '' '' + C.ACHTERNAAM) AS CONTACTPERSOONNAAM,
+						(AD.VOORNAAM + '' '' + AD.ACHTERNAAM) AS ADVISEURNAAM,
+						AANVRAAG_DATUM
+				FROM	AANVRAAG A INNER JOIN
+						ORGANISATIE O ON A.ORGANISATIENUMMER = O.ORGANISATIENUMMER INNER JOIN
+						CONTACTPERSOON C ON A.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID INNER JOIN
+						ADVISEUR AD ON A.ADVISEUR_ID = AD.ADVISEUR_ID
+				WHERE	AANVRAAG_ID = @aanvraag_id2
+				'
+	SET @aanvraag_id2 = @aanvraag_id
+	EXEC sp_executesql @sql, N'@aanvraag_id2 INT', @aanvraag_id2
 END
 GO
 
@@ -120,10 +109,7 @@ BEGIN
 			SET @query = @query + 'WHERE AANVRAAG_ID = ' + CAST(@aanvraag_id AS varchar(10))
 		END
 
-	PRINT @query
-
 	EXEC(@query)
-
 END
 GO
 
@@ -241,14 +227,10 @@ CREATE OR ALTER PROC proc_create_workshop
 AS
 BEGIN
 	SET NOCOUNT ON
-	/*
 
-	Create a workshop based on the given parameters
+	-- Create a workshop based on the given parameters
 
-	*/
-
-	DECLARE @status VARCHAR(40)
-	SET @status = 'uitgezet'
+	DECLARE @status VARCHAR(40) = 'uitgezet'
 
 	IF(@workshopleader IS NOT NULL)
 		BEGIN
@@ -267,21 +249,21 @@ BEGIN
 			,@modulenummer,@adviseur_ID,@workshopsector, @workshopdate,@workshopstarttime,
 			@workshopendtime, @workshopaddress,@workshoppostcode,
 			@workshopcity,@status,
-			@workshopNote, @workshoptype ,null,null,null,null,null,null)
+			@workshopNote, @workshoptype, NULL, NULL, NULL, NULL, NULL, NULL)
 END
 GO
 
 CREATE OR ALTER PROC proc_insert_aanvraag
 (
-@organisatienummer INT,
-@contactpersoon_ID INT,
-@adviseur_ID INT,
-@plannernaam VARCHAR(52)
+@organisatienummer	INT,
+@contactpersoon_ID	INT,
+@adviseur_ID		INT,
+@plannernaam		VARCHAR(52)
 )
 AS
 BEGIN
 
-	INSERT INTO AANVRAAG ([ORGANISATIENUMMER],[CONTACTPERSOON_ID],[ADVISEUR_ID],[PLANNERNAAM]) VALUES (@organisatienummer, @contactpersoon_ID,@adviseur_ID,@plannernaam)
+	INSERT INTO AANVRAAG ([ORGANISATIENUMMER],[CONTACTPERSOON_ID],[ADVISEUR_ID],[PLANNERNAAM]) VALUES (@organisatienummer, @contactpersoon_ID, @adviseur_ID, @plannernaam)
 
 END
 GO
@@ -327,7 +309,6 @@ CREATE OR ALTER PROC proc_insert_aanvraag_deelnemers
 )
 AS
 BEGIN
-
 	INSERT INTO DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER, IS_OPEN_INSCHRIJVING)
 		VALUES	(
 				@voornaam,
@@ -347,7 +328,6 @@ BEGIN
 				@aanvraag_id,
 				@deelnemer_id
 				)
-
 END
 GO
 
@@ -365,7 +345,6 @@ CREATE OR ALTER PROC proc_insert_incompany_participants
 )
 AS
 BEGIN
-
 	INSERT INTO DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER, IS_OPEN_INSCHRIJVING)
 		VALUES	(
 				@voornaam,
@@ -396,7 +375,6 @@ BEGIN
 				@volgnummer,
 				1
 				)
-
 END
 GO
 */
@@ -454,7 +432,7 @@ BEGIN
 		PLAATSNAAM = @workshopcity,		
 		WORKSHOPLEIDER_ID = @workshopleader,		
 		OPMERKING = @workshopNote		
-		WHERE WORKSHOP_ID = @workshop_id
+	WHERE WORKSHOP_ID = @workshop_id
 END
 GO
 
@@ -466,9 +444,7 @@ CREATE OR ALTER PROC proc_add_groep_deelnemers
 )
 AS
 BEGIN
-
 	UPDATE DEELNEMER_IN_AANVRAAG SET GROEP_ID = @groep_id WHERE AANVRAAG_ID = @aanvraag_ID AND DEELNEMER_ID = @deelnemer_id
-
 END
 GO
 
@@ -480,9 +456,7 @@ CREATE OR ALTER PROC proc_remove_groep_deelnemers
 )
 AS
 BEGIN
-
 	UPDATE DEELNEMER_IN_AANVRAAG SET GROEP_ID = NULL WHERE AANVRAAG_ID = @aanvraag_id AND DEELNEMER_ID = @deelnemer_id
-
 END
 GO
 
@@ -512,8 +486,6 @@ CREATE OR ALTER PROC proc_delete_aanvraag_deelnemers
 )
 AS
 BEGIN
-
 	DELETE FROM DEELNEMER_IN_AANVRAAG WHERE AANVRAAG_ID = @aanvraag_id AND DEELNEMER_ID = @deelnemer_id
-
 END
 GO
