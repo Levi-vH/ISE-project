@@ -3,8 +3,8 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
-include 'header.php';
 include 'functions.php';
+generate_header('Deelnemers');
 
 if ($_SESSION['username'] == 'planner') {
 

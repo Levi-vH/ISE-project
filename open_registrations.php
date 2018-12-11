@@ -3,8 +3,9 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
-include 'header.php';
 include 'functions.php';
+
+generate_header('Open aanvragen');
 
 if ($_SESSION['username'] == 'planner') {
 $workshop_id = $_GET['workshop_id'];
