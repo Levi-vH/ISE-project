@@ -111,6 +111,7 @@ BEGIN
 	SET @sql =	N'
 				SELECT	C.VOORNAAM,
 						C.ACHTERNAAM,
+						G.ADRES,
 						ISNULL(	(
 								SELECT	COUNT(*)
 								FROM	DEELNEMER_IN_AANVRAAG DA
@@ -250,20 +251,20 @@ GO
 
 CREATE OR ALTER PROC proc_create_workshop
 (
-@workshoptype		VARCHAR(3),
-@workshopdate		varchar(10),
+@workshoptype		NVARCHAR(3),
+@workshopdate		NVARCHAR(10),
 @modulenummer		INT,
 @contactpersoon_ID  INT,
 @adviseur_ID		INT,
 @organisatienummer	INT,
-@workshopsector		VARCHAR(20),
-@workshopstarttime	varchar(10),
-@workshopendtime	varchar(10),
-@workshopaddress	varchar(60),
-@workshoppostcode	VARCHAR(7),
-@workshopcity		VARCHAR(60),
-@workshopleader		VARCHAR(100),
-@workshopNote		VARCHAR(255)
+@workshopsector		NVARCHAR(20),
+@workshopstarttime	NVARCHAR(10),
+@workshopendtime	NVARCHAR(10),
+@workshopaddress	NVARCHAR(60),
+@workshoppostcode	NVARCHAR(7),
+@workshopcity		NVARCHAR(60),
+@workshopleader		NVARCHAR(100),
+@workshopnote		NVARCHAR(255)
 )
 AS
 BEGIN
@@ -272,7 +273,7 @@ BEGIN
 	-- Create a workshop based on the given parameters
 
 	DECLARE @sql NVARCHAR(4000)
-	DECLARE @status VARCHAR(40) = 'uitgezet'
+	DECLARE @status NVARCHAR(40) = 'uitgezet'
 
 	IF(@workshopleader IS NOT NULL)
 		BEGIN
@@ -301,11 +302,34 @@ BEGIN
 							@workshoppostcode,
 							@workshopcity,
 							@status,
-							@workshopNote,
+							@workshopnote,
 							@workshoptype,
 							NULL, NULL, NULL, NULL, NULL, NULL
 							)
 				'
+	EXEC sp_executesql @sql, N'	@workshopleader,
+								@contactpersoon_ID,
+								@organisatienummer,
+								@modulenummer,
+								@adviseur_ID,
+								@workshopsector,
+								@workshopdate,
+								@workshopstarttime,
+								@workshopendtime,
+								@workshopaddress,
+								@workshoppostcode,
+								@workshopcity,
+								@status,
+								@workshopnote,
+								@workshoptype',
+								@workshopleader,
+								@contactpersoon_ID,
+								@organisatienummer,
+								@modulenummer,
+								@adviseur_ID,
+								@workshopsector,
+								@workshopdate,
+								@workshop
 END
 GO
 
