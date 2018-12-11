@@ -13,6 +13,10 @@ Procedure order:
 /* SP Type: SELECT                                              */
 /*==============================================================*/
 
+--============================================================================================
+-- SP proc_get_workshops: returns all workshops with their data for the workshop overview page                                              
+--============================================================================================
+
 CREATE OR ALTER PROC proc_get_workshops -- proc_request_workshops
 (
 @orderby		NVARCHAR(40) = NULL,
@@ -71,22 +75,26 @@ BEGIN
 							ADVISEUR A ON W.ADVISEUR_ID = A.ADVISEUR_ID INNER JOIN
 							CONTACTPERSOON C ON W.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
 				'
-	IF(@where IS NOT NULL)
+	IF(@where IS NOT NULL) -- if the procedure was executed with an where statement, add the where statement to the select query
 		BEGIN
 			SET @sql += 'WHERE W.WORKSHOP_ID = @where'
 		END
-	SET @sql += 'ORDER BY @orderby + @orderdirection'
+	SET @sql += 'ORDER BY @orderby + @orderdirection' -- add an order by statement to the query
 	IF(@orderby IS NULL)
 		BEGIN
-			SET @orderby = 'W.WORKSHOP_ID'
+			SET @orderby = 'W.WORKSHOP_ID' -- if no order by statement was given with the execute, order by workshop_id's
 		END
 	IF(@orderdirection IS NULL)
 		BEGIN
-			SET @orderdirection = 'ASC'
+			SET @orderdirection = 'ASC' -- if no order by direction was given, order by ascending
 		END
 	EXEC sp_executesql @sql, N'@orderby NVARCHAR(40), @orderdirection NVARCHAR(4), @where INT', @orderby, @orderdirection, @where
 END
 GO
+
+--============================================================================================
+-- SP proc_get_workshoprequests: returns all workshops that are requested                                        
+--============================================================================================
 
 CREATE OR ALTER PROC proc_get_workshoprequests -- proc_request_workshoprequests
 (
@@ -129,6 +137,10 @@ BEGIN
 END
 GO
 
+--============================================================================================
+-- SP proc_request_groups: returns all groups from requests                                       
+--============================================================================================
+
 CREATE OR ALTER PROC proc_request_groups
 (
 @aanvraag_id INT = NULL
@@ -155,6 +167,10 @@ BEGIN
 END
 GO
 
+--============================================================================================================
+-- SP proc_request_approved_workshop_participants: returns all approved workshop participants for a workshop                                      
+--===========================================================================================================
+
 CREATE OR ALTER PROC proc_request_approved_workshop_participants -- reference number M1
 (
 @workshop_id INT
@@ -176,6 +192,10 @@ BEGIN
 	EXEC sp_executesql @sql, N'@workshop_id INT', @workshop_id
 END
 GO
+
+--===================================================================================================================================================
+-- SP proc_request_approved_workshop_participants_reservelist: returns all approved workshop participants for a workshop that are on the reservelist                                      
+--===================================================================================================================================================
 
 CREATE OR ALTER PROC proc_request_approved_workshop_participants_reservelist -- reference number M2
 (
@@ -206,6 +226,10 @@ BEGIN
 END
 GO
 
+--===================================================================================================================
+-- SP proc_request_not_approved_workshop_participants: returns all participants of a workshop that are not approved                                 
+--===================================================================================================================
+
 CREATE OR ALTER PROC proc_request_not_approved_workshop_participants -- reference number M3
 (
 @workshop_id INT
@@ -227,6 +251,10 @@ BEGIN
 	EXEC sp_executesql @sql, N'@workshop_id INT', @workshop_id
 END
 GO
+
+--=========================================================================================
+-- SP proc_request_deelnemers_in_aanvraag: returns all participants that are in a request                                
+--=========================================================================================
 
 CREATE OR ALTER PROC proc_request_deelnemers_in_aanvraag
 (
@@ -251,6 +279,10 @@ BEGIN
 	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
 END
 GO
+
+--=========================================================================================
+-- SP proc_request_deelnemers_van_groep: returns all participants that are in a group                              
+--=========================================================================================
 
 CREATE OR ALTER PROC proc_request_deelnemers_van_groep
 (
@@ -278,6 +310,9 @@ GO
 /* SP Type: INSERT                                              */
 /*==============================================================*/
 
+--=================================================
+-- SP proc_create_workshop: inserts a new workshop                              
+--=================================================
 CREATE OR ALTER PROC proc_create_workshop
 (
 @workshoptype		NVARCHAR(3),
@@ -371,6 +406,10 @@ BEGIN
 END
 GO
 
+--=================================================
+-- SP proc_insert_aanvraag: inserts a new request                              
+--=================================================
+
 CREATE OR ALTER PROC proc_insert_aanvraag
 (
 @organisatienummer	INT,
@@ -395,6 +434,10 @@ BEGIN
 								@organisatienummer, @contactpersoon_ID, @adviseur_ID, @plannernaam
 END
 GO
+
+--=======================================================================
+-- SP proc_insert_aanvraag_groepen: inserts the groups of a new request                        
+--=======================================================================
 
 CREATE OR ALTER PROC proc_insert_aanvraag_groepen
 (
@@ -468,6 +511,10 @@ BEGIN
 	END
 END
 GO
+
+--=======================================================================
+-- SP proc_insert_aanvraag_deelnemers: inserts participants of a request                       
+--=======================================================================
 
 CREATE OR ALTER PROC proc_insert_aanvraag_deelnemers
 (
@@ -576,6 +623,10 @@ GO
 /* SP Type: UPDATE                                              */
 /*==============================================================*/
 
+--=======================================================================================
+-- SP proc_approve_workshop_participants: updates participants of a workshop to approved                       
+--=======================================================================================
+
 CREATE OR ALTER PROC proc_approve_workshop_participants -- reference number M4
 (
 @workshop_id	INT,
@@ -591,8 +642,14 @@ BEGIN
 				WHERE	WORKSHOP_ID = @workshop_id
 				AND		DEELNEMER_ID = @deelnemer_id
 				'
+	EXEC sp_executesql @sql, N'@workshop_id INT, @deelnemer_id INT',
+							@workshop_id, @deelnemer_id
 END
 GO
+
+--===========================================================
+-- SP proc_update_workshop: updates the values of a workshop                    
+--===========================================================
 
 CREATE OR ALTER PROC proc_update_workshop -- reference number M5
 (
@@ -660,6 +717,10 @@ BEGIN
 								@workshop_id
 END
 GO
+
+--===========================================================
+-- SP proc_update_workshop: updates the values of a workshop                    
+--===========================================================
 
 CREATE OR ALTER PROC proc_add_groep_deelnemers
 (
