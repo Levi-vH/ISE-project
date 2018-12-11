@@ -49,7 +49,6 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     $sql = "exec proc_request_groups ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
-
                     $stmt->execute();
 
                     $nummer = 0;
@@ -114,7 +113,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                             $html .= $row['OPLEIDINGSNIVEAU'];
                             $html .= '</td>';
                             $html .= '<td>';
-                            $html .= '<a class="fas fa-check" id="approvebutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt toevoegen?\')" href="open_registrations.php?workshop_id='.$workshop_id.'&participant_id='.$row['DEELNEMER_ID'].'&addUser=true"></a>';
+                            $html .= '<a class="fas fa-check" id="approvebutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt toevoegen?\')" href="participants.php?aanvraag_id='.$aanvraag_id.'&participant_id='.$row['DEELNEMER_ID'].'&addUser=true"></a>';
                             $html .= '</td>';
                             $html .= '</tr>';
 
