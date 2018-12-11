@@ -220,7 +220,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROC proc_request_deelnemer_in_aanvraag
+CREATE OR ALTER PROC proc_request_deelnemers_in_aanvraag
 (
 @aanvraag_id INT
 )
