@@ -199,11 +199,133 @@ if exists (select 1
 go
 */
 
+DROP TYPE IF EXISTS Workshop_ID
+CREATE TYPE Workshop_ID FROM INT
+
+DROP TYPE IF EXISTS Deelnemer_ID
+CREATE TYPE Deelnemer_ID FROM INT
+
+DROP TYPE IF EXISTS Adviseur_ID
+CREATE TYPE Adviseur_ID FROM INT
+
+DROP TYPE IF EXISTS WorkshopLeider_ID
+CREATE TYPE WorkshopLeider_ID FROM INT
+
+DROP TYPE IF EXISTS Contactpersoon_ID
+CREATE TYPE Contactpersoon_ID FROM INT
+
+DROP TYPE IF EXISTS Organisatienummer
+CREATE TYPE Organisatienummer FROM VARCHAR(15)
+
+DROP TYPE IF EXISTS Organisatienaam
+CREATE TYPE Organisatienaam FROM VARCHAR(60)
+
+DROP TYPE IF EXISTS Datum
+CREATE TYPE Datum FROM DATE
+
+DROP TYPE IF EXISTS Starttijd
+CREATE TYPE Starttijd FROM TIME
+
+DROP TYPE IF EXISTS Eindtijd
+CREATE TYPE Eindtijd FROM TIME
+ 
+DROP TYPE IF EXISTS Adres
+CREATE TYPE Adres FROM VARCHAR(60)
+
+DROP TYPE IF EXISTS Postcode
+CREATE TYPE Postcode FROM VARCHAR(20)
+
+DROP TYPE IF EXISTS Plaatsnaam
+CREATE TYPE Plaatsnaam FROM VARCHAR(60)
+
+DROP TYPE IF EXISTS [Status]
+CREATE TYPE [Status] FROM VARCHAR(20)
+
+DROP TYPE IF EXISTS Opmerking
+CREATE TYPE Opmerking FROM VARCHAR(255)
+
+DROP TYPE IF EXISTS [Type]
+CREATE TYPE [Type] FROM VARCHAR(3)
+
+DROP TYPE IF EXISTS Voornaam
+CREATE TYPE Voornaam FROM VARCHAR(30)
+
+DROP TYPE IF EXISTS Achternaam
+CREATE TYPE Achternaam FROM VARCHAR(50)
+
+DROP TYPE IF EXISTS Naam
+CREATE TYPE Naam FROM VARCHAR(52)
+
+DROP TYPE IF EXISTS Kwartaal
+CREATE TYPE Kwartaal FROM CHAR(1)
+
+DROP TYPE IF EXISTS Jaar
+CREATE TYPE Jaar FROM SMALLINT
+
+DROP TYPE IF EXISTS AantalUur
+CREATE TYPE AantalUur FROM SMALLINT
+
+DROP TYPE IF EXISTS Aanhef
+CREATE TYPE Aanhef FROM VARCHAR(7)
+
+DROP TYPE IF EXISTS Geboortedatum
+CREATE TYPE Geboortedatum FROM DATE
+
+DROP TYPE IF EXISTS Email
+CREATE TYPE Email FROM VARCHAR(100) 
+
+DROP TYPE IF EXISTS Telefoonnummer
+CREATE TYPE Telefoonnummer FROM VARCHAR(12)
+
+DROP TYPE IF EXISTS Opleidinsniveau
+CREATE TYPE Opleidinsniveau FROM VARCHAR(100)
+
+DROP TYPE IF EXISTS GewenstBegeleidingsniveau
+CREATE TYPE GewenstBegeleidingsniveau FROM VARCHAR(100)
+
+DROP TYPE IF EXISTS Sectornaam
+CREATE TYPE Sectornaam FROM VARCHAR(20)
+
+DROP TYPE IF EXISTS Toevoeging
+CREATE TYPE Toevoeging FROM TINYINT
+--
+DROP TYPE IF EXISTS IsOpenInschrijving
+CREATE TYPE IsOpenInschrijving FROM BIT
+
+DROP TYPE IF EXISTS FunctieNaam
+CREATE TYPE FunctieNaam	FROM VARCHAR(50)
+
+DROP TYPE IF EXISTS ModuleNummer
+CREATE TYPE ModuleNummer FROM INT
+
+DROP TYPE IF EXISTS ModuleNaam
+CREATE TYPE ModuleNaam FROM VARCHAR(75)
+
+DROP TYPE IF EXISTS Volgnummer
+CREATE TYPE Volgnummer FROM INT
+
+DROP TYPE IF EXISTS IsGoedgekeurd
+CREATE TYPE IsGoedgekeurd FROM BIT
+
+DROP TYPE IF EXISTS Aanvraag_ID
+CREATE TYPE Aanvraag_ID FROM INT
+
+DROP TYPE IF EXISTS AanvraagDatum
+CREATE TYPE AanvraagDatum FROM DATETIME
+
+DROP TYPE IF EXISTS Groep_ID
+CREATE TYPE Groep_ID FROM INT
+
+DROP TYPE IF EXISTS Voorkeur
+CREATE TYPE Voorkeur FROM VARCHAR(20)
+
+
+
 /*==============================================================*/
 /* Table: PLANNER                                                */
 /*==============================================================*/
 CREATE TABLE PLANNER (
-	PLANNERNAAM		VARCHAR(52)		NOT NULL,
+	PLANNERNAAM		Naam		NOT NULL,
 	CONSTRAINT PK_PLANNER PRIMARY KEY (PLANNERNAAM)
 )
 GO
@@ -212,7 +334,7 @@ GO
 /* Table: SECTOR                                                */
 /*==============================================================*/
 CREATE TABLE SECTOR (
-   SECTORNAAM          VARCHAR(20)         NOT NULL,
+   SECTORNAAM          Sectornaam	         NOT NULL,
    CONSTRAINT PK_SECTOR PRIMARY KEY (SECTORNAAM)
 )
 GO
@@ -221,11 +343,11 @@ GO
 /* Table: ORGANISATIE                                           */
 /*==============================================================*/
 CREATE TABLE ORGANISATIE (
-   ORGANISATIENUMMER     INT		         NOT NULL,
-   ORGANISATIENAAM       VARCHAR(60)         NOT NULL,
-   ADRES				 VARCHAR(60)         NOT NULL,
-   POSTCODE				 VARCHAR(20)         NOT NULL,
-   PLAATSNAAM			 VARCHAR(60)         NOT NULL,
+   ORGANISATIENUMMER     Organisatienummer   NOT NULL,
+   ORGANISATIENAAM       Organisatienaam     NOT NULL,
+   ADRES				 Adres		         NOT NULL,
+   POSTCODE				 Postcode	         NOT NULL,
+   PLAATSNAAM			 Plaatsnaam	         NOT NULL,
    CONSTRAINT PK_ORGANISATIE PRIMARY KEY (ORGANISATIENUMMER)
 )
 GO
@@ -234,13 +356,13 @@ GO
 /* Table: ADVISEUR                                              */
 /*==============================================================*/
 CREATE TABLE ADVISEUR (
-   ADVISEUR_ID          INT IDENTITY         NOT NULL,
-   ORGANISATIENUMMER    INT			         NOT NULL,
-   SECTORNAAM			VARCHAR(20)	         NOT NULL,
-   VOORNAAM				VARCHAR(30)          NOT NULL,
-   ACHTERNAAM			VARCHAR(50)	         NOT NULL,
-   TELEFOONNUMMER       VARCHAR(12)          NULL,
-   EMAIL                VARCHAR(100)         NULL,
+   ADVISEUR_ID          Adviseur_ID IDENTITY    NOT NULL,
+   ORGANISATIENUMMER    Organisatienummer		NOT NULL,
+   SECTORNAAM			Sectornaam				NOT NULL,
+   VOORNAAM				Voornaam			    NOT NULL,
+   ACHTERNAAM			Achternaam				NOT NULL,
+   TELEFOONNUMMER       Telefoonnummer			NULL,
+   EMAIL                Email					NULL,
    CONSTRAINT PK_ADVISEUR PRIMARY KEY (ADVISEUR_ID)
 )
 GO
@@ -249,12 +371,12 @@ GO
 /* Table: CONTACTPERSOON                                        */
 /*==============================================================*/
 CREATE TABLE CONTACTPERSOON (
-   CONTACTPERSOON_ID    INT IDENTITY         NOT NULL,
-   ORGANISATIENUMMER    INT			         NOT NULL,
-   VOORNAAM             VARCHAR(30)          NOT NULL,
-   ACHTERNAAM           VARCHAR(50)          NOT NULL,
-   TELEFOONNUMMER       VARCHAR(12)          NULL,
-   EMAIL                VARCHAR(100)         NULL,
+   CONTACTPERSOON_ID    Contactpersoon_ID IDENTITY  NOT NULL,
+   ORGANISATIENUMMER    Organisatienummer			NOT NULL,
+   VOORNAAM             Voornaam					NOT NULL,
+   ACHTERNAAM           Achternaam					NOT NULL,
+   TELEFOONNUMMER       Telefoonnummer				NULL,
+   EMAIL                Email						NULL,
    CONSTRAINT PK_CONTACTPERSOON PRIMARY KEY (CONTACTPERSOON_ID)
 )
 GO
@@ -263,10 +385,10 @@ GO
 /* Table: WORKSHOPLEIDER                                        */
 /*==============================================================*/
 CREATE TABLE WORKSHOPLEIDER (
-   WORKSHOPLEIDER_ID    INT IDENTITY         NOT NULL,
-   VOORNAAM				VARCHAR(30)          NOT NULL,
-   ACHTERNAAM			VARCHAR(50)          NOT NULL,
-   TOEVOEGING			TINYINT				 NULL,
+   WORKSHOPLEIDER_ID    WorkshopLeider_ID IDENTITY  NOT NULL,
+   VOORNAAM				Voornaam			        NOT NULL,
+   ACHTERNAAM			Achternaam					NOT NULL,
+   TOEVOEGING			Toevoeging					NULL,
    CONSTRAINT PK_WORKSHOPLEIDER PRIMARY KEY (WORKSHOPLEIDER_ID)
 )
 GO
@@ -275,10 +397,10 @@ GO
 /* Table: BESCHIKBAARHEID                                       */
 /*==============================================================*/
 CREATE TABLE BESCHIKBAARHEID (
-   WORKSHOPLEIDER_ID    INT			         NOT NULL,
-   KWARTAAL             CHAR(1)              NOT NULL,
-   JAAR                 SMALLINT             NOT NULL,
-   AANTAL_UUR           SMALLINT             NOT NULL,
+   WORKSHOPLEIDER_ID    WorkshopLeider_ID			         NOT NULL,
+   KWARTAAL             Kwartaal             NOT NULL,
+   JAAR                 Jaar	             NOT NULL,
+   AANTAL_UUR           AantalUur            NOT NULL,
    CONSTRAINT PK_BESCHIKBAARHEID PRIMARY KEY (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
 )
 GO
@@ -287,19 +409,19 @@ GO
 /* Table: DEELNEMER                                             */
 /*==============================================================*/
 CREATE TABLE DEELNEMER (
-   DEELNEMER_ID					INT IDENTITY         NOT NULL,
-   ORGANISATIENUMMER			INT			         NOT NULL,
-   AANHEF						VARCHAR(7)           NULL,
-   VOORNAAM						VARCHAR(30)          NOT NULL,
-   ACHTERNAAM					VARCHAR(50)          NOT NULL,
-   GEBOORTEDATUM				DATE	             NOT NULL,
-   EMAIL						VARCHAR(100)         NULL,
-   TELEFOONNUMMER				VARCHAR(12)          NULL,
-   OPLEIDINGSNIVEAU				VARCHAR(100)         NOT NULL,
-   IS_OPEN_INSCHRIJVING         BIT                  NOT NULL,
-   GEWENST_BEGELEIDINGSNIVEAU	VARCHAR(100)         NULL,
-   FUNCTIENAAM					VARCHAR(100)         NULL,
-   SECTORNAAM					VARCHAR(20)          NULL,
+   DEELNEMER_ID					Deelnemer_ID IDENTITY		NOT NULL,
+   ORGANISATIENUMMER			Organisatienummer			NOT NULL,
+   AANHEF						Aanhef						NULL,
+   VOORNAAM						Voornaam					NOT NULL,
+   ACHTERNAAM					Achternaam					NOT NULL,
+   GEBOORTEDATUM				Geboortedatum				NOT NULL,
+   EMAIL						Email						NULL,
+   TELEFOONNUMMER				telefoonnummer				NULL,
+   OPLEIDINGSNIVEAU				Opleidinsniveau				NOT NULL,
+   IS_OPEN_INSCHRIJVING         IsOpenInschrijving		NOT NULL,
+   GEWENST_BEGELEIDINGSNIVEAU	GewenstBegeleidingsniveau	NULL,
+   FUNCTIENAAM					Functienaam					NULL,
+   SECTORNAAM					Sectornaam					NULL,
    CONSTRAINT PK_DEELNEMER PRIMARY KEY (DEELNEMER_ID)
 )
 GO
@@ -308,8 +430,8 @@ GO
 /* Table: MODULE                                                */
 /*==============================================================*/
 CREATE TABLE MODULE (
-   MODULENUMMER       INT                  NOT NULL,
-   MODULENAAM         VARCHAR(100)         NOT NULL,
+   MODULENUMMER       ModuleNummer       NOT NULL,
+   MODULENAAM         ModuleNaam         NOT NULL,
    CONSTRAINT PK_MODULE PRIMARY KEY (MODULENUMMER)
 )
 GO
@@ -318,28 +440,28 @@ GO
 /* Table: WORKSHOP                                              */
 /*==============================================================*/
 CREATE TABLE WORKSHOP (
-   WORKSHOP_ID						INT IDENTITY         NOT NULL,
-   WORKSHOPLEIDER_ID				INT                  NULL,
-   CONTACTPERSOON_ID				INT                  NULL,
-   ORGANISATIENUMMER				INT			         NULL,
-   MODULENUMMER						INT                  NULL,
-   ADVISEUR_ID						INT                  NULL,
-   SECTORNAAM						VARCHAR(20)          NULL,
-   DATUM							DATE	             NULL,
-   STARTTIJD						TIME	             NULL,
-   EINDTIJD							TIME	             NULL,
-   ADRES							VARCHAR(60)          NULL,
-   POSTCODE							VARCHAR(7)           NULL,
-   PLAATSNAAM						VARCHAR(60)          NULL,
-   [STATUS]							VARCHAR(20)          NULL,
-   OPMERKING						VARCHAR(255)         NULL,
-   [TYPE]							VARCHAR(3)           NULL,
-   VERWERKT_BREIN					DATE	             NULL,
-   DEELNEMER_GEGEVENS_ONTVANGEN		DATE	             NULL,
-   OVK_BEVESTIGING					DATE	             NULL,
-   PRESENTIELIJST_VERSTUURD			DATE	             NULL,
-   PRESENTIELIJST_ONTVANGEN			DATE	             NULL,
-   BEWIJS_DEELNAME_MAIL_SBB_WSL		DATE	             NULL,
+   WORKSHOP_ID						Workshop_ID IDENTITY NOT NULL,
+   WORKSHOPLEIDER_ID				WorkshopLeider_ID    NULL,
+   CONTACTPERSOON_ID				Contactpersoon_ID    NULL,
+   ORGANISATIENUMMER				Organisatienummer    NULL,
+   MODULENUMMER						ModuleNummer         NULL,
+   ADVISEUR_ID						Adviseur_ID          NULL,
+   SECTORNAAM						Sectornaam           NULL,
+   DATUM							Datum	             NULL,
+   STARTTIJD						Starttijd            NULL,
+   EINDTIJD							Eindtijd             NULL,
+   ADRES							Adres		         NULL,
+   POSTCODE							Postcode             NULL,
+   PLAATSNAAM						Plaatsnaam           NULL,
+   [STATUS]							[Status]             NULL,
+   OPMERKING						Opmerking	         NULL,
+   [TYPE]							[Type]	             NULL,
+   VERWERKT_BREIN					Datum	             NULL,
+   DEELNEMER_GEGEVENS_ONTVANGEN		Datum	             NULL,
+   OVK_BEVESTIGING					Datum	             NULL,
+   PRESENTIELIJST_VERSTUURD			Datum	             NULL,
+   PRESENTIELIJST_ONTVANGEN			Datum	             NULL,
+   BEWIJS_DEELNAME_MAIL_SBB_WSL		Datum	             NULL,
    CONSTRAINT PK_WORKSHOP PRIMARY KEY (WORKSHOP_ID)
 )
 GO
@@ -348,10 +470,10 @@ GO
 /* Table: DEELNEMER_IN_WORKSHOP                                 */
 /*==============================================================*/
 CREATE TABLE DEELNEMER_IN_WORKSHOP (
-   WORKSHOP_ID          INT			         NOT NULL,
-   DEELNEMER_ID         INT                  NOT NULL,
-   VOLGNUMMER           INT                  NOT NULL,
-   IS_GOEDGEKEURD       BIT                  NOT NULL,
+   WORKSHOP_ID          Workshop_ID			 NOT NULL,
+   DEELNEMER_ID         Deelnemer_ID         NOT NULL,
+   VOLGNUMMER           Volgnummer           NOT NULL,
+   IS_GOEDGEKEURD       IsGoedgekeurd        NOT NULL,
    CONSTRAINT PK_DEELNEMER_IN_WORKSHOP PRIMARY KEY (WORKSHOP_ID, DEELNEMER_ID)
 )
 GO
@@ -360,12 +482,12 @@ GO
 /* Table: AANVRAAG		                                        */
 /*==============================================================*/
 CREATE TABLE AANVRAAG (
-   AANVRAAG_ID		    INT IDENTITY         NOT NULL,
-   ORGANISATIENUMMER	INT					 NOT NULL,
-   CONTACTPERSOON_ID	INT			         NOT NULL,
-   ADVISEUR_ID			INT			         NOT NULL,
-   PLANNERNAAM			VARCHAR(52)			 NOT NULL,
-   AANVRAAG_DATUM		DATETIME			 DEFAULT GETDATE(),
+   AANVRAAG_ID		    Aanvraag_ID IDENTITY NOT NULL,
+   ORGANISATIENUMMER	Organisatienummer	 NOT NULL,
+   CONTACTPERSOON_ID	Contactpersoon_ID    NOT NULL,
+   ADVISEUR_ID			Adviseur_ID	         NOT NULL,
+   PLANNERNAAM			Naam				 NOT NULL,
+   AANVRAAG_DATUM		AanvraagDatum		 DEFAULT GETDATE(),
    CONSTRAINT PK_AANVRAAG PRIMARY KEY (AANVRAAG_ID)
 )
 GO
@@ -374,10 +496,10 @@ GO
 /* Table: GROEP													*/
 /*==============================================================*/
 CREATE TABLE GROEP (
-   GROEP_ID				INT IDENTITY			 NOT NULL,
-   AANVRAAG_ID			INT						 NOT NULL,
-   CONTACTPERSOON_ID	INT						 NOT NULL,
-   ADRES				VARCHAR(60)				 NOT NULL,
+   GROEP_ID				Groep_ID IDENTITY		 NOT NULL,
+   AANVRAAG_ID			Aanvraag_ID				 NOT NULL,
+   CONTACTPERSOON_ID	Contactpersoon_ID		 NOT NULL,
+   ADRES				Adres					 NOT NULL,
    CONSTRAINT PK_GROEP PRIMARY KEY (GROEP_ID)
 )
 GO
@@ -386,9 +508,9 @@ GO
 /* Table: DEELNEMER_IN_AANVRAAG                                 */
 /*==============================================================*/
 CREATE TABLE DEELNEMER_IN_AANVRAAG (
-   AANVRAAG_ID          INT			         NOT NULL,
-   DEELNEMER_ID         INT                  NOT NULL,
-   GROEP_ID				INT					 NULL
+   AANVRAAG_ID          Aanvraag_ID	         NOT NULL,
+   DEELNEMER_ID         Deelnemer_ID         NOT NULL,
+   GROEP_ID				Groep_ID			 NULL
    CONSTRAINT PK_DEELNEMER_IN_AANVRAAG PRIMARY KEY (AANVRAAG_ID, DEELNEMER_ID)
 )
 GO
@@ -397,9 +519,9 @@ GO
 /* Table: MODULE_VAN_GROEP		                                */
 /*==============================================================*/
 CREATE TABLE MODULE_VAN_GROEP (
-   GROEP_ID				INT					 NOT NULL,
-   MODULENUMMER			INT					 NOT NULL,
-   VOORKEUR				VARCHAR(20)			 NOT NULL,
+   GROEP_ID				Groep_ID			 NOT NULL,
+   MODULENUMMER			ModuleNummer		 NOT NULL,
+   VOORKEUR				Voorkeur			 NOT NULL,
    CONSTRAINT PK_MODULE_VAN_GROEP PRIMARY KEY (GROEP_ID, MODULENUMMER)
 )
 GO

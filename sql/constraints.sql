@@ -1,3 +1,5 @@
+-- Constraints with a ** have no tests 
+
 USE [SBBWorkshopOmgeving]
 GO
 --=========================================================================
@@ -196,6 +198,41 @@ GO
 ALTER TABLE DEELNEMER
 ADD CONSTRAINT CK_OpenInschrijvingValues CHECK (IS_OPEN_INSCHRIJVING != 1 OR (GEWENST_BEGELEIDINGSNIVEAU IS NOT NULL
 AND FUNCTIENAAM IS NOT NULL AND SECTORNAAM IS NOT NULL))
+
+--========================================================================================
+-- AANHEF has be 'mevrouw' or 'meneer' **
+--========================================================================================
+
+ALTER TABLE DEELNEMER
+DROP CONSTRAINT IF EXISTS CK_OpenInschrijvingValues
+GO
+
+ALTER TABLE DEELNEMER
+ADD CONSTRAINT CK_OpenInschrijvingValues CHECK (AANHEF = 'mevrouw' OR AANHEF = 'meneer')
+
+
+--=========================================================================
+-- BESCHIKBAARHEID constraints
+--=========================================================================
+
+--========================================================================================
+-- KWARTAAL has to be 1, 2, 3 or 4 **
+--========================================================================================
+ALTER TABLE BESCHIKBAARHEID
+DROP CONSTRAINT IF EXISTS CK_Kwartaal
+
+ALTER TABLE BESCHIKBAARHEID
+ADD CONSTRAINT CK_Kwartaal CHECK (KWARTAAL IN (1, 2, 3, 4))
+
+
+--========================================================================================
+-- JAAR has to be between 1900 and 2200 **
+--========================================================================================
+ALTER TABLE BESCHIKBAARHEID
+DROP CONSTRAINT IF EXISTS CK_Jaar
+
+ALTER TABLE BESCHIKBAARHEID
+ADD CONSTRAINT CK_Jaar CHECK (JAAR BETWEEN 1900 AND 2200)
 
 
 
