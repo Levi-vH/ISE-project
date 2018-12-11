@@ -457,7 +457,6 @@ CREATE OR ALTER PROC proc_insert_aanvraag_deelnemers
 @geboortedatum		DATE,
 @email				NVARCHAR(100),
 @telefoonnummer		NVARCHAR(12),
-@organisatienummer	INT,
 @opleidingsniveau	NVARCHAR(100)
 )
 AS
@@ -465,25 +464,42 @@ BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
 	DECLARE @sql2 NVARCHAR(4000)
+	DECLARE @organisatienummer INT = (SELECT ORGANISATIENUMMER FROM AANVRAAG WHERE AANVRAAG_ID = @aanvraag_id)
 	SET @sql =	N'
-	INSERT INTO DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER, IS_OPEN_INSCHRIJVING)
-		VALUES	(
-				@voornaam,
-				@achternaam,
-				@geboortedatum,
-				@email,
-				@telefoonnummer,
-				@opleidingsniveau,
-				@organisatienummer,
-				0
-				)
+				INSERT INTO DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER, IS_OPEN_INSCHRIJVING)
+				VALUES	(
+						@voornaam,
+						@achternaam,
+						@geboortedatum,
+						@email,
+						@telefoonnummer,
+						@opleidingsniveau,
+						@organisatienummer,
+						0
+						)
 				'
+	EXEC sp_executesql @sql,	N'
+								@voornaam NVARCHAR(30),
+								@achternaam NVARCHAR(50),
+								@geboortedatum DATE,
+								@email NVARCHAR(100),
+								@telefoonnummer NVARCHAR(12),
+								@opleidingsniveau NVARCHAR(100),
+								@organisatienummer INT
+								',
+								@voornaam,
+								@achternaam,
+								@geboortedatum,
+								@email,
+								@telefoonnummer,
+								@opleidingsniveau,
+								@organisatienummer
 	DECLARE @deelnemer_id INT = (SELECT IDENT_CURRENT('DEELNEMER'))
-	INSERT INTO DEELNEMER_IN_AANVRAAG (AANVRAAG_ID, DEELNEMER_ID)
-		VALUES	(
-				@aanvraag_id,
-				@deelnemer_id
-				)
+	SET @sql2 =	N'
+				INSERT INTO DEELNEMER_IN_AANVRAAG (AANVRAAG_ID, DEELNEMER_ID)
+				VALUES (@aanvraag_id, @deelnemer_id)
+				'
+	EXEC sp_executesql @sql2, N'@aanvraag_id INT, @deelnemer_id INT', @aanvraag_id, @deelnemer_id
 END
 GO
 
