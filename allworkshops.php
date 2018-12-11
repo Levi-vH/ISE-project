@@ -23,7 +23,7 @@ generate_header('Workshop overzicht');
 
             //Run the stored procedure
            // $sql = "SELECT * FROM VW_WORKSHOPS";
-            $sql = "EXEC proc_get_WorkshopRequests";
+            $sql = "EXEC proc_get_Workshops";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 
@@ -51,7 +51,7 @@ generate_header('Workshop overzicht');
                 $html .= $row['ORGANISATIENAAM'];
                 $html .= '</td>';
                 $html .= '<td class="align-middle">';
-                $html .= $row['AANTAL_DEELNEMER_AANVRAAG'] . '/16';
+                $html .= $row['AANTAL_DEELNEMERS'] . '/16';
                 $html .= '</td>';
                 $html .= '</tr>';
 
