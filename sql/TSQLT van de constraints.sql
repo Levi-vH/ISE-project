@@ -1,8 +1,7 @@
 USE [UnitTesting SBB]
 
 -- all tests are sorted per table. You can find the table name and the function of the constraint
--- that is being testen for every constraints
-
+-- that is being tested for every constraint
 
 EXEC tSQLt.NewTestClass 'testWorkshop';
 EXEC tSQLt.NewTestClass 'testDeelnemer';
@@ -13,34 +12,17 @@ SELECT  'DROP TABLE ' + TABLE_SCHEMA + '.' + TABLE_NAME
 FROM	INFORMATION_SCHEMA.TABLES
 WHERE	TABLE_TYPE = 'BASE TABLE'
 AND		TABLE_SCHEMA LIKE ('dbo%')
-
-DROP TABLE dbo.ADVISEUR
-DROP TABLE dbo.BESCHIKBAARHEID
-DROP TABLE dbo.CONTACTPERSOON
-DROP TABLE dbo.DEELNEMER
-DROP TABLE dbo.DEELNEMER_IN_WORKSHOP
-DROP TABLE dbo.PLANNER
-DROP TABLE dbo.MODULE
-DROP TABLE dbo.ORGANISATIE
-DROP TABLE dbo.SECTOR
-DROP TABLE dbo.WORKSHOP
-DROP TABLE dbo.WORKSHOPLEIDER
-DROP TABLE dbo.AANVRAAG
-DROP TABLE dbo.GROEP
-DROP TABLE dbo.AANVRAAG_VAN_GROEP
-DROP TABLE dbo.MODULE_VAN_GROEP
-
 */
 
---==============================================================
+--==============================================
 -- all tests for the workshop table constraints
---==============================================================
+--==============================================
 
---==============================================================
+--=======================================================
 -- tests for the check on the automatic update on status
---==============================================================
---test with type = 'afgehandeld'
+--=======================================================
 
+-- test with type = 'afgehandeld'
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 1]
 GO
 CREATE PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 1]
@@ -75,7 +57,7 @@ BEGIN
 END;
 GO
 
---test with workhop_id = 1 and workshopleider_ID = '1'
+-- test with workhop_id = 1 and workshopleider_ID = '1'
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 2]
 GO
 
@@ -112,7 +94,7 @@ BEGIN
 END;
 GO
 
---test with workhop_id = 1, workshopleider_ID = '1' and type = 'afgehandeld'
+-- test with workhop_id = 1, workshopleider_ID = '1' and type = 'afgehandeld'
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 3]
 GO
 
@@ -149,7 +131,7 @@ BEGIN
 END;
 GO
 
---test with workhop_id = 1
+-- test with workhop_id = 1
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 4]
 GO
 
@@ -186,9 +168,9 @@ BEGIN
 END;
 GO
 
---==============================================================
+--=======================================
 -- tests for the check on workshop types
---==============================================================
+--=======================================
 
 -- test for type = INC 
 DROP PROCEDURE IF EXISTS [testWorkshop].[test on workshop types INC]
@@ -256,9 +238,9 @@ BEGIN
 END
 GO
 
---==============================================================
+--==================================================
 -- tests for the check on advisors in INC workshops
---==============================================================
+--==================================================
 
 -- test for advisor = 1 and type = COM
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for advisor in INC workshops 1]
@@ -348,9 +330,10 @@ BEGIN
 END
 GO
 
---==============================================================
+--======================================
 -- tests for the check on workshop date
---==============================================================
+--======================================
+
 -- test for workshopdate = 20 seconds after getdate
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopdate 1]
 GO
@@ -443,9 +426,9 @@ BEGIN
 END
 GO
 
---========================================================================================
+--==========================================================
 -- tests if the workshop endtime is after the starting time
---========================================================================================
+--==========================================================
 
 -- test for starttime is getdate and endtime is getdate + 30 sec 
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopEndtime 1]
@@ -491,10 +474,11 @@ BEGIN
 END
 GO
 
---=====================================================================================================================
+--==============================================================================================================================
 -- Tests if a workshop that received VERWERKT_BREIN, DEELNEMER_GEGEGEVENS_ONTVANGEN, OVK_BEVESTIGING, PRESENTIELIJST_VERSTUURD,
 -- PRESENTIELIJST_ONTVANGEN, BEWIJS_DEELNAME_MAIL_SBB_WSL has status 'afgehandeld'
---=====================================================================================================================
+--==============================================================================================================================
+
 -- test for status is bevestigd with all columns NOT NULL
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopConcluded 1]
 GO
@@ -599,9 +583,9 @@ IF OBJECT_ID('[testWorkshopStateTrigger]','Table') IS NOT NULL
 	EXEC [tSQLt].[AssertEqualsTable] @Expected='testWorkshopStateTrigger', @Actual='dbo.WORKSHOP'END
 GO
 
---=====================================================================================================================
+--====================================================================
 -- Tests when workshop_type isn't IND, then SECTOR has te be NOT NULL
---=====================================================================================================================
+--====================================================================
 
 -- test for type is IND and sector is NULL
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopTypeAndSector 1]
@@ -689,13 +673,14 @@ BEGIN
 	VALUES(NULL, NULL, NULL, NULL, NULL, 'SECTOR', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'IND', NULL, NULL, NULL, NULL, NULL, NULL)
 END
 GO
---========================================================================================
--- tests for the deelnemer table
---========================================================================================
 
---========================================================================================
+--===============================
+-- tests for the deelnemer table
+--===============================
+
+--=============================================
 -- test if the e-mail contains a '@' and a '.'
---========================================================================================
+--=============================================
 
 -- test for emails without a '@'
 DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer emails 1]
@@ -760,12 +745,11 @@ BEGIN
 END
 GO
 
---======================================================================
+--=================================================================
 -- Test if the date of birth can't be higher than the current date
---======================================================================
+--=================================================================
 
 -- Test for date of birth is current date +20 sec
-
 DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer birthdates 1]
 GO
 
@@ -807,13 +791,12 @@ BEGIN
 END
 GO
 
---======================================================================
+--======================================================================================
 -- Test for when IS_OPEN_INSCHRIJVING is 1 then GEWENST_BEGELEIDINGSNIVEAU, FUNCTIENAAM 
 -- and SECTORNAAM have to be NOT NULL
---======================================================================
+--======================================================================================
 
 -- Test for IS_OPEN_INSCHRIJVING is 1 AND the rest is NOT NULL 
-
 DROP PROCEDURE IF EXISTS [testDeelnemer].[test for open inschrvijving 1]
 GO
 
@@ -835,7 +818,6 @@ END
 GO
 
 -- Test for IS_OPEN_INSCHRIJVING is 0 AND the rest is NOT NULL 
-
 DROP PROCEDURE IF EXISTS [testDeelnemer].[test for open inschrvijving 2]
 GO
 
@@ -857,7 +839,6 @@ END
 GO
 
 -- Test for IS_OPEN_INSCHRIJVING is 1 AND FUNCTIENAAM is NULL 
-
 DROP PROCEDURE IF EXISTS [testDeelnemer].[test for open inschrvijving 3]
 GO
 
@@ -877,7 +858,3 @@ BEGIN
 	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'niveau', NULL, 'sector'); 
 END
 GO
-
---EXEC [tSQLt].[Run] '[testWorkshop]'
-
---EXEC [tSQLt].[Run] '[testDeelnemer]'
