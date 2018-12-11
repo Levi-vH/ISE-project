@@ -1,10 +1,14 @@
 USE [UnitTesting SBB]
 
+-- all tests are sorted per table. You can find the table name and the function of the constraint
+-- that is being testen for every constraints
+
+
 EXEC tSQLt.NewTestClass 'testWorkshop';
 EXEC tSQLt.NewTestClass 'testDeelnemer';
 
+-- the select statement can be used to drop all tables in the tSQLt database
 /*
-
 SELECT  'DROP TABLE ' + TABLE_SCHEMA + '.' + TABLE_NAME
 FROM	INFORMATION_SCHEMA.TABLES
 WHERE	TABLE_TYPE = 'BASE TABLE'
