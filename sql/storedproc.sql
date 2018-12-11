@@ -452,16 +452,20 @@ GO
 CREATE OR ALTER PROC proc_insert_aanvraag_deelnemers
 (
 @aanvraag_id		INT,
-@voornaam			VARCHAR(30),
-@achternaam			VARCHAR(50),
+@voornaam			NVARCHAR(30),
+@achternaam			NVARCHAR(50),
 @geboortedatum		DATE,
-@email				VARCHAR(100),
-@telefoonnummer		VARCHAR(12),
+@email				NVARCHAR(100),
+@telefoonnummer		NVARCHAR(12),
 @organisatienummer	INT,
-@opleidingsniveau	VARCHAR(100)
+@opleidingsniveau	NVARCHAR(100)
 )
 AS
 BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	DECLARE @sql2 NVARCHAR(4000)
+	SET @sql =	N'
 	INSERT INTO DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER, IS_OPEN_INSCHRIJVING)
 		VALUES	(
 				@voornaam,
@@ -473,9 +477,8 @@ BEGIN
 				@organisatienummer,
 				0
 				)
-
-	DECLARE @deelnemer_id INT = (SELECT TOP 1 DEELNEMER_ID FROM DEELNEMER ORDER BY DEELNEMER_ID DESC)
-
+				'
+	DECLARE @deelnemer_id INT = (SELECT IDENT_CURRENT('DEELNEMER'))
 	INSERT INTO DEELNEMER_IN_AANVRAAG (AANVRAAG_ID, DEELNEMER_ID)
 		VALUES	(
 				@aanvraag_id,
@@ -498,6 +501,7 @@ CREATE OR ALTER PROC proc_insert_incompany_participants
 )
 AS
 BEGIN
+	SET NOCOUNT ON
 	INSERT INTO DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER, IS_OPEN_INSCHRIJVING)
 		VALUES	(
 				@voornaam,
@@ -544,7 +548,6 @@ CREATE OR ALTER PROC proc_approve_workshop_participants -- reference number M4
 AS
 BEGIN
 	SET NOCOUNT ON
-
 	UPDATE DEELNEMER_IN_WORKSHOP
 	SET IS_GOEDGEKEURD = 1
 	WHERE WORKSHOP_ID = @workshop_id
@@ -571,7 +574,6 @@ CREATE OR ALTER PROC proc_update_workshop -- reference number M5
 AS
 BEGIN
 	SET NOCOUNT ON
-
 	UPDATE WORKSHOP
 	SET	[TYPE] = @workshoptype,		
 		DATUM = @workshopdate,		
@@ -597,6 +599,7 @@ CREATE OR ALTER PROC proc_add_groep_deelnemers
 )
 AS
 BEGIN
+	SET NOCOUNT ON
 	UPDATE DEELNEMER_IN_AANVRAAG SET GROEP_ID = @groep_id WHERE AANVRAAG_ID = @aanvraag_ID AND DEELNEMER_ID = @deelnemer_id
 END
 GO
@@ -609,6 +612,7 @@ CREATE OR ALTER PROC proc_remove_groep_deelnemers
 )
 AS
 BEGIN
+SET NOCOUNT ON
 	UPDATE DEELNEMER_IN_AANVRAAG SET GROEP_ID = NULL WHERE AANVRAAG_ID = @aanvraag_id AND DEELNEMER_ID = @deelnemer_id
 END
 GO
@@ -625,7 +629,6 @@ CREATE OR ALTER PROC proc_disapprove_workshop_participants -- reference number M
 AS
 BEGIN
 	SET NOCOUNT ON
-
 	DELETE FROM DEELNEMER_IN_WORKSHOP
 	WHERE WORKSHOP_ID = @workshop_id
 	AND DEELNEMER_ID = @deelnemer_id
@@ -639,6 +642,7 @@ CREATE OR ALTER PROC proc_delete_aanvraag_deelnemers
 )
 AS
 BEGIN
+	SET NOCOUNT ON
 	DELETE FROM DEELNEMER_IN_AANVRAAG WHERE AANVRAAG_ID = @aanvraag_id AND DEELNEMER_ID = @deelnemer_id
 END
 GO
