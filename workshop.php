@@ -58,7 +58,6 @@ foreach ($row as $key => $value){
                 </ul>
             </div>
         </div>
-        <h1>Reservelijst</h1>
         <div class="col-md-10 col-sm-8 main-content">
             <!--Main content code to be written here -->
                 <div class="details-container">
