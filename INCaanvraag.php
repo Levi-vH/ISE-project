@@ -4,7 +4,7 @@ include 'functions.php';
 
 $aanvraag_id = $_GET['aanvraag_id'];
 
-generate_header('Incompnay Aanvraag');
+generate_header('Incompany aanvraag');
 ?>
 
 <body>

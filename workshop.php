@@ -1,5 +1,6 @@
 <?php
 include 'functions.php';
+generate_header('Deelnemers en Groepen');
 
 $workshop_id = $_GET['workshop_id'];
 $workshoptype = getWorkshopType($workshop_id);
@@ -9,7 +10,7 @@ $conn = connectToDB();
 
 //Run the stored procedure
 // $sql = "SELECT * FROM VW_WORKSHOPS";
-$sql = "exec proc_getWorkshops @where = ?";
+$sql = "exec proc_get_workshops @where = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(1, $id, PDO::PARAM_INT);
 $stmt->execute();
@@ -21,8 +22,6 @@ foreach ($row as $key => $value){
         $row[$key] = 'Nog niet bekend';
     }
 }
-
-generate_header('Workshop Details Pagina');
 ?>
 <body>
 <div class="container-fluid">

@@ -9,7 +9,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
 
     $aanvraag_id = $_GET['aanvraag_id'];
 
-    $name = $surname = $dateofbirth = $email = $phonenumber = $organisation = $educational_attainment = '';
+    $name = $surname = $dateofbirth = $email = $phonenumber = $educational_attainment = '';
 
     $conn = connectToDB();
 
@@ -20,7 +20,6 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $dateofbirth = ($_POST["dateofbirth"]);
         $email = check_input($_POST["email"]);
         $phonenumber = check_input(@$_POST['phonenumber']);
-        $organisation = check_input(@$_POST['organisation']);
         $educational_attainment = check_input(@$_POST['educational_attainment']);
 
         //Run the stored procedure
@@ -35,13 +34,10 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $stmt->bindParam(7, $organisation, PDO::PARAM_INT);
         $stmt->bindParam(8, $educational_attainment, PDO::PARAM_STR);
         $stmt->execute();
-
-
     }
 
-    generate_header('deelnemers');
+    generate_header('Deelnemers toevoegen');
     ?>
-
     <body>
     <div class="container-fluid">
         <div class="row">
@@ -116,62 +112,38 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                 </table>
                 <h1 class="headcenter">Voeg deelnemers toe</h1>
                 <div>
-                    <form class="form-group" action="addparticipant.php?aanvraag_id=<?php echo $aanvraag_id ?>"
-                          method="post">
-                        <div class="form-group">
-                            <label class="control-label col-sm-2 font-weight-bold" for="name">Voornaam:</label>
-                            <div class="col-sm-4">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="name">Voornaam</label>
                                 <input type="text" class="form-control" placeholder="Voornaam" name="name">
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2 font-weight-bold" for="surname">Achternaam:</label>
-                            <div class="col-sm-4">
+                            <div class="form-group col-md-6">
+                                <label for="surname">Achternaam</label>
                                 <input type="text" class="form-control" placeholder="Achternaam" name="surname">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2 font-weight-bold"
-                                   for="dateofbirth">Geboortedatum:</label>
-                            <div class="col-sm-4">
-                                <input type="date" class="form-control" placeholder="Geboortedatum"
-                                       name="dateofbirth">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="dateofbirth">Geboortedatum</label>
+                                <input type="date" class="form-control" placeholder="Geboortedatum" name="dateofbirth">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="dateofbirth">Opleidingsniveau</label>
+                                <input type="text" class="form-control" placeholder="Opleidingsniveau" name="educational_attainment">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2 font-weight-bold" for="email">Emailadres:</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" placeholder="Emailadres" name="email">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="phonenumber">Telefoonnummer</label>
+                                <input type="number" class="form-control" placeholder="Telefoonnummer" name="phonenumber">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="emailaddress">Emailadres</label>
+                                <input type="email" class="form-control" placeholder="Emailadres" name="phonenumber">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2 font-weight-bold"
-                                   for="phonenumber">Telefoonnummer:</label>
-                            <div class="col-sm-4">
-                                <input type="number" class="form-control" placeholder="Telefoonnummer"
-                                       name="phonenumber">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2 font-weight-bold"
-                                   for="organisation">Organisatie:</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" placeholder="Organisatie"
-                                       name="organisation">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-sm-2 font-weight-bold" for="educational_attainment">Opleidingsniveau:</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" placeholder="Opleidingsniveau"
-                                       name="educational_attainment">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-default">Submit</button>
-                            </div>
-                        </div>
+                        <button type="submit" class="btn btn-primary">Maak nieuwe deelnemer</button>
                     </form>
                 </div>
             </div>
