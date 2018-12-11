@@ -15,57 +15,6 @@ DELETE FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[PLANNER]
 GO
 
-/*
--- organizations that have more than one advisor
-SELECT ORGANISATIENUMMER
-FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
-GROUP BY ORGANISATIENUMMER
-HAVING COUNT(*) > 1
-ORDER BY ORGANISATIENUMMER
-
--- organizations that have more than one contactperson
-SELECT ORGANISATIENUMMER
-FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
-GROUP BY ORGANISATIENUMMER
-HAVING COUNT(*) > 1
-ORDER BY ORGANISATIENUMMER
-
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
-
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
-ORDER BY ORGANISATIENAAM
-
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
-
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
-
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER]
-
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID]
-
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER]
-
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[MODULE]
-
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
-
-SELECT WORKSHOP_ID, VOLGNUMMER, DEELNEMER_ID, IS_GOEDGEKEURD
-FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]
-ORDER BY WORKSHOP_ID, VOLGNUMMER
-
-SELECT *
-FROM [SBBWorkshopOmgeving].[dbo].[AANVRAAG]
-*/
-
 /*==============================================================*/
 /* Table: SECTOR                                                */
 /*==============================================================*/
@@ -184,47 +133,6 @@ GO
 EXEC Testdata_Adviseur
 GO
 
-/* OLD CODE (KEEP FOR SAFETY)
-;WITH orgnum AS -- organizationnumber/organisatienummer
-(
-SELECT TOP 300 ORGANISATIENUMMER AS organizationnumber, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
-FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
-),
-fname_sector AS -- firstname + sectorname/voornaam + sectornaam
-(
-SELECT TOP 300 FirstName AS firstname, SECTORNAAM AS sectorname, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
-FROM [AdventureWorksDW2014].[dbo].[DimCustomer], [SBBWorkshopOmgeving].[dbo].[SECTOR]
-),
-lname_email AS -- lastname + email/achternaam + email
-(
-SELECT TOP 300 LastName AS lastname, CAST(RAND(CHECKSUM(NEWID()))*2 AS INT) randomemail, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
-FROM [AdventureWorksDW2014].[dbo].[DimCustomer]
-),
-phonenum AS -- phonenumber/telefoonnummer
-(
-SELECT 1 AS id, '0' + CAST(CAST(FLOOR((RAND(CHECKSUM(NEWID()))+6)*100000000) AS INT) AS VARCHAR(9)) AS phonenumber
-UNION ALL
-SELECT id + 1, '0' + CAST(CAST(FLOOR((RAND(CHECKSUM(NEWID()))+6)*100000000) AS INT) AS VARCHAR(9)) AS phonenumber
-FROM phonenum
-WHERE id < 300 -- amount of rows/hoeveelheid rijen
-)
-INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ADVISEUR] (ORGANISATIENUMMER, SECTORNAAM, VOORNAAM, ACHTERNAAM, TELEFOONNUMMER, EMAIL)
-SELECT	organizationnumber, sectorname, firstname, lastname, phonenumber,
-		email =
-			CASE
-				WHEN randomemail = 0 THEN
-				LOWER(left(FirstName,1)+LastName)+'@hotmail.com'
-				ELSE 
-				LOWER(left(FirstName,1)+LastName)+'@gmail.com'
-			END
-FROM orgnum o, fname_sector fs, lname_email le, phonenum p
-WHERE o.id = fs.id
-AND o.id = le.id
-AND o.id = p.id
-OPTION(MAXRECURSION 0)
-GO
-*/
-
 /*==============================================================*/
 /* Table: CONTACTPERSOON                                        */
 /*==============================================================*/
@@ -273,47 +181,6 @@ GO
 
 EXEC Testdata_Contactpersoon
 GO
-
-/* OLD CODE (KEEP FOR SAFETY)
-;WITH orgnum AS -- organizationnumber/organisatienummer
-(
-SELECT TOP 300 ORGANISATIENUMMER AS organizationnumber, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
-FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
-),
-fname AS -- firstname/voornaam
-(
-SELECT TOP 300 FirstName AS firstname, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
-FROM [AdventureWorksDW2014].[dbo].[DimCustomer]
-),
-lname_email AS -- lastname + email/achternaam + email
-(
-SELECT TOP 300 LastName AS lastname, CAST(RAND(CHECKSUM(NEWID()))*2 AS INT) randomemail, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
-FROM [AdventureWorksDW2014].[dbo].[DimCustomer]
-),
-phonenum AS -- phonenumber/telefoonnummer
-(
-SELECT 1 AS id, '0' + CAST(CAST(FLOOR((RAND(CHECKSUM(NEWID()))+6)*100000000) AS INT) AS VARCHAR(9)) AS phonenumber
-UNION ALL
-SELECT id + 1, '0' + CAST(CAST(FLOOR((RAND(CHECKSUM(NEWID()))+6)*100000000) AS INT) AS VARCHAR(9)) AS phonenumber
-FROM phonenum
-WHERE id < 300 -- amount of rows/hoeveelheid rijen
-)
-INSERT INTO	[SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON] (ORGANISATIENUMMER, VOORNAAM, ACHTERNAAM, TELEFOONNUMMER, EMAIL)
-SELECT	organizationnumber, firstname, lastname, phonenumber,
-		email =
-			CASE
-				WHEN randomemail = 0 THEN
-				LOWER(left(FirstName,1)+LastName)+'@hotmail.com'
-				ELSE 
-				LOWER(left(FirstName,1)+LastName)+'@gmail.com'
-			END
-FROM orgnum o, fname f, lname_email le, phonenum p
-WHERE o.id = f.id
-AND o.id = le.id
-AND o.id = p.id
-OPTION(MAXRECURSION 0)
-GO
-*/
 
 /*==============================================================*/
 /* Table: WORKSHOPLEIDER                                        */
@@ -597,7 +464,7 @@ BEGIN
 	DECLARE @counter INT = 1
 	WHILE @counter <= 100
 		BEGIN
-			SET @amount = FLOOR(RAND(CHECKSUM(NEWID()))*(10+24)+12)
+			SET @amount = FLOOR(RAND(CHECKSUM(NEWID()))*(10+10)+12)
 			;WITH [1group] AS
 			(
 			SELECT TOP (@amount)	workshop_id,
@@ -605,6 +472,7 @@ BEGIN
 									0 AS is_goedgekeurd
 			FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER],
 			(SELECT TOP 1 WORKSHOP_ID AS workshop_id FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP] ORDER BY NEWID()) workshop
+			WHERE deelnemer_id NOT IN (SELECT DEELNEMER_ID FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP])
 			ORDER BY NEWID()
 			)
 			INSERT INTO [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP] (WORKSHOP_ID, DEELNEMER_ID, VOLGNUMMER, IS_GOEDGEKEURD)
