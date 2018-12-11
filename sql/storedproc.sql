@@ -615,22 +615,49 @@ BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
 	SET @sql =	N'
-				
+				UPDATE	WORKSHOP
+				SET		[TYPE] = @workshoptype,
+						DATUM = @workshopdate,
+						MODULENUMMER = @modulenummer,
+						ORGANISATIENUMMER = @organisatienummer,
+						SECTORNAAM = @workshopsector,
+						STARTTIJD = @workshopstarttime,
+						EINDTIJD = @workshopendtime,
+						ADRES = @workshopaddress,
+						POSTCODE = @workshoppostcode,
+						PLAATSNAAM = @workshopcity,
+						WORKSHOPLEIDER_ID = @workshopleader,
+						OPMERKING = @workshopnote
+				WHERE	WORKSHOP_ID = @workshop_id
 				'
-	UPDATE WORKSHOP
-	SET	[TYPE] = @workshoptype,		
-		DATUM = @workshopdate,		
-		MODULENUMMER = @modulenummer,		
-		ORGANISATIENUMMER = @organisatienummer,	
-		SECTORNAAM = @workshopsector,		
-		STARTTIJD = @workshopstarttime,	
-		EINDTIJD = @workshopendtime,	
-		ADRES = @workshopaddress,	
-		POSTCODE = @workshoppostcode,	
-		PLAATSNAAM = @workshopcity,		
-		WORKSHOPLEIDER_ID = @workshopleader,		
-		OPMERKING = @workshopnote		
-	WHERE WORKSHOP_ID = @workshop_id
+	EXEC sp_executesql @sql,	N'
+								@workshoptype NVARCHAR(3),
+								@workshopdate NVARCHAR(10),
+								@modulenummer INT,
+								@organisatienummer INT,
+								@workshopsector NVARCHAR(20),
+								@workshopstarttime NVARCHAR(10),
+								@workshopendtime NVARCHAR(10),
+								@workshopaddress NVARCHAR(60),
+								@workshoppostcode NVARCHAR(7),
+								@workshopcity NVARCHAR(60),
+								@workshopleader NVARCHAR(100),
+								@workshopnote NVARCHAR(255),
+								@workshop_id INT
+								',
+								@workshoptype,
+								@workshopdate,
+								@modulenummer,
+								@organisatienummer,
+								@workshopsector,
+								@workshopstarttime,
+								@workshopendtime,
+								@workshopaddress,
+								@workshoppostcode,
+								@workshopcity,
+								@workshopleader,
+								@workshopnote,
+								@workshop_id
 END
 GO
 
@@ -643,7 +670,15 @@ CREATE OR ALTER PROC proc_add_groep_deelnemers
 AS
 BEGIN
 	SET NOCOUNT ON
-	UPDATE DEELNEMER_IN_AANVRAAG SET GROEP_ID = @groep_id WHERE AANVRAAG_ID = @aanvraag_ID AND DEELNEMER_ID = @deelnemer_id
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				UPDATE	DEELNEMER_IN_AANVRAAG
+				SET		GROEP_ID = @groep_id
+				WHERE	AANVRAAG_ID = @aanvraag_ID
+				AND		DEELNEMER_ID = @deelnemer_id
+				'
+	EXEC sp_executesql @sql,	N'@aanvraag_id INT, @groep_id INT, @deelnemer_id INT',
+								@aanvraag_id, @groep_id, @deelnemer_id
 END
 GO
 
@@ -655,8 +690,16 @@ CREATE OR ALTER PROC proc_remove_groep_deelnemers
 )
 AS
 BEGIN
-SET NOCOUNT ON
-	UPDATE DEELNEMER_IN_AANVRAAG SET GROEP_ID = NULL WHERE AANVRAAG_ID = @aanvraag_id AND DEELNEMER_ID = @deelnemer_id
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				UPDATE	DEELNEMER_IN_AANVRAAG
+				SET		GROEP_ID = NULL
+				WHERE	AANVRAAG_ID = @aanvraag_ID
+				AND		DEELNEMER_ID = @deelnemer_id
+				'
+	EXEC sp_executesql @sql,	N'@aanvraag_id INT, @groep_id INT, @deelnemer_id INT',
+								@aanvraag_id, @groep_id, @deelnemer_id
 END
 GO
 
@@ -672,9 +715,13 @@ CREATE OR ALTER PROC proc_disapprove_workshop_participants -- reference number M
 AS
 BEGIN
 	SET NOCOUNT ON
-	DELETE FROM DEELNEMER_IN_WORKSHOP
-	WHERE WORKSHOP_ID = @workshop_id
-	AND DEELNEMER_ID = @deelnemer_id
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				DELETE FROM	DEELNEMER_IN_WORKSHOP
+				WHERE		WORKSHOP_ID = @workshop_id
+				AND			DEELNEMER_ID = @deelnemer_id
+				'
+	EXEC sp_executesql @sql, N'@workshop_id INT, @deelnemer_id INT', @workshop_id, @deelnemer_id
 END
 GO
 
@@ -686,6 +733,12 @@ CREATE OR ALTER PROC proc_delete_aanvraag_deelnemers
 AS
 BEGIN
 	SET NOCOUNT ON
-	DELETE FROM DEELNEMER_IN_AANVRAAG WHERE AANVRAAG_ID = @aanvraag_id AND DEELNEMER_ID = @deelnemer_id
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				DELETE FROM	DEELNEMER_IN_AANVRAAG
+				WHERE		AANVRAAG_ID = @aanvraag_id
+				AND			DEELNEMER_ID = @deelnemer_id
+				'
+	EXEC sp_executesql @sql, N'@aanvraag_id INT, @deelnemer_id INT', @aanvraag_id, @deelnemer_id
 END
 GO
