@@ -375,15 +375,15 @@ GO
 
 CREATE OR ALTER PROC proc_insert_aanvraag_groepen
 (
-@aanvraag_ID	INT,
-@Module1		INT,
-@Module2		INT,
-@Module3		INT,
-@Voorkeur1		NVARCHAR(20),
-@Voorkeur2		NVARCHAR(20),
-@Voorkeur3		NVARCHAR(20),
+@aanvraag_id	INT,
+@module1		INT,
+@module2		INT,
+@module3		INT,
+@voorkeur1		NVARCHAR(20),
+@voorkeur2		NVARCHAR(20),
+@voorkeur3		NVARCHAR(20),
 @address		NVARCHAR(60),
-@contactperson	INT
+@contactpersoon	INT
 )
 AS
 BEGIN
@@ -392,17 +392,32 @@ BEGIN
 	DECLARE @sql2 NVARCHAR(4000)
 	SET @sql =	N'
 				INSERT INTO GROEP(AANVRAAG_ID, CONTACTPERSOON_ID, ADRES)
-				VALUES (@aanvraag_ID, @contactperson, @address)
+				VALUES (@aanvraag_ID, @contactpersoon, @address)
 				'
-	EXEC sp_executesql @sql, N'@aanvraag_ID INT, @contactperson INT, @address NVARCHAR(60)', @aanvraag_ID, @contactperson, @address
-
+	EXEC sp_executesql @sql, N'@aanvraag_ID INT, @contactpersoon INT, @address NVARCHAR(60)', @aanvraag_ID, @contactpersoon, @address
 	DECLARE @groep_ID INT = (SELECT IDENT_CURRENT('GROEP'))
-
-
-	INSERT MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
-	VALUES(@groep_ID, @Module1, @VOORKEUR1),
-		  (@groep_ID, @Module2, @VOORKEUR2),
-		  (@groep_ID, @Module3, @VOORKEUR3)
+	SET @sql2 =	N'
+				INSERT INTO MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
+				VALUES	(@groep_ID, @module1, @voorkeur1),
+						(@groep_ID, @module2, @voorkeur2),
+						(@groep_ID, @module3, @voorkeur3)
+				'
+	EXEC sp_executesql @sql2,	N'
+								@groep_ID INT,
+								@module1 INT,
+								@module2 INT,
+								@module3 INT,
+								@voorkeur1 NVARCHAR(20),
+								@voorkeur2 NVARCHAR(20),
+								@voorkeur3 NVARCHAR(20)
+								',
+								@groep_ID,
+								@module1,
+								@module2,
+								@module3,
+								@voorkeur1,
+								@voorkeur2,
+								@voorkeur3
 END
 GO
 
