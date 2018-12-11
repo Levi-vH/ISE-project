@@ -262,7 +262,7 @@ include 'footer.html';
         var organisatienaam = document.getElementById("Organisation_Name");
         var organisatieValue = organisatienaam.options[organisatienaam.selectedIndex].value;
         $.ajax({
-            url: "autofill_organisation.php",
+            url: "ajax/autofill_organisation.php",
             method: "POST",
             data: {organisation: organisatieValue},
             dataType: "json"
@@ -290,7 +290,7 @@ include 'footer.html';
 
     function get_contactpersons(relationnumber) {
         $.ajax({
-            url: "autofill_contact.php",
+            url: "ajax/autofill_contact.php",
             method: "POST",
             data: {organisation_number: relationnumber},
             dateType: "json"
@@ -318,7 +318,7 @@ include 'footer.html';
         }
 
         $.ajax({
-            url: "autofill_contact_details.php",
+            url: "ajax/autofill_contact_details.php",
             method: "POST",
             data: {contact_id: contactValue},
             dateType: "json"
@@ -332,7 +332,7 @@ include 'footer.html';
 
     function get_advisor(relationnumber) {
         $.ajax({
-            url: "autofill_advisor.php",
+            url: "ajax/autofill_advisor.php",
             method: "POST",
             data: {organisation_number: relationnumber},
             dateType: "json"
@@ -361,7 +361,7 @@ include 'footer.html';
         }
 
         $.ajax({
-            url: "autofill_advisor_details.php",
+            url: "ajax/autofill_advisor_details.php",
             method: "POST",
             data: {advisor_id: advisorValue},
             dateType: "json"
