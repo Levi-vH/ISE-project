@@ -18,12 +18,12 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $name = check_input($_POST["name"]);
         $surname = check_input($_POST["surname"]);
         $dateofbirth = ($_POST["dateofbirth"]);
-        $email = check_input($_POST["email"]);
+        $email = check_input($_POST["emailaddress"]);
         $phonenumber = check_input(@$_POST['phonenumber']);
         $educational_attainment = check_input(@$_POST['educational_attainment']);
 
         //Run the stored procedure
-        $sql = "exec proc_insert_aanvraag_deelnemers ?, ?, ?, ?, ?, ?, ?, ?";
+        $sql = "exec proc_insert_aanvraag_deelnemers ?, ?, ?, ?, ?, ?, ?";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
         $stmt->bindParam(2, $name, PDO::PARAM_STR);
@@ -31,8 +31,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $stmt->bindParam(4, $dateofbirth, PDO::PARAM_STR);
         $stmt->bindParam(5, $email, PDO::PARAM_STR);
         $stmt->bindParam(6, $phonenumber, PDO::PARAM_STR);
-        $stmt->bindParam(7, $organisation, PDO::PARAM_INT);
-        $stmt->bindParam(8, $educational_attainment, PDO::PARAM_STR);
+        $stmt->bindParam(7, $educational_attainment, PDO::PARAM_STR);
         $stmt->execute();
     }
 
@@ -46,10 +45,10 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     <ul class="list">
                         <h5><strong>Aanvraag Opties</strong></h5>
                         <li>
-                            <a href="INCaanvraag.php?aanvraag_id=<?php echo $aanvraag_id ?>">Details</a>
+                            <a href="INCaanvraag.php?aanvraag_id=<?=$aanvraag_id?>">Details</a>
                         </li>
                         <li>
-                            <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id ?>">Deelnemers en Groepen</a>
+                            <a href="participants.php?aanvraag_id=<?=$aanvraag_id?>">Deelnemers en Groepen</a>
                         </li>
                         <li>
                             <a class="active-page">Deelnemers toevoegen</a>
@@ -72,7 +71,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     $conn = connectToDB();
 
                     //Run the stored procedure
-                    $sql = "exec proc_request_deelnemer_in_aanvraag ?";
+                    $sql = "exec proc_request_deelnemers_in_aanvraag ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                     $stmt->execute();
@@ -112,7 +111,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                 </table>
                 <h1 class="headcenter">Voeg deelnemers toe</h1>
                 <div>
-                    <form>
+                    <form action="?aanvraag_id=<?=$aanvraag_id?>" method="post">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="name">Voornaam</label>
@@ -140,7 +139,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="emailaddress">Emailadres</label>
-                                <input type="email" class="form-control" placeholder="Emailadres" name="phonenumber">
+                                <input type="email" class="form-control" placeholder="Emailadres" name="emailaddress">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Maak nieuwe deelnemer</button>

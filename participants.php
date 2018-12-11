@@ -96,7 +96,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $conn = connectToDB();
 
                         //Run the stored procedure
-                        $sql = "exec proc_request_deelnemer_in_aanvraag ?";
+                        $sql = "exec proc_request_deelnemers_in_aanvraag ?";
                         $stmt = $conn->prepare($sql);
                         $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                         $stmt->execute();
@@ -140,7 +140,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $conn = connectToDB();
 
                         //Run the stored procedure
-                        $sql = "exec proc_request_deelnemer_in_groep ?, ?";
+                        $sql = "exec proc_request_deelnemers_van_groep ?, ?";
                         $stmt = $conn->prepare($sql);
                         $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                         $stmt->bindParam(2, $aanvraag_id, PDO::PARAM_INT);

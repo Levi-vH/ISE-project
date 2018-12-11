@@ -24,17 +24,19 @@ generate_header('Incompany Aanvragen');
             $conn = connectToDB();
 
             //Run the stored procedure
-            // $sql = "SELECT * FROM VW_WORKSHOPS";
-            $sql = "exec proc_get_WorkshopRequests";
+            $sql = "exec proc_get_workshoprequests";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 
+            $nummer = 0;
+
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $nummer++;
                 $html = '';
                 $link = $row['AANVRAAG_ID'];
                 $html .= "<tr onclick=\"window.location='INCaanvraag.php?aanvraag_id=$link'\">";
                 $html .= '<td class="align-middle">';
-                $html .= $row['ORGANISATIENAAM'];
+                $html .= $nummer;
                 $html .= '</td>';
                 $html .= '<td class="align-middle">';
                 $html .= $row['AANTAL_GROEPEN'];
