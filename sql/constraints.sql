@@ -2,6 +2,7 @@
 
 USE [SBBWorkshopOmgeving]
 GO
+
 --=========================================================================
 -- WORKSHOP constraints
 --=========================================================================
@@ -95,6 +96,7 @@ BEGIN
 	ELSE RETURN
 END
 GO
+
 --==============================================
 -- Check if workshop type = INC, IND etc.
 --==============================================
@@ -108,7 +110,6 @@ ADD CONSTRAINT CK_WorkshopTypes	CHECK(TYPE IN ('INC', 'IND', 'COM', 'ROC', 'LA')
 --===============================================
 -- Check if adviseur is not null when type = INC
 --===============================================
-
 ALTER TABLE WORKSHOP
 DROP CONSTRAINT IF EXISTS CK_WorkshopAdvisor
 GO
@@ -119,7 +120,6 @@ ADD CONSTRAINT CK_WorkshopAdvisor CHECK(ADVISEUR_ID IS NOT NULL OR TYPE != 'INC'
 --========================================================================
 -- Check if the workshopdate is later than the date the workshop is added
 --========================================================================
-
 ALTER TABLE WORKSHOP
 DROP CONSTRAINT IF EXISTS CK_WorkshopDate
 GO
@@ -130,7 +130,6 @@ ADD CONSTRAINT CK_WorkshopDate CHECK(DATUM > GETDATE())
 --========================================================================================
 -- Check if the workshopstatus is 'uitgezet', 'bevestigd', 'geannuleerd' or 'afgehandeld'
 --========================================================================================
-
 ALTER TABLE WORKSHOP
 DROP CONSTRAINT IF EXISTS CK_WorkshopState
 GO
@@ -141,14 +140,12 @@ ADD CONSTRAINT CK_WorkshopState CHECK (STATUS IN ('uitgezet', 'bevestigd', 'gean
 --========================================================================================
 -- The ending time of a workshop has to be after the starting time
 --========================================================================================
-
 ALTER TABLE WORKSHOP
 DROP CONSTRAINT IF EXISTS CK_WorkshopEndtime
 GO
 
 ALTER TABLE WORKSHOP
 ADD CONSTRAINT CK_WorkshopEndtime CHECK (STARTTIJD < EINDTIJD)
-
 
 --========================================================================================
 -- If workshop_type isn't IND, then SECTOR has to be NOT NULL
@@ -159,6 +156,7 @@ GO
 
 ALTER TABLE WORKSHOP
 ADD CONSTRAINT CK_WorkshopTypeAndSector CHECK(SECTORNAAM IS NOT NULL OR TYPE = 'IND')
+
 --=========================================================================
 -- DEELNEMER constraints
 --=========================================================================
@@ -166,7 +164,6 @@ ADD CONSTRAINT CK_WorkshopTypeAndSector CHECK(SECTORNAAM IS NOT NULL OR TYPE = '
 --========================================================================================
 -- Check if the e-mail contains a '@' and a '.'
 --========================================================================================
-
 ALTER TABLE DEELNEMER
 DROP CONSTRAINT IF EXISTS CK_DeelnemerEmail
 GO
@@ -174,11 +171,9 @@ GO
 ALTER TABLE DEELNEMER
 ADD CONSTRAINT CK_DeelnemerEmail CHECK (EMAIL LIKE '%@%.%')
 
-
 --========================================================================================
 -- The date of birth can't be higher than the current date
 --========================================================================================
-
 ALTER TABLE DEELNEMER
 DROP CONSTRAINT IF EXISTS CK_DeelnemerBirthdate
 GO
@@ -190,7 +185,6 @@ ADD CONSTRAINT CK_DeelnemerBirthdate CHECK (GEBOORTEDATUM < GETDATE())
 -- If IS_OPEN_INSCHRIJVING is 1 then GEWENST_BEGELEIDINGSNIVEAU, FUNCTIENAAM 
 -- and SECTORNAAM have to be NOT NULL
 --========================================================================================
-
 ALTER TABLE DEELNEMER
 DROP CONSTRAINT IF EXISTS CK_OpenInschrijvingValues
 GO
@@ -200,16 +194,14 @@ ADD CONSTRAINT CK_OpenInschrijvingValues CHECK (IS_OPEN_INSCHRIJVING != 1 OR (GE
 AND FUNCTIENAAM IS NOT NULL AND SECTORNAAM IS NOT NULL))
 
 --========================================================================================
--- AANHEF has be 'mevrouw' or 'meneer' **
+-- AANHEF has to be 'mevrouw' or 'meneer' **
 --========================================================================================
-
 ALTER TABLE DEELNEMER
 DROP CONSTRAINT IF EXISTS CK_OpenInschrijvingValues
 GO
 
 ALTER TABLE DEELNEMER
 ADD CONSTRAINT CK_OpenInschrijvingValues CHECK (AANHEF = 'mevrouw' OR AANHEF = 'meneer')
-
 
 --=========================================================================
 -- BESCHIKBAARHEID constraints
@@ -224,7 +216,6 @@ DROP CONSTRAINT IF EXISTS CK_Kwartaal
 ALTER TABLE BESCHIKBAARHEID
 ADD CONSTRAINT CK_Kwartaal CHECK (KWARTAAL IN (1, 2, 3, 4))
 
-
 --========================================================================================
 -- JAAR has to be between 1900 and 2200 **
 --========================================================================================
@@ -233,8 +224,6 @@ DROP CONSTRAINT IF EXISTS CK_Jaar
 
 ALTER TABLE BESCHIKBAARHEID
 ADD CONSTRAINT CK_Jaar CHECK (JAAR BETWEEN 1900 AND 2200)
-
-
 
 -- Deze code wordt gebruikt om de eerste 2 triggers te testen, aangezien deze vaak kapot gaan hou ik
 -- de test code nog even hier.
