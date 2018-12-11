@@ -66,7 +66,7 @@ BEGIN
 		BEGIN
 			SET @sql += 'WHERE W.WORKSHOP_ID = @where'
 		END
-	SET @sql += 'ORDER BY @orderby @orderdirection'
+	SET @sql += 'ORDER BY @orderby + @orderdirection'
 	IF(@orderby IS NULL)
 		BEGIN
 			SET @orderby = 'W.WORKSHOP_ID'
@@ -382,7 +382,7 @@ CREATE OR ALTER PROC proc_insert_aanvraag_groepen
 @Voorkeur1		NVARCHAR(20),
 @Voorkeur2		NVARCHAR(20),
 @Voorkeur3		NVARCHAR(20),
-@address			NVARCHAR(60),
+@address		NVARCHAR(60),
 @contactperson	INT
 )
 AS
@@ -390,16 +390,19 @@ BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
 	DECLARE @sql2 NVARCHAR(4000)
-	INSERT INTO GROEP(AANVRAAG_ID, CONTACTPERSOON_ID, ADRES)
-	VALUES (@aanvraag_ID, @contactperson, @address)
+	SET @sql =	N'
+				INSERT INTO GROEP(AANVRAAG_ID, CONTACTPERSOON_ID, ADRES)
+				VALUES (@aanvraag_ID, @contactperson, @address)
+				'
+	EXEC sp_executesql @sql, N'@aanvraag_ID INT, @contactperson INT, @address NVARCHAR(60)', @aanvraag_ID, @contactperson, @address
 
-	DECLARE @groepsID INT = (SELECT IDENT_CURRENT('GROEP'))
+	DECLARE @groep_ID INT = (SELECT IDENT_CURRENT('GROEP'))
 
 
 	INSERT MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
-	VALUES(@groepsID, @Module1, @VOORKEUR1),
-		  (@groepsID, @Module2, @VOORKEUR2),
-		  (@groepsID, @Module3, @VOORKEUR3)
+	VALUES(@groep_ID, @Module1, @VOORKEUR1),
+		  (@groep_ID, @Module2, @VOORKEUR2),
+		  (@groep_ID, @Module3, @VOORKEUR3)
 END
 GO
 
