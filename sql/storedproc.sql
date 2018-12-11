@@ -61,9 +61,12 @@ BEGIN
 							WORKSHOPLEIDER WL ON W.WORKSHOPLEIDER_ID = WL.WORKSHOPLEIDER_ID INNER JOIN
 							ADVISEUR A ON W.ADVISEUR_ID = A.ADVISEUR_ID INNER JOIN
 							CONTACTPERSOON C ON W.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
-				WHERE		W.WORKSHOP_ID = @where
-				ORDER BY	@orderby @orderdirection
 				'
+	IF(@where IS NOT NULL)
+		BEGIN
+			SET @sql += 'WHERE W.WORKSHOP_ID = @where'
+		END
+	SET @sql += 'ORDER BY @orderby @orderdirection'
 	IF(@orderby IS NULL)
 		BEGIN
 			SET @orderby = 'W.WORKSHOP_ID'
@@ -97,7 +100,7 @@ BEGIN
 				'
 	IF(@aanvraag_id IS NOT NULL)
 		BEGIN
-			SET @sql +=	N'WHERE	A.AANVRAAG_ID = @aanvraag_id'
+			SET @sql +=	N'WHERE A.AANVRAAG_ID = @aanvraag_id'
 		END
 	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
 END
