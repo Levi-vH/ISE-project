@@ -13,7 +13,7 @@ Procedure order:
 /* SP Type: SELECT                                              */
 /*==============================================================*/
 
-CREATE OR ALTER PROC proc_get_workshops
+CREATE OR ALTER PROC proc_get_workshops -- proc_request_workshops
 (
 @orderby		NVARCHAR(40) = NULL,
 @orderdirection	NVARCHAR(4) = NULL,
@@ -88,7 +88,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROC proc_get_workshoprequests
+CREATE OR ALTER PROC proc_get_workshoprequests -- proc_request_workshoprequests
 (
 @aanvraag_id INT = NULL
 )
