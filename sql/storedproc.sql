@@ -337,7 +337,6 @@ BEGIN
 								@adviseur_ID,
 								@workshopsector,
 								@workshopdate,
-								@workshop,
 								@workshopstarttime,
 								@workshopendtime,
 								@workshopaddress,
