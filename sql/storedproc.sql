@@ -84,7 +84,7 @@ BEGIN
 			SET @orderdirection2 = @orderdirection
 		END
 	SET @where2 = @where
-	EXEC @sql, N'@orderby2 NVARCHAR(40), ', variabelen
+	EXEC sp_executesql @sql, N'@orderby2 NVARCHAR(40), @orderdirection2 NVARCHAR(4), @where2 INT', @orderby2, @orderdirection2, @where2
 END
 GO
 
