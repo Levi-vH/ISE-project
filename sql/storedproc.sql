@@ -109,8 +109,6 @@ BEGIN
 END
 GO
 
-EXEC proc_get_workshoprequests
-
 CREATE OR ALTER PROC proc_request_groups
 (
 @aanvraag_id INT = NULL
@@ -380,8 +378,8 @@ GO
 
 CREATE OR ALTER PROC proc_insert_aanvraag_groepen
 (
-@aanvraag_id    INT,
-@module1        INT,
+@aanvraag_id	INT,
+@module1		INT,
 @module2		INT,
 @module3		INT,
 @voorkeur1		NVARCHAR(20),
@@ -392,71 +390,62 @@ CREATE OR ALTER PROC proc_insert_aanvraag_groepen
 )
 AS
 BEGIN
-    SET NOCOUNT ON
-    DECLARE @sql NVARCHAR(4000)
-    DECLARE @sql2 NVARCHAR(4000)
-    DECLARE @sql3 NVARCHAR(4000)
-    DECLARE @sql4 NVARCHAR(4000)
-    SET @sql =    N'
-                INSERT INTO GROEP(AANVRAAG_ID, CONTACTPERSOON_ID, ADRES)
-                VALUES (@aanvraag_ID, @contactpersoon, @address)
-                '
-    EXEC sp_executesql @sql, N'@aanvraag_ID INT, @contactpersoon INT, @address NVARCHAR(60)', @aanvraag_ID, @contactpersoon, @address
-    DECLARE @groep_ID INT = (SELECT IDENT_CURRENT('GROEP'))
-
-    IF ((@module1 IS NOT NULL) AND (@voorkeur1 IS NOT NULL))
-    BEGIN
-        SET @sql2 =    N'
-                INSERT INTO MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
-                VALUES    (@groep_ID, @module1, @voorkeur1),
-                        (@groep_ID, @module2, @voorkeur2),
-                        (@groep_ID, @module3, @voorkeur3)
-                '
-EXEC sp_executesql @sql2,    N'
-                                @groep_ID INT,
-                                @module1 INT,
-                                @voorkeur1 NVARCHAR(20),
-                                ',
-                                @groep_ID,
-                                @module1,
-                                @voorkeur1
-    END
-
-    IF ((@module2 IS NOT NULL) AND (@voorkeur2 IS NOT NULL))
-    BEGIN
-        SET @sql3 =    N'
-                INSERT INTO MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
-                VALUES    (@groep_ID, @module1, @voorkeur1),
-                        (@groep_ID, @module2, @voorkeur2),
-                        (@groep_ID, @module3, @voorkeur3)
-                '
-        EXEC sp_executesql @sql3,    N'
-                                @groep_ID INT,
-                                @module1 INT,
-                                @voorkeur1 NVARCHAR(20),
-                                ',
-                                @groep_ID,
-                                @module2,
-                                @voorkeur2
-    END
-
-    IF ((@module3 IS NOT NULL) AND (@voorkeur3 IS NOT NULL))
-    BEGIN
-        SET @sql4 =    N'
-                INSERT INTO MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
-                VALUES    (@groep_ID, @module1, @voorkeur1),
-                        (@groep_ID, @module2, @voorkeur2),
-                        (@groep_ID, @module3, @voorkeur3)
-                '
-        EXEC sp_executesql @sql4,    N'
-                                @groep_ID INT,
-                                @module1 INT,
-                                @voorkeur1 NVARCHAR(20),
-                                ',
-                                @groep_ID,
-                                @module3,
-                                @voorkeur3
-    END
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	DECLARE @sql2 NVARCHAR(4000)
+	DECLARE @sql3 NVARCHAR(4000)
+	DECLARE @sql4 NVARCHAR(4000)
+	SET @sql =	N'
+				INSERT INTO GROEP(AANVRAAG_ID, CONTACTPERSOON_ID, ADRES)
+				VALUES (@aanvraag_ID, @contactpersoon, @address)
+				'
+	EXEC sp_executesql @sql, N'@aanvraag_ID INT, @contactpersoon INT, @address NVARCHAR(60)', @aanvraag_ID, @contactpersoon, @address
+	DECLARE @groep_ID INT = (SELECT IDENT_CURRENT('GROEP'))
+	IF ((@module1 IS NOT NULL) AND (@voorkeur1 IS NOT NULL))
+	BEGIN
+		SET @sql2 =	N'
+					INSERT INTO MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
+					VALUES (@groep_ID, @module1, @voorkeur1)
+					'	
+		EXEC sp_executesql @sql2,	N'
+									@groep_ID INT,
+									@module1 INT,
+									@voorkeur1 NVARCHAR(20),
+									',
+									@groep_ID,
+									@module1,
+									@voorkeur1
+	END
+	IF ((@module2 IS NOT NULL) AND (@voorkeur2 IS NOT NULL))
+	BEGIN
+		SET @sql3 =	N'
+				INSERT INTO MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
+				VALUES (@groep_ID, @module2, @voorkeur2)
+				'	
+		EXEC sp_executesql @sql3,	N'
+									@groep_ID INT,
+									@module2 INT,
+									@voorkeur2 NVARCHAR(20),
+									',
+									@groep_ID,
+									@module2,
+									@voorkeur2
+	END
+	IF ((@module3 IS NOT NULL) AND (@voorkeur3 IS NOT NULL))
+	BEGIN
+		SET @sql4 =	N'
+					INSERT INTO MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
+					VALUES (@groep_ID, @module3, @voorkeur3)
+					'	
+		EXEC sp_executesql @sql4,	N'
+									@groep_ID INT,
+									@module3 INT,
+									@voorkeur3 NVARCHAR(20),
+									',
+									@groep_ID,
+									@module3,
+									@voorkeur3
+	END
 END
 GO
 
