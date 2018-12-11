@@ -1,3 +1,8 @@
+body{
+    display: flex;
+    flex-direction: column;
+}
+
 .sidebar1 {
     background: rgba(0, 0, 0, 0.55);
     /* Standard syntax */
@@ -65,4 +70,33 @@ a:hover{
 }
 #denybutton {
     color: red;
+}
+
+footer{
+    margin-top: auto;
+}
+
+
+/*
+
+Detail pagina voor workshops
+
+ */
+.details-container{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.details {
+    padding:5px;
+    width: 45%;
+    border: 1px solid black;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.detail-row div{
+    width:45%;
+    display:inline-block;
+    margin-top:3px;
 }
