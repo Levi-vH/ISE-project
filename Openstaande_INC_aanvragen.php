@@ -25,7 +25,7 @@ generate_header('Incompany Aanvragen');
 
             //Run the stored procedure
             // $sql = "SELECT * FROM VW_WORKSHOPS";
-            $sql = "exec proc_getWorkshopRequest";
+            $sql = "exec proc_get_WorkshopRequests";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 
