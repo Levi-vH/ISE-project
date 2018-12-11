@@ -199,16 +199,18 @@ if exists (select 1
 go
 */
 
---DROP TYPE IF EXISTS Workshop_ID
+
+-- creating domain types for all the columns in the database
+DROP TYPE IF EXISTS Workshop_ID
 CREATE TYPE Workshop_ID FROM INT
 
---DROP TYPE IF EXISTS Deelnemer_ID
+DROP TYPE IF EXISTS Deelnemer_ID
 CREATE TYPE Deelnemer_ID FROM INT
 
---DROP TYPE IF EXISTS Adviseur_ID
+DROP TYPE IF EXISTS Adviseur_ID
 CREATE TYPE Adviseur_ID FROM INT
 
---DROP TYPE IF EXISTS WorkshopLeider_ID
+DROP TYPE IF EXISTS WorkshopLeider_ID
 CREATE TYPE WorkshopLeider_ID FROM INT
 
 DROP TYPE IF EXISTS Contactpersoon_ID
@@ -526,6 +528,7 @@ CREATE TABLE MODULE_VAN_GROEP (
 )
 GO
 
+-- creating all the foreign key relations
 ALTER TABLE ADVISEUR
    ADD CONSTRAINT FK_ADVISEUR_ref_ORGANISATIE FOREIGN KEY (ORGANISATIENUMMER)
       REFERENCES ORGANISATIE (ORGANISATIENUMMER)
