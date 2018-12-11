@@ -125,7 +125,7 @@ BEGIN
 								SELECT	COUNT(*)
 								FROM	DEELNEMER_IN_AANVRAAG DA
 								WHERE	DA.AANVRAAG_ID = G.AANVRAAG_ID
-								GROUP BY DEELNEMER_ID
+								GROUP BY GROEP_ID
 								), 0) AS AANTAL_DEELNEMERS
 				FROM	GROEP G INNER JOIN
 						CONTACTPERSOON C ON G.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
@@ -396,21 +396,21 @@ BEGIN
 	DECLARE @sql3 NVARCHAR(4000)
 	DECLARE @sql4 NVARCHAR(4000)
 	SET @sql =	N'
-				INSERT INTO GROEP(AANVRAAG_ID, CONTACTPERSOON_ID, ADRES)
-				VALUES (@aanvraag_ID, @contactpersoon, @address)
+				INSERT INTO	GROEP(AANVRAAG_ID, CONTACTPERSOON_ID, ADRES)
+				VALUES		(@aanvraag_ID, @contactpersoon, @address)
 				'
 	EXEC sp_executesql @sql, N'@aanvraag_ID INT, @contactpersoon INT, @address NVARCHAR(60)', @aanvraag_ID, @contactpersoon, @address
 	DECLARE @groep_ID INT = (SELECT IDENT_CURRENT('GROEP'))
 	IF ((@module1 IS NOT NULL) AND (@voorkeur1 IS NOT NULL))
 	BEGIN
 		SET @sql2 =	N'
-					INSERT INTO MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
-					VALUES (@groep_ID, @module1, @voorkeur1)
+					INSERT INTO	MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
+					VALUES		(@groep_ID, @module1, @voorkeur1)
 					'	
 		EXEC sp_executesql @sql2,	N'
 									@groep_ID INT,
 									@module1 INT,
-									@voorkeur1 NVARCHAR(20),
+									@voorkeur1 NVARCHAR(20)
 									',
 									@groep_ID,
 									@module1,
@@ -419,13 +419,13 @@ BEGIN
 	IF ((@module2 IS NOT NULL) AND (@voorkeur2 IS NOT NULL))
 	BEGIN
 		SET @sql3 =	N'
-				INSERT INTO MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
-				VALUES (@groep_ID, @module2, @voorkeur2)
+				INSERT INTO	MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
+				VALUES		(@groep_ID, @module2, @voorkeur2)
 				'	
 		EXEC sp_executesql @sql3,	N'
 									@groep_ID INT,
 									@module2 INT,
-									@voorkeur2 NVARCHAR(20),
+									@voorkeur2 NVARCHAR(20)
 									',
 									@groep_ID,
 									@module2,
@@ -434,13 +434,13 @@ BEGIN
 	IF ((@module3 IS NOT NULL) AND (@voorkeur3 IS NOT NULL))
 	BEGIN
 		SET @sql4 =	N'
-					INSERT INTO MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
-					VALUES (@groep_ID, @module3, @voorkeur3)
+					INSERT INTO	MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
+					VALUES		(@groep_ID, @module3, @voorkeur3)
 					'	
 		EXEC sp_executesql @sql4,	N'
 									@groep_ID INT,
 									@module3 INT,
-									@voorkeur3 NVARCHAR(20),
+									@voorkeur3 NVARCHAR(20)
 									',
 									@groep_ID,
 									@module3,
@@ -457,7 +457,6 @@ CREATE OR ALTER PROC proc_insert_aanvraag_deelnemers
 @geboortedatum		DATE,
 @email				NVARCHAR(100),
 @telefoonnummer		NVARCHAR(12),
-@organisatienummer	INT,
 @opleidingsniveau	NVARCHAR(100)
 )
 AS
@@ -465,25 +464,42 @@ BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
 	DECLARE @sql2 NVARCHAR(4000)
+	DECLARE @organisatienummer INT = (SELECT ORGANISATIENUMMER FROM AANVRAAG WHERE AANVRAAG_ID = @aanvraag_id)
 	SET @sql =	N'
-	INSERT INTO DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER, IS_OPEN_INSCHRIJVING)
-		VALUES	(
-				@voornaam,
-				@achternaam,
-				@geboortedatum,
-				@email,
-				@telefoonnummer,
-				@opleidingsniveau,
-				@organisatienummer,
-				0
-				)
+				INSERT INTO	DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER, IS_OPEN_INSCHRIJVING)
+				VALUES		(
+							@voornaam,
+							@achternaam,
+							@geboortedatum,
+							@email,
+							@telefoonnummer,
+							@opleidingsniveau,
+							@organisatienummer,
+							0
+							)
 				'
+	EXEC sp_executesql @sql,	N'
+								@voornaam NVARCHAR(30),
+								@achternaam NVARCHAR(50),
+								@geboortedatum DATE,
+								@email NVARCHAR(100),
+								@telefoonnummer NVARCHAR(12),
+								@opleidingsniveau NVARCHAR(100),
+								@organisatienummer INT
+								',
+								@voornaam,
+								@achternaam,
+								@geboortedatum,
+								@email,
+								@telefoonnummer,
+								@opleidingsniveau,
+								@organisatienummer
 	DECLARE @deelnemer_id INT = (SELECT IDENT_CURRENT('DEELNEMER'))
-	INSERT INTO DEELNEMER_IN_AANVRAAG (AANVRAAG_ID, DEELNEMER_ID)
-		VALUES	(
-				@aanvraag_id,
-				@deelnemer_id
-				)
+	SET @sql2 =	N'
+				INSERT INTO	DEELNEMER_IN_AANVRAAG (AANVRAAG_ID, DEELNEMER_ID)
+				VALUES		(@aanvraag_id, @deelnemer_id)
+				'
+	EXEC sp_executesql @sql2, N'@aanvraag_id INT, @deelnemer_id INT', @aanvraag_id, @deelnemer_id
 END
 GO
 
@@ -548,10 +564,13 @@ CREATE OR ALTER PROC proc_approve_workshop_participants -- reference number M4
 AS
 BEGIN
 	SET NOCOUNT ON
-	UPDATE DEELNEMER_IN_WORKSHOP
-	SET IS_GOEDGEKEURD = 1
-	WHERE WORKSHOP_ID = @workshop_id
-	AND DEELNEMER_ID = @deelnemer_id
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				UPDATE	DEELNEMER_IN_WORKSHOP
+				SET		IS_GOEDGEKEURD = 1
+				WHERE	WORKSHOP_ID = @workshop_id
+				AND		DEELNEMER_ID = @deelnemer_id
+				'
 END
 GO
 
