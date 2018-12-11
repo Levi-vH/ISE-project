@@ -75,16 +75,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         if (!is_null($Contact_Person) && !is_null($Adress)) {
 
-                            if (is_null($Group_Module1)) {
-                                $Group_Module1_voorkeur = NULL;
+                            if (isset($Group_Module1)) {
+                                if (is_null($Group_Module1)) {
+                                    $Group_Module1_voorkeur = NULL;
+                                }
                             }
 
-                            if (is_null($Group_Module2)) {
-                                $Group_Module2_voorkeur = NULL;
+                            if (isset($Group_Module2)) {
+                                if (is_null($Group_Module2)) {
+                                    $Group_Module2_voorkeur = NULL;
+                                }
                             }
 
-                            if (is_null($Group_Module3)) {
-                                $Group_Module3_voorkeur = NULL;
+                            if (isset($Group_Module3)) {
+                                if (is_null($Group_Module3)) {
+                                    $Group_Module3_voorkeur = NULL;
+                                }
                             }
                             //Run the stored procedure
                             $sql3 = "exec proc_insert_aanvraag_groepen ?, ?, ?, ?, ?, ?, ?, ?, ?";

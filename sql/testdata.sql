@@ -89,11 +89,11 @@ SELECT TOP 300 [Name] AS organizationname, ROW_NUMBER() OVER (ORDER BY NEWID()) 
 FROM [AdventureWorks2014].[Sales].[Store]
 ),
 pcode AS -- postcode
-(
-SELECT 1 AS id, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(9000)+1000) AS CHAR(4)) AS pcodenumbers,
-				CHAR(CAST((90-65 )*RAND(CHECKSUM(NEWID())) + 65 AS INT)) AS pcodecharacter1,
-				CHAR(CAST((90-65 )*RAND(CHECKSUM(NEWID())) + 65 AS INT)) AS pcodecharacter2
-UNION ALL
+( -- first we create a postcode for the first id then we add 300 more id's, using a while loop to select the id's and using UNION to add them to our first id
+SELECT 1 AS id, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(9000)+1000) AS CHAR(4)) AS pcodenumbers, -- select random number between 1000 and 9000 for the postcode number
+				CHAR(CAST((90-65 )*RAND(CHECKSUM(NEWID())) + 65 AS INT)) AS pcodecharacter1, -- select random ascii character between 65 and 90 (A-Z)
+				CHAR(CAST((90-65 )*RAND(CHECKSUM(NEWID())) + 65 AS INT)) AS pcodecharacter2 -- select random ascii character between 65 and 90 (A-Z)
+UNION ALL -- adding the while loop id's to our first id
 SELECT id + 1, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(9000)+1000) AS CHAR(4)) AS pcodenumbers,
 			   CHAR(CAST((90-65 )*RAND(CHECKSUM(NEWID())) + 65 AS INT)) AS pcodecharacter1,
 			   CHAR(CAST((90-65 )*RAND(CHECKSUM(NEWID())) + 65 AS INT)) AS pcodecharacter2
@@ -102,25 +102,26 @@ WHERE id < 300 -- amount of rows/hoeveelheid rijen
 ),
 adrs AS -- address/adres
 (
+-- PATINDEX selects everything that's 0-9, '_' , '-' and STUFF replaces those characters with '' that way we delete all those characters
 SELECT TOP 300 STUFF(AddressLine1, 1, PATINDEX('%[^0-9_ -.]%', AddressLine1)-1, '') AS [address], ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
 FROM [AdventureWorks2014].[Person].[Address]
 WHERE AddressLine1 LIKE '[0-9]%'
 ),
 housenum AS -- housenumber/huisnummer
 (
-SELECT 1 AS id, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(10+89)+1) AS VARCHAR(4)) AS housenumber
+SELECT 1 AS id, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(10+89)+1) AS VARCHAR(4)) AS housenumber -- select random values between 1 and 89 as housenumbers the first id
 UNION ALL
-SELECT id + 1, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(10+89)+1) AS VARCHAR(4)) AS housenumber
+SELECT id + 1, CAST(FLOOR(RAND(CHECKSUM(NEWID()))*(10+89)+1) AS VARCHAR(4)) AS housenumber -- select random values between 1 and 89 
 FROM housenum
 WHERE id < 300 -- amount of rows/hoeveelheid rijen
 ),
 pname AS -- placename/plaatsnaam
 (
-SELECT TOP 300 City AS placename, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
+SELECT TOP 300 City AS placename, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id -- select the top 300 city's from adventureworks as placenames
 FROM [AdventureWorks2014].[Person].[Address]
 )
-INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ORGANISATIE] (ORGANISATIENUMMER, ORGANISATIENAAM, ADRES, POSTCODE, PLAATSNAAM)
-SELECT TOP 300	ROW_NUMBER() OVER (ORDER BY NEWID()) AS organizationnumber,
+INSERT INTO	[SBBWorkshopOmgeving].[dbo].[ORGANISATIE] (ORGANISATIENUMMER, ORGANISATIENAAM, ADRES, POSTCODE, PLAATSNAAM) -- after all the selects insert the data
+SELECT TOP 300	ROW_NUMBER() OVER (ORDER BY NEWID()) AS organizationnumber, --												into organisatie
 				organizationname,
 				([address] + ' ' + housenumber) AS [address],
 				(pcodenumbers + pcodecharacter1 + pcodecharacter2) AS postcode,
@@ -139,18 +140,18 @@ GO
 CREATE OR ALTER PROCEDURE Testdata_Adviseur
 AS
 BEGIN
-	SELECT ORGANISATIENUMMER INTO #tempTable FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
+	SELECT ORGANISATIENUMMER INTO #tempTable FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE] -- create template table with all organisatienummers in it.
 	DECLARE @amount INT -- amount of advisors per organization
 	DECLARE @organizationnumber INT
 	DECLARE @organizations INT = (SELECT COUNT(*) FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]) -- amount of organizations
 	DECLARE @counter INT = 1
 	DECLARE @counter2 INT
-	WHILE @counter <= @organizations
+	WHILE @counter <= @organizations -- for each organization
 		BEGIN
 			SET @organizationnumber = (SELECT TOP 1 * FROM #tempTable)
-			SET @amount = FLOOR(RAND(CHECKSUM(NEWID()))*(1+2)+1)
+			SET @amount = FLOOR(RAND(CHECKSUM(NEWID()))*(1+2)+1) -- select the amount of advisors for the organisation (between 1 and 4)
 			SET @counter2 = 1
-			WHILE @counter2 <= @amount
+			WHILE @counter2 <= @amount -- 
 				BEGIN
 					;WITH fname_lname_email AS
 					(
