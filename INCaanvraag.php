@@ -9,7 +9,6 @@ generate_header('Incompany aanvraag');
 $conn = connectToDB();
 
 //Run the stored procedure
-// $sql = "SELECT * FROM VW_WORKSHOPS";
 $sql = "exec proc_get_workshoprequests @aanvraag_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
@@ -152,9 +151,38 @@ foreach ($row as $key => $value){
             <h2 class="text-center">Groepen</h2>
             <div class="accordion" id="accordionGroups">
                 <?php
-                $aantalModules = 3;
+                $GroupIDs[] = '';
+                //Run the stored procedure
+                $sql2 = "exec proc_request_groupsID @aanvraag_id = ?";
+                $stmt2 = $conn->prepare($sql2);
+                $stmt2->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
+                $stmt2->execute();
+
+                $groups = $stmt2->fetchall(PDO::FETCH_ASSOC);
+                $i = 1;
+                foreach ($groups as $group => $value){
+                    $GroupIDs[$i] = $groups[$group];
+                    $i++;
+                }
+
+
+
+
                 $group_info = '';
                 for($i = 1; $i<=$row['AANTAL_GROEPEN']; $i++){
+                    $sql3 = "exec proc_request_group_information @group_ID = ?";
+                    $stmt3 = $conn->prepare($sql3);
+                    $stmt3->bindParam(1, $GroupIDs[$i]['GROEP_ID'], PDO::PARAM_INT);
+                    $stmt3->execute();
+
+                    $groupinfo = $stmt3->fetch(PDO::FETCH_ASSOC);
+
+                    foreach ($groupinfo as $key => $value){
+                        if($value == ''){
+                            $groupinfo[$key] = 'Nog niet bekend';
+                        }
+                    }
+
                     $group_info .= '<div class="card">
                                     <div class="card-header" id="heading' . $i . '">
                                         <h5 class="mb-0">
@@ -171,10 +199,10 @@ foreach ($row as $key => $value){
                                                                 <h3> Algemeen</h3>
                                                                     <div class="detail-row">
                                                                         <div class="details-column">
-                                                                            Adres:
+                                                                            Adres: 
                                                                         </div>
                                                                         <div class="details-value">
-                                                                        
+                                                                          ' . $groupinfo['ADRES'] . '
                                                                         </div>
                                                                      </div>
                                                             </div>
@@ -185,7 +213,7 @@ foreach ($row as $key => $value){
                                                                             Naam:
                                                                         </div>
                                                                         <div class="details-value">
-                                                                        
+                                                                             ' . $groupinfo['VOORNAAM'] . ' ' . $groupinfo['VOORNAAM'] . '
                                                                         </div>
                                                                      </div>
                                                                      <div class="detail-row">
@@ -193,26 +221,55 @@ foreach ($row as $key => $value){
                                                                             Telefoon:
                                                                         </div>
                                                                         <div class="details-value">
-                                                                        
+                                                                         ' . $groupinfo['TELEFOONNUMMER'] . '
                                                                         </div>
                                                                      </div>
                                                                      <div class="detail-row">
                                                                         <div class="details-column">
-                                                                            Email:
+                                                                            Email: 
                                                                         </div>
                                                                         <div class="details-value">
-                                                                        
+                                                                          ' . $groupinfo['EMAIL'] . '
                                                                         </div>
                                                                      </div>
                                                             </div>
                                                         </div>
                                                         
                                                         <div class="accordion" id="accordionModules">';
-                    for($j=1; $j<=$aantalModules; $j++){
+
+                    $ModuleIDs[] = '';
+                    $sql4 = "exec proc_request_modulenummers @group_id = ?";
+                    $stmt4 = $conn->prepare($sql4);
+                    $stmt4->bindParam(1, $GroupIDs[$i]['GROEP_ID'], PDO::PARAM_INT);
+                    $stmt4->execute();
+
+                    $Modules = $stmt4->fetchall(PDO::FETCH_ASSOC);
+                    $k = 1;
+                    foreach ($Modules as $module => $value){
+                        $ModuleIDs[$k] = $Modules[$module];
+                        $k++;
+                    }
+
+                    for($j=1; $j<=$groupinfo['AANTAL_MODULES']; $j++){
+
+                        $sql5 = "exec proc_request_module_group_information @group_ID = ?, @modulenummer = ?";
+                        $stmt5 = $conn->prepare($sql5);
+                        $stmt5->bindParam(1, $GroupIDs[$i]['GROEP_ID'], PDO::PARAM_INT);
+                        $stmt5->bindParam(2, $ModuleIDs[$j]['MODULENUMMER'], PDO::PARAM_INT);
+                        $stmt5->execute();
+
+                        $moduleinfo = $stmt5->fetch(PDO::FETCH_ASSOC);
+
+                        foreach ($moduleinfo as $key => $value){
+                            if($value == ''){
+                                $moduleinfo[$key] = 'Nog niet bekend';
+                            }
+                        }
+
                         $group_info .= '<div class="card-header" id="heading_Module' . $j . '">
                                                                                 <h5 class="mb-0">
                                                                                     <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse_Module' . $j . '" aria-expanded="false" aria-controls="collapse_Module' . $j . '">
-                                                                                        Module ' . $j . '
+                                                                                        Module ' . $ModuleIDs[$j]['MODULENUMMER'] . ': '  .  $ModuleIDs[$j]['MODULENAAM'] . '
                                                                                     </button>
                                                                                 </h5>
                                                                             </div>
@@ -222,19 +279,19 @@ foreach ($row as $key => $value){
                                                                                                 <form>
                                                                                                     <div class="form-group">
                                                                                                         <label for="preference">Opgegeven Voorkeur:</label>
-                                                                                                        <input type="text" class="form-control" id="preference" value="Ochtend" disabled>
+                                                                                                        <input type="text" class="form-control" id="preference" value="' . $moduleinfo['VOORKEUR'] . '" disabled>
                                                                                                     </div>
                                                                                                     <div class="form-group">
                                                                                                         <label for="Date">Opgegeven Voorkeur:</label>
-                                                                                                        <input type="text" class="form-control" id="Date" value="01-01-2018" disabled>
+                                                                                                        <input type="text" class="form-control" id="Date" value="' . $moduleinfo['DATUM'] . '" disabled>
                                                                                                     </div>
                                                                                                     <div class="form-group">
                                                                                                         <label for="Starttime">Starttijd:</label>
-                                                                                                        <input type="text" class="form-control" id="Starttime" value="12:00" disabled>
+                                                                                                        <input type="text" class="form-control" id="Starttime" value="' . $moduleinfo['STARTTIJD'] . '" disabled>
                                                                                                     </div>
                                                                                                     <div class="form-group">
                                                                                                         <label for="Endtime">Eindtijd:</label>
-                                                                                                        <input type="text" class="form-control" id="Endtime" value="15:00" disabled>
+                                                                                                        <input type="text" class="form-control" id="Endtime" value="' . $moduleinfo['EINDTIJD'] . '" disabled>
                                                                                                     </div>
                                                                                                 </form>
                                                                                 </div>
