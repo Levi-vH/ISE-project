@@ -198,7 +198,8 @@ GO
 -- voorkeur, datum, starttijd, einddtijd 
 CREATE OR ALTER PROC proc_request_module_group_information
 (
-@group_ID INT
+@group_ID INT,
+@modulenummer INT
 )
 AS
 BEGIN
@@ -208,8 +209,9 @@ BEGIN
 					SELECT VOORKEUR, DATUM, STARTTIJD, EINDTIJD -- module naam
 					FROM MODULE_VAN_GROEP
 					WHERE GROEP_ID = @group_ID
+					AND MODULENUMMER = @modulenummer
 				'
-	EXEC sp_executesql @sql, N'@group_ID INT', @group_ID
+	EXEC sp_executesql @sql, N'@group_ID INT, @modulenummer', @group_ID, @modulenummer
 END
 GO
 
