@@ -77,9 +77,9 @@ BEGIN
 				'
 	IF(@where IS NOT NULL) -- if the procedure was executed with an where statement, add the where statement to the select query
 		BEGIN
-			SET @sql += 'WHERE W.WORKSHOP_ID = @where'
+			SET @sql += ' WHERE W.WORKSHOP_ID = @where'
 		END
-	SET @sql += 'ORDER BY @orderby + @orderdirection' -- add an order by statement to the query
+	SET @sql += ' ORDER BY @orderby + @orderdirection' -- add an order by statement to the query
 	IF(@orderby IS NULL)
 		BEGIN
 			SET @orderby = 'W.WORKSHOP_ID' -- if no order by statement was given with the execute, order by workshop_id's
@@ -350,7 +350,7 @@ BEGIN
 				FROM		DEELNEMER_IN_AANVRAAG DA INNER JOIN
 							DEELNEMER D ON DA.DEELNEMER_ID = D.DEELNEMER_ID
 				WHERE		DA.AANVRAAG_ID = @aanvraag_id
-				AND			DA.GROEP_ID = NULL
+				AND			DA.GROEP_ID IS NULL
 				'
 	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
 END
@@ -372,8 +372,9 @@ BEGIN
 	SET @sql =	N'
 				SELECT		D.DEELNEMER_ID,
 							D.VOORNAAM,
-							D.ACHTERNAAM
-							D.OPLEIDINGSNIVEAU
+							D.ACHTERNAAM,
+							D.OPLEIDINGSNIVEAU,
+							D.GEBOORTEDATUM
 				FROM		DEELNEMER_IN_AANVRAAG DA INNER JOIN
 							DEELNEMER D ON DA.DEELNEMER_ID = D.DEELNEMER_ID
 				WHERE		DA.AANVRAAG_ID = @aanvraag_id
