@@ -65,6 +65,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         <th>Opleidingsniveau</th>
                         <th>Email</th>
                         <th>Telefoonnummer</th>
+                        <th>Verwijderen</th>
                     </tr>
                     <?php
                     //Try to make connection
@@ -83,7 +84,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $html = '';
                         $html .= '<tr>';
                         $html .= '<td>';
-                        $html .= $row['VOORNAAM'] . $row['ACHTERNAAM'];
+                        $html .= $row['VOORNAAM'] .' '. $row['ACHTERNAAM'];
                         $html .= '</td>';
                         $html .= '<td>';
                         $html .= $row['GEBOORTEDATUM'];
@@ -96,6 +97,9 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $html .= '</td>';
                         $html .= '<td>';
                         $html .= $row['TELEFOONNUMMER'];
+                        $html .= '</td>';
+                        $html .= '<td>';
+                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="addparticipant.php?aanvraag_id='.$aanvraag_id.'&participant_id='.$row['DEELNEMER_ID'].'&deleteUser=true"></a>';
                         $html .= '</td>';
                         $html .= '</tr>';
 
@@ -135,11 +139,11 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="phonenumber">Telefoonnummer</label>
-                                <input type="number" class="form-control" placeholder="Telefoonnummer" name="phonenumber">
+                                <input type="number" class="form-control" placeholder="Telefoonnummer" name="phonenumber" max="999999999999" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="emailaddress">Emailadres</label>
-                                <input type="email" class="form-control" placeholder="Emailadres" name="emailaddress">
+                                <input type="email" class="form-control" placeholder="Emailadres" name="emailaddress" required>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Maak nieuwe deelnemer</button>

@@ -218,3 +218,50 @@ function getWorkshopType($id) {
     return $workshoptype;
 
 }
+
+function getGroupNumber($id) {
+    $conn = connectToDB();
+
+
+    $sql = "SELECT TYPE FROM WORKSHOP WHERE WORKSHOP_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $workshoptype = $row['TYPE'];
+
+    return $workshoptype;
+
+}
+
+function addUserToGroup($aanvraag_id, $groeps_id, $participant_id) {
+    $conn = connectToDB();
+
+    $sql = "exec proc_add_groep_deelnemers ?, ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
+    $stmt->bindParam(1, $groeps_id, PDO::PARAM_INT);
+    $stmt->bindParam(1, $participant_id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+?>
+
+<!--<script type="text/javascript">-->
+<!--function colorSelectedRow(row, pagina) {-->
+<!---->
+<!--    window.location.href = pagina;-->
+<!---->
+<!--    // row.style.backgroundColor = "rgb(126, 241, 85)";-->
+<!---->
+<!---->
+<!--    // var els = document.getElementsByClassName("groupsrow"); // Creates an HTMLObjectList not an array.-->
+<!--    // Array.prototype.forEach.call(els, function(el) {-->
+<!--    //     el.removeAttribute("style");-->
+<!--    // });-->
+<!---->
+<!--    // row.style.backgroundColor = "rgb(126, 241, 85)";-->
+<!---->
+<!--}-->
+<!--</script>-->

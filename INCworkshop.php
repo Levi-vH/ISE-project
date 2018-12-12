@@ -13,260 +13,260 @@ if ($_SESSION['username'] == 'contactpersoon') {
 
 
 // The ones that do not get checked are dropdown or select.
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
 //    pre_r($_POST);
-    $Organisation_Relationnumber = check_input($_POST["Organisation_Relationnumber"]);
-    $Contact_ID = check_input($_POST["Contact_Name"]);
-    $SBB_Planner = check_input($_POST["Coordination_Contact"]);
-    $Advisor_practical_learning = check_input($_POST["Advisor_practical_learning"]);
-    $Groups = check_input($_POST["Groups"]);
+        $Organisation_Relationnumber = check_input($_POST["Organisation_Relationnumber"]);
+        $Contact_ID = check_input($_POST["Contact_Name"]);
+        $SBB_Planner = check_input($_POST["Coordination_Contact"]);
+        $Advisor_practical_learning = check_input($_POST["Advisor_practical_learning"]);
+        $Groups = check_input($_POST["Groups"]);
 
-    //Try to make connection
-    $conn = connectToDB();
+        //Try to make connection
+        $conn = connectToDB();
 
-    if (($Organisation_Relationnumber !== "")) {
-        if (($Contact_ID) !== "") {
-            if (($Advisor_practical_learning !== "")) {
-                //Run the stored procedure
+        if (($Organisation_Relationnumber !== "")) {
+            if (($Contact_ID) !== "") {
+                if (($Advisor_practical_learning !== "")) {
+                    //Run the stored procedure
 
-                $sql = "exec proc_insert_aanvraag ?, ?, ?, ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bindParam(1, $Organisation_Relationnumber, PDO::PARAM_INT);
-                $stmt->bindParam(2, $Contact_ID, PDO::PARAM_INT);
-                $stmt->bindParam(3, $Advisor_practical_learning, PDO::PARAM_INT);
-                $stmt->bindParam(4, $SBB_Planner, PDO::PARAM_STR);
-                $stmt->execute();
+                    $sql = "exec proc_insert_aanvraag ?, ?, ?, ?";
+                    $stmt = $conn->prepare($sql);
+                    $stmt->bindParam(1, $Organisation_Relationnumber, PDO::PARAM_INT);
+                    $stmt->bindParam(2, $Contact_ID, PDO::PARAM_INT);
+                    $stmt->bindParam(3, $Advisor_practical_learning, PDO::PARAM_INT);
+                    $stmt->bindParam(4, $SBB_Planner, PDO::PARAM_STR);
+                    $stmt->execute();
 
-                //get aanvraagID
-                $sql2 = "SELECT IDENT_CURRENT('AANVRAAG') AS LAATSTE_INDEX";
-                $stmt2 = $conn->prepare($sql2);
-                $stmt2->execute();
+                    //get aanvraagID
+                    $sql2 = "SELECT IDENT_CURRENT('AANVRAAG') AS LAATSTE_INDEX";
+                    $stmt2 = $conn->prepare($sql2);
+                    $stmt2->execute();
 
-                while ($resultaat = $stmt2->fetch(PDO::FETCH_ASSOC)) {
-                    $Aanvraag_ID = $resultaat['LAATSTE_INDEX'];
+                    while ($resultaat = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+                        $Aanvraag_ID = $resultaat['LAATSTE_INDEX'];
 
-                }
-                // if ($Groups > 1) {
-                for ($i = 1; $i <= $Groups; $i++) {
-                    if (isset($_POST["group_" . $i . "_module1"])) {
-                        $Group_Module1 = check_input($_POST["group_" . $i . "_module1"]);
                     }
-                    if (isset($_POST["group_" . $i . "_module2"])) {
-                        $Group_Module2 = check_input($_POST["group_" . $i . "_module2"]);
-                    }
-                    if (isset($_POST["group_" . $i . "_module3"])) {
-                        $Group_Module3 = check_input($_POST["group_" . $i . "_module3"]);
-                    }
-                    if (isset($_POST["group_" . $i . "_module1_Voorkeur"])) {
-                        $Group_Module1_voorkeur = check_input($_POST["group_" . $i . "_module1_Voorkeur"]);
-                    }
-                    if (isset($_POST["group_" . $i . "_module2_Voorkeur"])) {
-                        $Group_Module2_voorkeur = check_input($_POST["group_" . $i . "_module2_Voorkeur"]);
-                    }
-                    if (isset($_POST["group_" . $i . "_module3_Voorkeur"])) {
-                        $Group_Module3_voorkeur = check_input($_POST["group_" . $i . "_module3_Voorkeur"]);
-                    }
-                    $Adress = check_input($_POST["group_" . $i . "Workshop_Address"]);
-                    $Contact_Person = check_input($_POST["group_" . $i . "Aanwezig_Contactpersoon"]);
+                    // if ($Groups > 1) {
+                    for ($i = 1; $i <= $Groups; $i++) {
+                        if (isset($_POST["group_" . $i . "_module1"])) {
+                            $Group_Module1 = check_input($_POST["group_" . $i . "_module1"]);
+                        }
+                        if (isset($_POST["group_" . $i . "_module2"])) {
+                            $Group_Module2 = check_input($_POST["group_" . $i . "_module2"]);
+                        }
+                        if (isset($_POST["group_" . $i . "_module3"])) {
+                            $Group_Module3 = check_input($_POST["group_" . $i . "_module3"]);
+                        }
+                        if (isset($_POST["group_" . $i . "_module1_Voorkeur"])) {
+                            $Group_Module1_voorkeur = check_input($_POST["group_" . $i . "_module1_Voorkeur"]);
+                        }
+                        if (isset($_POST["group_" . $i . "_module2_Voorkeur"])) {
+                            $Group_Module2_voorkeur = check_input($_POST["group_" . $i . "_module2_Voorkeur"]);
+                        }
+                        if (isset($_POST["group_" . $i . "_module3_Voorkeur"])) {
+                            $Group_Module3_voorkeur = check_input($_POST["group_" . $i . "_module3_Voorkeur"]);
+                        }
+                        $Adress = check_input($_POST["group_" . $i . "Workshop_Address"]);
+                        $Contact_Person = check_input($_POST["group_" . $i . "Aanwezig_Contactpersoon"]);
 //        $Contact_Telephone = check_input($_POST["group_" . $i . "Aanwezig_Telephone"]);
 //        $Contact_Email = check_input($_POST["group_" . $i . "Aanwezig_Email"]);
 
-                    if ((isset($Group_Module1) && isset($Group_Module1_voorkeur)) || (isset($Group_Module2) && isset($Group_Module2_voorkeur)) || (isset($Group_Module3) && isset($Group_Module3_voorkeur))) {
+                        if ((isset($Group_Module1) && isset($Group_Module1_voorkeur)) || (isset($Group_Module2) && isset($Group_Module2_voorkeur)) || (isset($Group_Module3) && isset($Group_Module3_voorkeur))) {
 
-                        if (!is_null($Contact_Person) && !is_null($Adress)) {
+                            if (!is_null($Contact_Person) && !is_null($Adress)) {
 
-                            if (isset($Group_Module1)) {
-                                if (is_null($Group_Module1)) {
-                                    $Group_Module1_voorkeur = NULL;
+                                if (isset($Group_Module1)) {
+                                    if (is_null($Group_Module1)) {
+                                        $Group_Module1_voorkeur = NULL;
+                                    }
                                 }
-                            }
 
-                            if (isset($Group_Module2)) {
-                                if (is_null($Group_Module2)) {
-                                    $Group_Module2_voorkeur = NULL;
+                                if (isset($Group_Module2)) {
+                                    if (is_null($Group_Module2)) {
+                                        $Group_Module2_voorkeur = NULL;
+                                    }
                                 }
-                            }
 
-                            if (isset($Group_Module3)) {
-                                if (is_null($Group_Module3)) {
-                                    $Group_Module3_voorkeur = NULL;
+                                if (isset($Group_Module3)) {
+                                    if (is_null($Group_Module3)) {
+                                        $Group_Module3_voorkeur = NULL;
+                                    }
                                 }
+                                //Run the stored procedure
+                                $sql3 = "exec proc_insert_aanvraag_groepen ?, ?, ?, ?, ?, ?, ?, ?, ?";
+                                $stmt3 = $conn->prepare($sql3);
+                                $stmt3->bindParam(1, $Aanvraag_ID, PDO::PARAM_INT);
+                                $stmt3->bindParam(2, $Group_Module1, PDO::PARAM_INT);
+                                $stmt3->bindParam(3, $Group_Module2, PDO::PARAM_INT);
+                                $stmt3->bindParam(4, $Group_Module3, PDO::PARAM_INT);
+                                $stmt3->bindParam(5, $Group_Module1_voorkeur, PDO::PARAM_STR);
+                                $stmt3->bindParam(6, $Group_Module2_voorkeur, PDO::PARAM_STR);
+                                $stmt3->bindParam(7, $Group_Module3_voorkeur, PDO::PARAM_STR);
+                                $stmt3->bindParam(8, $Adress, PDO::PARAM_STR);
+                                $stmt3->bindParam(9, $Contact_Person, PDO::PARAM_STR);
+                                $stmt3->execute();
+                            } else {
+                                $error_message = "een contactpersoon & een adres zijn verplicht";
                             }
-                            //Run the stored procedure
-                            $sql3 = "exec proc_insert_aanvraag_groepen ?, ?, ?, ?, ?, ?, ?, ?, ?";
-                            $stmt3 = $conn->prepare($sql3);
-                            $stmt3->bindParam(1, $Aanvraag_ID, PDO::PARAM_INT);
-                            $stmt3->bindParam(2, $Group_Module1, PDO::PARAM_INT);
-                            $stmt3->bindParam(3, $Group_Module2, PDO::PARAM_INT);
-                            $stmt3->bindParam(4, $Group_Module3, PDO::PARAM_INT);
-                            $stmt3->bindParam(5, $Group_Module1_voorkeur, PDO::PARAM_STR);
-                            $stmt3->bindParam(6, $Group_Module2_voorkeur, PDO::PARAM_STR);
-                            $stmt3->bindParam(7, $Group_Module3_voorkeur, PDO::PARAM_STR);
-                            $stmt3->bindParam(8, $Adress, PDO::PARAM_STR);
-                            $stmt3->bindParam(9, $Contact_Person, PDO::PARAM_STR);
-                            $stmt3->execute();
                         } else {
-                            $error_message = "een contactpersoon & een adres zijn verplicht";
+                            $error_message = "er moet een module gekozen worden en voor elke module moet een voorkeur worden opgegeven";
                         }
-                    } else {
-                        $error_message = "er moet een module gekozen worden en voor elke module moet een voorkeur worden opgegeven";
                     }
-                }
 
+                } else {
+                    $error_message = 'De adviseur moet worden ingevoerd.';
+                }
             } else {
-                $error_message = 'De adviseur moet worden ingevoerd.';
+                $error_message = 'De contact_ID moet worden ingevoerd.';
             }
         } else {
-            $error_message = 'De contact_ID moet worden ingevoerd.';
+            $error_message = 'De organisatie moet worden ingevoerd.';
         }
-    } else {
-        $error_message = 'De organisatie moet worden ingevoerd.';
+
+        //  }
+
     }
+    generate_header('Incompany Aanvragen');
+    ?>
 
-    //  }
-
-}
-generate_header('Incompany Aanvragen');
-?>
-
-<body>
-<div class="container">
-    <h2 class="text-info text-center">Aanvraag INC workshop</h2>
-    <br>
-    <?php     if ($error_message !== NULL){
-        echo '<div class ="container"> <p>' . $error_message .'</p> </div>';
-    } ?>
-    <h3>Organisatie</h3>
-    <form class="form-horizontal" action="" method="post">
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="Organisation_Name">Naam Organisatie:</label>
-            <div class="col-sm-10">
-                <?php
-                echo selectBox("Organisation_Name", "Organisatie", array("Organisatienaam"), "Organisatienaam", array("Organisatienaam"), "Organisatienaam", "get_organisatie()");
-                ?>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="Organisation_Relationnumber">Relatie nummer:</label>
-            <div class="col-sm-10">
-                <input id="Organisation_Relationnumber" type="text" class="form-control" placeholder="Relatie nummer"
-                       name="Organisation_Relationnumber" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="Organisation_Address">Adres:</label>
-            <div class="col-sm-10">
-                <input id="Organisation_Address" type="text" class="form-control" placeholder="Adres organisatie"
-                       name="Organisation_Address" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="Organisation_Postcode">Postcode:</label>
-            <div class="col-sm-10">
-                <input id="Organisation_Postcode" type="text" class="form-control" placeholder="Postcode organisatie"
-                       name="Organisation_Postcode" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="Organisation_Town">Plaats:</label>
-            <div class="col-sm-10">
-                <input id="Organisation_Town" type="text" class="form-control" placeholder="Plaats organisatie"
-                       name="Organisation_Town" readonly>
-            </div>
-        </div>
+    <body>
+    <div class="container">
+        <h2 class="text-info text-center">Aanvraag INC workshop</h2>
         <br>
-
-        <h3>Contactpersoon Organisatie</h3>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="Contact_Name">Contactpersoon:</label>
-            <div class="col-sm-10">
-                <select id="Contact_Name" class="form-control" name="Contact_Name" onchange="get_contact_details()">
-                    <option value="">Selecteer Contactpersoon Coördinatie...</option>
-                </select>
+        <?php     if ($error_message !== NULL){
+            echo '<div class ="container"> <p>' . $error_message .'</p> </div>';
+        } ?>
+        <h3>Organisatie</h3>
+        <form class="form-horizontal" action="" method="post">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Organisation_Name">Naam Organisatie:</label>
+                <div class="col-sm-10">
+                    <?php
+                    echo selectBox("Organisation_Name", "Organisatie", array("Organisatienaam"), "Organisatienaam", array("Organisatienaam"), "Organisatienaam", "get_organisatie()");
+                    ?>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="Contact_Telephonenumber">Telefoonnummer:</label>
-            <div class="col-sm-10">
-                <input id="Contact_Telephonenumber" type="text" class="form-control"
-                       placeholder="Telefoonnummer contactpersoon" name="Contact_Telephonenumber" readonly>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Organisation_Relationnumber">Relatie nummer:</label>
+                <div class="col-sm-10">
+                    <input id="Organisation_Relationnumber" type="text" class="form-control" placeholder="Relatie nummer"
+                           name="Organisation_Relationnumber" readonly>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="Contact_Email">Email:</label>
-            <div class="col-sm-10">
-                <input id="Contact_Email" type="text" class="form-control" placeholder="Email contactpersoon"
-                       name="Contact_Email" readonly>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Organisation_Address">Adres:</label>
+                <div class="col-sm-10">
+                    <input id="Organisation_Address" type="text" class="form-control" placeholder="Adres organisatie"
+                           name="Organisation_Address" readonly>
+                </div>
             </div>
-        </div>
-        <br>
-
-        <h3>Coördinatie SBB</h3>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="Coordination_Contact">Contactpersoon:</label>
-            <div class="col-sm-10">
-                <?php echo selectBox("Coordination_Contact", "planner", array("plannernaam"), "plannernaam", array("plannernaam"), "plannernaam"); ?>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Organisation_Postcode">Postcode:</label>
+                <div class="col-sm-10">
+                    <input id="Organisation_Postcode" type="text" class="form-control" placeholder="Postcode organisatie"
+                           name="Organisation_Postcode" readonly>
+                </div>
             </div>
-        </div>
-        <br>
-
-        <h3>Adviseur SBB</h3>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="Advisor_practical_learning">Adviseur praktijkleren:</label>
-            <div class="col-sm-10">
-                <select id="Advisor_practical_learning" class="form-control" name="Advisor_practical_learning"
-                        onchange="get_advisor_details()">
-                    <option value="">Selecteer Adviseur praktijkleren...</option>
-                </select>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Organisation_Town">Plaats:</label>
+                <div class="col-sm-10">
+                    <input id="Organisation_Town" type="text" class="form-control" placeholder="Plaats organisatie"
+                           name="Organisation_Town" readonly>
+                </div>
             </div>
-        </div>
+            <br>
 
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="Advisor_Email">Email:</label>
-            <div class="col-sm-10">
-                <input id="Advisor_Email" type="text" class="form-control" placeholder="Email adviseur"
-                       name="Advisor_Email" readonly>
+            <h3>Contactpersoon Organisatie</h3>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Contact_Name">Contactpersoon:</label>
+                <div class="col-sm-10">
+                    <select id="Contact_Name" class="form-control" name="Contact_Name" onchange="get_contact_details()">
+                        <option value="">Selecteer Contactpersoon Coördinatie...</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="Advisor_Telephonenumber">Telefoonnummer:</label>
-            <div class="col-sm-10">
-                <input id="Advisor_Telephonenumber" type="text" class="form-control"
-                       placeholder="Telefoonnummer adviseur" name="Advisor_Telephonenumber" readonly>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Contact_Telephonenumber">Telefoonnummer:</label>
+                <div class="col-sm-10">
+                    <input id="Contact_Telephonenumber" type="text" class="form-control"
+                           placeholder="Telefoonnummer contactpersoon" name="Contact_Telephonenumber" readonly>
+                </div>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="Advisor_Sector">Sector:</label>
-            <div class="col-sm-10">
-                <input id="Advisor_Sector" type="text" class="form-control" placeholder="Sector"
-                       name="Advisor_Sector" readonly>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Contact_Email">Email:</label>
+                <div class="col-sm-10">
+                    <input id="Contact_Email" type="text" class="form-control" placeholder="Email contactpersoon"
+                           name="Contact_Email" readonly>
+                </div>
             </div>
-        </div>
-        <br>
+            <br>
 
-        <h3>Workshop informatie</h3>
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="Groups">Aantal groepen:</label>
-            <div class="col-sm-10">
-                <input id="Groups" type="number" class="form-control" name="Groups" onchange="accordion(value)" min="0"
-                       max="15">
+            <h3>Coördinatie SBB</h3>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Coordination_Contact">Contactpersoon:</label>
+                <div class="col-sm-10">
+                    <?php echo selectBox("Coordination_Contact", "planner", array("plannernaam"), "plannernaam", array("plannernaam"), "plannernaam"); ?>
+                </div>
             </div>
-        </div>
+            <br>
 
-        <div id="hidden_accordion">
-
-        </div>
-
-
-        <div class="form-group">
-            <div class="col-sm-offset-5 col-sm-10">
-                <button type="submit" class="btn btn-success btn-lg">Vraag Incompany Workshop Aan</button>
+            <h3>Adviseur SBB</h3>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Advisor_practical_learning">Adviseur praktijkleren:</label>
+                <div class="col-sm-10">
+                    <select id="Advisor_practical_learning" class="form-control" name="Advisor_practical_learning"
+                            onchange="get_advisor_details()">
+                        <option value="">Selecteer Adviseur praktijkleren...</option>
+                    </select>
+                </div>
             </div>
-        </div>
-    </form>
-</div>
 
-</body>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Advisor_Email">Email:</label>
+                <div class="col-sm-10">
+                    <input id="Advisor_Email" type="text" class="form-control" placeholder="Email adviseur"
+                           name="Advisor_Email" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Advisor_Telephonenumber">Telefoonnummer:</label>
+                <div class="col-sm-10">
+                    <input id="Advisor_Telephonenumber" type="text" class="form-control"
+                           placeholder="Telefoonnummer adviseur" name="Advisor_Telephonenumber" readonly>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Advisor_Sector">Sector:</label>
+                <div class="col-sm-10">
+                    <input id="Advisor_Sector" type="text" class="form-control" placeholder="Sector"
+                           name="Advisor_Sector" readonly>
+                </div>
+            </div>
+            <br>
+
+            <h3>Workshop informatie</h3>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Groups">Aantal groepen:</label>
+                <div class="col-sm-10">
+                    <input id="Groups" type="number" class="form-control" name="Groups" onchange="accordion(value)" min="0"
+                           max="15">
+                </div>
+            </div>
+
+            <div id="hidden_accordion">
+
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-sm-offset-5 col-sm-10">
+                    <button type="submit" class="btn btn-success btn-lg">Vraag Incompany Workshop Aan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    </body>
 <?php } else {
     echo '<h1> Alleen contactpersonen kunnen deze pagina bezoeken</h1>';
 }

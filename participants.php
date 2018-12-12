@@ -56,9 +56,11 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         $nummer++;
                         $html = '';
-                        $html .= "<tr>";
+                        $groeps_id = $row['GROEP_ID'];
+                        $pagina = $_SERVER['PHP_SELF'].'?aanvraag_id='.$aanvraag_id.'&groeps_id='.$groeps_id;
+                        $html .= "<tr class='groupsrow' onclick='colorSelectedRow(this, \"$pagina\")'>";
                         $html .= '<td>';
-                        $html .= $nummer;
+                        $html .= $row['GROEP_ID'];
                         $html .= '</td>';
                         $html .= '<td>';
                         $html .= $row['VOORNAAM'] . ' ' . $row['ACHTERNAAM'];
@@ -81,14 +83,14 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
 
                     ?>
                 </table>
-                <h1 class="participantsheader">Groep   Deelnemers</h1>
+                <h1 class="participantsheader">Deelnemers</h1>
                 <div>
                     <table class='table table-striped table-hover participantstable'>
-                        <tr>
+                        <tr class="small">
                             <th>Naam</th>
                             <th>Geboortedatum</th>
                             <th>Opleidingsniveau</th>
-                            <th>Toevoegen aan groep</th>
+                            <th>Toevoegen</th>
                         </tr>
                         <?php
                         //Try to make connection
@@ -102,7 +104,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
 
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             $html = '';
-                            $html .= "<tr>";
+                            $html .= "<tr class='small'>";
                             $html .= '<td>';
                             $html .= $row['VOORNAAM'] . ' ' . $row['ACHTERNAAM'];
                             $html .= '</td>';
@@ -113,7 +115,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                             $html .= $row['OPLEIDINGSNIVEAU'];
                             $html .= '</td>';
                             $html .= '<td>';
-                            $html .= '<a class="fas fa-check" id="approvebutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt toevoegen?\')" href="participants.php?aanvraag_id='.$aanvraag_id.'&participant_id='.$row['DEELNEMER_ID'].'&addUser=true"></a>';
+                            $html .= '<a class="fas fa-check" id="approvebutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt toevoegen?\')" href="participants.php?aanvraag_id='.$aanvraag_id.'&groeps_id='.$_GET['groeps_id'].'&participant_id='.$row['DEELNEMER_ID'].'&addUserToGroup=true"></a>';
                             $html .= '</td>';
                             $html .= '</tr>';
 
@@ -124,15 +126,19 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                             deleteUserAanvraag($aanvraag_id, $_GET['participant_id']);
                             updatePage($_SERVER['PHP_SELF'] . '?aanvraag_id=' . $aanvraag_id);
                         }
+                        if (isset($_GET['addUserToGroup'])) {
+                            addUserToGroup($aanvraag_id, $_GET['groeps_id'], $_GET['participant_id']);
+                           //updatePage($_SERVER['PHP_SELF'] . '?aanvraag_id=' . $aanvraag_id);
+                        }
 
                         ?>
                     </table>
                     <table class='table table-striped table-hover participantstable'>
-                        <tr>
+                        <tr class="small">
                             <th>Naam</th>
                             <th>Geboortedatum</th>
                             <th>Opleidingsniveau</th>
-                            <th>Verwijderen uit groep</th>
+                            <th>Verwijderen</th>
                         </tr>
                         <?php
                         //Try to make connection
@@ -142,13 +148,13 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $sql = "exec proc_request_deelnemers_van_groep ?, ?";
                         $stmt = $conn->prepare($sql);
                         $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
-                        $stmt->bindParam(2, $aanvraag_id, PDO::PARAM_INT);
+                        $stmt->bindParam(2, $_GET['groeps_id'], PDO::PARAM_INT);
 
                         $stmt->execute();
 
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             $html = '';
-                            $html .= "<tr>";
+                            $html .= "<tr class='small col-sm-6'>";
                             $html .= '<td>';
                             $html .= $row['VOORNAAM'] . ' ' . $row['ACHTERNAAM'];
                             $html .= '</td>';

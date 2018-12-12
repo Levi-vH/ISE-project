@@ -22,7 +22,26 @@ foreach ($row as $key => $value){
         $row[$key] = 'Nog niet bekend';
     }
 }
+
+function getFirstGroup($aanvraag_id) {
+    $conn = connectToDB();
+
+    $sql = "select top 1 GROEP_ID from GROEP where aanvraag_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $firstgroup = $row['GROEP_ID'];
+
+    return $firstgroup;
+
+}
+
+$groep = getFirstGroup($aanvraag_id);
+
 ?>
+
 
 <body>
 <div class="container-fluid">
@@ -35,7 +54,7 @@ foreach ($row as $key => $value){
                         <a class="active-page">Details</a>
                     </li>
                     <li>
-                        <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id?>">Deelnemers en Groepen</a>
+                        <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id?>&groeps_id=<?=$groep?>">Deelnemers en Groepen</a>
                     </li>
                     <li>
                         <a href="addparticipant.php?aanvraag_id=<?php echo $aanvraag_id?>">Deelnemers toevoegen</a>
@@ -149,10 +168,6 @@ foreach ($row as $key => $value){
                     </div>
                 </div>
             </div>
-
-
-
-
         </div>
     </div>
 </body>

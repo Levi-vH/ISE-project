@@ -64,9 +64,9 @@ a:hover{
 
 .participantstable {
     display: inline-block;
-    width: 50%;
     float: left;
-    padding-right: 40px;
+    width: 48%;
+    margin-right: 20px;
 }
 
 .headcenter {
