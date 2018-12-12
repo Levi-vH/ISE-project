@@ -245,6 +245,26 @@ END
 GO
 
 --============================================================================================================
+-- SP proc_request_groupsID:                                    
+--===========================================================================================================
+
+CREATE OR ALTER PROC proc_request_Modulenummers
+(
+@group_ID INT = NULL
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				SELECT	MODULENUMMER
+				FROM	MODULE_VAN_GROEP
+				WHERE	GROEP_ID = @group_ID
+	 '
+	 EXEC sp_executesql @sql, N'@group_ID INT', @group_ID
+END
+GO
+--============================================================================================================
 -- SP proc_request_approved_workshop_participants: returns all approved workshop participants for a workshop                                      
 --===========================================================================================================
 
