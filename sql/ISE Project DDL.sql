@@ -1,7 +1,12 @@
-/*==============================================================*/
-/* DBMS name:      Microsoft SQL Server 2008                    */
-/* Created on:     26-11-2018 10:42:20                          */
-/*==============================================================*/
+/* =================================================================
+   Author: Mark
+   Create date: 26-11-2018
+   Description: this script is used to create the database
+   'SBBWorkshopOmgeving'
+   --------------------------------
+   Modified by: Bart
+   Modifications made by Bart: made domain types
+   ================================================================ */
 
 USE master
 GO
