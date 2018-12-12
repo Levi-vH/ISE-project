@@ -55,7 +55,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
 
-	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TRG_workshop_state_bevestigd'
+	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TR_workshop_state_bevestigd'
 	
 	INSERT INTO WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
  [MODULENUMMER], [ADVISEUR_ID], [SECTORNAAM], [DATUM], [STARTTIJD], [EINDTIJD],[ADRES],
@@ -92,7 +92,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
 
-	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TRG_workshop_state_bevestigd'
+	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TR_workshop_state_bevestigd'
 	
 	INSERT INTO WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
  [MODULENUMMER], [ADVISEUR_ID], [SECTORNAAM], [DATUM], [STARTTIJD], [EINDTIJD],[ADRES],
@@ -129,7 +129,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
 
-	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TRG_workshop_state_bevestigd'
+	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TR_workshop_state_bevestigd'
 	
 	INSERT INTO WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
  [MODULENUMMER], [ADVISEUR_ID], [SECTORNAAM], [DATUM], [STARTTIJD], [EINDTIJD],[ADRES],
@@ -166,7 +166,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
 
-	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TRG_workshop_state_bevestigd'
+	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TR_workshop_state_bevestigd'
 	
 	INSERT INTO WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
  [MODULENUMMER], [ADVISEUR_ID], [SECTORNAAM], [DATUM], [STARTTIJD], [EINDTIJD],[ADRES],
@@ -192,7 +192,7 @@ BEGIN
 		
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopTypes';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_types';
 
 	EXEC tSQLt.ExpectNoException
 	
@@ -214,7 +214,7 @@ BEGIN
 	
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopTypes';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_types';
 
 	EXEC tSQLt.ExpectNoException
 	
@@ -236,7 +236,7 @@ BEGIN
 		
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopTypes';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_types';
 
 	EXEC tSQLt.ExpectException
 	
@@ -262,7 +262,7 @@ BEGIN
 	
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopAdvisor';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_advisor';
 
 	EXEC tSQLt.ExpectnoException
 	
@@ -284,7 +284,7 @@ BEGIN
 	
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopAdvisor';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_advisor';
 
 	EXEC tSQLt.ExpectnoException
 	
@@ -306,7 +306,7 @@ BEGIN
 	
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopAdvisor';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_advisor';
 
 	EXEC tSQLt.ExpectException
 	
@@ -328,7 +328,7 @@ BEGIN
 		
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopAdvisor';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_advisor';
 
 	EXEC tSQLt.ExpectnoException
 	
@@ -354,7 +354,7 @@ BEGIN
 		
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopDate';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_date';
 
 	EXEC tSQLt.ExpectnoException
 	
@@ -376,7 +376,7 @@ BEGIN
 	
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopDate';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_date';
 
 	EXEC tSQLt.ExpectException
 	
@@ -402,7 +402,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopState';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_state';
 
 	EXEC tSQLt.ExpectnoException
 	
@@ -424,7 +424,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopState';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_state';
 
 	EXEC tSQLt.ExpectException
 	
@@ -450,7 +450,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopState';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_state';
 
 	EXEC tSQLt.ExpectnoException
 	
@@ -472,7 +472,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopState';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_state';
 
 	EXEC tSQLt.ExpectnoException
 	
@@ -512,7 +512,7 @@ IF OBJECT_ID('[testWorkshopStateTrigger]','Table') IS NOT NULL
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
 
-	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TRG_WorkshopConcluded'
+	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TR_workshop_concluded'
 	
 	INSERT INTO WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
  [MODULENUMMER], [ADVISEUR_ID], [SECTORNAAM], [DATUM], [STARTTIJD], [EINDTIJD],[ADRES],
@@ -547,7 +547,7 @@ IF OBJECT_ID('[testWorkshopStateTrigger]','Table') IS NOT NULL
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
 
-	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TRG_WorkshopConcluded'
+	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TR_workshop_concluded'
 	
 	INSERT INTO WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
  [MODULENUMMER], [ADVISEUR_ID], [SECTORNAAM], [DATUM], [STARTTIJD], [EINDTIJD],[ADRES],
@@ -582,7 +582,7 @@ IF OBJECT_ID('[testWorkshopStateTrigger]','Table') IS NOT NULL
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP'; 
 
-	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TRG_WorkshopConcluded'
+	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.WORKSHOP', @triggername = 'TR_workshop_concluded'
 	
 	INSERT INTO WORKSHOP([WORKSHOP_ID], [WORKSHOPLEIDER_ID], [CONTACTPERSOON_ID], [ORGANISATIENUMMER],
  [MODULENUMMER], [ADVISEUR_ID], [SECTORNAAM], [DATUM], [STARTTIJD], [EINDTIJD],[ADRES],
@@ -607,7 +607,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopTypeAndSector';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_type_and_sector';
 
 	EXEC tSQLt.ExpectnoException
 
@@ -628,7 +628,7 @@ AS
 BEGIN
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopTypeAndSector';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_type_and_sector';
 
 	EXEC tSQLt.ExpectException
 	
@@ -650,7 +650,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopTypeAndSector';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_type_and_sector';
 
 	EXEC tSQLt.ExpectnoException
 	
@@ -672,7 +672,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_WorkshopTypeAndSector';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_workshop_type_and_sector';
 
 	EXEC tSQLt.ExpectnoException
 	
@@ -702,7 +702,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.DEELNEMER';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_DeelnemerEmail';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_deelnemer_email';
 
 	EXEC tSQLt.ExpectException
 	
@@ -723,7 +723,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.DEELNEMER';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_DeelnemerEmail';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_deelnemer_email';
 
 	EXEC tSQLt.ExpectException
 	
@@ -744,7 +744,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.DEELNEMER';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_DeelnemerEmail';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_deelnemer_email';
 
 	EXEC tSQLt.ExpectnoException
 	
@@ -769,7 +769,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.DEELNEMER';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_DeelnemerBirthdate';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_deelnemer_birthdate';
 
 	EXEC tSQLt.ExpectException
 	
@@ -790,7 +790,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.DEELNEMER';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_DeelnemerBirthdate';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_deelnemer_birthdate';
 
 	EXEC tSQLt.ExpectnoException
 	
@@ -816,7 +816,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.DEELNEMER';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_OpenInschrijvingValues';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_open_inschrijving_values';
 
 	EXEC tSQLt.ExpectnoException
 
@@ -837,7 +837,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.DEELNEMER';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_OpenInschrijvingValues';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_open_inschrijving_values';
 
 	EXEC tSQLt.ExpectnoException
 
@@ -858,7 +858,7 @@ BEGIN
 
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.DEELNEMER';  
 	
-	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_OpenInschrijvingValues';
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.DEELNEMER', @ConstraintName = 'CK_open_inschrijving_values';
 
 	EXEC tSQLt.ExpectException
 
