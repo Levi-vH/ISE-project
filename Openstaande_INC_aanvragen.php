@@ -15,8 +15,15 @@ generate_header('Incompany Aanvragen');
     <div>
         <table class='table table-striped table-hover'>
             <tr>
-                <th>Organisatie</th>
+                <?php
+                if(isset($_SESSION['username']) && $_SESSION['username'] == 'contactpersoon'){
+                    echo '<th>Aanvraag nummer</th>';
+                }elseif(isset($_SESSION['username']) && $_SESSION['username'] == 'planner'){
+                    echo '<th>Organisatie</th>';
+                }
+                ?>
                 <th>Aantal groepen</th>
+                <th>Adviseur naam</th>
                 <th>Datum aanvraag</th>
             </tr>
             <?php
@@ -31,15 +38,24 @@ generate_header('Incompany Aanvragen');
             $nummer = 0;
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
                 $nummer++;
                 $html = '';
                 $link = $row['AANVRAAG_ID'];
                 $html .= "<tr onclick=\"window.location='INCaanvraag.php?aanvraag_id=$link'\">";
                 $html .= '<td class="align-middle">';
-                $html .= $nummer;
+                if(isset($_SESSION['username']) && $_SESSION['username'] == 'contactpersoon'){
+                    $html .= $nummer;
+                }elseif(isset($_SESSION['username']) && $_SESSION['username'] == 'planner'){
+                    $html .= $row['ORGANISATIENAAM'];
+                }
+
                 $html .= '</td>';
                 $html .= '<td class="align-middle">';
                 $html .= $row['AANTAL_GROEPEN'];
+                $html .= '</td>';
+                $html .= '<td class="align-middle">';
+                $html .= $row['ADVISEURVOORNAAM'] . ' ' . $row['ADVISEURACHTERNAAM'];
                 $html .= '</td>';
                 $html .= '<td class="align-middle">';
                 $html .=  date('j F Y', strtotime($row['AANVRAAG_DATUM']));
