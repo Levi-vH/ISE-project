@@ -220,7 +220,7 @@ GO
 -- voorkeur, datum, starttijd, einddtijd 
 CREATE OR ALTER PROC proc_request_group_information
 (
-@group_ID INT
+@group_ID INT = NULL
 )
 AS
 BEGIN
