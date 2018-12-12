@@ -211,7 +211,7 @@ BEGIN
 					WHERE GROEP_ID = @group_ID
 					AND MODULENUMMER = @modulenummer
 				'
-	EXEC sp_executesql @sql, N'@group_ID INT, @modulenummer', @group_ID, @modulenummer
+	EXEC sp_executesql @sql, N'@group_ID INT, @modulenummer INT', @group_ID, @modulenummer
 END
 GO
 

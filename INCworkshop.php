@@ -48,6 +48,16 @@ if ($_SESSION['username'] == 'contactpersoon') {
                     }
                     // if ($Groups > 1) {
                     for ($i = 1; $i <= $Groups; $i++) {
+                        $Group_Module1 = NULL;
+                        $Group_Module2 = NULL;
+                        $Group_Module3 = NULL;
+                        $Group_Module1_voorkeur = NULL;
+                        $Group_Module2_voorkeur = NULL;
+                        $Group_Module3_voorkeur = NULL;
+                        $Adress = NULL;
+                        $Contact_Person = NULL;
+
+
                         if (isset($_POST["group_" . $i . "_module1"])) {
                             $Group_Module1 = check_input($_POST["group_" . $i . "_module1"]);
                         }
