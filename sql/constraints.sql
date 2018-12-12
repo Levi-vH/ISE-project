@@ -1,3 +1,13 @@
+/* =================================================================
+   Author: Bart
+   Create date: 26-11-2018
+   Description: this script is used to create the constraints
+   for the 'SBBWorkshopOmgeving' database
+   --------------------------------
+   Modified by:
+   Modifications made by :
+   ================================================================ */
+
 -- Constraints with a ** have no tests 
 
 USE [SBBWorkshopOmgeving]
