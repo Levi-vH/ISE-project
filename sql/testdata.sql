@@ -1,3 +1,13 @@
+/* =====================================================================
+   Author: Mark
+   Create date: 26-11-2018
+   Description: this is a script to create random testdata for the
+   'SBBWorkshopOmgeving' database
+   --------------------------------
+   Modified by:
+   Modifications made by :
+   ==================================================================== */
+
 USE master
 GO
 
