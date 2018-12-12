@@ -196,7 +196,7 @@ GO
 --============================================================================================
 -- van de groep en module dan wil je de module informatie: de opgegeven voorkeur datum startijd eindtijd
 -- voorkeur, datum, starttijd, einddtijd 
-CREATE OR ALTER PROC proc_request_group_information
+CREATE OR ALTER PROC proc_request_module_group_information
 (
 @group_ID INT
 )
@@ -204,12 +204,35 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
-	--SET @sql =	N'
+	SET @sql =	N'
 					SELECT VOORKEUR, DATUM, STARTTIJD, EINDTIJD -- module naam
 					FROM MODULE_VAN_GROEP
 					WHERE GROEP_ID = @group_ID
-		--		'
-	EXEC sp_executesql @sql, N'@group_id INT', @group_id
+				'
+	EXEC sp_executesql @sql, N'@group_ID INT', @group_ID
+END
+GO
+
+--============================================================================================
+-- SP proc_request_group_information: returns information for a single group                                      
+--============================================================================================
+-- van de groep en module dan wil je de module informatie: de opgegeven voorkeur datum startijd eindtijd
+-- voorkeur, datum, starttijd, einddtijd 
+CREATE OR ALTER PROC proc_request_group_information
+(
+@group_ID INT = NULL
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+					SELECT C.VOORNAAM, C.ACHTERNAAM, C.EMAIL, C.TELEFOONNUMMER, G.ADRES
+					FROM GROEP G INNER JOIN CONTACTPERSOON C
+					ON G.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
+					WHERE GROEP_ID = @group_ID
+				'
+	EXEC sp_executesql @sql, N'@group_ID INT', @group_ID
 END
 GO
 
