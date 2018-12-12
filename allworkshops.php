@@ -12,10 +12,9 @@ generate_header('Workshop overzicht');
                 <th>Workshoptype</th>
                 <th>Module</th>
                 <th>Datum</th>
-                <th>Starttijd</th>
-                <th>Eindtijd</th>
+                <th>Workshopleider</th>
                 <th>Organisatie</th>
-                <th>Aantal deelnemers</th>
+
             </tr>
             <?php
             //Try to make connection
@@ -28,8 +27,8 @@ generate_header('Workshop overzicht');
             $stmt->execute();
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+
                 $html = '';
-                //$row[\'WORKSHOP_ID\']'
                 $link = $row['WORKSHOP_ID'];
                 $html .= "<tr onclick=\"window.location='workshop.php?workshop_id=$link'\">";
                 $html .= '<td class="align-middle">';
@@ -42,17 +41,12 @@ generate_header('Workshop overzicht');
                 $html .= date('j F Y', strtotime($row['DATUM']));
                 $html .= '</td>';
                 $html .= '<td class="align-middle">';
-                $html .= substr($row['STARTTIJD'],0,5);
-                $html .= '</td>';
-                $html .= '<td class="align-middle">';
-                $html .= substr($row['EINDTIJD'],0,5);
+                $html .= $row['ADVISEUR_VOORNAAM'] . ' ' . $row['ADVISEUR_ACHTERNAAM'];
                 $html .= '</td>';
                 $html .= '<td class="align-middle">';
                 $html .= $row['ORGANISATIENAAM'];
                 $html .= '</td>';
-                $html .= '<td class="align-middle">';
-                $html .= $row['AANTAL_DEELNEMERS'] . '/16';
-                $html .= '</td>';
+
                 $html .= '</tr>';
 
                 echo $html;
