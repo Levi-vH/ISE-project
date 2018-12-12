@@ -1,3 +1,10 @@
+/* ===========================================================
+   Author: Bart
+   Create date: 22-11-2018
+   Description: here you can find all the tSQLt tests for 
+   the constraints that are used in SBBWorkshopOmgeving
+   =========================================================== */
+
 USE [UnitTesting SBB]
 
 -- all tests are sorted per table. You can find the table name and the function of the constraint

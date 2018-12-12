@@ -1,3 +1,14 @@
+/* ===========================================================
+   Author: Bart
+   Create date: 22-11-2018
+   Description: this script is used to automatically create 
+   history tables for SBBWorkshopOmgeving
+   --------------------------------
+   modified by: Lars
+   on: 11-12-2018
+   changes: made the proc: proc_generate_history_table
+   =========================================================== */
+
 USE SBBWorkshopOmgeving
 GO
 
