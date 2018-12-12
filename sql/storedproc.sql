@@ -151,13 +151,41 @@ BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
 	SET @sql =	N'
-				SELECT GROEP_ID
+				SELECT	GROEP_ID
 				FROM	GROEP
-				WHERE AANVRAAG_ID = @aanvraag_id
-	 '
+				WHERE	AANVRAAG_ID = @aanvraag_id
+				'
 	 EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
 END
 GO
+
+--============================================================================================
+-- SP proc_request_groupsID: returns all row number groups ID's of a request                                      
+--============================================================================================
+
+CREATE OR ALTER PROC proc_request_row_number_groupsID
+(
+@aanvraag_id INT = NULL,
+@groep_id INT = NULL
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				;WITH row_number AS
+				(
+				SELECT	ROW_NUMBER() OVER (ORDER BY GROEP_ID) AS row_number_group, GROEP_ID
+				FROM	GROEP
+				)
+				SELECT	row_number_group
+				FROM	row_number
+				WHERE	GROEP_ID = @groep_id
+				'
+	 EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
+END
+GO
+
 --============================================================================================
 -- SP proc_request_groups: returns all groups from requests                                       
 --============================================================================================
