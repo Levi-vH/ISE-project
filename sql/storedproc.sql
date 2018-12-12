@@ -35,6 +35,7 @@ BEGIN
 							W.ADRES,
 							W.POSTCODE,
 							W.PLAATSNAAM,
+							W.SECTORNAAM,
 							STATUS,
 							OPMERKING,
 							VERWERKT_BREIN,
