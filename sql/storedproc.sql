@@ -182,7 +182,7 @@ BEGIN
 				FROM	row_number
 				WHERE	GROEP_ID = @groep_id
 				'
-	 EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
+	 EXEC sp_executesql @sql, N'@aanvraag_id INT, @groep_id INT', @aanvraag_id, @groep_id
 END
 GO
 
