@@ -137,6 +137,7 @@ BEGIN
 END
 GO
 
+-- groep meegeven adres naam telefoon contactpersoon aantal modules namen modules
 --============================================================================================
 -- SP proc_request_groups: returns all groups from requests                                       
 --============================================================================================
@@ -152,6 +153,9 @@ BEGIN
 	SET @sql =	N'
 				SELECT	C.VOORNAAM,
 						C.ACHTERNAAM,
+						C.TELEFOONNUMMER,
+						MG.MODULENUMMER,
+						M.MODULENAAM,
 						G.ADRES,
 						ISNULL(	(
 								SELECT		COUNT(GROEP_ID)
@@ -159,9 +163,17 @@ BEGIN
 								WHERE		DA.AANVRAAG_ID = G.AANVRAAG_ID
 								GROUP BY	GROEP_ID
 								), 0) AS AANTAL_DEELNEMERS,
+						ISNULL(	(
+								SELECT		COUNT(GROEP_ID)
+								FROM		MODULE_VAN_GROEP 
+								WHERE		MG.GROEP_ID = G.GROEP_ID
+								GROUP BY	GROEP_ID
+								), 0) AS AANTAL_MODULES,
 						G.GROEP_ID
 				FROM	GROEP G INNER JOIN
 						CONTACTPERSOON C ON G.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
+						INNER JOIN MODULE_VAN_GROEP MG ON G.GROEP_ID = MG.GROEP_ID
+						INNER JOIN MODULE M ON M.MODULENUMMER = MG.MODULENUMMER
 				WHERE	G.AANVRAAG_ID = @aanvraag_id
 				'
 	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
@@ -306,6 +318,52 @@ BEGIN
 	EXEC sp_executesql @sql, N'@aanvraag_id INT, @groep_id INT', @aanvraag_id, @groep_id
 END
 GO
+
+
+
+--====================================================================================
+-- groep meegeven adres naam telefoon contactpersoon aantal modules namen modules
+--=========================================================================================
+-- SP proc_request_deelnemers_van_groep: returns all participants that are in a group                              
+--=========================================================================================
+
+
+
+
+-- van de groep en module dan wil je de module informatie: de opgegeven voorkeur datum startijd eindtijd
+--============================================================================================
+-- SP proc_request_group_information: returns the information of a group                                       
+--============================================================================================
+
+CREATE OR ALTER PROC proc_request_group_information
+(
+@aanvraag_id INT = NULL
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	--SET @sql =	N'
+				SELECT	C.VOORNAAM,
+						C.ACHTERNAAM,
+						G.ADRES,
+						ISNULL(	(
+								SELECT		COUNT(GROEP_ID)
+								FROM		DEELNEMER_IN_AANVRAAG DA
+								WHERE		DA.AANVRAAG_ID = G.AANVRAAG_ID
+								GROUP BY	GROEP_ID
+								), 0) AS AANTAL_DEELNEMERS,
+						G.GROEP_ID
+				FROM	GROEP G INNER JOIN
+						CONTACTPERSOON C ON G.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
+				WHERE	G.AANVRAAG_ID = @aanvraag_id
+	--			'
+	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
+END
+GO
+
+
+-- groep meegeven adres naam telefoon contactpersoon aantal modules namen modules
 
 /*==============================================================*/
 /* SP Type: INSERT                                              */
