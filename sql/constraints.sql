@@ -20,10 +20,10 @@ GO
 --=========================================================================
 -- Check if workshopstate = 'bevestigd' when WORKSHOPLEIDER_ID is not null
 --=========================================================================
-DROP TRIGGER IF EXISTS dbo.TRG_workshop_state_bevestigd
+DROP TRIGGER IF EXISTS dbo.TR_workshop_state_bevestigd
 GO
 
-CREATE TRIGGER TRG_workshop_state_bevestigd
+CREATE TRIGGER TR_workshop_state_bevestigd
 ON WORKSHOP
 AFTER INSERT, UPDATE
 AS
@@ -59,17 +59,18 @@ GO
 -- PRESENTIELIJST_ONTVANGEN, BEWIJS_DEELNAME_MAIL_SBB_WSL has to have status 'afgehandeld'
 --=====================================================================================================================
 ALTER TABLE WORKSHOP
-DROP CONSTRAINT IF EXISTS CK_WorkshopConcluded
+DROP CONSTRAINT IF EXISTS CK_workshop_concluded
 GO
 
 ALTER TABLE WORKSHOP
-ADD CONSTRAINT CK_WorkshopConcluded CHECK((VERWERKT_BREIN IS NULL AND DEELNEMER_GEGEVENS_ONTVANGEN IS NULL AND OVK_BEVESTIGING IS NULL AND
+ADD CONSTRAINT CK_workshop_concluded CHECK((VERWERKT_BREIN IS NULL AND DEELNEMER_GEGEVENS_ONTVANGEN IS NULL AND OVK_BEVESTIGING IS NULL AND
 PRESENTIELIJST_VERSTUURD IS NULL AND BEWIJS_DEELNAME_MAIL_SBB_WSL IS NULL AND PRESENTIELIJST_ONTVANGEN IS NULL) OR STATUS = 'afgehandeld')
-
-DROP TRIGGER IF EXISTS dbo.TRG_WorkshopConcluded
 GO
 
-CREATE TRIGGER TRG_WorkshopConcluded
+DROP TRIGGER IF EXISTS dbo.TR_workshop_concluded
+GO
+
+CREATE TRIGGER TR_workshop_concluded
 ON WORKSHOP
 AFTER INSERT, UPDATE
 AS
@@ -109,61 +110,67 @@ GO
 -- Check if workshop type = INC, IND etc.
 --==============================================
 ALTER TABLE WORKSHOP
-DROP CONSTRAINT IF EXISTS CK_WorkshopTypes
+DROP CONSTRAINT IF EXISTS CK_workshop_types
 GO
 
 ALTER TABLE WORKSHOP
-ADD CONSTRAINT CK_WorkshopTypes	CHECK(TYPE IN ('INC', 'IND', 'COM', 'ROC', 'LA'))
+ADD CONSTRAINT CK_workshop_types	CHECK(TYPE IN ('INC', 'IND', 'COM', 'ROC', 'LA'))
+GO
 
 --===============================================
 -- Check if adviseur is not null when type = INC
 --===============================================
 ALTER TABLE WORKSHOP
-DROP CONSTRAINT IF EXISTS CK_WorkshopAdvisor
+DROP CONSTRAINT IF EXISTS CK_workshop_advisor
 GO
 
 ALTER TABLE WORKSHOP
-ADD CONSTRAINT CK_WorkshopAdvisor CHECK(ADVISEUR_ID IS NOT NULL OR TYPE != 'INC')
+ADD CONSTRAINT CK_workshop_advisor CHECK(ADVISEUR_ID IS NOT NULL OR TYPE != 'INC')
+GO
 
 --========================================================================
 -- Check if the workshopdate is later than the date the workshop is added
 --========================================================================
 ALTER TABLE WORKSHOP
-DROP CONSTRAINT IF EXISTS CK_WorkshopDate
+DROP CONSTRAINT IF EXISTS CK_workshop_date
 GO
 
 ALTER TABLE WORKSHOP
-ADD CONSTRAINT CK_WorkshopDate CHECK(DATUM > GETDATE())
+ADD CONSTRAINT CK_workshop_date CHECK(DATUM > GETDATE())
+GO
 
 --========================================================================================
 -- Check if the workshopstatus is 'uitgezet', 'bevestigd', 'geannuleerd' or 'afgehandeld'
 --========================================================================================
 ALTER TABLE WORKSHOP
-DROP CONSTRAINT IF EXISTS CK_WorkshopState
+DROP CONSTRAINT IF EXISTS CK_workshop_state
 GO
 
 ALTER TABLE WORKSHOP
-ADD CONSTRAINT CK_WorkshopState CHECK (STATUS IN ('uitgezet', 'bevestigd', 'geannuleerd', 'afgehandeld'))
+ADD CONSTRAINT CK_workshop_state CHECK (STATUS IN ('uitgezet', 'bevestigd', 'geannuleerd', 'afgehandeld'))
+GO
 
 --========================================================================================
 -- The ending time of a workshop has to be after the starting time
 --========================================================================================
 ALTER TABLE WORKSHOP
-DROP CONSTRAINT IF EXISTS CK_WorkshopEndtime
+DROP CONSTRAINT IF EXISTS CK_workshop_endtime
 GO
 
 ALTER TABLE WORKSHOP
-ADD CONSTRAINT CK_WorkshopEndtime CHECK (STARTTIJD < EINDTIJD)
+ADD CONSTRAINT CK_workshop_endtime CHECK (STARTTIJD < EINDTIJD)
+GO
 
 --========================================================================================
 -- If workshop_type isn't IND, then SECTOR has to be NOT NULL
 --========================================================================================
 ALTER TABLE WORKSHOP
-DROP CONSTRAINT IF EXISTS CK_WorkshopTypeAndSector
+DROP CONSTRAINT IF EXISTS CK_workshop_type_and_sector
 GO
 
 ALTER TABLE WORKSHOP
-ADD CONSTRAINT CK_WorkshopTypeAndSector CHECK(SECTORNAAM IS NOT NULL OR TYPE = 'IND')
+ADD CONSTRAINT CK_workshop_type_and_sector CHECK(SECTORNAAM IS NOT NULL OR TYPE = 'IND')
+GO
 
 --=========================================================================
 -- DEELNEMER constraints
@@ -173,43 +180,47 @@ ADD CONSTRAINT CK_WorkshopTypeAndSector CHECK(SECTORNAAM IS NOT NULL OR TYPE = '
 -- Check if the e-mail contains a '@' and a '.'
 --========================================================================================
 ALTER TABLE DEELNEMER
-DROP CONSTRAINT IF EXISTS CK_DeelnemerEmail
+DROP CONSTRAINT IF EXISTS CK_deelnemer_email
 GO
 
 ALTER TABLE DEELNEMER
-ADD CONSTRAINT CK_DeelnemerEmail CHECK (EMAIL LIKE '%@%.%')
+ADD CONSTRAINT CK_deelnemer_email CHECK (EMAIL LIKE '%@%.%')
+GO
 
 --========================================================================================
 -- The date of birth can't be higher than the current date
 --========================================================================================
 ALTER TABLE DEELNEMER
-DROP CONSTRAINT IF EXISTS CK_DeelnemerBirthdate
+DROP CONSTRAINT IF EXISTS CK_deelnemer_birthdate
 GO
 
 ALTER TABLE DEELNEMER
-ADD CONSTRAINT CK_DeelnemerBirthdate CHECK (GEBOORTEDATUM < GETDATE())
+ADD CONSTRAINT CK_deelnemer_birthdate CHECK (GEBOORTEDATUM < GETDATE())
+GO
 
 --========================================================================================
 -- If IS_OPEN_INSCHRIJVING is 1 then GEWENST_BEGELEIDINGSNIVEAU, FUNCTIENAAM 
 -- and SECTORNAAM have to be NOT NULL
 --========================================================================================
 ALTER TABLE DEELNEMER
-DROP CONSTRAINT IF EXISTS CK_OpenInschrijvingValues
+DROP CONSTRAINT IF EXISTS CK_open_inschrijving_values
 GO
 
 ALTER TABLE DEELNEMER
-ADD CONSTRAINT CK_OpenInschrijvingValues CHECK (IS_OPEN_INSCHRIJVING != 1 OR (GEWENST_BEGELEIDINGSNIVEAU IS NOT NULL
+ADD CONSTRAINT CK_open_inschrijving_values CHECK (IS_OPEN_INSCHRIJVING != 1 OR (GEWENST_BEGELEIDINGSNIVEAU IS NOT NULL
 AND FUNCTIENAAM IS NOT NULL AND SECTORNAAM IS NOT NULL))
+GO
 
 --========================================================================================
 -- AANHEF has to be 'mevrouw' or 'meneer' **
 --========================================================================================
 ALTER TABLE DEELNEMER
-DROP CONSTRAINT IF EXISTS CK_OpenInschrijvingValues
+DROP CONSTRAINT IF EXISTS CK_open_inschrijving_values
 GO
 
 ALTER TABLE DEELNEMER
-ADD CONSTRAINT CK_OpenInschrijvingValues CHECK (AANHEF = 'mevrouw' OR AANHEF = 'meneer')
+ADD CONSTRAINT CK_open_inschrijving_values CHECK (AANHEF = 'mevrouw' OR AANHEF = 'meneer')
+GO
 
 --=========================================================================
 -- BESCHIKBAARHEID constraints
@@ -219,19 +230,23 @@ ADD CONSTRAINT CK_OpenInschrijvingValues CHECK (AANHEF = 'mevrouw' OR AANHEF = '
 -- KWARTAAL has to be 1, 2, 3 or 4 **
 --========================================================================================
 ALTER TABLE BESCHIKBAARHEID
-DROP CONSTRAINT IF EXISTS CK_Kwartaal
+DROP CONSTRAINT IF EXISTS CK_kwartaal
+GO
 
 ALTER TABLE BESCHIKBAARHEID
-ADD CONSTRAINT CK_Kwartaal CHECK (KWARTAAL IN (1, 2, 3, 4))
+ADD CONSTRAINT CK_kwartaal CHECK (KWARTAAL IN (1, 2, 3, 4))
+GO
 
 --========================================================================================
 -- JAAR has to be between 1900 and 2200 **
 --========================================================================================
 ALTER TABLE BESCHIKBAARHEID
-DROP CONSTRAINT IF EXISTS CK_Jaar
+DROP CONSTRAINT IF EXISTS CK_jaar
+GO
 
 ALTER TABLE BESCHIKBAARHEID
-ADD CONSTRAINT CK_Jaar CHECK (JAAR BETWEEN 1900 AND 2200)
+ADD CONSTRAINT CK_jaar CHECK (JAAR BETWEEN 1900 AND 2200)
+GO
 
 -- Deze code wordt gebruikt om de eerste 2 triggers te testen, aangezien deze vaak kapot gaan hou ik
 -- de test code nog even hier.
