@@ -47,6 +47,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
 
                     }
                     // if ($Groups > 1) {
+                    $error_message = 'berichtje';
                     for ($i = 1; $i <= $Groups; $i++) {
                         $Group_Module1 = NULL;
                         $Group_Module2 = NULL;
@@ -57,7 +58,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
                         $Adress = NULL;
                         $Contact_Person = NULL;
 
-
+                        $error_message += $Group_Module1;
                         if (isset($_POST["group_" . $i . "_module1"])) {
                             $Group_Module1 = check_input($_POST["group_" . $i . "_module1"]);
                         }
@@ -90,7 +91,6 @@ if ($_SESSION['username'] == 'contactpersoon') {
                                         $Group_Module1_voorkeur = NULL;
                                     }
                                 }
-
                                 if (isset($Group_Module2)) {
                                     if (is_null($Group_Module2)) {
                                         $Group_Module2_voorkeur = NULL;
