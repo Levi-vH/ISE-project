@@ -137,8 +137,26 @@ BEGIN
 END
 GO
 
-select *
-from aanvraag
+--============================================================================================
+-- SP proc_request_groupsID: returns all groups ID's of a request                                      
+--============================================================================================
+
+CREATE OR ALTER PROC proc_request_groupsID
+(
+@aanvraag_id INT = NULL
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				SELECT GROEP_ID
+				FROM	GROEP
+				WHERE AANVRAAG_ID = @aanvraag_id
+	 '
+	 EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
+END
+GO
 --============================================================================================
 -- SP proc_request_groups: returns all groups from requests                                       
 --============================================================================================
@@ -156,14 +174,14 @@ BEGIN
 						C.ACHTERNAAM,
 						C.TELEFOONNUMMER,
 						C.EMAIL,
-						MG.MODULENUMMER,
-						M.MODULENAAM,
+						MG.MODULENUMMER, --
+						M.MODULENAAM, --
 						G.ADRES,
 						ISNULL(	(
-								SELECT		COUNT(GROEP_ID)
+								SELECT		COUNT(DEELNEMER_ID)
 								FROM		DEELNEMER_IN_AANVRAAG DA
 								WHERE		DA.AANVRAAG_ID = G.AANVRAAG_ID
-								GROUP BY	GROEP_ID
+								GROUP BY	GROEP_ID, DEELNEMER_ID
 								), 0) AS AANTAL_DEELNEMERS,
 					/*	ISNULL(	(
 								SELECT		COUNT(GROEP_ID)
@@ -176,7 +194,7 @@ BEGIN
 						CONTACTPERSOON C ON G.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
 						INNER JOIN MODULE_VAN_GROEP MG ON G.GROEP_ID = MG.GROEP_ID
 						INNER JOIN MODULE M ON M.MODULENUMMER = MG.MODULENUMMER
-				WHERE	G.AANVRAAG_ID = 8
+				WHERE	G.AANVRAAG_ID = @aanvraag_id
 				'
 	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
 END
@@ -189,37 +207,16 @@ GO
 -- voorkeur, datum, starttijd, einddtijd 
 CREATE OR ALTER PROC proc_request_group_information
 (
-@group_ID INT = NULL
+@group_ID INT
 )
 AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
 	--SET @sql =	N'
-				SELECT	C.VOORNAAM,
-						C.ACHTERNAAM,
-						C.TELEFOONNUMMER,
-						MG.MODULENUMMER,
-						M.MODULENAAM,
-						G.ADRES,
-						ISNULL(	(
-								SELECT		COUNT(GROEP_ID)
-								FROM		DEELNEMER_IN_AANVRAAG DA
-								WHERE		DA.AANVRAAG_ID = G.AANVRAAG_ID
-								GROUP BY	GROEP_ID
-								), 0) AS AANTAL_DEELNEMERS,
-					/*	ISNULL(	(
-								SELECT		COUNT(GROEP_ID)
-								FROM		MODULE_VAN_GROEP 
-								WHERE		MG.GROEP_ID = G.GROEP_ID
-								GROUP BY	GROEP_ID
-								), 0) AS AANTAL_MODULES, */
-						G.GROEP_ID
-				FROM	GROEP G INNER JOIN
-						CONTACTPERSOON C ON G.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
-						INNER JOIN MODULE_VAN_GROEP MG ON G.GROEP_ID = MG.GROEP_ID
-						INNER JOIN MODULE M ON M.MODULENUMMER = MG.MODULENUMMER
-				WHERE	G.AANVRAAG_ID = 1
+					SELECT VOORKEUR, DATUM, STARTTIJD, EINDTIJD -- module naam
+					FROM MODULE_VAN_GROEP
+					WHERE GROEP_ID = @group_ID
 		--		'
 	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
 END
@@ -814,6 +811,9 @@ GO
 -- SP proc_update_workshop: updates the values of a workshop                    
 --===========================================================
 
+--select *
+--from DEELNEMER_IN_AANVRAAG
+
 CREATE OR ALTER PROC proc_add_groep_deelnemers
 (
 @aanvraag_id	INT,
@@ -824,12 +824,12 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
-	SET @sql =	N'
+	--SET @sql =	N'
 				UPDATE	DEELNEMER_IN_AANVRAAG
 				SET		GROEP_ID = @groep_id
 				WHERE	AANVRAAG_ID = @aanvraag_ID
 				AND		DEELNEMER_ID = @deelnemer_id
-				'
+	--			'
 	EXEC sp_executesql @sql,	N'@aanvraag_id INT, @groep_id INT, @deelnemer_id INT',
 								@aanvraag_id, @groep_id, @deelnemer_id
 END
