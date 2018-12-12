@@ -168,7 +168,7 @@ BEGIN
 								FROM		MODULE_VAN_GROEP 
 								WHERE		MG.GROEP_ID = G.GROEP_ID
 								GROUP BY	GROEP_ID
-								), 0) AS AANTAL_GROEPEN,
+								), 0) AS AANTAL_MODULES,
 						G.GROEP_ID
 				FROM	GROEP G INNER JOIN
 						CONTACTPERSOON C ON G.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
@@ -319,32 +319,14 @@ BEGIN
 END
 GO
 
+
+
+--====================================================================================
 -- groep meegeven adres naam telefoon contactpersoon aantal modules namen modules
 --=========================================================================================
 -- SP proc_request_deelnemers_van_groep: returns all participants that are in a group                              
 --=========================================================================================
 
-CREATE OR ALTER PROC
-(
-@aanvraag_id	INT,
-@groep_id		INT
-)
-AS
-BEGIN
-	SET NOCOUNT ON
-	DECLARE @sql NVARCHAR(4000)
-	SET @sql =	N'
-				SELECT		D.DEELNEMER_ID,
-							D.VOORNAAM,
-							D.ACHTERNAAM
-				FROM		DEELNEMER_IN_AANVRAAG DA INNER JOIN
-							DEELNEMER D ON DA.DEELNEMER_ID = D.DEELNEMER_ID
-				WHERE		DA.AANVRAAG_ID = @aanvraag_id
-				AND			DA.GROEP_ID = @groep_id
-				'
-	EXEC sp_executesql @sql, N'@aanvraag_id INT, @groep_id INT', @aanvraag_id, @groep_id
-END
-GO
 
 
 
