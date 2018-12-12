@@ -77,9 +77,9 @@ BEGIN
 				'
 	IF(@where IS NOT NULL) -- if the procedure was executed with an where statement, add the where statement to the select query
 		BEGIN
-			SET @sql += 'WHERE W.WORKSHOP_ID = @where'
+			SET @sql += ' WHERE W.WORKSHOP_ID = @where'
 		END
-	SET @sql += 'ORDER BY @orderby + @orderdirection' -- add an order by statement to the query
+	SET @sql += ' ORDER BY @orderby + @orderdirection' -- add an order by statement to the query
 	IF(@orderby IS NULL)
 		BEGIN
 			SET @orderby = 'W.WORKSHOP_ID' -- if no order by statement was given with the execute, order by workshop_id's
