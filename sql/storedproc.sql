@@ -209,7 +209,7 @@ BEGIN
 					FROM MODULE_VAN_GROEP
 					WHERE GROEP_ID = @group_ID
 				'
-	EXEC sp_executesql @sql, N'@group_id INT', @group_id
+	EXEC sp_executesql @sql, N'@group_ID INT', @group_ID
 END
 GO
 
@@ -232,7 +232,7 @@ BEGIN
 					ON G.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
 					WHERE GROEP_ID = @group_ID
 				'
-	EXEC sp_executesql @sql, N'@group_id INT', @group_ID
+	EXEC sp_executesql @sql, N'@group_ID INT', @group_ID
 END
 GO
 
