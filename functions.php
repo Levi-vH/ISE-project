@@ -235,14 +235,40 @@ function getGroupNumber($id) {
 
 }
 
+function getFirstGroup($aanvraag_id) {
+    $conn = connectToDB();
+
+    $sql = "select top 1 GROEP_ID from GROEP where aanvraag_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $firstgroup = $row['GROEP_ID'];
+
+    return $firstgroup;
+}
+
 function addUserToGroup($aanvraag_id, $groeps_id, $participant_id) {
     $conn = connectToDB();
 
     $sql = "exec proc_add_groep_deelnemers ?, ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
-    $stmt->bindParam(1, $groeps_id, PDO::PARAM_INT);
-    $stmt->bindParam(1, $participant_id, PDO::PARAM_INT);
+    $stmt->bindParam(2, $groeps_id, PDO::PARAM_INT);
+    $stmt->bindParam(3, $participant_id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+
+function deleteUserFromGroup($aanvraag_id, $groeps_id, $participant_id) {
+    $conn = connectToDB();
+
+    $sql = "exec proc_remove_groep_deelnemers ?, ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
+    $stmt->bindParam(2, $groeps_id, PDO::PARAM_INT);
+    $stmt->bindParam(3, $participant_id, PDO::PARAM_INT);
     $stmt->execute();
 }
 
