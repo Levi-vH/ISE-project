@@ -35,14 +35,27 @@ function getFirstGroup($aanvraag_id) {
     $firstgroup = $row['GROEP_ID'];
 
     return $firstgroup;
-
 }
 
 $groep = getFirstGroup($aanvraag_id);
-
 ?>
+<script type="text/javascript">
+function colorSelectedRow(row, pagina) {
+
+    window.location.href = pagina;
+
+    // row.style.backgroundColor = "rgb(126, 241, 85)";
 
 
+    // var els = document.getElementsByClassName("groupsrow"); // Creates an HTMLObjectList not an array.
+    // Array.prototype.forEach.call(els, function(el) {
+    //     el.removeAttribute("style");
+    // });
+
+    // row.style.backgroundColor = "rgb(126, 241, 85)";
+
+}
+</script>
 <body>
 <div class="container-fluid">
     <div class="row">
