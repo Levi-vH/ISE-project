@@ -218,7 +218,7 @@ BEGIN
 					FROM MODULE_VAN_GROEP
 					WHERE GROEP_ID = @group_ID
 		--		'
-	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
+	EXEC sp_executesql @sql, N'@group_id INT', @group_id
 END
 GO
 
@@ -312,6 +312,35 @@ GO
 --=========================================================================================
 
 CREATE OR ALTER PROC proc_request_deelnemers_in_aanvraag
+(
+@aanvraag_id INT
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				SELECT		D.DEELNEMER_ID,
+							D.VOORNAAM,
+							D.ACHTERNAAM,
+							D.GEBOORTEDATUM,
+							D.OPLEIDINGSNIVEAU,
+							D.EMAIL,
+							D.TELEFOONNUMMER
+				FROM		DEELNEMER_IN_AANVRAAG DA INNER JOIN
+							DEELNEMER D ON DA.DEELNEMER_ID = D.DEELNEMER_ID
+				WHERE		DA.AANVRAAG_ID = @aanvraag_id
+				'
+	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
+END
+GO
+
+--=========================================================================================
+-- SP proc_request_deelnemers_in_aanvraag: returns all participants that are in a request,
+-- but not in a group
+--=========================================================================================
+
+CREATE OR ALTER PROC proc_request_deelnemers_in_aanvraag_not_in_groep
 (
 @aanvraag_id INT
 )
