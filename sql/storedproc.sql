@@ -177,6 +177,7 @@ BEGIN
 				(
 				SELECT	ROW_NUMBER() OVER (ORDER BY GROEP_ID) AS row_number_group, GROEP_ID
 				FROM	GROEP
+				WHERE	AANVRAAG_ID = @aanvraag_id
 				)
 				SELECT	row_number_group
 				FROM	row_number
