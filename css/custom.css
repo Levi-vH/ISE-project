@@ -97,6 +97,7 @@ Detail pagina voor workshops
 .details-container{
     display: flex;
     flex-wrap: wrap;
+    margin-top:15px;
 }
 
 .details {
