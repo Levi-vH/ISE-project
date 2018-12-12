@@ -245,10 +245,10 @@ END
 GO
 
 --============================================================================================================
--- SP proc_request_groupsID:                                    
+-- SP proc_request_groupsID: returns the id's for all the modules
 --===========================================================================================================
 
-CREATE OR ALTER PROC proc_request_Modulenummers
+CREATE OR ALTER PROC proc_request_modulenummers
 (
 @group_ID INT = NULL
 )
