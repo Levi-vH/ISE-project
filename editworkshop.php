@@ -19,7 +19,7 @@ if ($_SESSION['username'] == 'planner') {
 
 //Run the stored procedure
 // $sql = "SELECT * FROM VW_WORKSHOPS";
-    $sql = "exec proc_getWorkshops @where = ?";
+    $sql = "exec proc_get_workshops @where = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
     $stmt->execute();

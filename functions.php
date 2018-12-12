@@ -192,7 +192,7 @@ function getModuleNummer($id) {
     $conn = connectToDB();
 
     //Run the stored procedure
-    $sql = "exec proc_getWorkshops @where = ?";
+    $sql = "exec proc_get_workshops @where = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $id, PDO::PARAM_INT);
     $stmt->execute();
