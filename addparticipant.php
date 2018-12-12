@@ -36,6 +36,8 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
     }
 
     generate_header('Deelnemers toevoegen');
+
+    $group = getFirstGroup($aanvraag_id);
     ?>
     <body>
     <div class="container-fluid">
@@ -45,13 +47,14 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     <ul class="list">
                         <h5><strong>Aanvraag Opties</strong></h5>
                         <li>
-                            <a href="INCaanvraag.php?aanvraag_id=<?=$aanvraag_id?>">Details</a>
+                            <a href="INCaanvraag.php?aanvraag_id=<?= $aanvraag_id ?>">Details</a>
                         </li>
                         <li>
-                            <a href="participants.php?aanvraag_id=<?=$aanvraag_id?>">Deelnemers en Groepen</a>
+                            <a href="participants.php?aanvraag_id=<?= $aanvraag_id ?>&groeps_id=<?= $group ?>">Deelnemers
+                                en Groepen</a>
                         </li>
                         <li>
-                            <a class="active-page">Deelnemers toevoegen</a>
+                            <a class="active-page">Deelnemers beheren</a>
                         </li>
                     </ul>
                 </div>
@@ -63,13 +66,28 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         <th>Naam</th>
                         <th>Geboortedatum</th>
                         <th>Opleidingsniveau</th>
+                        <th>Groep</th>
                         <th>Email</th>
                         <th>Telefoonnummer</th>
                         <th>Verwijderen</th>
                     </tr>
                     <?php
                     //Try to make connection
-                    $conn = connectToDB();
+                    //Run the stored procedure
+                    function getRightGroepsNummer($groepss_id)
+                    {
+                        $conn = connectToDB();
+
+                        $sql = "exec proc_request_row_number_groupsID ?, ?";
+                        $stmt = $conn->prepare($sql);
+                        $stmt->bindParam(1, $_GET['aanvraag_id'], PDO::PARAM_INT);
+                        $stmt->bindParam(2, $groepss_id, PDO::PARAM_INT);
+                        $stmt->execute();
+
+                        $groepsnummer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                        return $groepsnummer['row_number_group'];
+                    }
 
                     //Run the stored procedure
                     $sql = "exec proc_request_deelnemers_in_aanvraag ?";
@@ -84,7 +102,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $html = '';
                         $html .= '<tr>';
                         $html .= '<td>';
-                        $html .= $row['VOORNAAM'] .' '. $row['ACHTERNAAM'];
+                        $html .= $row['VOORNAAM'] . ' ' . $row['ACHTERNAAM'];
                         $html .= '</td>';
                         $html .= '<td>';
                         $html .= $row['GEBOORTEDATUM'];
@@ -93,13 +111,16 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $html .= $row['OPLEIDINGSNIVEAU'];
                         $html .= '</td>';
                         $html .= '<td>';
+                        $html .= getRightGroepsNummer($row['GROEP_ID']);
+                        $html .= '</td>';
+                        $html .= '<td>';
                         $html .= $row['EMAIL'];
                         $html .= '</td>';
                         $html .= '<td>';
                         $html .= $row['TELEFOONNUMMER'];
                         $html .= '</td>';
                         $html .= '<td>';
-                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="addparticipant.php?aanvraag_id='.$aanvraag_id.'&participant_id='.$row['DEELNEMER_ID'].'&deleteUser=true"></a>';
+                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="addparticipant.php?aanvraag_id=' . $aanvraag_id . '&participant_id=' . $row['DEELNEMER_ID'] . '&deleteUser=true"></a>';
                         $html .= '</td>';
                         $html .= '</tr>';
 
@@ -115,35 +136,40 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                 </table>
                 <h1 class="headcenter">Voeg deelnemers toe</h1>
                 <div>
-                    <form action="?aanvraag_id=<?=$aanvraag_id?>" method="post">
+                    <form action="?aanvraag_id=<?= $aanvraag_id ?>" method="post">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="name">Voornaam</label>
-                                <input type="text" class="form-control" placeholder="Voornaam" name="name">
+                                <input type="text" class="form-control" placeholder="Voornaam" name="name" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="surname">Achternaam</label>
-                                <input type="text" class="form-control" placeholder="Achternaam" name="surname">
+                                <input type="text" class="form-control" placeholder="Achternaam" name="surname"
+                                       required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="dateofbirth">Geboortedatum</label>
-                                <input type="date" class="form-control" placeholder="Geboortedatum" name="dateofbirth">
+                                <input type="date" class="form-control" placeholder="Geboortedatum" name="dateofbirth"
+                                       required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="dateofbirth">Opleidingsniveau</label>
-                                <input type="text" class="form-control" placeholder="Opleidingsniveau" name="educational_attainment">
+                                <input type="text" class="form-control" placeholder="Opleidingsniveau"
+                                       name="educational_attainment" required>
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="phonenumber">Telefoonnummer</label>
-                                <input type="number" class="form-control" placeholder="Telefoonnummer" name="phonenumber" max="999999999999" required>
+                                <input type="number" class="form-control" placeholder="Telefoonnummer"
+                                       name="phonenumber" max="999999999999" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="emailaddress">Emailadres</label>
-                                <input type="email" class="form-control" placeholder="Emailadres" name="emailaddress" required>
+                                <input type="email" class="form-control" placeholder="Emailadres" name="emailaddress"
+                                       required>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary">Maak nieuwe deelnemer</button>
