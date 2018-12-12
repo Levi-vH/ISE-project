@@ -21,6 +21,30 @@ foreach ($row as $key => $value){
         $row[$key] = 'Nog niet bekend';
     }
 }
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    for($Groupsnumber=1; $Groupsnumber<=$row['AANTAL_GROEPEN']; $Groupsnumber++) {
+
+        for($Modulenumber=1; $Modulenumber<=$groupinfo['AANTAL_MODULES']; $Modulenumber++) {
+            $Groep_Module_Date          = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Date'];
+            $Groep_Module_Starttime     = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Starttime'];
+            $Groep_Module_Endtime       = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Endtime'];
+
+            $sql = "exec proc_insert_module_info ?, ?, ?, ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(1, $Groupsnumber, PDO::PARAM_INT);
+            $stmt->bindParam(2, $Modulenumber, PDO::PARAM_INT);
+            $stmt->bindParam(3, $Groep_Module_Date, PDO::PARAM_INT);
+            $stmt->bindParam(4, $Groep_Module_Starttime, PDO::PARAM_STR);
+            $stmt->bindParam(5, $Groep_Module_Endtime, PDO::PARAM_STR);
+            $stmt->execute();
+
+        }
+    }
+}
+
+
 ?>
 
 <body>
@@ -276,24 +300,29 @@ foreach ($row as $key => $value){
 
                                                                             <div id="collapse_Module' . $j . '" class="collapse" aria-labelledby="heading_Module' . $j . '" data-parent="#accordionModules">
                                                                                 <div class="card-body">
-                                                                                                <form>
+                                                                                                <form method="post">
                                                                                                     <div class="form-group">
-                                                                                                        <label for="preference">Opgegeven Voorkeur:</label>
-                                                                                                        <input type="text" class="form-control" id="preference" value="' . $moduleinfo['VOORKEUR'] . '" disabled>
+                                                                                                        <label for="group_'. $i .'_module_'. $j .'_preference">Opgegeven Voorkeur:</label>
+                                                                                                        <input type="text" class="form-control" id="group_'. $i .'_module_'. $j .'_preference" placeholder="' . $moduleinfo['VOORKEUR'] . '" disabled>
                                                                                                     </div>
                                                                                                     <div class="form-group">
-                                                                                                        <label for="Date">Opgegeven Voorkeur:</label>
-                                                                                                        <input type="text" class="form-control" id="Date" value="' . $moduleinfo['DATUM'] . '" disabled>
-                                                                                                    </div>
+                                                                                                        <label for="group_'. $i .'_module_'. $j .'_Date">Datum:</label>
+                                                                                                        <input type="date" class="form-control" id="group_'. $i .'_module_'. $j .'_Date" placeholder="' . $moduleinfo['DATUM'] . '"';
+                                                                            if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
+                        $group_info .=                                                                           '></div>
                                                                                                     <div class="form-group">
-                                                                                                        <label for="Starttime">Starttijd:</label>
-                                                                                                        <input type="text" class="form-control" id="Starttime" value="' . $moduleinfo['STARTTIJD'] . '" disabled>
-                                                                                                    </div>
+                                                                                                        <label for="group_'. $i .'_module_'. $j .'_Starttime">Starttijd:</label>
+                                                                                                        <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Starttime" placeholder="' . $moduleinfo['STARTTIJD'] . '"';
+                                                                            if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
+                        $group_info .=                                                                           '></div>
                                                                                                     <div class="form-group">
-                                                                                                        <label for="Endtime">Eindtijd:</label>
-                                                                                                        <input type="text" class="form-control" id="Endtime" value="' . $moduleinfo['EINDTIJD'] . '" disabled>
-                                                                                                    </div>
-                                                                                                </form>
+                                                                                                        <label for="group_'. $i .'_module_'. $j .'_Endtime">Eindtijd:</label>
+                                                                                                        <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Endtime" placeholder="' . $moduleinfo['EINDTIJD'] . '"';
+                                                                            if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
+                        $group_info .=                                                                           '></div>';
+                                                    if($_SESSION['username'] == 'planner'){ $group_info .= '<button type="submit" class="btn btn-primary">Submit</button>';}
+                        $group_info .=
+                            '</form>
                                                                                 </div>
                                                                             </div>';
                     }
