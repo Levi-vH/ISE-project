@@ -410,7 +410,7 @@ GO
 --============================================================================================
 -- SP proc_request_group_information: returns the information of a group                                       
 --============================================================================================
-
+/*
 CREATE OR ALTER PROC proc_request_group_information
 (
 @aanvraag_id INT = NULL
@@ -437,7 +437,7 @@ BEGIN
 	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
 END
 GO
-
+*/
 
 -- groep meegeven adres naam telefoon contactpersoon aantal modules namen modules
 
