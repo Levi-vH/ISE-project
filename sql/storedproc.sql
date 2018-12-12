@@ -663,7 +663,7 @@ GO
 -- SP_insert_groups_of_workshoprequest: inserts the groups of a new request                        
 --=======================================================================
 
-CREATE OR ALTER PROC SP_insert_groups_of_workshoprequest
+CREATE OR ALTER PROC SP_insert_group_of_workshoprequest
 (
 @request_id			INT,
 @module1			INT,
@@ -740,7 +740,7 @@ GO
 -- SP_insert_participants_of_workshoprequest: inserts participants of a request                       
 --=======================================================================
 
-CREATE OR ALTER PROC SP_insert_participants_of_workshoprequest
+CREATE OR ALTER PROC SP_insert_participant_of_workshoprequest
 (
 @request_id		INT,
 @firstname			NVARCHAR(30),
@@ -795,7 +795,7 @@ END
 GO
 
 /*
-CREATE OR ALTER PROC SP_insert_participants_of_incompany_workshop
+CREATE OR ALTER PROC SP_insert_participant_of_incompany_workshop
 (
 @workshop_id		INT,
 @firstname			NVARCHAR(30),

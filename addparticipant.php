@@ -23,7 +23,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $educational_attainment = check_input(@$_POST['educational_attainment']);
 
         //Run the stored procedure
-        $sql = "exec proc_insert_aanvraag_deelnemers ?, ?, ?, ?, ?, ?, ?";
+        $sql = "exec SP_insert_participant_of_workshoprequest ?, ?, ?, ?, ?, ?, ?";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
         $stmt->bindParam(2, $name, PDO::PARAM_STR);
@@ -78,7 +78,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     {
                         $conn = connectToDB();
 
-                        $sql = "exec proc_request_row_number_groupsID ?, ?";
+                        $sql = "exec SP_get_row_numbers_of_group_ids ?, ?";
                         $stmt = $conn->prepare($sql);
                         $stmt->bindParam(1, $_GET['aanvraag_id'], PDO::PARAM_INT);
                         $stmt->bindParam(2, $groepss_id, PDO::PARAM_INT);
@@ -90,7 +90,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     }
 
                     //Run the stored procedure
-                    $sql = "exec proc_request_deelnemers_in_aanvraag ?";
+                    $sql = "exec SP_get_participants_of_workshoprequest ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                     $stmt->execute();

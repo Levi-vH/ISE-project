@@ -151,7 +151,7 @@ function deleteUserWorkshop($workshop_id, $participant_id) {
     $conn = connectToDB();
 
     //Run the stored procedure
-    $sql = "exec proc_disapprove_workshop_participants ?, ?";
+    $sql = "exec SP_disapprove_workshop_participant ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);
@@ -162,7 +162,7 @@ function deleteUserAanvraag($aanvraag_id, $participant_id) {
     $conn = connectToDB();
 
     //Run the stored procedure
-    $sql = "exec proc_delete_aanvraag_deelnemers ?, ?";
+    $sql = "exec SP_remove_participant_from_workshoprequest ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);
@@ -173,7 +173,7 @@ function addUser($workshop_id, $participant_id) {
     $conn = connectToDB();
 
     //Run the stored procedure
-    $sql = "exec proc_approve_workshop_participants ?, ?";
+    $sql = "exec SP_approve_workshop_participant ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);
@@ -192,7 +192,7 @@ function getModuleNummer($id) {
     $conn = connectToDB();
 
     //Run the stored procedure
-    $sql = "exec proc_get_workshops @where = ?";
+    $sql = "exec SP_get_workshops @where = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $id, PDO::PARAM_INT);
     $stmt->execute();
@@ -252,7 +252,7 @@ function getFirstGroup($aanvraag_id) {
 function addUserToGroup($aanvraag_id, $groeps_id, $participant_id) {
     $conn = connectToDB();
 
-    $sql = "exec proc_add_groep_deelnemers ?, ?, ?";
+    $sql = "exec SP_add_participant_to_group ?, ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $groeps_id, PDO::PARAM_INT);
@@ -264,7 +264,7 @@ function addUserToGroup($aanvraag_id, $groeps_id, $participant_id) {
 function deleteUserFromGroup($aanvraag_id, $groeps_id, $participant_id) {
     $conn = connectToDB();
 
-    $sql = "exec proc_remove_groep_deelnemers ?, ?, ?";
+    $sql = "exec SP_remove_participant_from_group ?, ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $groeps_id, PDO::PARAM_INT);

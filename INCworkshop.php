@@ -29,7 +29,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
                 if (($Advisor_practical_learning !== "")) {
                     //Run the stored procedure
 
-                    $sql = "exec proc_insert_aanvraag ?, ?, ?, ?";
+                    $sql = "exec SP_insert_workshoprequest ?, ?, ?, ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $Organisation_Relationnumber, PDO::PARAM_INT);
                     $stmt->bindParam(2, $Contact_ID, PDO::PARAM_INT);
@@ -103,7 +103,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
                                     }
                                 }
                                 //Run the stored procedure
-                                $sql3 = "exec proc_insert_aanvraag_groepen ?, ?, ?, ?, ?, ?, ?, ?, ?";
+                                $sql3 = "exec SP_insert_group_of_workshoprequest ?, ?, ?, ?, ?, ?, ?, ?, ?";
                                 $stmt3 = $conn->prepare($sql3);
                                 $stmt3->bindParam(1, $Aanvraag_ID, PDO::PARAM_INT);
                                 $stmt3->bindParam(2, $Group_Module1, PDO::PARAM_INT);

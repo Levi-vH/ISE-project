@@ -61,7 +61,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     $conn = connectToDB();
 
                     //Run the stored procedure
-                    $sql = "exec proc_request_groups ?";
+                    $sql = "exec SP_get_groups ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                     $stmt->execute();
@@ -118,7 +118,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $conn = connectToDB();
 
                         //Run the stored procedure
-                        $sql = "exec proc_request_deelnemers_in_aanvraag_not_in_groep ?";
+                        $sql = "exec SP_get_participants_of_workshoprequest_without_group ?";
                         $stmt = $conn->prepare($sql);
                         $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                         $stmt->execute();
@@ -162,7 +162,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $conn = connectToDB();
 
                         //Run the stored procedure
-                        $sql = "exec proc_request_deelnemers_van_groep ?, ?";
+                        $sql = "exec SP_get_participants_of_group ?, ?";
                         $stmt = $conn->prepare($sql);
                         $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                         $stmt->bindParam(2, $_GET['groeps_id'], PDO::PARAM_INT);

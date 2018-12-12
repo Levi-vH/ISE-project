@@ -9,7 +9,7 @@ generate_header('Incompany aanvraag');
 $conn = connectToDB();
 
 //Run the stored procedure
-$sql = "exec proc_get_workshoprequests @aanvraag_id = ?";
+$sql = "exec SP_get_workshoprequests @aanvraag_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
 $stmt->execute();
@@ -177,7 +177,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <?php
                 $GroupIDs[] = '';
                 //Run the stored procedure
-                $sql2 = "exec proc_request_groupsID @aanvraag_id = ?";
+                $sql2 = "exec SP_get_group_ids @aanvraag_id = ?";
                 $stmt2 = $conn->prepare($sql2);
                 $stmt2->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                 $stmt2->execute();
@@ -194,7 +194,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                 $group_info = '';
                 for($i = 1; $i<=$row['AANTAL_GROEPEN']; $i++){
-                    $sql3 = "exec proc_request_group_information @group_ID = ?";
+                    $sql3 = "exec SP_get_information_of_group @group_ID = ?";
                     $stmt3 = $conn->prepare($sql3);
                     $stmt3->bindParam(1, $GroupIDs[$i]['GROEP_ID'], PDO::PARAM_INT);
                     $stmt3->execute();
@@ -262,7 +262,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                                                         <div class="accordion" id="accordionModules">';
 
                     $ModuleIDs[] = '';
-                    $sql4 = "exec proc_request_modulenummers @group_id = ?";
+                    $sql4 = "exec SP_get_modulenumbers @group_id = ?";
                     $stmt4 = $conn->prepare($sql4);
                     $stmt4->bindParam(1, $GroupIDs[$i]['GROEP_ID'], PDO::PARAM_INT);
                     $stmt4->execute();
@@ -276,7 +276,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                     for($j=1; $j<=$groupinfo['AANTAL_MODULES']; $j++){
 
-                        $sql5 = "exec proc_request_module_group_information @group_ID = ?, @modulenummer = ?";
+                        $sql5 = "exec SP_get_module_information_of_group @group_ID = ?, @modulenummer = ?";
                         $stmt5 = $conn->prepare($sql5);
                         $stmt5->bindParam(1, $GroupIDs[$i]['GROEP_ID'], PDO::PARAM_INT);
                         $stmt5->bindParam(2, $ModuleIDs[$j]['MODULENUMMER'], PDO::PARAM_INT);

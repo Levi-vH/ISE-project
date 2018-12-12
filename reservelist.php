@@ -65,7 +65,7 @@ $workshoptype = getWorkshopType($workshop_id);
                     $conn = connectToDB();
 
                     //Run the stored procedure
-                    $sql = "exec proc_request_approved_workshop_participants_reservelist ?";
+                    $sql = "exec SP_get_reservelist_of_approved_workshop_participants ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
                     $stmt->execute();
