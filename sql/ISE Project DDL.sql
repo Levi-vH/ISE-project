@@ -143,8 +143,20 @@ CREATE TYPE Voorkeur FROM VARCHAR(20)
 
 
 GO
+
 /*==============================================================*/
-/* Table: PLANNER                                                */
+/* Table: WORKSHOPTYPE                                          */
+/*==============================================================*/
+CREATE TABLE WORKSHOPTYPE (
+	[TYPE]		[Type] NOT NULL,
+	TypeName	Naam NOT NULL,
+	CONSTRAINT PK_WORKSHOPTYPE PRIMARY KEY ([TYPE])
+)
+GO
+
+
+/*==============================================================*/
+/* Table: PLANNER                                               */
 /*==============================================================*/
 CREATE TABLE PLANNER (
 	PLANNERNAAM		Naam		NOT NULL,
@@ -475,4 +487,9 @@ GO
 ALTER TABLE MODULE_VAN_GROEP
 	ADD CONSTRAINT FK_MODULE_VAN_GROEP_ref_GROEP FOREIGN KEY (GROEP_ID) 
 	REFERENCES GROEP(GROEP_ID)
+GO
+
+ALTER TABLE WORKSHOP
+	ADD CONSTRAINT FK_TYPE_ref_TYPE FOREIGN KEY ([TYPE])
+	REFERENCES WORKSHOPTYPE([TYPE])
 GO

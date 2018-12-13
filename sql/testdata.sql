@@ -23,7 +23,20 @@ DELETE FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[PLANNER]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPTYPE]
 GO
+
+
+/*==============================================================*/
+/* Table: WORKSHOPTYPE                                          */
+/*==============================================================*/
+INSERT INTO [SBBWorkshopOmgeving].[dbo].[WORKSHOPTYPE] ([TYPE], TypeName)
+VALUES ('INC', 'Incompany'),
+	   ('IND', 'Individueel'),
+	   ('COM', 'Combinatie'),
+	   ('LA', 'Large Account')
+GO
+
 
 /*==============================================================*/
 /* Table: SECTOR                                                */
