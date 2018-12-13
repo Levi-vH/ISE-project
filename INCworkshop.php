@@ -47,7 +47,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
 
                     }
                     // if ($Groups > 1) {
-                    $error_message = 'berichtje';
+
                     for ($i = 1; $i <= $Groups; $i++) {
                         $Group_Module1 = NULL;
                         $Group_Module2 = NULL;
@@ -58,7 +58,6 @@ if ($_SESSION['username'] == 'contactpersoon') {
                         $Adress = NULL;
                         $Contact_Person = NULL;
 
-                        $error_message += $Group_Module1;
                         if (isset($_POST["group_" . $i . "_module1"])) {
                             $Group_Module1 = check_input($_POST["group_" . $i . "_module1"]);
                         }
@@ -222,7 +221,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
 
             <h3>Adviseur SBB</h3>
             <div class="form-group">
-                <label class="control-label col-sm-2" for="Advisor_practical_learning">Adviseur praktijkleren:</label>
+                <label class="control-label" for="Advisor_practical_learning">Adviseur praktijkleren:</label>
                 <div class="col-sm-10">
                     <select id="Advisor_practical_learning" class="form-control" name="Advisor_practical_learning"
                             onchange="get_advisor_details()">
@@ -258,8 +257,8 @@ if ($_SESSION['username'] == 'contactpersoon') {
             <div class="form-group">
                 <label class="control-label col-sm-2" for="Groups">Aantal groepen:</label>
                 <div class="col-sm-10">
-                    <input id="Groups" type="number" class="form-control" name="Groups" onchange="accordion(value)" min="0"
-                           max="10">
+                    <input id="Groups" type="number" class="form-control" name="Groups" aria-describedby="GroupsHelp" onchange="accordion(value)" min="0" max="10">
+                    <small id="GroupsHelp" class="form-text text-muted">Een groep bestaat uit min. 12 - max. 16 deelnemers. <br> U kunt maximaal 3 groepen indienen, tenzij u gemachtigd bent voor Large accounts(max. 10 groepen). </small>
                 </div>
             </div>
 
@@ -436,13 +435,17 @@ include 'footer.html';
                 '                           <div class="form-group">\n' +
                 '                                  <label class="control-label" for="group_' + i + '_module1_Voorkeur">Voorkeur module 1:</label>\n' +
                 '                                       <div class="form-check form-check-inline">\n' +
-                '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module1_Voorkeur" id="group_' + i + '_module1_ochtend" value="ochtend">\n' +
-                '                                           <label class="form-check-label" for="group_' + i + '_module1_ochtend">ochtend</label>\n' +
+                '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module1_Voorkeur" id="group_' + i + '_module1_ochtend" value="Ochtend">\n' +
+                '                                           <label class="form-check-label" for="group_' + i + '_module1_ochtend">Ochtend</label>\n' +
                 '                                       </div>\n' +
                 '                                       <div class="form-check form-check-inline">\n' +
-                '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module1_Voorkeur" id="group_' + i + '_module1_middag" value="middag">\n' +
-                '                                           <label class="form-check-label" for="group_' + i + '_module1_middag">middag</label>\n' +
-                '                                       </div>\n' +
+            '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module1_Voorkeur" id="group_' + i + '_module1_middag" value="Middag">\n' +
+            '                                           <label class="form-check-label" for="group_' + i + '_module1_middag">Middag</label>\n' +
+            '                                       </div>\n' +
+             '                                          <div class="form-check form-check-inline">\n' +
+            '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module1_Voorkeur" id="group_' + i + '_module1_geen" value="Geen Voorkeur">\n' +
+            '                                           <label class="form-check-label" for="group_' + i + '_module1_geen">Geen Voorkeur</label>\n' +
+            '                                       </div>\n' +
                 '                           </div>\n' +
                 '                       </div>\n' +
                 //MODULE 2
@@ -452,13 +455,17 @@ include 'footer.html';
                 '                           <div class="form-group">\n' +
                 '                               <label class="control-label" for="group_' + i + '_module2_Voorkeur">Voorkeur module 2:</label>\n' +
                 '                                   <div class="form-check form-check-inline">\n' +
-                '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module2_Voorkeur" id="group_' + i + '_module2_ochtend" value="ochtend">\n' +
-                '                                       <label class="form-check-label" for="group_' + i + '_module2_ochtend">ochtend</label>\n' +
+                '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module2_Voorkeur" id="group_' + i + '_module2_ochtend" value="Ochtend">\n' +
+                '                                       <label class="form-check-label" for="group_' + i + '_module2_ochtend">Ochtend</label>\n' +
                 '                                   </div>\n' +
                 '                                   <div class="form-check form-check-inline">\n' +
-                '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module2_Voorkeur" id="group_' + i + '_module2middag" value="middag">\n' +
-                '                                       <label class="form-check-label" for="group_' + i + '_module2_middag">middag</label>\n' +
+                '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module2_Voorkeur" id="group_' + i + '_module2middag" value="Middag">\n' +
+                '                                       <label class="form-check-label" for="group_' + i + '_module2_middag">Middag</label>\n' +
                 '                                   </div>\n' +
+                '                                          <div class="form-check form-check-inline">\n' +
+                '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module2_Voorkeur" id="group_' + i + '_module2_geen" value="Geen Voorkeur">\n' +
+                '                                           <label class="form-check-label" for="group_' + i + '_module1_geen">Geen Voorkeur</label>\n' +
+                '                                       </div>\n' +
                 '                          </div>\n' +
                 '                       </div>\n' +
                 //MODULE 3
@@ -468,13 +475,17 @@ include 'footer.html';
                 '                           <div class="form-group">\n' +
                 '                               <label class="control-label" for="group_' + i + '_module3_Voorkeur">Voorkeur module 3:</label>\n' +
                 '                                   <div class="form-check form-check-inline">\n' +
-                '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module3_Voorkeur" id="group_' + i + '_module3_ochtend" value="ochtend">\n' +
-                '                                       <label class="form-check-label" for="group_' + i + '_module3_ochtend">ochtend</label>\n' +
+                '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module3_Voorkeur" id="group_' + i + '_module3_ochtend" value="Ochtend">\n' +
+                '                                       <label class="form-check-label" for="group_' + i + '_module3_ochtend">Ochtend</label>\n' +
                 '                                   </div>\n' +
                 '                                   <div class="form-check form-check-inline">\n' +
-                '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module3_Voorkeur" id="group_' + i + '_module3_middag" value="middag">\n' +
-                '                                       <label class="form-check-label" for="group_' + i + '_module3_middag">middag</label>\n' +
+                '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module3_Voorkeur" id="group_' + i + '_module3_middag" value="Middag">\n' +
+                '                                       <label class="form-check-label" for="group_' + i + '_module3_middag">Middag</label>\n' +
                 '                                   </div>\n' +
+                '                                          <div class="form-check form-check-inline">\n' +
+                '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module3_Voorkeur" id="group_' + i + '_module3_geen" value="Geen Voorkeur">\n' +
+                '                                           <label class="form-check-label" for="group_' + i + '_module1_geen">Geen Voorkeur</label>\n' +
+                '                                       </div>\n' +
                 '                           </div>\n' +
                 '                       </div>\n' +
                 '           </div>\n' +
@@ -488,7 +499,7 @@ include 'footer.html';
                 '           </div>\n' +
                 //CONTACTPERSOON
                 '   <div class="form-group">\n' +
-                '            <label class="control-label col-sm-2" for=group_' + i + 'Aanwezig_Contactpersoon"> Aanwezig Contactpersoon:</label>\n' +
+                '            <label class="control-label" for=group_' + i + 'Aanwezig_Contactpersoon"> Aanwezig Contactpersoon:</label>\n' +
                 '            <div class="col-sm-10">\n' +
                 '                <select id= "group_' + i + 'Aanwezig_Contactpersoon" class="form-control" name="group_' + i + 'Aanwezig_Contactpersoon">\n' +
                 '                    <option value="">Selecteer Contactpersoon Coördinatie...</option>\n' +
