@@ -112,6 +112,8 @@ if ($_SESSION['username'] == 'contactpersoon') {
                                 $stmt3->bindParam(8, $Adress, PDO::PARAM_STR);
                                 $stmt3->bindParam(9, $Contact_Person, PDO::PARAM_STR);
                                 $stmt3->execute();
+
+                                header('Location: INCaanvraag.php?aanvraag_id=' . $Aanvraag_ID . '');
                             } else {
                                 $error_message = "een contactpersoon & een adres zijn verplicht";
                             }
@@ -129,8 +131,6 @@ if ($_SESSION['username'] == 'contactpersoon') {
         } else {
             $error_message = 'De organisatie moet worden ingevoerd.';
         }
-
-        //  }
 
     }
     generate_header('Incompany Aanvragen');
@@ -405,7 +405,6 @@ include 'footer.html';
             selectbox.remove(i);
         }
     }
-
 
     function accordion(amount_of_groups) {
         $html = '<div class="accordion" id="accordionGroups">';
