@@ -12,7 +12,7 @@ $conn = connectToDB();
 // $sql = "SELECT * FROM VW_WORKSHOPS";
 $sql = "exec proc_get_workshops @where = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bindParam(1, $id, PDO::PARAM_INT);
+$stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
 $stmt->execute();
 
 $row = $stmt->fetch(PDO::FETCH_ASSOC);

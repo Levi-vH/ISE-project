@@ -25,6 +25,7 @@ if ($_SESSION['username'] == 'planner') {
     $stmt->execute();
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
     $workshoptype = $row['TYPE'];
     $workshopdate = $row['DATUM'];
     $contactinfo = $row['CONTACTPERSOON_VOORNAAM'] . ' ' . $row['CONTACTPERSOON_ACHTERNAAM'];
@@ -74,7 +75,25 @@ if ($_SESSION['username'] == 'planner') {
         $stmt->execute();
     }
 
+    pre_r($row);
+
     generate_header('Workshop aanpassen');
+
+    $getTypes = "SELECT * FROM WORKSHOPTYPE";
+    $statement = $conn->prepare($getTypes);
+    $statement->execute();
+
+    $types = $statement->fetchAll(PDO::FETCH_ASSOC);
+    $dropdownTypes = '<option disabled> Kies een Type... </option>';
+
+    foreach ($types as $type){
+        if($type['TYPE'] == $workshoptype){
+            $dropdownTypes .= '<option value="'.$type['TYPE'].'" selected> '.$type['TypeName'].'</option>';
+        }else{
+            $dropdownTypes .= '<option value="'.$type['TYPE'].'"> '.$type['TypeName'].'</option>';
+        }
+    }
+
     ?>
 
     <body>
@@ -122,11 +141,7 @@ if ($_SESSION['username'] == 'planner') {
                         <label class="control-label col-sm-2 font-weight-bold" for="workshoptype">Type workshop:</label>
                         <div class="col-sm-10">
                             <select class="form-control" name="workshoptype">
-                                <option>TYPE...</option>
-                                <option>INCOMPANY</option>
-                                <option>INDIVIDUEEL</option>
-                                <option>LARGE ACCOUNTS</option>
-                                <option>COM</option>
+                               <?= $dropdownTypes ?>
                             </select>
                         </div>
                     </div>
@@ -167,6 +182,16 @@ if ($_SESSION['username'] == 'planner') {
                             <?php
                             echo selectBox("workshopcompany", "organisatie", array("organisatienaam", "organisatienummer"), "organisatienummer", array("organisatienaam"), "organisatienaam");
                             ?>
+                            <script href="text/javascript">
+                                var val = '<?php echo $row['ORGANISATIENAAM']; ?> ';
+                                $('#workshopcompany option').each(function (){
+                                    if($(this).text() === val){
+                                        $(this).attr('selected', 'selected');
+                                        return false;
+                                    }
+                                    return true;
+                                });
+                            </script>
                         </div>
                     </div>
                     <div class="form-group">
@@ -175,6 +200,10 @@ if ($_SESSION['username'] == 'planner') {
                             <?php
                             echo selectBox("workshopsector", "sector", array("sectornaam"), "sectornaam", array("sectornaam"), "sectornaam");
                             ?>
+                            <script href="text/javascript">
+                                var val = '<?php echo $row['SECTORNAAM']; ?>';
+                                $('#workshopsector').find('option[value='+val+']').attr('selected','selected');
+                            </script>
                         </div>
                     </div>
                     <div class="form-group">
@@ -224,6 +253,12 @@ if ($_SESSION['username'] == 'planner') {
                             <?php
                             echo selectBox("workshopleader", "workshopleider", array("achternaam", "voornaam", "workshopleider_id"), "workshopleider_id", array("achternaam", "voornaam"), "achternaam, voornaam");
                             ?>
+                            <script>
+                                $("#workshopleader").prepend("<option value='' selected>Kies een workshopleider...</option>");
+
+                                var val = '<?php echo $row['WORKSHOPLEIDER_ID']; ?>';
+                                $('#workshopsector').find('option[value='+val+']').attr('selected','selected');
+                            </script>
                         </div>
                     </div>
                     <div class="form-group">
