@@ -958,13 +958,22 @@ CREATE OR ALTER PROC SP_add_participant_to_group
 AS
 BEGIN
 	SET NOCOUNT ON
+	IF	(
+		SELECT		COUNT(DEELNEMER_ID)
+		FROM		DEELNEMER_IN_AANVRAAG
+		WHERE		AANVRAAG_ID = @request_id
+		AND			GROEP_ID = @group_id
+		) >= 16
+		BEGIN
+			RETURN
+		END
 	DECLARE @sql NVARCHAR(4000)
-	--SET @sql =	N'
+	SET @sql =	N'
 				UPDATE	DEELNEMER_IN_AANVRAAG
 				SET		GROEP_ID = @group_id
 				WHERE	AANVRAAG_ID = @request_id
 				AND		DEELNEMER_ID = @participant_id
-	--			'
+				'
 	EXEC sp_executesql @sql,	N'@request_id INT, @group_id INT, @participant_id INT',
 								@request_id, @group_id, @participant_id
 END
