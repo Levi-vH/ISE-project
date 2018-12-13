@@ -42,24 +42,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
         <h3>Persoonlijke gegevens</h3>
-        <label class="control-label col-sm-2" for="Organisation_Relationnumber">Aanhef</label>
-        <label class="radio-inline"><input type="radio" name="optradio" checked>Dhr.</label>
-        <label class="radio-inline"><input type="radio" name="optradio">Mvr.</label>
-
+        <div class="form-group">
+            <label for="Organisation_Relationnumber">Aanhef</label>
+            <label class="radio-inline"><input type="radio" name="Aanhefradio" checked>Dhr.</label>
+            <label class="radio-inline"><input type="radio" name="Aanhefradio">Mvr.</label>
+        </div>
 
         <div class="form-group">
-
-            <div class="col-sm-10">
-                <input id="Organisation_Relationnumber" type="text" class="form-control" placeholder="Relatie nummer"
-                       name="Organisation_Relationnumber" readonly>
-            </div>
+            <label for="voornaamInput">Voornaam</label>
+            <input type="text" class="form-control" id="voornaamInput" placeholder="Voornaam">
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-2" for="Organisation_Address">Adres:</label>
-            <div class="col-sm-10">
-                <input id="Organisation_Address" type="text" class="form-control" placeholder="Adres organisatie"
-                       name="Organisation_Address" readonly>
-            </div>
+            <label for="achternaamInput">Achternaam</label>
+            <input type="text" class="form-control" id="voornaamInput" placeholder="Achternaam">
         </div>
         <div class="form-group">
             <label class="control-label col-sm-2" for="Organisation_Postcode">Postcode:</label>
