@@ -103,7 +103,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     ?>
                 </table>
                 <h1 class="participantsheader">Deelnemers zonder groep</h1>
-                <h1 class="participantsheader">Deelnemers in groep</h1>
+                <h1 class="participantsheader">Deelnemers in groep <?= getRightGroepsNummer($_GET['groeps_id'])?></h1>
                 <p class="alert-danger warning">Let op! elke deelnemer moet aan een groep zijn toegevoegd</p>
                 <div>
                     <table class='table table-striped table-hover participantstable'>

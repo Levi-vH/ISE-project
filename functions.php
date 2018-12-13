@@ -49,6 +49,10 @@ function generate_header($title_of_page){
             <li class="nav-item active">
                 <a class="nav-link" href="Openstaande_INC_aanvragen.php">Openstaande INC aanvragen</a>
             </li>';
+        } else if ($_SESSION['username'] == 'deelnemer') {
+            $header .= '<li class="nav-item active">
+                <a class="nav-link" href="open_registrationform.php">Inschrijven voor open workshop</a>
+            </li>';
         }
         $header .= '<li class="nav-item">
                     <a class="nav-link">';
@@ -270,6 +274,21 @@ function deleteUserFromGroup($aanvraag_id, $groeps_id, $participant_id) {
     $stmt->bindParam(2, $groeps_id, PDO::PARAM_INT);
     $stmt->bindParam(3, $participant_id, PDO::PARAM_INT);
     $stmt->execute();
+}
+
+function getRightGroepsNummer($groepss_id)
+{
+    $conn = connectToDB();
+
+    $sql = "exec SP_get_row_numbers_of_group_ids ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $_GET['aanvraag_id'], PDO::PARAM_INT);
+    $stmt->bindParam(2, $groepss_id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $groepsnummer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $groepsnummer['row_number_group'];
 }
 
 ?>

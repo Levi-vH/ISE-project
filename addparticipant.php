@@ -72,22 +72,6 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         <th>Verwijderen</th>
                     </tr>
                     <?php
-                    //Try to make connection
-                    //Run the stored procedure
-                    function getRightGroepsNummer($groepss_id)
-                    {
-                        $conn = connectToDB();
-
-                        $sql = "exec SP_get_row_numbers_of_group_ids ?, ?";
-                        $stmt = $conn->prepare($sql);
-                        $stmt->bindParam(1, $_GET['aanvraag_id'], PDO::PARAM_INT);
-                        $stmt->bindParam(2, $groepss_id, PDO::PARAM_INT);
-                        $stmt->execute();
-
-                        $groepsnummer = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                        return $groepsnummer['row_number_group'];
-                    }
 
                     //Run the stored procedure
                     $sql = "exec SP_get_participants_of_workshoprequest ?";

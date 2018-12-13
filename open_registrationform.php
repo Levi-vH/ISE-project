@@ -5,6 +5,11 @@ if (!isset($_SESSION)) {
 
 include 'functions.php';
 
+generate_header('Inschrijven open workshop');
+
+
+if ($_SESSION['username'] == 'deelnemer') {
+
 $error_message = NULL;
 
 
@@ -17,15 +22,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 }
-generate_header('Inschrijven open workshop');
 ?>
 
 <body>
 <div class="container">
     <h2 class="text-info text-center">Inschrijven open workshop</h2>
     <br>
-    <?php     if ($error_message !== NULL){
-        echo '<div class ="container"> <p>' . $error_message .'</p> </div>';
+    <?php if ($error_message !== NULL) {
+        echo '<div class ="container"> <p>' . $error_message . '</p> </div>';
     } ?>
     <h3>Organisatie</h3>
     <form class="form-horizontal" action="" method="post">
@@ -449,5 +453,8 @@ include 'footer.html';
             $("#hidden_voorkeur_module3_group_" + i + "").addClass("d-none");
         }
     }
+    <?php } else {
+        echo '<h1> Alleen deelnemers kunnen deze pagina bezoeken</h1>';
+    } ?>
 
 </script>
