@@ -78,8 +78,6 @@ if ($_SESSION['username'] == 'contactpersoon') {
                         }
                         $Adress = check_input($_POST["group_" . $i . "Workshop_Address"]);
                         $Contact_Person = check_input($_POST["group_" . $i . "Aanwezig_Contactpersoon"]);
-//        $Contact_Telephone = check_input($_POST["group_" . $i . "Aanwezig_Telephone"]);
-//        $Contact_Email = check_input($_POST["group_" . $i . "Aanwezig_Email"]);
 
                         if ((isset($Group_Module1) && isset($Group_Module1_voorkeur)) || (isset($Group_Module2) && isset($Group_Module2_voorkeur)) || (isset($Group_Module3) && isset($Group_Module3_voorkeur))) {
 
@@ -413,118 +411,104 @@ include 'footer.html';
         $html = '<div class="accordion" id="accordionGroups">';
 
         for (var i = 1; i <= amount_of_groups; i++) {
-            $html += ' <div class="card">\n' +
-                '        <div class="card-header" id="heading' + i + '">\n' +
-                '           <h5 class="mb-0">\n' +
-                '               <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse' + i + '" aria-expanded="false" aria-controls="collapse' + i + '">\n' +
-                '                   Groep ' + i + ' \n' +
-                '               </button>\n' +
-                '           </h5>\n' +
-                '        </div>\n' +
-                '\n' +
-                '        <div id="collapse' + i + '" class="panel-collapse collapse in" aria-labelledby="heading' + i + '" data-parent="#accordionGroups">\n' +
-                '           <div class="card-body">\n' +
-                '               <div class="form-group">\n' +
-                //MODULES
-                '                   <label class="control-label col-sm-2" for="group_' + i + '_module">Modules:</label>\n' +
-                '                       <div class="col-sm-10">\n' +
-                //MODULE 1
-                '<input type="checkbox" name="group_' + i + '_module1" value="1" onchange="checked_module1(' + i + ', this)"> Module 1: Matching en voorbereiding <br>\n' +
-                //VOORKEUR MODULE 1
-                '                       <div id="hidden_voorkeur_module1_group_' + i + '" class="d-none">\n' +
-                '                           <div class="form-group">\n' +
-                '                                  <label class="control-label" for="group_' + i + '_module1_Voorkeur">Voorkeur module 1:</label>\n' +
-                '                                       <div class="form-check form-check-inline">\n' +
-                '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module1_Voorkeur" id="group_' + i + '_module1_ochtend" value="Ochtend">\n' +
-                '                                           <label class="form-check-label" for="group_' + i + '_module1_ochtend">Ochtend</label>\n' +
-                '                                       </div>\n' +
-                '                                       <div class="form-check form-check-inline">\n' +
-            '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module1_Voorkeur" id="group_' + i + '_module1_middag" value="Middag">\n' +
-            '                                           <label class="form-check-label" for="group_' + i + '_module1_middag">Middag</label>\n' +
-            '                                       </div>\n' +
-             '                                          <div class="form-check form-check-inline">\n' +
-            '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module1_Voorkeur" id="group_' + i + '_module1_geen" value="Geen Voorkeur">\n' +
-            '                                           <label class="form-check-label" for="group_' + i + '_module1_geen">Geen Voorkeur</label>\n' +
-            '                                       </div>\n' +
-                '                           </div>\n' +
-                '                       </div>\n' +
-                //MODULE 2
-                '<input type="checkbox" name="group_' + i + '_module2" value="2" onchange="checked_module2(' + i + ', this)"> Module 2: Begeleiden <br>\n' +
-                //VOORKEUR MODULE 2
-                '                       <div id="hidden_voorkeur_module2_group_' + i + '" class="d-none">\n' +
-                '                           <div class="form-group">\n' +
-                '                               <label class="control-label" for="group_' + i + '_module2_Voorkeur">Voorkeur module 2:</label>\n' +
-                '                                   <div class="form-check form-check-inline">\n' +
-                '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module2_Voorkeur" id="group_' + i + '_module2_ochtend" value="Ochtend">\n' +
-                '                                       <label class="form-check-label" for="group_' + i + '_module2_ochtend">Ochtend</label>\n' +
-                '                                   </div>\n' +
-                '                                   <div class="form-check form-check-inline">\n' +
-                '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module2_Voorkeur" id="group_' + i + '_module2middag" value="Middag">\n' +
-                '                                       <label class="form-check-label" for="group_' + i + '_module2_middag">Middag</label>\n' +
-                '                                   </div>\n' +
-                '                                          <div class="form-check form-check-inline">\n' +
-                '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module2_Voorkeur" id="group_' + i + '_module2_geen" value="Geen Voorkeur">\n' +
-                '                                           <label class="form-check-label" for="group_' + i + '_module1_geen">Geen Voorkeur</label>\n' +
-                '                                       </div>\n' +
-                '                          </div>\n' +
-                '                       </div>\n' +
-                //MODULE 3
-                '<input type="checkbox" name="group_' + i + '_module3" value="3" onchange="checked_module3(' + i + ', this)"> Module 3: Beoordelen <br>\n' +
-                //VOORKEUR MODULE 3
-                '                       <div id="hidden_voorkeur_module3_group_' + i + '" class="d-none">\n' +
-                '                           <div class="form-group">\n' +
-                '                               <label class="control-label" for="group_' + i + '_module3_Voorkeur">Voorkeur module 3:</label>\n' +
-                '                                   <div class="form-check form-check-inline">\n' +
-                '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module3_Voorkeur" id="group_' + i + '_module3_ochtend" value="Ochtend">\n' +
-                '                                       <label class="form-check-label" for="group_' + i + '_module3_ochtend">Ochtend</label>\n' +
-                '                                   </div>\n' +
-                '                                   <div class="form-check form-check-inline">\n' +
-                '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module3_Voorkeur" id="group_' + i + '_module3_middag" value="Middag">\n' +
-                '                                       <label class="form-check-label" for="group_' + i + '_module3_middag">Middag</label>\n' +
-                '                                   </div>\n' +
-                '                                          <div class="form-check form-check-inline">\n' +
-                '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module3_Voorkeur" id="group_' + i + '_module3_geen" value="Geen Voorkeur">\n' +
-                '                                           <label class="form-check-label" for="group_' + i + '_module1_geen">Geen Voorkeur</label>\n' +
-                '                                       </div>\n' +
-                '                           </div>\n' +
-                '                       </div>\n' +
-                '           </div>\n' +
-                '        </div>\n' +
-                //ADRES
-                '           <div class="form-group">\n' +
-                '               <label class="control-label" for="group_' + i + 'Workshop_Address">Adres:</label>\n' +
-                '                   <div class="col-sm-10">\n' +
-                '                       <input id="group_' + i + 'Workshop_Address" type="text" class="form-control" placeholder="Adres Workshop" name="group_' + i + 'Workshop_Address">\n' +
-                '                   </div>\n' +
-                '           </div>\n' +
-                //CONTACTPERSOON
-                '   <div class="form-group">\n' +
-                '            <label class="control-label" for=group_' + i + 'Aanwezig_Contactpersoon"> Aanwezig Contactpersoon:</label>\n' +
-                '            <div class="col-sm-10">\n' +
-                '                <select id= "group_' + i + 'Aanwezig_Contactpersoon" class="form-control" name="group_' + i + 'Aanwezig_Contactpersoon">\n' +
-                '                    <option value="">Selecteer Contactpersoon Coördinatie...</option>\n' +
-                '                </select>\n' +
-                '            </div>\n' +
-                '        </div>        ' +
-
-
-                //            //TELEFOONNUMMER
-                //            '           <div class="form-group">\n' +
-                //            '               <label class="control-label" for="group_' + i + 'Aanwezig_Telephone">Telefoonnummer:</label>\n' +
-                //            '                   <div class="col-sm-10">\n' +
-                //            '                       <input id="group_' + i + 'Aanwezig_Telephone" type="text" class="form-control" placeholder="Telefoonnummer" name="group_' + i + 'Aanwezig_Telephone">\n'+
-                //            '                   </div>\n' +
-                //            '           </div>\n' +
-                //            //EMAIL
-                //            '           <div class="form-group">\n' +
-                //            '               <label class="control-label" for="group_' + i + 'Aanwezig_Email">Email:</label>\n' +
-                //            '                   <div class="col-sm-10">\n' +
-                //            '                       <input id="group_' + i + 'Aanwezig_Email" type="text" class="form-control" placeholder="Email" name="group_' + i + 'Aanwezig_Email">\n' +
-                //            '                   </div>\n' +
-                //            '           </div>\n' +
-                '       </div>\n' +
-                '     </div>\n' +
-                '</div>';
+            if(amount_of_groups >=1 && amount_of_groups <= 10) {
+                $html += ' <div class="card">\n' +
+                    '        <div class="card-header" id="heading' + i + '">\n' +
+                    '           <h5 class="mb-0">\n' +
+                    '               <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse' + i + '" aria-expanded="false" aria-controls="collapse' + i + '">\n' +
+                    '                   Groep ' + i + ' \n' +
+                    '               </button>\n' +
+                    '           </h5>\n' +
+                    '        </div>\n' +
+                    '\n' +
+                    '        <div id="collapse' + i + '" class="panel-collapse collapse in" aria-labelledby="heading' + i + '" data-parent="#accordionGroups">\n' +
+                    '           <div class="card-body">\n' +
+                    '               <div class="form-group">\n' +
+                    //MODULES
+                    '                   <label class="control-label col-sm-2" for="group_' + i + '_module">Modules:</label>\n' +
+                    '                       <div class="col-sm-10">\n' +
+                    //MODULE 1
+                    '<input type="checkbox" name="group_' + i + '_module1" value="1" onchange="checked_module1(' + i + ', this)"> Module 1: Matching en voorbereiding <br>\n' +
+                    //VOORKEUR MODULE 1
+                    '                       <div id="hidden_voorkeur_module1_group_' + i + '" class="d-none">\n' +
+                    '                           <div class="form-group">\n' +
+                    '                                  <label class="control-label" for="group_' + i + '_module1_Voorkeur">Voorkeur module 1:</label>\n' +
+                    '                                       <div class="form-check form-check-inline">\n' +
+                    '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module1_Voorkeur" id="group_' + i + '_module1_ochtend" value="Ochtend">\n' +
+                    '                                           <label class="form-check-label" for="group_' + i + '_module1_ochtend">Ochtend</label>\n' +
+                    '                                       </div>\n' +
+                    '                                       <div class="form-check form-check-inline">\n' +
+                    '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module1_Voorkeur" id="group_' + i + '_module1_middag" value="Middag">\n' +
+                    '                                           <label class="form-check-label" for="group_' + i + '_module1_middag">Middag</label>\n' +
+                    '                                       </div>\n' +
+                    '                                          <div class="form-check form-check-inline">\n' +
+                    '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module1_Voorkeur" id="group_' + i + '_module1_geen" value="Geen Voorkeur">\n' +
+                    '                                           <label class="form-check-label" for="group_' + i + '_module1_geen">Geen Voorkeur</label>\n' +
+                    '                                       </div>\n' +
+                    '                           </div>\n' +
+                    '                       </div>\n' +
+                    //MODULE 2
+                    '<input type="checkbox" name="group_' + i + '_module2" value="2" onchange="checked_module2(' + i + ', this)"> Module 2: Begeleiden <br>\n' +
+                    //VOORKEUR MODULE 2
+                    '                       <div id="hidden_voorkeur_module2_group_' + i + '" class="d-none">\n' +
+                    '                           <div class="form-group">\n' +
+                    '                               <label class="control-label" for="group_' + i + '_module2_Voorkeur">Voorkeur module 2:</label>\n' +
+                    '                                   <div class="form-check form-check-inline">\n' +
+                    '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module2_Voorkeur" id="group_' + i + '_module2_ochtend" value="Ochtend">\n' +
+                    '                                       <label class="form-check-label" for="group_' + i + '_module2_ochtend">Ochtend</label>\n' +
+                    '                                   </div>\n' +
+                    '                                   <div class="form-check form-check-inline">\n' +
+                    '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module2_Voorkeur" id="group_' + i + '_module2middag" value="Middag">\n' +
+                    '                                       <label class="form-check-label" for="group_' + i + '_module2_middag">Middag</label>\n' +
+                    '                                   </div>\n' +
+                    '                                          <div class="form-check form-check-inline">\n' +
+                    '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module2_Voorkeur" id="group_' + i + '_module2_geen" value="Geen Voorkeur">\n' +
+                    '                                           <label class="form-check-label" for="group_' + i + '_module1_geen">Geen Voorkeur</label>\n' +
+                    '                                       </div>\n' +
+                    '                          </div>\n' +
+                    '                       </div>\n' +
+                    //MODULE 3
+                    '<input type="checkbox" name="group_' + i + '_module3" value="3" onchange="checked_module3(' + i + ', this)"> Module 3: Beoordelen <br>\n' +
+                    //VOORKEUR MODULE 3
+                    '                       <div id="hidden_voorkeur_module3_group_' + i + '" class="d-none">\n' +
+                    '                           <div class="form-group">\n' +
+                    '                               <label class="control-label" for="group_' + i + '_module3_Voorkeur">Voorkeur module 3:</label>\n' +
+                    '                                   <div class="form-check form-check-inline">\n' +
+                    '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module3_Voorkeur" id="group_' + i + '_module3_ochtend" value="Ochtend">\n' +
+                    '                                       <label class="form-check-label" for="group_' + i + '_module3_ochtend">Ochtend</label>\n' +
+                    '                                   </div>\n' +
+                    '                                   <div class="form-check form-check-inline">\n' +
+                    '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module3_Voorkeur" id="group_' + i + '_module3_middag" value="Middag">\n' +
+                    '                                       <label class="form-check-label" for="group_' + i + '_module3_middag">Middag</label>\n' +
+                    '                                   </div>\n' +
+                    '                                          <div class="form-check form-check-inline">\n' +
+                    '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module3_Voorkeur" id="group_' + i + '_module3_geen" value="Geen Voorkeur">\n' +
+                    '                                           <label class="form-check-label" for="group_' + i + '_module1_geen">Geen Voorkeur</label>\n' +
+                    '                                       </div>\n' +
+                    '                           </div>\n' +
+                    '                       </div>\n' +
+                    '           </div>\n' +
+                    '        </div>\n' +
+                    //ADRES
+                    '           <div class="form-group">\n' +
+                    '               <label class="control-label" for="group_' + i + 'Workshop_Address">Adres:</label>\n' +
+                    '                   <div class="col-sm-10">\n' +
+                    '                       <input id="group_' + i + 'Workshop_Address" type="text" class="form-control" placeholder="Adres Workshop" name="group_' + i + 'Workshop_Address">\n' +
+                    '                   </div>\n' +
+                    '           </div>\n' +
+                    //CONTACTPERSOON
+                    '   <div class="form-group">\n' +
+                    '            <label class="control-label" for=group_' + i + 'Aanwezig_Contactpersoon"> Aanwezig Contactpersoon:</label>\n' +
+                    '            <div class="col-sm-10">\n' +
+                    '                <select id= "group_' + i + 'Aanwezig_Contactpersoon" class="form-control" name="group_' + i + 'Aanwezig_Contactpersoon">\n' +
+                    '                    <option value="">Selecteer Contactpersoon Coördinatie...</option>\n' +
+                    '                </select>\n' +
+                    '            </div>\n' +
+                    '        </div>        ' +
+                    '       </div>\n' +
+                    '     </div>\n' +
+                    '</div>';
+            }
         }
 
         $html += '</div><br>';
