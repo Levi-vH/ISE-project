@@ -259,7 +259,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
                 <label class="control-label col-sm-2" for="Groups">Aantal groepen:</label>
                 <div class="col-sm-10">
                     <input id="Groups" type="number" class="form-control" name="Groups" onchange="accordion(value)" min="0"
-                           max="15">
+                           max="10">
                 </div>
             </div>
 
