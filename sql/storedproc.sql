@@ -14,7 +14,9 @@
 
    Modifications made by Jesse:
 		procedures made:
-		-
+		-SP_insert_workshoprequest 
+		-SP_insert_group_of_workshoprequest
+		-SP_add_date_and_time_to_request_from_group
 
 		procedures modified:
 		-
@@ -635,7 +637,7 @@ GO
 -- SP_insert_workshoprequest: inserts a new request                              
 --=================================================
 
-CREATE OR ALTER PROC SP_insert_workshoprequest
+CREATE OR ALTER PROC SP_insert_workshoprequest 
 (
 @organisationnumber	INT,
 @contactperson_id	INT,
@@ -1002,6 +1004,43 @@ BEGIN
 				'
 	EXEC sp_executesql @sql,	N'@request_id INT, @group_id INT, @participant_id INT',
 								@request_id, @group_id, @participant_id
+END
+GO
+
+--===========================================================
+-- SP_add_date_and_time_to_request_from_group                    
+--===========================================================
+
+CREATE OR ALTER PROC SP_add_date_and_time_to_request_from_group
+(
+@Groupsnumber INT,
+@Modulenumber INT,
+@Groep_Module_Date INT = NULL,
+@Groep_Module_Starttime TIME = NULL,
+@Groep_Module_Endtime TIME = NULL
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				UPDATE	MODULE_VAN_GROUP
+				SET		DATUM = @Groep_Module_Date
+				AND		STARTTIJD = @Groep_Module_Starttime
+				AND     EINDTIJD= @Groep_Module_Endtime
+				WHERE	GROEP_ID = @Groupsnumber
+				AND		MODULENUMMER = @Modulenumber
+				'
+	EXEC sp_executesql @sql,	N'@Groupsnumber INT,
+								  @Modulenumber INT,
+								  @Groep_Module_Date INT,
+								  @Groep_Module_Starttime TIME,
+								  @Groep_Module_Endtime TIME',
+								  @Groupsnumber,
+								  @Modulenumber,
+								  @Groep_Module_Date,
+								  @Groep_Module_Starttime,
+								  @Groep_Module_Endtime
 END
 GO
 
