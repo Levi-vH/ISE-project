@@ -4,10 +4,10 @@ if (!isset($_SESSION)) {
 }
 
 include 'functions.php';
-
 if ($_SESSION['username'] == 'planner') {
 
     $workshop_id = $_GET['workshop_id'];
+
     $workshoptypeget = getWorkshopType($workshop_id);
 
 // define (empty) variables
@@ -37,7 +37,7 @@ if ($_SESSION['username'] == 'planner') {
     $workshopaddress = $row['ADRES'];
     $workshoppostcode = $row['POSTCODE'];
     $workshopcity = $row['PLAATSNAAM'];
-//$workshopleader = $row['WORKSHOPLEIDER_VOORNAAM'];
+    $workshopleader = $row['WORKSHOPLEIDER_ID'];
     $workshopnotes = $row['OPMERKING'];
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -74,8 +74,6 @@ if ($_SESSION['username'] == 'planner') {
         $stmt->bindParam(13, $workshopnotes, PDO::PARAM_STR);
         $stmt->execute();
     }
-
-    pre_r($row);
 
     generate_header('Workshop aanpassen');
 
@@ -136,7 +134,7 @@ if ($_SESSION['username'] == 'planner') {
 
             <div class="container">
                 <h2 class="text-info text-center">Wijzig workshop <?php echo $workshop_id ?></h2>
-                <form class="form-horizontal" action="editworkshop.php?id=<?php echo $workshop_id ?>" method="post">
+                <form class="form-horizontal" action="editworkshop.php?workshop_id=<?php echo $workshop_id ?>" method="post">
                     <div class="form-group">
                         <label class="control-label col-sm-2 font-weight-bold" for="workshoptype">Type workshop:</label>
                         <div class="col-sm-10">
@@ -254,10 +252,17 @@ if ($_SESSION['username'] == 'planner') {
                             echo selectBox("workshopleader", "workshopleider", array("achternaam", "voornaam", "workshopleider_id"), "workshopleider_id", array("achternaam", "voornaam"), "achternaam, voornaam");
                             ?>
                             <script>
-                                $("#workshopleader").prepend("<option value='' selected>Kies een workshopleider...</option>");
+                               var dropdown = $("#workshopleader");
+                               dropdown.prepend("<option value='null'>Kies een workshopleider...</option>");
 
-                                var val = '<?php echo $row['WORKSHOPLEIDER_ID']; ?>';
-                                $('#workshopsector').find('option[value='+val+']').attr('selected','selected');
+                                var val = '<?php echo $workshopleader; ?>';
+                                console.log(val);
+                                if(val === ''){
+                                    dropdown.find('option[value=null]').attr('selected','selected');
+                                }else{
+                                    dropdown.find('option[value='+val+']').attr('selected','selected');
+                                }
+
                             </script>
                         </div>
                     </div>

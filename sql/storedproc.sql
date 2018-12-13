@@ -897,6 +897,12 @@ CREATE OR ALTER PROC SP_alter_workshop -- reference number M5
 AS
 BEGIN
 	SET NOCOUNT ON
+
+	IF(@workshopleader = 'null')
+	BEGIN
+		SET @workshopleader = null
+	END
+
 	DECLARE @sql NVARCHAR(4000)
 	SET @sql =	N'
 				UPDATE	WORKSHOP
