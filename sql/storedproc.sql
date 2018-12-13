@@ -65,6 +65,7 @@ BEGIN
 							W.POSTCODE,
 							W.PLAATSNAAM,
 							W.SECTORNAAM,
+							W.WORKSHOPLEIDER_ID,
 							STATUS,
 							OPMERKING,
 							VERWERKT_BREIN,
