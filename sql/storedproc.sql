@@ -1,3 +1,32 @@
+/* =====================================================================
+   Author: Lars
+   Create date: 26-11-2018
+   Description: this is a script to create random testdata for the
+   'SBBWorkshopOmgeving' database
+   --------------------------------
+   Modified by: Bart, Jesse, Mark
+   Modifications made by Bart:
+		procedures made:
+		-
+
+		procedures modified:
+		-
+
+   Modifications made by Jesse:
+		procedures made:
+		-
+
+		procedures modified:
+		-
+
+   Modifications made by Mark:
+		procedures made:
+		-
+
+		procedures modified:
+		-
+   ==================================================================== */
+
 USE SBBWorkshopOmgeving
 GO
 
@@ -14,13 +43,13 @@ Procedure order:
 /*==============================================================*/
 
 --============================================================================================
--- SP proc_get_workshops: returns all workshops with their data for the workshop overview page                                              
+-- SP_get_workshops: returns all workshops with their data for the workshop overview page                                              
 --============================================================================================
 
-CREATE OR ALTER PROC proc_get_workshops -- proc_request_workshops
+CREATE OR ALTER PROC SP_get_workshops
 (
-@orderby		NVARCHAR(40) = NULL,
-@orderdirection	NVARCHAR(4) = NULL,
+@order_by		NVARCHAR(40) = NULL,
+@order_direction	NVARCHAR(4) = NULL,
 @where			INT = NULL
 )
 AS
@@ -80,26 +109,26 @@ BEGIN
 		BEGIN
 			SET @sql += ' WHERE W.WORKSHOP_ID = @where'
 		END
-	SET @sql += ' ORDER BY @orderby + @orderdirection' -- add an order by statement to the query
-	IF(@orderby IS NULL)
+	SET @sql += ' ORDER BY @order_by + @order_direction' -- add an order by statement to the query
+	IF(@order_by IS NULL)
 		BEGIN
-			SET @orderby = 'W.WORKSHOP_ID' -- if no order by statement was given with the execute, order by workshop_id's
+			SET @order_by = 'W.WORKSHOP_ID' -- if no order by statement was given with the execute, order by workshop_id's
 		END
-	IF(@orderdirection IS NULL)
+	IF(@order_direction IS NULL)
 		BEGIN
-			SET @orderdirection = 'ASC' -- if no order by direction was given, order by ascending
+			SET @order_direction = 'ASC' -- if no order by direction was given, order by ascending
 		END
-	EXEC sp_executesql @sql, N'@orderby NVARCHAR(40), @orderdirection NVARCHAR(4), @where INT', @orderby, @orderdirection, @where
+	EXEC sp_executesql @sql, N'@order_by NVARCHAR(40), @order_direction NVARCHAR(4), @where INT', @order_by, @order_direction, @where
 END
 GO
 
 --============================================================================================
--- SP proc_get_workshoprequests: returns all workshops that are requested                                        
+-- SP_get_workshoprequests: returns all workshops that are requested                                        
 --============================================================================================
 
-CREATE OR ALTER PROC proc_get_workshoprequests -- proc_request_workshoprequests
+CREATE OR ALTER PROC SP_get_workshoprequests
 (
-@aanvraag_id INT = NULL
+@request_id INT = NULL
 )
 AS
 BEGIN
@@ -130,41 +159,70 @@ BEGIN
 						ADVISEUR AD ON A.ADVISEUR_ID = AD.ADVISEUR_ID INNER JOIN
 						PLANNER P ON A.PLANNERNAAM = P.PLANNERNAAM
 				'
-	IF(@aanvraag_id IS NOT NULL)
+	IF(@request_id IS NOT NULL)
 		BEGIN
-			SET @sql +=	N'WHERE A.AANVRAAG_ID = @aanvraag_id'
+			SET @sql +=	N'WHERE A.AANVRAAG_ID = @request_id'
 		END
-	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
+	EXEC sp_executesql @sql, N'@request_id INT', @request_id
 END
 GO
 
 --============================================================================================
--- SP proc_request_groupsID: returns all groups ID's of a request                                      
+-- SP_group_ids: returns all group ID's of a request                                      
 --============================================================================================
 
-CREATE OR ALTER PROC proc_request_groupsID
+CREATE OR ALTER PROC SP_get_group_ids
 (
-@aanvraag_id INT = NULL
+@request_id INT = NULL
 )
 AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
 	SET @sql =	N'
-				SELECT GROEP_ID
+				SELECT	GROEP_ID
 				FROM	GROEP
-				WHERE AANVRAAG_ID = @aanvraag_id
-	 '
-	 EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
+				WHERE	AANVRAAG_ID = @request_id
+				'
+	 EXEC sp_executesql @sql, N'@request_id INT', @request_id
 END
 GO
+
+--==============================================================================================
+-- SP_get_row_numbers_of_group_ids: returns the row numbers of the group ID's list of a request                                      
+--==============================================================================================
+
+CREATE OR ALTER PROC SP_get_row_numbers_of_group_ids
+(
+@request_id INT = NULL,
+@group_id INT = NULL
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				;WITH row_number AS
+				(
+				SELECT	ROW_NUMBER() OVER (ORDER BY GROEP_ID) AS row_number_group, GROEP_ID
+				FROM	GROEP
+				WHERE	AANVRAAG_ID = @request_id
+				)
+				SELECT	row_number_group
+				FROM	row_number
+				WHERE	GROEP_ID = @group_id
+				'
+	 EXEC sp_executesql @sql, N'@request_id INT, @group_id INT', @request_id, @group_id
+END
+GO
+
 --============================================================================================
--- SP proc_request_groups: returns all groups from requests                                       
+-- SP_get_groups: returns all groups from requests                                       
 --============================================================================================
 
-CREATE OR ALTER PROC proc_request_groups
+CREATE OR ALTER PROC SP_get_groups
 (
-@aanvraag_id INT = NULL
+@request_id INT = NULL
 )
 AS
 BEGIN
@@ -186,21 +244,21 @@ BEGIN
 						G.GROEP_ID
 				FROM	GROEP G INNER JOIN
 						CONTACTPERSOON C ON G.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
-				WHERE	G.AANVRAAG_ID = @aanvraag_id
+				WHERE	G.AANVRAAG_ID = @request_id
 				'
-	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
+	EXEC sp_executesql @sql, N'@request_id INT', @request_id
 END
 GO
 
 --============================================================================================
--- SP proc_request_group_information: returns information for a single group                                      
+-- SP_get_module_information_of_group: returns module information for a single group                                      
 --============================================================================================
 -- van de groep en module dan wil je de module informatie: de opgegeven voorkeur datum startijd eindtijd
 -- voorkeur, datum, starttijd, einddtijd 
-CREATE OR ALTER PROC proc_request_module_group_information
+CREATE OR ALTER PROC SP_get_module_information_of_group
 (
-@group_ID INT,
-@modulenummer INT
+@group_id INT,
+@modulenumber INT
 )
 AS
 BEGIN
@@ -209,21 +267,21 @@ BEGIN
 	SET @sql =	N'
 					SELECT VOORKEUR, DATUM, STARTTIJD, EINDTIJD
 					FROM MODULE_VAN_GROEP
-					WHERE GROEP_ID = @group_ID
-					AND MODULENUMMER = @modulenummer
+					WHERE GROEP_ID = @group_id
+					AND MODULENUMMER = @modulenumber
 				'
-	EXEC sp_executesql @sql, N'@group_ID INT, @modulenummer INT', @group_ID, @modulenummer
+	EXEC sp_executesql @sql, N'@group_id INT, @modulenumber INT', @group_id, @modulenumber
 END
 GO
 
 --============================================================================================
--- SP proc_request_group_information: returns information for a single group                                      
+-- SP_get_information_of_group: returns information for a single group                                      
 --============================================================================================
 -- van de groep en module dan wil je de module informatie: de opgegeven voorkeur datum startijd eindtijd
 -- voorkeur, datum, starttijd, einddtijd 
-CREATE OR ALTER PROC proc_request_group_information
+CREATE OR ALTER PROC SP_get_information_of_group
 (
-@group_ID INT = NULL
+@group_id INT = NULL
 )
 AS
 BEGIN
@@ -246,10 +304,10 @@ END
 GO
 
 --============================================================================================================
--- SP proc_request_groupsID: returns the id's for all the modules
+-- SP_get_modulenumbers: returns the id's for all the modules
 --===========================================================================================================
 
-CREATE OR ALTER PROC proc_request_modulenummers
+CREATE OR ALTER PROC SP_get_modulenumbers
 (
 @group_ID INT = NULL
 )
@@ -267,10 +325,10 @@ BEGIN
 END
 GO
 --============================================================================================================
--- SP proc_request_approved_workshop_participants: returns all approved workshop participants for a workshop                                      
+-- SP_get_list_of_approved_workshop_participants: returns all approved workshop participants for a workshop                                      
 --===========================================================================================================
 
-CREATE OR ALTER PROC proc_request_approved_workshop_participants -- reference number M1
+CREATE OR ALTER PROC SP_get_list_of_approved_workshop_participants -- reference number M1
 (
 @workshop_id INT
 )
@@ -293,10 +351,10 @@ END
 GO
 
 --===================================================================================================================================================
--- SP proc_request_approved_workshop_participants_reservelist: returns all approved workshop participants for a workshop that are on the reservelist                                      
+-- SP_get_reservelist_of_approved_workshop_participants: returns all approved workshop participants for a workshop that are on the reservelist                                      
 --===================================================================================================================================================
 
-CREATE OR ALTER PROC proc_request_approved_workshop_participants_reservelist -- reference number M2
+CREATE OR ALTER PROC SP_get_reservelist_of_approved_workshop_participants -- reference number M2
 (
 @workshop_id INT
 )
@@ -326,10 +384,10 @@ END
 GO
 
 --===================================================================================================================
--- SP proc_request_not_approved_workshop_participants: returns all participants of a workshop that are not approved                                 
+-- SP_get_list_of_to_approve_workshop_participants: returns all participants of a workshop that are not approved                                 
 --===================================================================================================================
 
-CREATE OR ALTER PROC proc_request_not_approved_workshop_participants -- reference number M3
+CREATE OR ALTER PROC SP_get_list_of_to_approve_workshop_participants -- reference number M3
 (
 @workshop_id INT
 )
@@ -352,12 +410,12 @@ END
 GO
 
 --=========================================================================================
--- SP proc_request_deelnemers_in_aanvraag: returns all participants that are in a request                                
+-- SP_get_participants_in_workshoprequest: returns all participants that are in a request                                
 --=========================================================================================
 
-CREATE OR ALTER PROC proc_request_deelnemers_in_aanvraag
+CREATE OR ALTER PROC SP_get_participants_of_workshoprequest
 (
-@aanvraag_id INT
+@request_id INT
 )
 AS
 BEGIN
@@ -374,20 +432,20 @@ BEGIN
 							DA.GROEP_ID
 				FROM		DEELNEMER_IN_AANVRAAG DA INNER JOIN
 							DEELNEMER D ON DA.DEELNEMER_ID = D.DEELNEMER_ID
-				WHERE		DA.AANVRAAG_ID = @aanvraag_id
+				WHERE		DA.AANVRAAG_ID = @request_id
 				'
-	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
+	EXEC sp_executesql @sql, N'@request_id INT', @request_id
 END
 GO
 
 --=========================================================================================
--- SP proc_request_deelnemers_in_aanvraag: returns all participants that are in a request,
+-- SP_get_participants_of_workshoprequest_without_group: returns all participants that are in a request,
 -- but not in a group
 --=========================================================================================
 
-CREATE OR ALTER PROC proc_request_deelnemers_in_aanvraag_not_in_groep
+CREATE OR ALTER PROC SP_get_participants_of_workshoprequest_without_group
 (
-@aanvraag_id INT
+@request_id INT
 )
 AS
 BEGIN
@@ -403,21 +461,21 @@ BEGIN
 							D.TELEFOONNUMMER
 				FROM		DEELNEMER_IN_AANVRAAG DA INNER JOIN
 							DEELNEMER D ON DA.DEELNEMER_ID = D.DEELNEMER_ID
-				WHERE		DA.AANVRAAG_ID = @aanvraag_id
+				WHERE		DA.AANVRAAG_ID = @request_id
 				AND			DA.GROEP_ID IS NULL
 				'
-	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
+	EXEC sp_executesql @sql, N'@request_id INT', @request_id
 END
 GO
 
 --=========================================================================================
--- SP proc_request_deelnemers_van_groep: returns all participants that are in a group                              
+-- SP_get_participants_of_group: returns all participants that are in a group                              
 --=========================================================================================
 
-CREATE OR ALTER PROC proc_request_deelnemers_van_groep
+CREATE OR ALTER PROC SP_get_participants_of_group
 (
-@aanvraag_id	INT,
-@groep_id		INT
+@request_id	INT,
+@group_id		INT
 )
 AS
 BEGIN
@@ -431,20 +489,20 @@ BEGIN
 							D.GEBOORTEDATUM
 				FROM		DEELNEMER_IN_AANVRAAG DA INNER JOIN
 							DEELNEMER D ON DA.DEELNEMER_ID = D.DEELNEMER_ID
-				WHERE		DA.AANVRAAG_ID = @aanvraag_id
-				AND			DA.GROEP_ID = @groep_id
+				WHERE		DA.AANVRAAG_ID = @request_id
+				AND			DA.GROEP_ID = @group_id
 				'
-	EXEC sp_executesql @sql, N'@aanvraag_id INT, @groep_id INT', @aanvraag_id, @groep_id
+	EXEC sp_executesql @sql, N'@request_id INT, @group_id INT', @request_id, @group_id
 END
 GO
 
 --============================================================================================
--- SP proc_request_group_information: returns the information of a group                                       
+-- SP_get_information_of_group: returns the information of a group                                       
 --============================================================================================
 /*
-CREATE OR ALTER PROC proc_request_group_information
+CREATE OR ALTER PROC SP_get_information_of_group
 (
-@aanvraag_id INT = NULL
+@request_id INT = NULL
 )
 AS
 BEGIN
@@ -463,9 +521,9 @@ BEGIN
 						G.GROEP_ID
 				FROM	GROEP G INNER JOIN
 						CONTACTPERSOON C ON G.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
-				WHERE	G.AANVRAAG_ID = @aanvraag_id
+				WHERE	G.AANVRAAG_ID = @request_id
 	--			'
-	EXEC sp_executesql @sql, N'@aanvraag_id INT', @aanvraag_id
+	EXEC sp_executesql @sql, N'@request_id INT', @request_id
 END
 GO
 */
@@ -477,16 +535,16 @@ GO
 /*==============================================================*/
 
 --=================================================
--- SP proc_create_workshop: inserts a new workshop                              
+-- SP_insert_workshop: inserts a new workshop                              
 --=================================================
-CREATE OR ALTER PROC proc_create_workshop
+CREATE OR ALTER PROC SP_insert_workshop
 (
 @workshoptype		NVARCHAR(3),
 @workshopdate		NVARCHAR(10),
-@modulenummer		INT,
-@contactpersoon_ID  INT,
-@adviseur_ID		INT,
-@organisatienummer	INT,
+@modulenumber		INT,
+@contactperson_id  INT,
+@advisor_id		INT,
+@organisationnumber	INT,
 @workshopsector		NVARCHAR(20),
 @workshopstarttime	NVARCHAR(10),
 @workshopendtime	NVARCHAR(10),
@@ -520,10 +578,10 @@ BEGIN
 				INSERT INTO	WORKSHOP
 				VALUES		(
 							@workshopleader,
-							@contactpersoon_ID,
-							@organisatienummer,
-							@modulenummer,
-							@adviseur_ID,
+							@contactperson_id,
+							@organisationnumber,
+							@modulenumber,
+							@advisor_id,
 							@workshopsector,
 							@workshopdate,
 							@workshopstarttime,
@@ -539,10 +597,10 @@ BEGIN
 				'
 	EXEC sp_executesql @sql,	N'
 								@workshopleader		NVARCHAR(100),
-								@contactpersoon_ID	INT,
-								@organisatienummer	INT,
-								@modulenummer		INT,
-								@adviseur_ID		INT,
+								@contactperson_id	INT,
+								@organisationnumber	INT,
+								@modulenumber		INT,
+								@advisor_id		INT,
 								@workshopsector		NVARCHAR(20),
 								@workshopdate		NVARCHAR(10),
 								@workshopstarttime	NVARCHAR(10),
@@ -555,10 +613,10 @@ BEGIN
 								@workshoptype		NVARCHAR(3)
 								',
 								@workshopleader,
-								@contactpersoon_ID,
-								@organisatienummer,
-								@modulenummer,
-								@adviseur_ID,
+								@contactperson_id,
+								@organisationnumber,
+								@modulenumber,
+								@advisor_id,
 								@workshopsector,
 								@workshopdate,
 								@workshopstarttime,
@@ -573,15 +631,15 @@ END
 GO
 
 --=================================================
--- SP proc_insert_aanvraag: inserts a new request                              
+-- SP_insert_workshoprequest: inserts a new request                              
 --=================================================
 
-CREATE OR ALTER PROC proc_insert_aanvraag
+CREATE OR ALTER PROC SP_insert_workshoprequest
 (
-@organisatienummer	INT,
-@contactpersoon_ID	INT,
-@adviseur_ID		INT,
-@plannernaam		NVARCHAR(52)
+@organisationnumber	INT,
+@contactperson_id	INT,
+@advisor_id		INT,
+@plannername		NVARCHAR(52)
 )
 AS
 BEGIN
@@ -590,32 +648,32 @@ BEGIN
 	SET @sql =	N'
 				INSERT INTO	AANVRAAG(ORGANISATIENUMMER, CONTACTPERSOON_ID, ADVISEUR_ID, PLANNERNAAM)
 				VALUES		(
-							@organisatienummer,
-							@contactpersoon_ID,
-							@adviseur_ID,
-							@plannernaam
+							@organisationnumber,
+							@contactperson_id,
+							@advisor_id,
+							@plannername
 							)
 				'
-	EXEC sp_executesql @sql,	N'@organisatienummer INT, @contactpersoon_ID INT, @adviseur_ID INT, @plannernaam NVARCHAR(52)',
-								@organisatienummer, @contactpersoon_ID, @adviseur_ID, @plannernaam
+	EXEC sp_executesql @sql,	N'@organisationnumber INT, @contactperson_id INT, @advisor_id INT, @plannername NVARCHAR(52)',
+								@organisationnumber, @contactperson_id, @advisor_id, @plannername
 END
 GO
 
 --=======================================================================
--- SP proc_insert_aanvraag_groepen: inserts the groups of a new request                        
+-- SP_insert_groups_of_workshoprequest: inserts the groups of a new request                        
 --=======================================================================
 
-CREATE OR ALTER PROC proc_insert_aanvraag_groepen
+CREATE OR ALTER PROC SP_insert_group_of_workshoprequest
 (
-@aanvraag_id	INT,
-@module1		INT,
-@module2		INT,
-@module3		INT,
-@voorkeur1		NVARCHAR(20),
-@voorkeur2		NVARCHAR(20),
-@voorkeur3		NVARCHAR(20),
-@address		NVARCHAR(60),
-@contactpersoon	INT
+@request_id			INT,
+@module1			INT,
+@module2			INT,
+@module3			INT,
+@preference1		NVARCHAR(20),
+@preference2		NVARCHAR(20),
+@preference3		NVARCHAR(20),
+@address			NVARCHAR(60),
+@contactperson_id	INT
 )
 AS
 BEGIN
@@ -626,144 +684,144 @@ BEGIN
 	DECLARE @sql4 NVARCHAR(4000)
 	SET @sql =	N'
 				INSERT INTO	GROEP(AANVRAAG_ID, CONTACTPERSOON_ID, ADRES)
-				VALUES		(@aanvraag_ID, @contactpersoon, @address)
+				VALUES		(@request_id, @contactperson_id, @address)
 				'
-	EXEC sp_executesql @sql, N'@aanvraag_ID INT, @contactpersoon INT, @address NVARCHAR(60)', @aanvraag_ID, @contactpersoon, @address
-	DECLARE @groep_ID INT = (SELECT IDENT_CURRENT('GROEP'))
-	IF ((@module1 IS NOT NULL) AND (@voorkeur1 IS NOT NULL))
+	EXEC sp_executesql @sql, N'@request_id INT, @contactperson_id INT, @address NVARCHAR(60)', @request_id, @contactperson_id, @address
+	DECLARE @group_id INT = (SELECT IDENT_CURRENT('GROEP'))
+	IF ((@module1 IS NOT NULL) AND (@preference1 IS NOT NULL))
 	BEGIN
 		SET @sql2 =	N'
 					INSERT INTO	MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
-					VALUES		(@groep_ID, @module1, @voorkeur1)
+					VALUES		(@group_id, @module1, @preference1)
 					'	
 		EXEC sp_executesql @sql2,	N'
-									@groep_ID INT,
+									@group_id INT,
 									@module1 INT,
-									@voorkeur1 NVARCHAR(20)
+									@preference1 NVARCHAR(20)
 									',
-									@groep_ID,
+									@group_id,
 									@module1,
-									@voorkeur1
+									@preference1
 	END
-	IF ((@module2 IS NOT NULL) AND (@voorkeur2 IS NOT NULL))
+	IF ((@module2 IS NOT NULL) AND (@preference2 IS NOT NULL))
 	BEGIN
 		SET @sql3 =	N'
 				INSERT INTO	MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
-				VALUES		(@groep_ID, @module2, @voorkeur2)
+				VALUES		(@group_id, @module2, @preference2)
 				'	
 		EXEC sp_executesql @sql3,	N'
-									@groep_ID INT,
+									@group_id INT,
 									@module2 INT,
-									@voorkeur2 NVARCHAR(20)
+									@preference2 NVARCHAR(20)
 									',
-									@groep_ID,
+									@group_id,
 									@module2,
-									@voorkeur2
+									@preference2
 	END
-	IF ((@module3 IS NOT NULL) AND (@voorkeur3 IS NOT NULL))
+	IF ((@module3 IS NOT NULL) AND (@preference3 IS NOT NULL))
 	BEGIN
 		SET @sql4 =	N'
 					INSERT INTO	MODULE_VAN_GROEP(GROEP_ID, MODULENUMMER, VOORKEUR)
-					VALUES		(@groep_ID, @module3, @voorkeur3)
+					VALUES		(@group_id, @module3, @preference3)
 					'	
 		EXEC sp_executesql @sql4,	N'
-									@groep_ID INT,
+									@group_id INT,
 									@module3 INT,
-									@voorkeur3 NVARCHAR(20)
+									@preference3 NVARCHAR(20)
 									',
-									@groep_ID,
+									@group_id,
 									@module3,
-									@voorkeur3
+									@preference3
 	END
 END
 GO
 
 --=======================================================================
--- SP proc_insert_aanvraag_deelnemers: inserts participants of a request                       
+-- SP_insert_participants_of_workshoprequest: inserts participants of a request                       
 --=======================================================================
 
-CREATE OR ALTER PROC proc_insert_aanvraag_deelnemers
+CREATE OR ALTER PROC SP_insert_participant_of_workshoprequest
 (
-@aanvraag_id		INT,
-@voornaam			NVARCHAR(30),
-@achternaam			NVARCHAR(50),
-@geboortedatum		DATE,
+@request_id		INT,
+@firstname			NVARCHAR(30),
+@lastname			NVARCHAR(50),
+@birthdate		DATE,
 @email				NVARCHAR(100),
-@telefoonnummer		NVARCHAR(12),
-@opleidingsniveau	NVARCHAR(100)
+@phonenumber		NVARCHAR(12),
+@education	NVARCHAR(100)
 )
 AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
 	DECLARE @sql2 NVARCHAR(4000)
-	DECLARE @organisatienummer INT = (SELECT ORGANISATIENUMMER FROM AANVRAAG WHERE AANVRAAG_ID = @aanvraag_id)
+	DECLARE @organisationnumber INT = (SELECT ORGANISATIENUMMER FROM AANVRAAG WHERE AANVRAAG_ID = @request_id)
 	SET @sql =	N'
 				INSERT INTO	DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER, IS_OPEN_INSCHRIJVING)
 				VALUES		(
-							@voornaam,
-							@achternaam,
-							@geboortedatum,
+							@firstname,
+							@lastname,
+							@birthdate,
 							@email,
-							@telefoonnummer,
-							@opleidingsniveau,
-							@organisatienummer,
+							@phonenumber,
+							@education,
+							@organisationnumber,
 							0
 							)
 				'
 	EXEC sp_executesql @sql,	N'
-								@voornaam NVARCHAR(30),
-								@achternaam NVARCHAR(50),
-								@geboortedatum DATE,
+								@firstname NVARCHAR(30),
+								@lastname NVARCHAR(50),
+								@birthdate DATE,
 								@email NVARCHAR(100),
-								@telefoonnummer NVARCHAR(12),
-								@opleidingsniveau NVARCHAR(100),
-								@organisatienummer INT
+								@phonenumber NVARCHAR(12),
+								@education NVARCHAR(100),
+								@organisationnumber INT
 								',
-								@voornaam,
-								@achternaam,
-								@geboortedatum,
+								@firstname,
+								@lastname,
+								@birthdate,
 								@email,
-								@telefoonnummer,
-								@opleidingsniveau,
-								@organisatienummer
-	DECLARE @deelnemer_id INT = (SELECT IDENT_CURRENT('DEELNEMER'))
+								@phonenumber,
+								@education,
+								@organisationnumber
+	DECLARE @participant_id INT = (SELECT IDENT_CURRENT('DEELNEMER'))
 	SET @sql2 =	N'
 				INSERT INTO	DEELNEMER_IN_AANVRAAG (AANVRAAG_ID, DEELNEMER_ID)
-				VALUES		(@aanvraag_id, @deelnemer_id)
+				VALUES		(@request_id, @participant_id)
 				'
-	EXEC sp_executesql @sql2, N'@aanvraag_id INT, @deelnemer_id INT', @aanvraag_id, @deelnemer_id
+	EXEC sp_executesql @sql2, N'@request_id INT, @participant_id INT', @request_id, @participant_id
 END
 GO
 
 /*
-CREATE OR ALTER PROC proc_insert_incompany_participants
+CREATE OR ALTER PROC SP_insert_participant_of_incompany_workshop
 (
 @workshop_id		INT,
-@voornaam			NVARCHAR(30),
-@achternaam			NVARCHAR(50),
-@geboortedatum		DATE,
+@firstname			NVARCHAR(30),
+@lastname			NVARCHAR(50),
+@birthdate		DATE,
 @email				NVARCHAR(100),
-@telefoonnummer		NVARCHAR(12),
-@organisatienummer	INT,
-@opleidingsniveau	NVARCHAR(100)
+@phonenumber		NVARCHAR(12),
+@organisationnumber	INT,
+@education	NVARCHAR(100)
 )
 AS
 BEGIN
 	SET NOCOUNT ON
 	INSERT INTO DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER, IS_OPEN_INSCHRIJVING)
 		VALUES	(
-				@voornaam,
-				@achternaam,
-				@geboortedatum,
+				@firstname,
+				@lastname,
+				@birthdate,
 				@email,
-				@telefoonnummer,
-				@opleidingsniveau,
-				@organisatienummer,
+				@phonenumber,
+				@education,
+				@organisationnumber,
 				0
 				)
 
-	DECLARE @deelnemer_id INT = (SELECT DEELNEMER_ID FROM inserted)
+	DECLARE @participant_id INT = (SELECT DEELNEMER_ID FROM inserted)
 	DECLARE @volgnummer INT
 	IF NOT EXISTS (SELECT * FROM DEELNEMER_IN_WORKSHOP WHERE WORKSHOP_ID = @workshop_id)
 		BEGIN
@@ -777,7 +835,7 @@ BEGIN
 	INSERT INTO DEELNEMER_IN_WORKSHOP (WORKSHOP_ID, DEELNEMER_ID, VOLGNUMMER, IS_GOEDGEKEURD)
 		VALUES	(
 				@workshop_id,
-				@deelnemer_id,
+				@participant_id,
 				@volgnummer,
 				1
 				)
@@ -790,13 +848,13 @@ GO
 /*==============================================================*/
 
 --=======================================================================================
--- SP proc_approve_workshop_participants: updates participants of a workshop to approved                       
+-- SP SP_approve_participant_of_workshop: updates participants of a workshop to approved                       
 --=======================================================================================
 
-CREATE OR ALTER PROC proc_approve_workshop_participants -- reference number M4
+CREATE OR ALTER PROC SP_approve_participant_of_workshop -- reference number M4
 (
 @workshop_id	INT,
-@deelnemer_id	INT
+@participant_id	INT
 )
 AS
 BEGIN
@@ -806,24 +864,24 @@ BEGIN
 				UPDATE	DEELNEMER_IN_WORKSHOP
 				SET		IS_GOEDGEKEURD = 1
 				WHERE	WORKSHOP_ID = @workshop_id
-				AND		DEELNEMER_ID = @deelnemer_id
+				AND		DEELNEMER_ID = @participant_id
 				'
-	EXEC sp_executesql @sql, N'@workshop_id INT, @deelnemer_id INT',
-							@workshop_id, @deelnemer_id
+	EXEC sp_executesql @sql, N'@workshop_id INT, @participant_id INT',
+							@workshop_id, @participant_id
 END
 GO
 
 --===========================================================
--- SP proc_update_workshop: updates the values of a workshop                    
+-- SP_alter_workshop: updates the values of a workshop                    
 --===========================================================
 
-CREATE OR ALTER PROC proc_update_workshop -- reference number M5
+CREATE OR ALTER PROC SP_alter_workshop -- reference number M5
 (
 @workshop_id		INT,
 @workshoptype		NVARCHAR(3),
 @workshopdate		NVARCHAR(10),
-@modulenummer		INT,
-@organisatienummer	INT,
+@modulenumber		INT,
+@organisationnumber	INT,
 @workshopsector		NVARCHAR(20),
 @workshopstarttime	NVARCHAR(10),
 @workshopendtime	NVARCHAR(10),
@@ -841,8 +899,8 @@ BEGIN
 				UPDATE	WORKSHOP
 				SET		[TYPE] = @workshoptype,
 						DATUM = @workshopdate,
-						MODULENUMMER = @modulenummer,
-						ORGANISATIENUMMER = @organisatienummer,
+						MODULENUMMER = @modulenumber,
+						ORGANISATIENUMMER = @organisationnumber,
 						SECTORNAAM = @workshopsector,
 						STARTTIJD = @workshopstarttime,
 						EINDTIJD = @workshopendtime,
@@ -856,8 +914,8 @@ BEGIN
 	EXEC sp_executesql @sql,	N'
 								@workshoptype NVARCHAR(3),
 								@workshopdate NVARCHAR(10),
-								@modulenummer INT,
-								@organisatienummer INT,
+								@modulenumber INT,
+								@organisationnumber INT,
 								@workshopsector NVARCHAR(20),
 								@workshopstarttime NVARCHAR(10),
 								@workshopendtime NVARCHAR(10),
@@ -870,8 +928,8 @@ BEGIN
 								',
 								@workshoptype,
 								@workshopdate,
-								@modulenummer,
-								@organisatienummer,
+								@modulenumber,
+								@organisationnumber,
 								@workshopsector,
 								@workshopstarttime,
 								@workshopendtime,
@@ -885,17 +943,17 @@ END
 GO
 
 --===========================================================
--- SP proc_update_workshop: updates the values of a workshop                    
+-- SP_add_participant_to_group: adds a participant to a group                
 --===========================================================
 
 --select *
 --from DEELNEMER_IN_AANVRAAG
 
-CREATE OR ALTER PROC proc_add_groep_deelnemers
+CREATE OR ALTER PROC SP_add_participant_to_group
 (
-@aanvraag_id	INT,
-@groep_id		INT,
-@deelnemer_id	INT
+@request_id	INT,
+@group_id		INT,
+@participant_id	INT
 )
 AS
 BEGIN
@@ -903,20 +961,24 @@ BEGIN
 	DECLARE @sql NVARCHAR(4000)
 	--SET @sql =	N'
 				UPDATE	DEELNEMER_IN_AANVRAAG
-				SET		GROEP_ID = @groep_id
-				WHERE	AANVRAAG_ID = @aanvraag_ID
-				AND		DEELNEMER_ID = @deelnemer_id
+				SET		GROEP_ID = @group_id
+				WHERE	AANVRAAG_ID = @request_id
+				AND		DEELNEMER_ID = @participant_id
 	--			'
-	EXEC sp_executesql @sql,	N'@aanvraag_id INT, @groep_id INT, @deelnemer_id INT',
-								@aanvraag_id, @groep_id, @deelnemer_id
+	EXEC sp_executesql @sql,	N'@request_id INT, @group_id INT, @participant_id INT',
+								@request_id, @group_id, @participant_id
 END
 GO
 
-CREATE OR ALTER PROC proc_remove_groep_deelnemers
+--===========================================================
+-- SP_remove_participant_from_group: removes a participant from a group                    
+--===========================================================
+
+CREATE OR ALTER PROC SP_remove_participant_from_group
 (
-@aanvraag_id	INT,
-@groep_id		INT,
-@deelnemer_id	INT
+@request_id	INT,
+@group_id		INT,
+@participant_id	INT
 )
 AS
 BEGIN
@@ -925,11 +987,11 @@ BEGIN
 	SET @sql =	N'
 				UPDATE	DEELNEMER_IN_AANVRAAG
 				SET		GROEP_ID = NULL
-				WHERE	AANVRAAG_ID = @aanvraag_ID
-				AND		DEELNEMER_ID = @deelnemer_id
+				WHERE	AANVRAAG_ID = @request_id
+				AND		DEELNEMER_ID = @participant_id
 				'
-	EXEC sp_executesql @sql,	N'@aanvraag_id INT, @groep_id INT, @deelnemer_id INT',
-								@aanvraag_id, @groep_id, @deelnemer_id
+	EXEC sp_executesql @sql,	N'@request_id INT, @group_id INT, @participant_id INT',
+								@request_id, @group_id, @participant_id
 END
 GO
 
@@ -937,10 +999,10 @@ GO
 /* SP Type: DELETE                                              */
 /*==============================================================*/
 
-CREATE OR ALTER PROC proc_disapprove_workshop_participants -- reference number M6
+CREATE OR ALTER PROC SP_disapprove_participant_of_workshop -- reference number M6
 (
 @workshop_id	INT,
-@deelnemer_id	INT
+@participant_id	INT
 )
 AS
 BEGIN
@@ -949,16 +1011,16 @@ BEGIN
 	SET @sql =	N'
 				DELETE FROM	DEELNEMER_IN_WORKSHOP
 				WHERE		WORKSHOP_ID = @workshop_id
-				AND			DEELNEMER_ID = @deelnemer_id
+				AND			DEELNEMER_ID = @participant_id
 				'
-	EXEC sp_executesql @sql, N'@workshop_id INT, @deelnemer_id INT', @workshop_id, @deelnemer_id
+	EXEC sp_executesql @sql, N'@workshop_id INT, @participant_id INT', @workshop_id, @participant_id
 END
 GO
 
-CREATE OR ALTER PROC proc_delete_aanvraag_deelnemers
+CREATE OR ALTER PROC SP_remove_participant_from_workshoprequest
 (
-@aanvraag_id	INT,
-@deelnemer_id	INT
+@request_id	INT,
+@participant_id	INT
 )
 AS
 BEGIN
@@ -966,9 +1028,9 @@ BEGIN
 	DECLARE @sql NVARCHAR(4000)
 	SET @sql =	N'
 				DELETE FROM	DEELNEMER_IN_AANVRAAG
-				WHERE		AANVRAAG_ID = @aanvraag_id
-				AND			DEELNEMER_ID = @deelnemer_id
+				WHERE		AANVRAAG_ID = @request_id
+				AND			DEELNEMER_ID = @participant_id
 				'
-	EXEC sp_executesql @sql, N'@aanvraag_id INT, @deelnemer_id INT', @aanvraag_id, @deelnemer_id
+	EXEC sp_executesql @sql, N'@request_id INT, @participant_id INT', @request_id, @participant_id
 END
 GO

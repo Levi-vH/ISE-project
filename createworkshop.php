@@ -31,7 +31,7 @@ if ($_SESSION['username'] == 'planner') {
         $conn = connectToDB();
 
         //Run the stored procedure
-        $sql = "exec proc_create_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+        $sql = "exec SP_insert_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(1, $workshoptype, PDO::PARAM_STR);
         $stmt->bindParam(2, $workshopdate, PDO::PARAM_STR);

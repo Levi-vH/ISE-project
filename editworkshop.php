@@ -19,7 +19,7 @@ if ($_SESSION['username'] == 'planner') {
 
 //Run the stored procedure
 // $sql = "SELECT * FROM VW_WORKSHOPS";
-    $sql = "exec proc_get_workshops @where = ?";
+    $sql = "exec SP_get_workshops @where = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
     $stmt->execute();
@@ -56,7 +56,7 @@ if ($_SESSION['username'] == 'planner') {
         $workshopnotes = check_input(@$_POST['workshopnotes']);
 
         //Run the stored procedure
-        $sql = "exec proc_update_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+        $sql = "exec SP_alter_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(1, $workshop_id, PDO::PARAM_STR);
         $stmt->bindParam(2, $workshoptype, PDO::PARAM_STR);

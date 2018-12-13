@@ -31,7 +31,7 @@ generate_header('Incompany Aanvragen');
             $conn = connectToDB();
 
             //Run the stored procedure
-            $sql = "exec proc_get_workshoprequests";
+            $sql = "exec SP_get_workshoprequests";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 

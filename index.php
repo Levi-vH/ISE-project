@@ -28,6 +28,9 @@ if (isset($_POST['planner'])) {
 } elseif (isset($_POST['contactpersoon'])) {
     $_SESSION['username'] = 'contactpersoon';
     header("Refresh:0");
+} elseif (isset($_POST['deelnemer'])) {
+    $_SESSION['username'] = 'deelnemer';
+    header("Refresh:0");
 }
 ?>
 <h1 class="text-center">Login als planner of contactpersoon</h1>
@@ -38,6 +41,7 @@ if (isset($_POST['planner'])) {
 <form class="form-horizontal" name="login" action="" method="post">
     <input align="right" type="submit" name="planner" value="Planner"/>
     <input class="text-center" type="submit" name="contactpersoon" value="Contactpersoon"/>
+    <input class="text-center" type="submit" name="deelnemer" value="Deelnemer"/>
 </form>
 </body>
 </html>

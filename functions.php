@@ -49,6 +49,10 @@ function generate_header($title_of_page){
             <li class="nav-item active">
                 <a class="nav-link" href="Openstaande_INC_aanvragen.php">Openstaande INC aanvragen</a>
             </li>';
+        } else if ($_SESSION['username'] == 'deelnemer') {
+            $header .= '<li class="nav-item active">
+                <a class="nav-link" href="open_registrationform.php">Inschrijven voor open workshop</a>
+            </li>';
         }
         $header .= '<li class="nav-item">
                     <a class="nav-link">';
@@ -151,7 +155,7 @@ function deleteUserWorkshop($workshop_id, $participant_id) {
     $conn = connectToDB();
 
     //Run the stored procedure
-    $sql = "exec proc_disapprove_workshop_participants ?, ?";
+    $sql = "exec SP_disapprove_workshop_participant ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);
@@ -162,7 +166,7 @@ function deleteUserAanvraag($aanvraag_id, $participant_id) {
     $conn = connectToDB();
 
     //Run the stored procedure
-    $sql = "exec proc_delete_aanvraag_deelnemers ?, ?";
+    $sql = "exec SP_remove_participant_from_workshoprequest ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);
@@ -173,7 +177,7 @@ function addUser($workshop_id, $participant_id) {
     $conn = connectToDB();
 
     //Run the stored procedure
-    $sql = "exec proc_approve_workshop_participants ?, ?";
+    $sql = "exec SP_approve_workshop_participant ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);
@@ -192,7 +196,7 @@ function getModuleNummer($id) {
     $conn = connectToDB();
 
     //Run the stored procedure
-    $sql = "exec proc_get_workshops @where = ?";
+    $sql = "exec SP_get_workshops @where = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $id, PDO::PARAM_INT);
     $stmt->execute();
@@ -235,15 +239,56 @@ function getGroupNumber($id) {
 
 }
 
+function getFirstGroup($aanvraag_id) {
+    $conn = connectToDB();
+
+    $sql = "select top 1 GROEP_ID from GROEP where aanvraag_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    $firstgroup = $row['GROEP_ID'];
+
+    return $firstgroup;
+}
+
 function addUserToGroup($aanvraag_id, $groeps_id, $participant_id) {
     $conn = connectToDB();
 
-    $sql = "exec proc_add_groep_deelnemers ?, ?, ?";
+    $sql = "exec SP_add_participant_to_group ?, ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
-    $stmt->bindParam(1, $groeps_id, PDO::PARAM_INT);
-    $stmt->bindParam(1, $participant_id, PDO::PARAM_INT);
+    $stmt->bindParam(2, $groeps_id, PDO::PARAM_INT);
+    $stmt->bindParam(3, $participant_id, PDO::PARAM_INT);
     $stmt->execute();
+}
+
+
+function deleteUserFromGroup($aanvraag_id, $groeps_id, $participant_id) {
+    $conn = connectToDB();
+
+    $sql = "exec SP_remove_participant_from_group ?, ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
+    $stmt->bindParam(2, $groeps_id, PDO::PARAM_INT);
+    $stmt->bindParam(3, $participant_id, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+function getRightGroepsNummer($groepss_id)
+{
+    $conn = connectToDB();
+
+    $sql = "exec SP_get_row_numbers_of_group_ids ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $_GET['aanvraag_id'], PDO::PARAM_INT);
+    $stmt->bindParam(2, $groepss_id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $groepsnummer = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $groepsnummer['row_number_group'];
 }
 
 ?>

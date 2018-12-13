@@ -82,7 +82,7 @@ $workshoptype = getWorkshopType($workshop_id);
                     $conn = connectToDB();
 
                     //Run the stored procedure
-                    $sql = "proc_request_approved_workshop_participants ?";
+                    $sql = "SP_get_list_of_approved_workshop_participants ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
                     $stmt->execute();

@@ -9,7 +9,7 @@ generate_header('Incompany aanvraag');
 $conn = connectToDB();
 
 //Run the stored procedure
-$sql = "exec proc_get_workshoprequests @aanvraag_id = ?";
+$sql = "exec SP_get_workshoprequests ?";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
 $stmt->execute();
@@ -21,6 +21,33 @@ foreach ($row as $key => $value){
         $row[$key] = 'Nog niet bekend';
     }
 }
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    for($Groupsnumber=1; $Groupsnumber<=$row['AANTAL_GROEPEN']; $Groupsnumber++) {
+
+        for($Modulenumber=1; $Modulenumber<=$groupinfo['AANTAL_MODULES']; $Modulenumber++) {
+            $Groep_Module_Date          = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Date'];
+            $Groep_Module_Starttime     = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Starttime'];
+            $Groep_Module_Endtime       = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Endtime'];
+
+            $sql = "exec proc_insert_module_info ?, ?, ?, ?, ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(1, $Groupsnumber, PDO::PARAM_INT);
+            $stmt->bindParam(2, $Modulenumber, PDO::PARAM_INT);
+            $stmt->bindParam(3, $Groep_Module_Date, PDO::PARAM_INT);
+            $stmt->bindParam(4, $Groep_Module_Starttime, PDO::PARAM_STR);
+            $stmt->bindParam(5, $Groep_Module_Endtime, PDO::PARAM_STR);
+            $stmt->execute();
+
+        }
+    }
+}
+
+$groupnumber = getFirstGroup($aanvraag_id);
+
+
+
 ?>
 
 <body>
@@ -34,7 +61,7 @@ foreach ($row as $key => $value){
                         <a class="active-page">Details</a>
                     </li>
                     <li>
-                        <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id?>">Deelnemers en Groepen</a>
+                        <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id?>&groeps_id=<?= $groupnumber ?>">Deelnemers en Groepen</a>
                     </li>
                     <li>
                         <a href="addparticipant.php?aanvraag_id=<?php echo $aanvraag_id?>">Deelnemers toevoegen</a>
@@ -153,7 +180,7 @@ foreach ($row as $key => $value){
                 <?php
                 $GroupIDs[] = '';
                 //Run the stored procedure
-                $sql2 = "exec proc_request_groupsID @aanvraag_id = ?";
+                $sql2 = "exec SP_get_group_ids ?";
                 $stmt2 = $conn->prepare($sql2);
                 $stmt2->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                 $stmt2->execute();
@@ -170,7 +197,7 @@ foreach ($row as $key => $value){
 
                 $group_info = '';
                 for($i = 1; $i<=$row['AANTAL_GROEPEN']; $i++){
-                    $sql3 = "exec proc_request_group_information @group_ID = ?";
+                    $sql3 = "exec SP_get_information_of_group ?";
                     $stmt3 = $conn->prepare($sql3);
                     $stmt3->bindParam(1, $GroupIDs[$i]['GROEP_ID'], PDO::PARAM_INT);
                     $stmt3->execute();
@@ -238,7 +265,7 @@ foreach ($row as $key => $value){
                                                         <div class="accordion" id="accordionModules">';
 
                     $ModuleIDs[] = '';
-                    $sql4 = "exec proc_request_modulenummers @group_id = ?";
+                    $sql4 = "exec SP_get_modulenumbers ?";
                     $stmt4 = $conn->prepare($sql4);
                     $stmt4->bindParam(1, $GroupIDs[$i]['GROEP_ID'], PDO::PARAM_INT);
                     $stmt4->execute();
@@ -252,7 +279,7 @@ foreach ($row as $key => $value){
 
                     for($j=1; $j<=$groupinfo['AANTAL_MODULES']; $j++){
 
-                        $sql5 = "exec proc_request_module_group_information @group_ID = ?, @modulenummer = ?";
+                        $sql5 = "exec SP_get_module_information_of_group ?, ?";
                         $stmt5 = $conn->prepare($sql5);
                         $stmt5->bindParam(1, $GroupIDs[$i]['GROEP_ID'], PDO::PARAM_INT);
                         $stmt5->bindParam(2, $ModuleIDs[$j]['MODULENUMMER'], PDO::PARAM_INT);
@@ -276,24 +303,29 @@ foreach ($row as $key => $value){
 
                                                                             <div id="collapse_Module' . $j . '" class="collapse" aria-labelledby="heading_Module' . $j . '" data-parent="#accordionModules">
                                                                                 <div class="card-body">
-                                                                                                <form>
+                                                                                                <form method="post">
                                                                                                     <div class="form-group">
-                                                                                                        <label for="preference">Opgegeven Voorkeur:</label>
-                                                                                                        <input type="text" class="form-control" id="preference" value="' . $moduleinfo['VOORKEUR'] . '" disabled>
+                                                                                                        <label for="group_'. $i .'_module_'. $j .'_preference">Opgegeven Voorkeur:</label>
+                                                                                                        <input type="text" class="form-control" id="group_'. $i .'_module_'. $j .'_preference" placeholder="' . $moduleinfo['VOORKEUR'] . '" disabled>
                                                                                                     </div>
                                                                                                     <div class="form-group">
-                                                                                                        <label for="Date">Opgegeven Voorkeur:</label>
-                                                                                                        <input type="text" class="form-control" id="Date" value="' . $moduleinfo['DATUM'] . '" disabled>
-                                                                                                    </div>
+                                                                                                        <label for="group_'. $i .'_module_'. $j .'_Date">Datum:</label>
+                                                                                                        <input type="date" class="form-control" id="group_'. $i .'_module_'. $j .'_Date" placeholder="' . $moduleinfo['DATUM'] . '"';
+                                                                            if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
+                        $group_info .=                                                                           '></div>
                                                                                                     <div class="form-group">
-                                                                                                        <label for="Starttime">Starttijd:</label>
-                                                                                                        <input type="text" class="form-control" id="Starttime" value="' . $moduleinfo['STARTTIJD'] . '" disabled>
-                                                                                                    </div>
+                                                                                                        <label for="group_'. $i .'_module_'. $j .'_Starttime">Starttijd:</label>
+                                                                                                        <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Starttime" placeholder="' . $moduleinfo['STARTTIJD'] . '"';
+                                                                            if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
+                        $group_info .=                                                                           '></div>
                                                                                                     <div class="form-group">
-                                                                                                        <label for="Endtime">Eindtijd:</label>
-                                                                                                        <input type="text" class="form-control" id="Endtime" value="' . $moduleinfo['EINDTIJD'] . '" disabled>
-                                                                                                    </div>
-                                                                                                </form>
+                                                                                                        <label for="group_'. $i .'_module_'. $j .'_Endtime">Eindtijd:</label>
+                                                                                                        <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Endtime" placeholder="' . $moduleinfo['EINDTIJD'] . '"';
+                                                                            if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
+                        $group_info .=                                                                           '></div>';
+                                                    if($_SESSION['username'] == 'planner'){ $group_info .= '<button type="submit" class="btn btn-primary">Submit</button>';}
+                        $group_info .=
+                            '</form>
                                                                                 </div>
                                                                             </div>';
                     }

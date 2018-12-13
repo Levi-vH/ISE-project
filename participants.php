@@ -10,11 +10,26 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
 
     $aanvraag_id = $_GET['aanvraag_id'];
 
+
     ?>
+    <script type="text/javascript">
+        function colorSelectedRow(row, pagina) {
+
+            window.location.href = pagina;
+
+            // var els = document.getElementsByClassName("groupsrow"); // Creates an HTMLObjectList not an array.
+            // Array.prototype.forEach.call(els, function(el) {
+            //     el.removeAttribute("style");
+            // });
+
+            // row.style.backgroundColor = "";
+
+        }
+    </script>
     <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-2 col-sm-4 sidebar1">
+            <div class="col-md-2 col-sm-10 sidebar1">
                 <div class="left-navigation">
                     <ul class="list">
                         <h5><strong>Aanvraag Opties</strong></h5>
@@ -25,7 +40,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                             <a class="active-page">Deelnemers en Groepen</a>
                         </li>
                         <li>
-                            <a href="addparticipant.php?aanvraag_id=<?php echo $aanvraag_id ?>">Deelnemers toevoegen</a>
+                            <a href="addparticipant.php?aanvraag_id=<?php echo $aanvraag_id ?>">Deelnemers beheren</a>
                         </li>
                     </ul>
                     <br>
@@ -46,7 +61,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     $conn = connectToDB();
 
                     //Run the stored procedure
-                    $sql = "exec proc_request_groups ?";
+                    $sql = "exec SP_get_groups ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                     $stmt->execute();
@@ -58,9 +73,13 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $html = '';
                         $groeps_id = $row['GROEP_ID'];
                         $pagina = $_SERVER['PHP_SELF'].'?aanvraag_id='.$aanvraag_id.'&groeps_id='.$groeps_id;
-                        $html .= "<tr class='groupsrow' onclick='colorSelectedRow(this, \"$pagina\")'>";
+                        if ($groeps_id == $_GET['groeps_id']) {
+                            $html .= "<tr class='colorrow' onclick='colorSelectedRow(this, \"$pagina\")'>";
+                        }else {
+                            $html .= "<tr onclick='colorSelectedRow(this, \"$pagina\")'>";
+                        }
                         $html .= '<td>';
-                        $html .= $row['GROEP_ID'];
+                        $html .= $nummer;
                         $html .= '</td>';
                         $html .= '<td>';
                         $html .= $row['VOORNAAM'] . ' ' . $row['ACHTERNAAM'];
@@ -78,12 +97,14 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     }
                     if (isset($_GET['deleteUser'])) {
                         deleteUserAanvraag($aanvraag_id, $_GET['participant_id']);
-                        updatePage($_SERVER['PHP_SELF'] . '?aanvraag_id=' . $aanvraag_id);
+                        updatePage($_SERVER['PHP_SELF'] . '?aanvraag_id='.$aanvraag_id.'&groeps_id=' . $_GET['groeps_id']);
                     }
 
                     ?>
                 </table>
-                <h1 class="participantsheader">Deelnemers</h1>
+                <h1 class="participantsheader">Deelnemers zonder groep</h1>
+                <h1 class="participantsheader">Deelnemers in groep <?= getRightGroepsNummer($_GET['groeps_id'])?></h1>
+                <p class="alert-danger warning">Let op! elke deelnemer moet aan een groep zijn toegevoegd</p>
                 <div>
                     <table class='table table-striped table-hover participantstable'>
                         <tr class="small">
@@ -97,7 +118,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $conn = connectToDB();
 
                         //Run the stored procedure
-                        $sql = "exec proc_request_deelnemers_in_aanvraag ?";
+                        $sql = "exec SP_get_participants_of_workshoprequest_without_group ?";
                         $stmt = $conn->prepare($sql);
                         $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                         $stmt->execute();
@@ -122,13 +143,9 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                             echo $html;
 
                         }
-                        if (isset($_GET['deleteUser'])) {
-                            deleteUserAanvraag($aanvraag_id, $_GET['participant_id']);
-                            updatePage($_SERVER['PHP_SELF'] . '?aanvraag_id=' . $aanvraag_id);
-                        }
                         if (isset($_GET['addUserToGroup'])) {
                             addUserToGroup($aanvraag_id, $_GET['groeps_id'], $_GET['participant_id']);
-                           //updatePage($_SERVER['PHP_SELF'] . '?aanvraag_id=' . $aanvraag_id);
+                            updatePage($_SERVER['PHP_SELF'] . '?aanvraag_id='.$aanvraag_id.'&groeps_id='.$_GET['groeps_id']);
                         }
 
                         ?>
@@ -145,7 +162,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $conn = connectToDB();
 
                         //Run the stored procedure
-                        $sql = "exec proc_request_deelnemers_van_groep ?, ?";
+                        $sql = "exec SP_get_participants_of_group ?, ?";
                         $stmt = $conn->prepare($sql);
                         $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                         $stmt->bindParam(2, $_GET['groeps_id'], PDO::PARAM_INT);
@@ -162,19 +179,19 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                             $html .= $row['GEBOORTEDATUM'];
                             $html .= '</td>';
                             $html .= '<td>';
-                            $html .= $row['AANTAL_DEELNEMERS'] . '/16';
+                            $html .= $row['OPLEIDINGSNIVEAU'];
                             $html .= '</td>';
                             $html .= '<td>';
-                            $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon uit de groep wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="participants.php?aanvraag_id='.$aanvraag_id.'&groeps_id='.$row['DEELNEMER_ID'].'&participant_id='.$row['DEELNEMER_ID'].'&deleteUser=true"></a>';
+                            $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon uit de groep wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="participants.php?aanvraag_id='.$aanvraag_id.'&groeps_id='.$_GET['groeps_id'].'&participant_id='.$row['DEELNEMER_ID'].'&deleteUserFromGroup=true"></a>';
                             $html .= '</td>';
                             $html .= '</tr>';
 
                             echo $html;
 
                         }
-                        if (isset($_GET['deleteUser'])) {
-                            deleteUserAanvraag($aanvraag_id, $_GET['participant_id']);
-                            updatePage($_SERVER['PHP_SELF'] . '?aanvraag_id=' . $aanvraag_id);
+                        if (isset($_GET['deleteUserFromGroup'])) {
+                            deleteUserFromGroup($aanvraag_id, $_GET['groeps_id'], $_GET['participant_id']);
+                            updatePage($_SERVER['PHP_SELF'] . '?aanvraag_id='.$aanvraag_id.'&groeps_id='.$_GET['groeps_id']);
                         }
 
                         ?>
@@ -188,6 +205,5 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
 <?php } else {
     echo '<h1> U mag deze pagina niet bezoeken</h1>';
 }
-include 'footer.html';
 
 

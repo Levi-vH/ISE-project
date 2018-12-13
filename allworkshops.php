@@ -22,7 +22,7 @@ generate_header('Workshop overzicht');
 
             //Run the stored procedure
            // $sql = "SELECT * FROM VW_WORKSHOPS";
-            $sql = "EXEC proc_get_Workshops";
+            $sql = "EXEC SP_get_workshops";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
 
