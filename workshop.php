@@ -144,6 +144,15 @@ foreach ($row as $key => $value){
                             </div>
 
                         </div>
+                        <div class="detail-row">
+                            <div class="details-column">
+                                Workshopleider:
+                            </div>
+                            <div class="details-value">
+                                <?= $row['WORKSHOPLEIDER_VOORNAAM'] .' '. $row['WORKSHOPLEIDER_ACHTERNAAM']  ?>
+                            </div>
+
+                        </div>
                     </div>
 
                     <div class="recieved-details details">
@@ -166,30 +175,26 @@ foreach ($row as $key => $value){
                             </div>
 
                         </div>
+                        <?php
+                        if($row['TYPE'] == 'IND'){
+                            ?>
+
                         <div class="detail-row">
                             <div class="details-column">
                                 OVK_Bevestiging:
                             </div>
                             <div class="details-value">
-                                <?= $row['OVK_BEVESTIGING'] ?>
+                                <?=$row['OVK_BEVESTIGING']?>
                             </div>
 
                         </div>
+                        <?php } ?>
                         <div class="detail-row">
                             <div class="details-column">
                                 Presentielijst verstuurd:
                             </div>
                             <div class="details-value">
                                 <?= $row['PRESENTIELIJST_VERSTUURD'] ?>
-                            </div>
-
-                        </div>
-                        <div class="detail-row">
-                            <div class="details-column">
-                                Presentielijst ontvangen:
-                            </div>
-                            <div class="details-value">
-                                <?= $row['PRESENTIELIJST_ONTVANGEN'] ?>
                             </div>
 
                         </div>
