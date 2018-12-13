@@ -44,6 +44,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 }
 
+$groupnumber = getFirstGroup($aanvraag_id);
+
+
 
 ?>
 
@@ -58,7 +61,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         <a class="active-page">Details</a>
                     </li>
                     <li>
-                        <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id?>">Deelnemers en Groepen</a>
+                        <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id?>&groeps_id=<?= $groupnumber ?>">Deelnemers en Groepen</a>
                     </li>
                     <li>
                         <a href="addparticipant.php?aanvraag_id=<?php echo $aanvraag_id?>">Deelnemers toevoegen</a>
