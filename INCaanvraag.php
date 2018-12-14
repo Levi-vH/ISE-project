@@ -204,7 +204,9 @@ $groupnumber = getFirstGroup($aanvraag_id);
             </div>
 
             <h2 class="text-center">Groepen</h2>
+            <form method="post">
             <div class="accordion" id="accordionGroups">
+
                 <?php
                 $GroupIDs[] = '';
                 //Run the stored procedure
@@ -249,46 +251,46 @@ $groupnumber = getFirstGroup($aanvraag_id);
 
                                     <div id="collapse' . $i . '" class="collapse" aria-labelledby="heading' . $i . '" data-parent="#accordionGroups">
                                         <div class="card-body">
-                                                        <div class="details-container">
-                                                            <div class="Groep-details details">
-                                                                <h3> Algemeen</h3>
-                                                                    <div class="detail-row">
-                                                                        <div class="details-column">
-                                                                            Adres: 
-                                                                        </div>
-                                                                        <div class="details-value">
-                                                                          ' . $groupinfo['ADRES'] . '
-                                                                        </div>
-                                                                     </div>
-                                                            </div>
-                                                            <div class="GroepContact-details details">
-                                                                <h3> Aanwezig contactpersoon:</h3>
-                                                                    <div class="detail-row">
-                                                                        <div class="details-column">
-                                                                            Naam:
-                                                                        </div>
-                                                                        <div class="details-value">
-                                                                             ' . $groupinfo['VOORNAAM'] . ' ' . $groupinfo['VOORNAAM'] . '
-                                                                        </div>
-                                                                     </div>
-                                                                     <div class="detail-row">
-                                                                        <div class="details-column">
-                                                                            Telefoon:
-                                                                        </div>
-                                                                        <div class="details-value">
-                                                                         ' . $groupinfo['TELEFOONNUMMER'] . '
-                                                                        </div>
-                                                                     </div>
-                                                                     <div class="detail-row">
-                                                                        <div class="details-column">
-                                                                            Email: 
-                                                                        </div>
-                                                                        <div class="details-value">
-                                                                          ' . $groupinfo['EMAIL'] . '
-                                                                        </div>
-                                                                     </div>
-                                                            </div>
+                                            <div class="details-container">
+                                                <div class="Groep-details details">
+                                                    <h3> Algemeen</h3>
+                                                    <div class="detail-row">
+                                                        <div class="details-column">
+                                                            Adres: 
                                                         </div>
+                                                        <div class="details-value">
+                                                          ' . $groupinfo['ADRES'] . '
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="GroepContact-details details">
+                                                    <h3> Aanwezig contactpersoon:</h3>
+                                                        <div class="detail-row">
+                                                            <div class="details-column">
+                                                                Naam:
+                                                            </div>
+                                                            <div class="details-value">
+                                                                 ' . $groupinfo['VOORNAAM'] . ' ' . $groupinfo['VOORNAAM'] . '
+                                                            </div>
+                                                         </div>
+                                                         <div class="detail-row">
+                                                            <div class="details-column">
+                                                                Telefoon:
+                                                            </div>
+                                                            <div class="details-value">
+                                                             ' . $groupinfo['TELEFOONNUMMER'] . '
+                                                            </div>
+                                                         </div>
+                                                         <div class="detail-row">
+                                                            <div class="details-column">
+                                                                Email: 
+                                                            </div>
+                                                            <div class="details-value">
+                                                              ' . $groupinfo['EMAIL'] . '
+                                                            </div>
+                                                         </div>
+                                                </div>
+                                            </div>
                                                         
                                                         <div class="accordion" id="accordionModules">';
 
@@ -322,46 +324,46 @@ $groupnumber = getFirstGroup($aanvraag_id);
                         }
 
                         $group_info .= '<div class="card-header" id="heading_Module' . $j . '">
-                                                                                <h5 class="mb-0">
-                                                                                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse_Module' . $j . '" aria-expanded="false" aria-controls="collapse_Module' . $j . '">
-                                                                                        Module ' . $ModuleIDs[$j]['MODULENUMMER'] . ': '  .  $ModuleIDs[$j]['MODULENAAM'] . '
-                                                                                    </button>
-                                                                                </h5>
-                                                                            </div>
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse_Module' . $j . '" aria-expanded="false" aria-controls="collapse_Module' . $j . '">
+                                                    Module ' . $ModuleIDs[$j]['MODULENUMMER'] . ': '  .  $ModuleIDs[$j]['MODULENAAM'] . '
+                                                </button>
+                                            </h5>
+                                        </div>
 
-                                                                            <div id="collapse_Module' . $j . '" class="collapse" aria-labelledby="heading_Module' . $j . '" data-parent="#accordionModules">
-                                                                                <div class="card-body">
-                                                                                                <form method="post">
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="group_'. $i .'_module_'. $j .'_preference">Opgegeven Voorkeur:</label>
-                                                                                                        <input type="text" class="form-control" id="group_'. $i .'_module_'. $j .'_preference" placeholder="' . $moduleinfo['VOORKEUR'] . '" disabled>
-                                                                                                    </div>
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="group_'. $i .'_module_'. $j .'_Date">Datum:</label>
-                                                                                                        <input type="date" class="form-control" id="group_'. $i .'_module_'. $j .'_Date" placeholder="' . $moduleinfo['DATUM'] . '"';
-                                                                            if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
-                        $group_info .=                                                                           '></div>
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="group_'. $i .'_module_'. $j .'_Starttime">Starttijd:</label>
-                                                                                                        <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Starttime" placeholder="' . $moduleinfo['STARTTIJD'] . '"';
-                                                                            if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
-                        $group_info .=                                                                           '></div>
-                                                                                                    <div class="form-group">
-                                                                                                        <label for="group_'. $i .'_module_'. $j .'_Endtime">Eindtijd:</label>
-                                                                                                        <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Endtime" placeholder="' . $moduleinfo['EINDTIJD'] . '"';
-                                                                            if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
-                        $group_info .=                                                                           '></div>';
+                                        <div id="collapse_Module' . $j . '" class="collapse" aria-labelledby="heading_Module' . $j . '" data-parent="#accordionModules">
+                                            <div class="card-body">
+                                                
+                                                    <div class="form-group">
+                                                        <label for="group_'. $i .'_module_'. $j .'_preference">Opgegeven Voorkeur:</label>
+                                                        <input type="text" class="form-control" id="group_'. $i .'_module_'. $j .'_preference" name="edit[group'. $i .'][module'. $j .'][preference]" placeholder="' . $moduleinfo['VOORKEUR'] . '" disabled>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="group_'. $i .'_module_'. $j .'_Date">Datum:</label>
+                                                        <input type="date" class="form-control" id="group_'. $i .'_module_'. $j .'_Date" name="edit[groep'. $i .'][module'. $j .'][Date]" placeholder="' . $moduleinfo['DATUM'] . '"';
+                                                     if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
+                                    $group_info .=  '></div>
+                                                         <div class="form-group">
+                                                             <label for="group_'. $i .'_module_'. $j .'_Starttime">Starttijd:</label>
+                                                             <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Starttime" name="edit[groep'. $i .'][module'. $j .'][Starttime]" placeholder="' . $moduleinfo['STARTTIJD'] . '"';
+                                                     if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
+                                    $group_info .=       '></div>
+                                                          <div class="form-group">
+                                                             <label for="group_'. $i .'_module_'. $j .'_Endtime">Eindtijd:</label>
+                                                             <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Endtime" name="edit[groep'. $i .'][module'. $j .'][Endtime]" placeholder="' . $moduleinfo['EINDTIJD'] . '"';
+                                                      if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
+                                    $group_info .=       '></div>';
                                                     if($_SESSION['username'] == 'planner'){ $group_info .= '<button type="submit" class="btn btn-primary">Submit</button>';}
-                        $group_info .=
-                            '</form>
-                                                                                </div>
-                                                                            </div>';
+                                 $group_info .='
+                                            </div>
+                                        </div>';
                     }
                     $group_info .=                      '</div>
                                                 </div>
                                     </div>
                           </div>';
                 }
+                $group_info .= '</form>';
 
                 echo $group_info;
                 ?>
