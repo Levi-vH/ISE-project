@@ -427,7 +427,7 @@ include 'footer.html';
                     '                   <label class="control-label col-sm-2" for="group_' + i + '_module">Modules:</label>\n' +
                     '                       <div class="col-sm-10">\n' +
                     //MODULE 1
-                    '<input type="checkbox" name="group_' + i + '_module1" value="1" onchange="checked_module1(' + i + ', this)"> Module 1: Matching en voorbereiding <br>\n' +
+                    '<input type="checkbox" name="group_' + i + '_module1" value="1" onchange="checked_module(' + i + ', this)"> Module 1: Matching en voorbereiding <br>\n' +
                     //VOORKEUR MODULE 1
                     '                       <div id="hidden_voorkeur_module1_group_' + i + '" class="d-none">\n' +
                     '                           <div class="form-group">\n' +
@@ -447,7 +447,7 @@ include 'footer.html';
                     '                           </div>\n' +
                     '                       </div>\n' +
                     //MODULE 2
-                    '<input type="checkbox" name="group_' + i + '_module2" value="2" onchange="checked_module2(' + i + ', this)"> Module 2: Begeleiden <br>\n' +
+                    '<input type="checkbox" name="group_' + i + '_module2" value="2" onchange="checked_module(' + i + ', this)"> Module 2: Begeleiden <br>\n' +
                     //VOORKEUR MODULE 2
                     '                       <div id="hidden_voorkeur_module2_group_' + i + '" class="d-none">\n' +
                     '                           <div class="form-group">\n' +
@@ -467,7 +467,7 @@ include 'footer.html';
                     '                          </div>\n' +
                     '                       </div>\n' +
                     //MODULE 3
-                    '<input type="checkbox" name="group_' + i + '_module3" value="3" onchange="checked_module3(' + i + ', this)"> Module 3: Beoordelen <br>\n' +
+                    '<input type="checkbox" name="group_' + i + '_module3" value="3" onchange="checked_module(' + i + ', this)"> Module 3: Beoordelen <br>\n' +
                     //VOORKEUR MODULE 3
                     '                       <div id="hidden_voorkeur_module3_group_' + i + '" class="d-none">\n' +
                     '                           <div class="form-group">\n' +
@@ -534,7 +534,7 @@ include 'footer.html';
     }
 
 
-    function checked_module1(i, input) {
+    function checked_module(i, input) {
         if ($(input).is(":checked")) {
             $("#hidden_voorkeur_module1_group_" + i + "").removeClass("d-none");
         } else {
@@ -543,20 +543,5 @@ include 'footer.html';
     }
 
 
-    function checked_module2(i, input) {
-        if ($(input).is(":checked")) {
-            $("#hidden_voorkeur_module2_group_" + i + "").removeClass("d-none");
-        } else {
-            $("#hidden_voorkeur_module2_group_" + i + "").addClass("d-none");
-        }
-    }
-
-    function checked_module3(i, input) {
-        if ($(input).is(":checked")) {
-            $("#hidden_voorkeur_module3_group_" + i + "").removeClass("d-none");
-        } else {
-            $("#hidden_voorkeur_module3_group_" + i + "").addClass("d-none");
-        }
-    }
 
 </script>

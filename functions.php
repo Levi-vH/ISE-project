@@ -41,6 +41,9 @@ function generate_header($title_of_page){
                         </li>
                         <li class="nav-item active">
                             <a class="nav-link" href="allworkshops.php">Alle workshops</a>
+                        </li>
+                         <li class="nav-item active">
+                            <a class="nav-link" href="LargeAccounts.php">Large Accounts</a>
                         </li>';
         } else if ($_SESSION['username'] == 'contactpersoon') {
             $header .= '<li class="nav-item active">
@@ -102,7 +105,7 @@ function connectToDB(){
 
 
 
-function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayColumns, $order, $function = null, $INDworkshop = null){
+function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayColumns, $order, $function = null){
     $handler = connectToDB();
     $select = '<select class="form-control" id="'.$naamWaarde.'" name="'.$naamWaarde.'" onchange="'. $function .'">';
 
@@ -112,14 +115,8 @@ function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayCol
         $kolomString .= ',' . $kolommen[$i];
     }
 
-    
+    $sql = "SELECT $kolomString FROM $tabelnaam ORDER BY $order";
 
-    if($INDworkshop == NULL) {
-        $sql = "SELECT $kolomString FROM $tabelnaam ORDER BY $order";
-    } else {
-        $sql = "SELECT DATUM, FORMAT(STARTTIJD, N'hh\:mm') AS STARTTIJD, FORMAT(EINDTIJD, N'hh\:mm') AS EINDTIJD
-                FROM WORKSHOP";
-    }
     $query = $handler->prepare($sql);
     $query->execute();
 
@@ -130,8 +127,8 @@ function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayCol
         if($kolommen == $displayColumns){
 
             foreach($resultaat as $row){
-                    $displayString .= $row . ' ';
-                }
+                $displayString .= $row . ' ';
+            }
         }else{
 
             foreach (array_keys($resultaat) as $column){
@@ -143,7 +140,7 @@ function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayCol
 
         $select.= '<option value="'. $resultaat[$optionvalue] . '">' . $displayString . '</option>';
 
-        }
+    }
 
     $select .= '</select>';
 
