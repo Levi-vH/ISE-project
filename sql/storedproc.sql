@@ -17,6 +17,8 @@
 		-SP_insert_workshoprequest 
 		-SP_insert_group_of_workshoprequest
 		-SP_add_date_and_time_to_request_from_group
+		-SP_grant_large_account
+		-SP_ungrant_large_account
 
 		procedures modified:
 		-
@@ -1051,6 +1053,46 @@ BEGIN
 								  @Groep_Module_Date,
 								  @Groep_Module_Starttime,
 								  @Groep_Module_Endtime
+END
+GO
+
+--=======================================================================================
+-- SP SP_grant_large_account: grant organisation to request large account                       
+--=======================================================================================
+
+CREATE OR ALTER PROC SP_grant_large_account
+(
+@organisation	VARCHAR(60)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				UPDATE	ORGANISATIE
+				SET		LARGE_ACCOUNTS = 1
+				WHERE	ORGANISATIENAAM = @organisation'
+	EXEC sp_executesql @sql, N'@organisation VARCHAR(60)', @organisation
+END
+GO
+
+--=======================================================================================
+-- SP SP_ungrant_large_account: ungrant organisation to request large account                       
+--=======================================================================================
+
+CREATE OR ALTER PROC SP_ungrant_large_account
+(
+@organisation	VARCHAR(60)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				UPDATE	ORGANISATIE
+				SET		LARGE_ACCOUNTS = 0
+				WHERE	ORGANISATIENAAM = @organisation'
+	EXEC sp_executesql @sql, N'@organisation VARCHAR(60)', @organisation
 END
 GO
 
