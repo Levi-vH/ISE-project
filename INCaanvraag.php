@@ -291,7 +291,7 @@ $groupnumber = getFirstGroup($aanvraag_id);
                                                                 Naam:
                                                             </div>
                                                             <div class="details-value">
-                                                                 ' . $groupinfo['VOORNAAM'] . ' ' . $groupinfo['VOORNAAM'] . '
+                                                                 ' . $groupinfo['VOORNAAM'] . ' ' . $groupinfo['ACHTERNAAM'] . '
                                                             </div>
                                                          </div>
                                                          <div class="detail-row">
