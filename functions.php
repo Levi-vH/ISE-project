@@ -115,7 +115,12 @@ function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayCol
         $kolomString .= ',' . $kolommen[$i];
     }
 
-    $sql = "SELECT $kolomString FROM $tabelnaam WHERE $where ORDER BY $order";
+    $sql = "SELECT $kolomString FROM $tabelnaam";
+    if(!is_null($where)){
+        $sql .= " WHERE " . $where;
+    }
+
+    $sql .= " ORDER BY " .  $order;
 
     $query = $handler->prepare($sql);
     $query->execute();
