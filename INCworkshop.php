@@ -283,6 +283,8 @@ include 'footer.html';
 
 <script>
 
+    var organisation_LargeAccount = '';
+
     function get_organisatie() {
         var organisatienaam = document.getElementById("Organisation_Name");
         var organisatieValue = organisatienaam.options[organisatienaam.selectedIndex].value;
@@ -292,6 +294,7 @@ include 'footer.html';
             data: {organisation: organisatieValue},
             dataType: "json"
         }).done(function (organisation) {
+            organisation_LargeAccount = organisation['LARGE_ACCOUNTS'];
             removeOptions(document.getElementById('Contact_Name'));
             removeOptions(document.getElementById('Advisor_practical_learning'));
             $("#Organisation_Relationnumber").val(organisation['ORGANISATIENUMMER']);
@@ -407,10 +410,15 @@ include 'footer.html';
     }
 
     function accordion(amount_of_groups) {
+        var max_groups = 3;
+        if(organisation_LargeAccount = 1){
+            max_groups = 10
+        }
+
         $html = '<div class="accordion" id="accordionGroups">';
 
         for (var i = 1; i <= amount_of_groups; i++) {
-            if(amount_of_groups >=1 && amount_of_groups <= 10) {
+            if(amount_of_groups >=1 && amount_of_groups <= max_groups) {
                 $html += ' <div class="card">\n' +
                     '        <div class="card-header" id="heading' + i + '">\n' +
                     '           <h5 class="mb-0">\n' +

@@ -5,7 +5,6 @@ include 'functions.php';
 generate_header('Incompany aanvraag');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    pre_r($_POST);
     //Try to make connection
     $conn = connectToDB();
     if(isset($_POST["Organisation_Name"])) {
