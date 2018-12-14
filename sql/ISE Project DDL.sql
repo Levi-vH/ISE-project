@@ -141,7 +141,8 @@ CREATE TYPE Groep_ID FROM INT
 DROP TYPE IF EXISTS Voorkeur
 CREATE TYPE Voorkeur FROM VARCHAR(20)
 
-
+DROP TYPE IF EXISTS LargeAcount
+CREATE TYPE LargeAcount FROM BIT
 GO
 
 /*==============================================================*/
@@ -177,11 +178,12 @@ GO
 /* Table: ORGANISATIE                                           */
 /*==============================================================*/
 CREATE TABLE ORGANISATIE (
-   ORGANISATIENUMMER     Organisatienummer   NOT NULL,
-   ORGANISATIENAAM       Organisatienaam     NOT NULL,
-   ADRES				 Adres		         NOT NULL,
-   POSTCODE				 Postcode	         NOT NULL,
-   PLAATSNAAM			 Plaatsnaam	         NOT NULL,
+   ORGANISATIENUMMER     Organisatienummer			  NOT NULL,
+   ORGANISATIENAAM       Organisatienaam			  NOT NULL,
+   ADRES				 Adres						  NOT NULL,
+   POSTCODE				 Postcode					  NOT NULL,
+   PLAATSNAAM			 Plaatsnaam					  NOT NULL,
+   LARGE_ACCOUNTS		 LargeAcount	DEFAULT 0	  NOT NULL,
    CONSTRAINT PK_ORGANISATIE PRIMARY KEY (ORGANISATIENUMMER)
 )
 GO

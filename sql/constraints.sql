@@ -279,3 +279,55 @@ ON W.WORKSHOP_ID = i.WORKSHOP_ID
 WHERE i.WORKSHOPLEIDER_ID IS NOT NULL
 AND i.STATUS IS NULL 
 */
+
+--=========================================================================
+-- DEELNEMER_IN_AANVRAAG constraints
+--=========================================================================
+
+--=========================================================================
+-- A workshoprequest with one group automatically has all participants
+-- in that one group
+--=========================================================================
+CREATE TRIGGER TR_workshoprequest_with_one_group
+ON DEELNEMER_IN_AANVRAAG
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+	DECLARE @RECORDSAFFECTED INT = @@ROWCOUNT
+	IF @RECORDSAFFECTED = 0
+		RETURN
+
+	SET NOCOUNT ON
+
+	BEGIN TRY
+		IF EXISTS	(
+					SELECT	*
+					FROM	inserted
+					WHERE	EXISTS	(
+									SELECT	AANVRAAG_ID
+									FROM	DEELNEMER_IN_AANVRAAG
+									GROUP BY	AANVRAAG_ID
+									HAVING		COUNT(GROEP_ID) = 1
+									)
+					)
+			BEGIN
+				UPDATE WORKSHOP
+				SET STATUS = 'bevestigd'
+				FROM WORKSHOP W INNER JOIN inserted i
+				ON W.WORKSHOP_ID = i.WORKSHOP_ID 
+				LEFT JOIN deleted d 
+				ON W.WORKSHOP_ID = d.WORKSHOP_ID 
+				WHERE (W.VERWERKT_BREIN IS NOT NULL OR i.VERWERKT_BREIN IS NOT NULL)
+				AND (W.DEELNEMER_GEGEVENS_ONTVANGEN IS NOT NULL OR i.DEELNEMER_GEGEVENS_ONTVANGEN iS NOT NULL)
+				AND (W.OVK_BEVESTIGING IS NOT NULL OR i.OVK_BEVESTIGING iS NOT NULL)
+				AND	(W.PRESENTIELIJST_VERSTUURD IS NOT NULL OR i.PRESENTIELIJST_VERSTUURD iS NOT NULL)
+				AND (W.BEWIJS_DEELNAME_MAIL_SBB_WSL IS NOT NULL OR i.BEWIJS_DEELNAME_MAIL_SBB_WSL iS NOT NULL)
+				AND (W.PRESENTIELIJST_ONTVANGEN IS NOT NULL OR i.PRESENTIELIJST_ONTVANGEN iS NOT NULL)
+				AND i.STATUS IS NULL
+			END
+	END TRY
+	BEGIN CATCH
+		THROW
+	END CATCH
+END
+GO
