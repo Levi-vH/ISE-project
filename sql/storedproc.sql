@@ -1980,7 +1980,7 @@ CREATE OR ALTER PROC SP_add_date_and_time_to_request_from_group
 (
 @Groupsnumber INT,
 @Modulenumber INT,
-@Groep_Module_Date INT = NULL,
+@Groep_Module_Date DATE = NULL,
 @Groep_Module_Starttime TIME = NULL,
 @Groep_Module_Endtime TIME = NULL
 )
@@ -1989,16 +1989,16 @@ BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
 	SET @sql =	N'
-				UPDATE	MODULE_VAN_GROUP
-				SET		DATUM = @Groep_Module_Date
-				AND		STARTTIJD = @Groep_Module_Starttime
-				AND     EINDTIJD= @Groep_Module_Endtime
+				UPDATE	MODULE_VAN_GROEP
+				SET		DATUM = @Groep_Module_Date,
+						STARTTIJD = @Groep_Module_Starttime,
+					    EINDTIJD = @Groep_Module_Endtime
 				WHERE	GROEP_ID = @Groupsnumber
 				AND		MODULENUMMER = @Modulenumber
 				'
 	EXEC sp_executesql @sql,	N'@Groupsnumber INT,
 								  @Modulenumber INT,
-								  @Groep_Module_Date INT,
+								  @Groep_Module_Date DATE,
 								  @Groep_Module_Starttime TIME,
 								  @Groep_Module_Endtime TIME',
 								  @Groupsnumber,
@@ -2008,6 +2008,8 @@ BEGIN
 								  @Groep_Module_Endtime
 END
 GO
+
+SELECT * FROM MODULE_VAN_GROEP
 
 --=======================================================================================
 -- SP SP_grant_large_account: grant organisation to request large account                       

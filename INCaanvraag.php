@@ -23,58 +23,79 @@ foreach ($row as $key => $value){
 }
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-pre_r($_POST);
-$GroupIDs[] = '';
-//Run the stored procedure
-$sql2 = "exec SP_get_group_ids ?";
-$stmt2 = $conn->prepare($sql2);
-$stmt2->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
-$stmt2->execute();
+    $GroupIDs[] = '';
+    //Run the stored procedure
+//    $sql2 = "exec SP_get_group_ids ?";
+//    $stmt2 = $conn->prepare($sql2);
+//    $stmt2->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
+//    $stmt2->execute();
+//
+//    $groups = $stmt2->fetchall(PDO::FETCH_ASSOC);
+//    $i = 1;
+//    foreach ($groups as $group => $value){
+//        $GroupIDs[$i] = $groups[$group];
+//        $i++;
+//    }
+//    for($Groupsnumber=1; $Groupsnumber<=$row['AANTAL_GROEPEN']; $Groupsnumber++) {
+//
+//            $sql3 = "exec SP_get_information_of_group ?";
+//            $stmt3 = $conn->prepare($sql3);
+//            $stmt3->bindParam(1, $GroupIDs[$Groupsnumber]['GROEP_ID'], PDO::PARAM_INT);
+//            $stmt3->execute();
+//
+//            $groupinfo = $stmt3->fetch(PDO::FETCH_ASSOC);
+//
+//            foreach ($groupinfo as $key => $value){
+//                if($value == ''){
+//                    $groupinfo[$key] = 'Nog niet bekend';
+//                }
+//            }
+//
+//
+//
+//            for($Modulenumber=1; $Modulenumber<=$groupinfo['AANTAL_MODULES']; $Modulenumber++) {
+//                $Groep_Module_Date          = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Date'];
+//                $Groep_Module_Starttime     = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Starttime'];
+//                $Groep_Module_Endtime       = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Endtime'];
+//
+//                $sql6 = "exec SP_add_date_and_time_to_request_from_group ?, ?, ?, ?, ?";
+//                $stmt6 = $conn->prepare($sql6);
+//                $stmt6->bindParam(1, $Groupsnumber, PDO::PARAM_INT);
+//                $stmt6->bindParam(2, $Modulenumber, PDO::PARAM_INT);
+//                $stmt6->bindParam(3, $Groep_Module_Date, PDO::PARAM_INT);
+//                $stmt6->bindParam(4, $Groep_Module_Starttime, PDO::PARAM_STR);
+//                $stmt6->bindParam(5, $Groep_Module_Endtime, PDO::PARAM_STR);
+//                $stmt6->execute();
+//
+//            }
+//    }
 
-$groups = $stmt2->fetchall(PDO::FETCH_ASSOC);
-$i = 1;
-foreach ($groups as $group => $value){
-    $GroupIDs[$i] = $groups[$group];
-    $i++;
-}
-for($Groupsnumber=1; $Groupsnumber<=$row['AANTAL_GROEPEN']; $Groupsnumber++) {
+    $groepNumber = 0;
 
-            $sql3 = "exec SP_get_information_of_group ?";
-            $stmt3 = $conn->prepare($sql3);
-            $stmt3->bindParam(1, $GroupIDs[$Groupsnumber]['GROEP_ID'], PDO::PARAM_INT);
-            $stmt3->execute();
+    pre_r($_POST);
 
-            $groupinfo = $stmt3->fetch(PDO::FETCH_ASSOC);
-
-            foreach ($groupinfo as $key => $value){
-                if($value == ''){
-                    $groupinfo[$key] = 'Nog niet bekend';
-                }
-            }
-
-
-
-        for($Modulenumber=1; $Modulenumber<=$groupinfo['AANTAL_MODULES']; $Modulenumber++) {
-            $Groep_Module_Date          = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Date'];
-            $Groep_Module_Starttime     = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Starttime'];
-            $Groep_Module_Endtime       = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Endtime'];
+    foreach ($_POST['edit'] as $groep){
+        $groepNumber++;
+        $moduleNumber = 0;
+        foreach($groep as $module){
+            $moduleNumber++;
 
             $sql6 = "exec SP_add_date_and_time_to_request_from_group ?, ?, ?, ?, ?";
             $stmt6 = $conn->prepare($sql6);
-            $stmt6->bindParam(1, $Groupsnumber, PDO::PARAM_INT);
-            $stmt6->bindParam(2, $Modulenumber, PDO::PARAM_INT);
-            $stmt6->bindParam(3, $Groep_Module_Date, PDO::PARAM_INT);
-            $stmt6->bindParam(4, $Groep_Module_Starttime, PDO::PARAM_STR);
-            $stmt6->bindParam(5, $Groep_Module_Endtime, PDO::PARAM_STR);
+            $stmt6->bindParam(1, $groepNumber, PDO::PARAM_INT);
+            $stmt6->bindParam(2, $moduleNumber, PDO::PARAM_INT);
+            $stmt6->bindParam(3, $module['Date'], PDO::PARAM_STR);
+            $stmt6->bindParam(4, $module['starttime'], PDO::PARAM_STR);
+            $stmt6->bindParam(5, $module['endtime'], PDO::PARAM_STR);
             $stmt6->execute();
 
         }
     }
+
+
 }
 
 $groupnumber = getFirstGroup($aanvraag_id);
-
-
 
 ?>
 
