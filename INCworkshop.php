@@ -411,8 +411,8 @@ include 'footer.html';
 
     function accordion(amount_of_groups) {
         var max_groups = 3;
-        if(organisation_LargeAccount = 1){
-            max_groups = 10
+        if(organisation_LargeAccount == 1){
+            max_groups = 10;
         }
 
         $html = '<div class="accordion" id="accordionGroups">';
