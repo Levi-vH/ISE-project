@@ -884,22 +884,23 @@ CREATE OR ALTER PROC SP_alter_workshop -- reference number M5
 @workshop_id		INT,
 @workshoptype		NVARCHAR(3),
 @workshopdate		NVARCHAR(10),
+@workshopContact	INT,
 @modulenumber		INT,
-@organisationnumber	INT,
+@organisationnumber	VARCHAR(15),
 @workshopsector		NVARCHAR(20),
 @workshopstarttime	NVARCHAR(10),
 @workshopendtime	NVARCHAR(10),
 @workshopaddress	NVARCHAR(60),
 @workshoppostcode	NVARCHAR(7),
 @workshopcity		NVARCHAR(60),
-@workshopleader		NVARCHAR(100),
+@workshopleader		INT,
 @workshopnote		NVARCHAR(255)
 )
 AS
 BEGIN
 	SET NOCOUNT ON
 
-	IF(@workshopleader = 'null')
+	IF(@workshopleader = 0)
 	BEGIN
 		SET @workshopleader = null
 	END
@@ -910,6 +911,7 @@ BEGIN
 				SET		[TYPE] = @workshoptype,
 						DATUM = @workshopdate,
 						MODULENUMMER = @modulenumber,
+						CONTACTPERSOON_ID = @workshopContact,
 						ORGANISATIENUMMER = @organisationnumber,
 						SECTORNAAM = @workshopsector,
 						STARTTIJD = @workshopstarttime,
@@ -925,20 +927,22 @@ BEGIN
 								@workshoptype NVARCHAR(3),
 								@workshopdate NVARCHAR(10),
 								@modulenumber INT,
-								@organisationnumber INT,
+								@workshopContact INT,
+								@organisationnumber VARCHAR(15),
 								@workshopsector NVARCHAR(20),
 								@workshopstarttime NVARCHAR(10),
 								@workshopendtime NVARCHAR(10),
 								@workshopaddress NVARCHAR(60),
 								@workshoppostcode NVARCHAR(7),
 								@workshopcity NVARCHAR(60),
-								@workshopleader NVARCHAR(100),
+								@workshopleader INT,
 								@workshopnote NVARCHAR(255),
 								@workshop_id INT
 								',
 								@workshoptype,
 								@workshopdate,
 								@modulenumber,
+								@workshopContact,
 								@organisationnumber,
 								@workshopsector,
 								@workshopstarttime,
@@ -951,7 +955,6 @@ BEGIN
 								@workshop_id
 END
 GO
-
 --===========================================================
 -- SP_add_participant_to_group: adds a participant to a group                
 --===========================================================

@@ -41,9 +41,10 @@ if ($_SESSION['username'] == 'planner') {
     $workshopnotes = $row['OPMERKING'];
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        
         $workshoptype = $_POST["workshoptype"];
         $workshopdate = $_POST["workshopdate"];
-        //$contactinfo = check_input($_POST["contactinfo"]);
+        $contactinfo = check_input($_POST["workshopContact"]);
         $workshopmodule = $_POST["workshopmodule"];
         $workshopcompany = $_POST["workshopcompany"];
         $workshopsector = $_POST["workshopsector"];
@@ -53,26 +54,28 @@ if ($_SESSION['username'] == 'planner') {
         $workshoppostcode = check_input($_POST["workshoppostcode"]);
         $workshopcity = check_input($_POST["workshopcity"]);
         $workshopleader = check_input($_POST["workshopleader"]);
-        $workshopnotes = check_input(@$_POST['workshopnotes']);
+        $workshopnotes = check_input($_POST['workshopnotes']);
 
         //Run the stored procedure
-        $sql = "exec SP_alter_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+        $sql = "exec SP_alter_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(1, $workshop_id, PDO::PARAM_STR);
+        $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
         $stmt->bindParam(2, $workshoptype, PDO::PARAM_STR);
         $stmt->bindParam(3, $workshopdate, PDO::PARAM_STR);
-        //$stmt->bindParam(3, $contactinfo, PDO::PARAM_STR);
-        $stmt->bindParam(4, $workshopmodule, PDO::PARAM_INT);
-        $stmt->bindParam(5, $workshopcompany, PDO::PARAM_INT);
-        $stmt->bindParam(6, $workshopsector, PDO::PARAM_STR);
-        $stmt->bindParam(7, $starttime, PDO::PARAM_STR);
-        $stmt->bindParam(8, $endtime, PDO::PARAM_STR);
-        $stmt->bindParam(9, $workshopadress, PDO::PARAM_STR);
-        $stmt->bindParam(10, $workshoppostcode, PDO::PARAM_STR);
-        $stmt->bindParam(11, $workshopcity, PDO::PARAM_STR);
-        $stmt->bindParam(12, $workshopleader, PDO::PARAM_STR);
-        $stmt->bindParam(13, $workshopnotes, PDO::PARAM_STR);
+        $stmt->bindParam(4, $contactinfo, PDO::PARAM_INT);
+        $stmt->bindParam(5, $workshopmodule, PDO::PARAM_INT);
+        $stmt->bindParam(6, $workshopcompany, PDO::PARAM_STR);
+        $stmt->bindParam(7, $workshopsector, PDO::PARAM_STR);
+        $stmt->bindParam(8, $starttime, PDO::PARAM_STR);
+        $stmt->bindParam(9, $endtime, PDO::PARAM_STR);
+        $stmt->bindParam(10, $workshopadress, PDO::PARAM_STR);
+        $stmt->bindParam(11, $workshoppostcode, PDO::PARAM_STR);
+        $stmt->bindParam(12, $workshopcity, PDO::PARAM_STR);
+        $stmt->bindParam(13, $workshopleader, PDO::PARAM_INT);
+        $stmt->bindParam(14, $workshopnotes, PDO::PARAM_STR);
         $stmt->execute();
+
+
     }
 
     generate_header('Workshop aanpassen');
@@ -89,6 +92,25 @@ if ($_SESSION['username'] == 'planner') {
             $dropdownTypes .= '<option value="'.$type['TYPE'].'" selected> '.$type['TypeName'].'</option>';
         }else{
             $dropdownTypes .= '<option value="'.$type['TYPE'].'"> '.$type['TypeName'].'</option>';
+        }
+    }
+
+    $getContact = "SELECT * FROM CONTACTPERSOON
+                    WHERE ORGANISATIENUMMER = ?";
+
+    $statement = $conn->prepare($getContact);
+    $statement->bindParam(1, $workshop_id,PDO::PARAM_INT);
+    $statement->execute();
+
+
+    $contacts = $statement->fetchAll(PDO::FETCH_ASSOC);
+    $dropdownContact = '<option disabled> Kies een Contactpersoon...</option>';
+
+    foreach($contacts as $contact){
+        if($contact['CONTACTPERSOON_ID'] == $contactinfo){
+            $dropdownContact .= '<option value="'. $contact['CONTACTPERSOON_ID'] .'" selected>' .$contact['VOORNAAM']. ' ' .$contact['ACHTERNAAM']. '</option>';
+        }else{
+            $dropdownContact .= '<option value="'. $contact['CONTACTPERSOON_ID'] .'">' .$contact['VOORNAAM']. ' ' .$contact['ACHTERNAAM']. '</option>';
         }
     }
 
@@ -154,9 +176,9 @@ if ($_SESSION['username'] == 'planner') {
                     <div class="form-group">
                         <label class="control-label col-sm-2 font-weight-bold" for="contactinfo">Contactpersoon:</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" placeholder="Contactpersoon gegevens"
-                                   name="contactinfo"
-                                   value="<?php echo $contactinfo ?>">
+                            <select class="form-control" name="workshopContact">
+                            <?= $dropdownContact ?>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
@@ -253,12 +275,12 @@ if ($_SESSION['username'] == 'planner') {
                             ?>
                             <script>
                                var dropdown = $("#workshopleader");
-                               dropdown.prepend("<option value='null'>Kies een workshopleider...</option>");
+                               dropdown.prepend("<option value='0'>Kies een workshopleider...</option>");
 
                                 var val = '<?php echo $workshopleader; ?>';
                                 console.log(val);
                                 if(val === ''){
-                                    dropdown.find('option[value=null]').attr('selected','selected');
+                                    dropdown.find('option[value=0]').attr('selected','selected');
                                 }else{
                                     dropdown.find('option[value='+val+']').attr('selected','selected');
                                 }
