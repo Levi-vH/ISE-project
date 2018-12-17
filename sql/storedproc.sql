@@ -506,7 +506,7 @@ BEGIN
 	SET @sql =	N'
 				SELECT		*
 				FROM		WORKSHOP
-				WHERE		WORKSHOPLEIDER = @workshopleader
+				WHERE		WORKSHOPLEIDER = @workshopleader_id
 				'
 	EXEC sp_executesql @sql, N'@workshopleader_id INT', @workshopleader_id
 END
