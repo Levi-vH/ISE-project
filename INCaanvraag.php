@@ -23,56 +23,7 @@ foreach ($row as $key => $value){
 }
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $GroupIDs[] = '';
-    //Run the stored procedure
-//    $sql2 = "exec SP_get_group_ids ?";
-//    $stmt2 = $conn->prepare($sql2);
-//    $stmt2->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
-//    $stmt2->execute();
-//
-//    $groups = $stmt2->fetchall(PDO::FETCH_ASSOC);
-//    $i = 1;
-//    foreach ($groups as $group => $value){
-//        $GroupIDs[$i] = $groups[$group];
-//        $i++;
-//    }
-//    for($Groupsnumber=1; $Groupsnumber<=$row['AANTAL_GROEPEN']; $Groupsnumber++) {
-//
-//            $sql3 = "exec SP_get_information_of_group ?";
-//            $stmt3 = $conn->prepare($sql3);
-//            $stmt3->bindParam(1, $GroupIDs[$Groupsnumber]['GROEP_ID'], PDO::PARAM_INT);
-//            $stmt3->execute();
-//
-//            $groupinfo = $stmt3->fetch(PDO::FETCH_ASSOC);
-//
-//            foreach ($groupinfo as $key => $value){
-//                if($value == ''){
-//                    $groupinfo[$key] = 'Nog niet bekend';
-//                }
-//            }
-//
-//
-//
-//            for($Modulenumber=1; $Modulenumber<=$groupinfo['AANTAL_MODULES']; $Modulenumber++) {
-//                $Groep_Module_Date          = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Date'];
-//                $Groep_Module_Starttime     = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Starttime'];
-//                $Groep_Module_Endtime       = $_POST['group_' . $Groupsnumber . '_module_' . $Modulenumber . '_Endtime'];
-//
-//                $sql6 = "exec SP_add_date_and_time_to_request_from_group ?, ?, ?, ?, ?";
-//                $stmt6 = $conn->prepare($sql6);
-//                $stmt6->bindParam(1, $Groupsnumber, PDO::PARAM_INT);
-//                $stmt6->bindParam(2, $Modulenumber, PDO::PARAM_INT);
-//                $stmt6->bindParam(3, $Groep_Module_Date, PDO::PARAM_INT);
-//                $stmt6->bindParam(4, $Groep_Module_Starttime, PDO::PARAM_STR);
-//                $stmt6->bindParam(5, $Groep_Module_Endtime, PDO::PARAM_STR);
-//                $stmt6->execute();
-//
-//            }
-//    }
-
     $groepNumber = 0;
-
-    pre_r($_POST);
 
     foreach ($_POST['edit'] as $groep){
         $groepNumber++;
@@ -80,13 +31,27 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         foreach($groep as $module){
             $moduleNumber++;
 
+            $moduleDate = $moduleStart = $moduleEind = null;
+
+            if(!empty($module['Date'])){
+                $moduleDate = date('Y-m-d',strtotime($module['Date']));
+            }
+
+            if(!empty($module['Starttime'])){
+                $moduleStart = date('H:i',strtotime($module['Starttime']));
+            }
+
+            if(!empty($module['Endtime'])){
+                $moduleEind = date('H:i',strtotime($module['Endtime']));
+            }
+
             $sql6 = "exec SP_add_date_and_time_to_request_from_group ?, ?, ?, ?, ?";
             $stmt6 = $conn->prepare($sql6);
             $stmt6->bindParam(1, $groepNumber, PDO::PARAM_INT);
             $stmt6->bindParam(2, $moduleNumber, PDO::PARAM_INT);
-            $stmt6->bindParam(3, $module['Date'], PDO::PARAM_STR);
-            $stmt6->bindParam(4, $module['starttime'], PDO::PARAM_STR);
-            $stmt6->bindParam(5, $module['endtime'], PDO::PARAM_STR);
+            $stmt6->bindParam(3, $moduleDate, PDO::PARAM_STR);
+            $stmt6->bindParam(4, $moduleStart, PDO::PARAM_STR);
+            $stmt6->bindParam(5, $moduleEind, PDO::PARAM_STR);
             $stmt6->execute();
 
         }
@@ -361,17 +326,17 @@ $groupnumber = getFirstGroup($aanvraag_id);
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="group_'. $i .'_module_'. $j .'_Date">Datum:</label>
-                                                        <input type="date" class="form-control" id="group_'. $i .'_module_'. $j .'_Date" name="edit[groep'. $i .'][module'. $j .'][Date]" placeholder="' . $moduleinfo['DATUM'] . '"';
+                                                        <input type="date" class="form-control" id="group_'. $i .'_module_'. $j .'_Date" name="edit[groep'. $i .'][module'. $j .'][Date]" placeholder="' . $moduleinfo['DATUM'] . '" value="'. $moduleinfo['DATUM']. '"';
                                                      if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
                                     $group_info .=  '></div>
                                                          <div class="form-group">
                                                              <label for="group_'. $i .'_module_'. $j .'_Starttime">Starttijd:</label>
-                                                             <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Starttime" name="edit[groep'. $i .'][module'. $j .'][Starttime]" placeholder="' . $moduleinfo['STARTTIJD'] . '"';
+                                                             <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Starttime" name="edit[groep'. $i .'][module'. $j .'][Starttime]" placeholder="' . $moduleinfo['STARTTIJD'] . '" value="' . substr($moduleinfo['STARTTIJD'], 0 ,5) . '"';
                                                      if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
                                     $group_info .=       '></div>
                                                           <div class="form-group">
                                                              <label for="group_'. $i .'_module_'. $j .'_Endtime">Eindtijd:</label>
-                                                             <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Endtime" name="edit[groep'. $i .'][module'. $j .'][Endtime]" placeholder="' . $moduleinfo['EINDTIJD'] . '"';
+                                                             <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Endtime" name="edit[groep'. $i .'][module'. $j .'][Endtime]" placeholder="' . $moduleinfo['EINDTIJD'] . '" value="' . substr($moduleinfo['EINDTIJD'], 0 ,5) . '"';
                                                       if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
                                     $group_info .=       '></div>';
                                                     if($_SESSION['username'] == 'planner'){ $group_info .= '<button type="submit" class="btn btn-primary">Submit</button>';}
