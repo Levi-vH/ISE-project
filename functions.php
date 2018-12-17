@@ -1,6 +1,7 @@
 <?php
 
-function generate_header($title_of_page){
+function generate_header($title_of_page)
+{
 
     if (!isset($_SESSION)) {
         session_start();
@@ -8,7 +9,7 @@ function generate_header($title_of_page){
     $header = '<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>'. $title_of_page .'</title>
+    <title>' . $title_of_page . '</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -64,17 +65,15 @@ function generate_header($title_of_page){
             $header .= $_SESSION['username'];
         }
     }
-            $header .= '</a>
+    $header .= '</a>
                 </li>
             </ul>
         </div>
     </nav>
 </header>';
 
-echo $header;
+    echo $header;
 }
-
-
 
 
 function check_input($data)
@@ -86,17 +85,18 @@ function check_input($data)
     return $data;
 }
 
-function connectToDB(){
+function connectToDB()
+{
     $hostnaam = '(local)';
-    $dbnaam ='SBBWorkshopOmgeving';
+    $dbnaam = 'SBBWorkshopOmgeving';
     $username = 'iseprojectuser';
     $wachtwoord = 'iseprojectww';
 
     try {
         $handler = new PDO("sqlsrv:Server=$hostnaam; Database=$dbnaam; ConnectionPooling=0", "$username", "$wachtwoord");
 
-        $handler->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-    }catch (PDOException $e){
+        $handler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
         echo "Er ging iets mis met de database.<br>";
         echo "De melding is {$e->getMessage()}<br><br>";
     }
@@ -104,46 +104,46 @@ function connectToDB(){
 }
 
 
-
-function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayColumns, $order, $function = null, $where = null){
+function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayColumns, $order, $function = null, $where = null)
+{
     $handler = connectToDB();
-    $select = '<select class="form-control" id="'.$naamWaarde.'" name="'.$naamWaarde.'" onchange="'. $function .'">';
+    $select = '<select class="form-control" id="' . $naamWaarde . '" name="' . $naamWaarde . '" onchange="' . $function . '">';
 
     $kolomString = $kolommen[0];
 
-    for($i = 1; $i < sizeof($kolommen); $i++){
+    for ($i = 1; $i < sizeof($kolommen); $i++) {
         $kolomString .= ',' . $kolommen[$i];
     }
 
     $sql = "SELECT $kolomString FROM $tabelnaam";
-    if(!is_null($where)){
+    if (!is_null($where)) {
         $sql .= " WHERE " . $where;
     }
 
-    $sql .= " ORDER BY " .  $order;
+    $sql .= " ORDER BY " . $order;
 
     $query = $handler->prepare($sql);
     $query->execute();
 
-    while($resultaat = $query->fetch(PDO::FETCH_ASSOC)){
+    while ($resultaat = $query->fetch(PDO::FETCH_ASSOC)) {
 
         $displayString = '';
 
-        if($kolommen == $displayColumns){
+        if ($kolommen == $displayColumns) {
 
-            foreach($resultaat as $row){
+            foreach ($resultaat as $row) {
                 $displayString .= $row . ' ';
             }
-        }else{
+        } else {
 
-            foreach (array_keys($resultaat) as $column){
-                if(in_array($column, $displayColumns)){
-                    $displayString .= $resultaat[$column] .  ' ';
+            foreach (array_keys($resultaat) as $column) {
+                if (in_array($column, $displayColumns)) {
+                    $displayString .= $resultaat[$column] . ' ';
                 }
             }
         }
 
-        $select.= '<option value="'. $resultaat[$optionvalue] . '">' . $displayString . '</option>';
+        $select .= '<option value="' . $resultaat[$optionvalue] . '">' . $displayString . '</option>';
 
     }
 
@@ -153,13 +153,15 @@ function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayCol
 }
 
 
-function pre_r($input){
+function pre_r($input)
+{
     echo '<pre>';
     print_r($input);
     echo '</pre>';
 }
 
-function deleteUserWorkshop($workshop_id, $participant_id) {
+function deleteUserWorkshop($workshop_id, $participant_id)
+{
     $conn = connectToDB();
 
     //Run the stored procedure
@@ -170,7 +172,8 @@ function deleteUserWorkshop($workshop_id, $participant_id) {
     $stmt->execute();
 }
 
-function deleteUserAanvraag($aanvraag_id, $participant_id) {
+function deleteUserAanvraag($aanvraag_id, $participant_id)
+{
     $conn = connectToDB();
 
     //Run the stored procedure
@@ -181,7 +184,8 @@ function deleteUserAanvraag($aanvraag_id, $participant_id) {
     $stmt->execute();
 }
 
-function addUser($workshop_id, $participant_id) {
+function addUser($workshop_id, $participant_id)
+{
     $conn = connectToDB();
 
     //Run the stored procedure
@@ -192,7 +196,8 @@ function addUser($workshop_id, $participant_id) {
     $stmt->execute();
 }
 
-function updatePage($pagina) {
+function updatePage($pagina)
+{
     ?>
     <script type="text/javascript">
         window.location.href = '<?php echo $pagina ?>';
@@ -200,7 +205,8 @@ function updatePage($pagina) {
     <?php
 }
 
-function getModuleNummer($id) {
+function getModuleNummer($id)
+{
     $conn = connectToDB();
 
     //Run the stored procedure
@@ -215,7 +221,8 @@ function getModuleNummer($id) {
     return $modulenummer;
 }
 
-function getWorkshopType($id) {
+function getWorkshopType($id)
+{
     $conn = connectToDB();
 
 
@@ -231,7 +238,8 @@ function getWorkshopType($id) {
 
 }
 
-function getGroupNumber($id) {
+function getGroupNumber($id)
+{
     $conn = connectToDB();
 
 
@@ -247,7 +255,8 @@ function getGroupNumber($id) {
 
 }
 
-function getFirstGroup($aanvraag_id) {
+function getFirstGroup($aanvraag_id)
+{
     $conn = connectToDB();
 
     $sql = "select top 1 GROEP_ID from GROEP where aanvraag_id = ?";
@@ -261,7 +270,8 @@ function getFirstGroup($aanvraag_id) {
     return $firstgroup;
 }
 
-function addUserToGroup($aanvraag_id, $groeps_id, $participant_id) {
+function addUserToGroup($aanvraag_id, $groeps_id, $participant_id)
+{
     $conn = connectToDB();
 
     $sql = "exec SP_add_participant_to_group ?, ?, ?";
@@ -273,7 +283,8 @@ function addUserToGroup($aanvraag_id, $groeps_id, $participant_id) {
 }
 
 
-function deleteUserFromGroup($aanvraag_id, $groeps_id, $participant_id) {
+function deleteUserFromGroup($aanvraag_id, $groeps_id, $participant_id)
+{
     $conn = connectToDB();
 
     $sql = "exec SP_remove_participant_from_group ?, ?, ?";
@@ -297,6 +308,34 @@ function getRightGroepsNummer($groepss_id)
     $groepsnummer = $stmt->fetch(PDO::FETCH_ASSOC);
 
     return $groepsnummer['row_number_group'];
+}
+
+function sendMail($to, $subject, $body)
+{
+    require 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
+
+    require 'vendor/autoload.php';
+
+    $mail = new PHPMailer\PHPMailer\PHPMailer();
+    $mail->IsSMTP(); // enable SMTP
+    $mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
+    $mail->SMTPAuth = true; // authentication enabled
+    $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for Gmail
+    $mail->Host = "smtp.gmail.com";
+    $mail->Port = 465;
+    $mail->IsHTML(true);
+    $mail->Username = "testISEB2@gmail.com";
+    $mail->Password = "ise!b2MAILTEST";
+    $mail->SetFrom("testISEB2@gmail.com");
+    $mail->Subject = $subject;
+    $mail->Body = $body;
+    $mail->AddAddress($to);
+    if (!$mail->Send()) {
+        echo 'Message was not sent!.';
+        echo 'Mailer error: ' . $mail->ErrorInfo;
+    } else {
+        echo 'Message was sent!.';
+    }
 }
 
 ?>

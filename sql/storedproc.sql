@@ -797,6 +797,21 @@ BEGIN
 				VALUES		(@request_id, @participant_id)
 				'
 	EXEC sp_executesql @sql2, N'@request_id INT, @participant_id INT', @request_id, @participant_id
+	IF	(
+		SELECT		COUNT(*)
+		FROM		GROEP
+		WHERE		AANVRAAG_ID = @request_id
+		) = 1
+		BEGIN
+			DECLARE @sql3 NVARCHAR(4000)
+			DECLARE @group_id INT = (SELECT GROEP_ID FROM GROEP WHERE AANVRAAG_ID = @request_id)
+			SET @sql3 =	N'
+						UPDATE	DEELNEMER_IN_AANVRAAG
+						SET		GROEP_ID = @group_id
+						WHERE	AANVRAAG_ID = @request_id
+						'
+			EXEC sp_executesql @sql3, N'@request_id INT, @group_id INT', @request_id, @group_id
+		END
 END
 GO
 
