@@ -145,6 +145,12 @@ DROP TYPE IF EXISTS LargeAcount
 CREATE TYPE LargeAcount FROM BIT
 GO
 
+DROP TYPE IF EXISTS Bevestiging
+CREATE TYPE Bevestiging FROM BIT
+GO
+
+
+
 /*==============================================================*/
 /* Table: WORKSHOPTYPE                                          */
 /*==============================================================*/
@@ -355,12 +361,16 @@ GO
 /* Table: MODULE_VAN_GROEP		                                */
 /*==============================================================*/
 CREATE TABLE MODULE_VAN_GROEP (
-   GROEP_ID				Groep_ID			 NOT NULL,
-   MODULENUMMER			ModuleNummer		 NOT NULL,
-   VOORKEUR				Voorkeur			 NOT NULL, -- VOORKEUR_DAGDEEL
-   DATUM				Datum				 NULL,
-   STARTTIJD			Starttijd			 NULL,
-   EINDTIJD				Eindtijd			 NULL
+   GROEP_ID								Groep_ID			 NOT NULL,
+   MODULENUMMER							ModuleNummer		 NOT NULL,
+   VOORKEUR								Voorkeur			 NOT NULL, -- VOORKEUR_DAGDEEL
+   DATUM								Datum				 NULL,
+   STARTTIJD							Starttijd			 NULL,
+   EINDTIJD								Eindtijd			 NULL,
+   WORKSHOPLEIDER						WorkshopLeider_ID    NULL,
+   BEVESTIGING_DATUM_SBB				Bevestiging			 NULL,
+   BEVESTIGING_WORKSHOPLEIDER			Bevestiging			 NULL,					
+   BEVESTIGING_DATUM_LEERBEDRIJF		Bevestiging			 NULL,
    CONSTRAINT PK_MODULE_VAN_GROEP PRIMARY KEY (GROEP_ID, MODULENUMMER)
 )
 GO
@@ -489,6 +499,11 @@ GO
 ALTER TABLE MODULE_VAN_GROEP
 	ADD CONSTRAINT FK_MODULE_VAN_GROEP_ref_GROEP FOREIGN KEY (GROEP_ID) 
 	REFERENCES GROEP(GROEP_ID)
+GO
+
+ALTER TABLE MODULE_VAN_GROEP
+	ADD CONSTRAINT FK_MODULE_VAN_GROEP_ref_WORKSHOPLEIDER FOREIGN KEY (WORKSHOPLEIDER) 
+	REFERENCES WORKSHOPLEIDER(WORKSHOPLEIDER_ID)
 GO
 
 ALTER TABLE WORKSHOP
