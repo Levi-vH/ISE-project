@@ -111,7 +111,7 @@ function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayCol
 
     $kolomString = $kolommen[0];
 
-    for($i = 1; $i < sizeof($kolommen); $i++){
+    for($i = 1; $i < sizeof($kolommen); $i++) {
         $kolomString .= ',' . $kolommen[$i];
     }
 
