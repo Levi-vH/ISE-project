@@ -27,6 +27,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     foreach ($_POST['edit'] as $groep){
         $moduleNumber = 0;
         foreach($groep as $module){
+
             $moduleNumber++;
 
             $groepNumber = $module['GROEP_ID'];
@@ -309,8 +310,8 @@ $groupnumber = getFirstGroup($aanvraag_id);
                             }
                         }
 
-                        $group_info .= '<input type="hidden" value="'.$GroupIDs[$i]['GROEP_ID'].'" name="edit[groep'.$i.'][module][GROEP_ID]">
-                                        <input type="hidden" value="'.$ModuleIDs[$j]['MODULENUMMER'].'" name="edit[groep'.$i.'][module][MODULENUMMER]">
+                        $group_info .= '<input type="hidden" value="'.$GroupIDs[$i]['GROEP_ID'].'" name="edit[groep'.$i.'][module'. $j .'][GROEP_ID]">
+                                        <input type="hidden" value="'.$ModuleIDs[$j]['MODULENUMMER'].'" name="edit[groep'.$i.'][module'. $j .'][MODULENUMMER]">
                                         <div class="card-header" id="heading_Module' . $j . '">
                                             <h5 class="mb-0">
                                                 <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse_Module' . $j . '" aria-expanded="false" aria-controls="collapse_Module' . $j . '">
