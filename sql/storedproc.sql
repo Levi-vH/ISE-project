@@ -506,11 +506,13 @@ BEGIN
 	SET @sql =	N'
 				SELECT		*
 				FROM		WORKSHOP
-				WHERE		WORKSHOPLEIDER = @workshopleader_id
+				WHERE		WORKSHOPLEIDER_ID = @workshopleader_id
 				'
 	EXEC sp_executesql @sql, N'@workshopleader_id INT', @workshopleader_id
 END
 GO
+
+
 --=========================================================================================
 -- SP_get_workshops_for_sector: returns all workshops for that sector                              
 --=========================================================================================
@@ -549,6 +551,22 @@ BEGIN
 END
 GO
 
+--=========================================================================================
+-- SP_get_count_workshoptypes: returns all workshopstypes with their numbers                              
+--=========================================================================================
+CREATE OR ALTER PROC SP_get_count_workshoptypes
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				SELECT		TYPE, COUNT(TYPE) AS AANTAL
+				FROM		WORKSHOP
+				GROUP BY	TYPE
+				'
+	EXEC sp_executesql @sql
+END
+GO
 --============================================================================================
 -- SP_get_information_of_group: returns the information of a group                                       
 --============================================================================================

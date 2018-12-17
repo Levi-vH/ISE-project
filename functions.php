@@ -45,6 +45,9 @@ function generate_header($title_of_page)
                         </li>
                          <li class="nav-item active">
                             <a class="nav-link" href="LargeAccounts.php">Large Accounts</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="reports.php">Rapportages</a>
                         </li>';
         } else if ($_SESSION['username'] == 'contactpersoon') {
             $header .= '<li class="nav-item active">
@@ -341,6 +344,68 @@ function sendMail($to, $subject, $body)
     }
 }
 
+function getCountOfWorkshopsForSector($sectorname) {
+    $conn = connectToDB();
+
+    $sql = "EXEC SP_get_workshops_for_sector ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $sectorname, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $nummer = 0;
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $nummer++;
+    }
+
+    return $nummer;
+}
+
+function getCountOfCancelledWorkshops() {
+    $conn = connectToDB();
+
+    $sql = "EXEC SP_get_cancelled_workshops";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+
+    $nummer = 0;
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $nummer++;
+    }
+
+    return $nummer;
+}
+
+function getCountOfWorkshopsForWorkshopLeader($workshopleader) {
+    $conn = connectToDB();
+
+    $sql = "EXEC SP_get_workshops_for_workshopleader ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $workshopleader, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $nummer = 0;
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $nummer++;
+    }
+
+    return $nummer;
+}
+
+function getCountOfTypeWorkshops() {
+    $conn = connectToDB();
+
+    $sql = "EXEC SP_get_count_workshoptypes";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+
+    $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+    return $row;
+}
 
 
 ?>
