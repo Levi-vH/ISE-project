@@ -43,9 +43,10 @@ Procedure order:
 
 CREATE OR ALTER PROC SP_get_workshops
 (
-@order_by		NVARCHAR(40) = NULL,
-@order_direction	NVARCHAR(4) = NULL,
-@where			INT = NULL
+@order_by		 NVARCHAR(40) = NULL,
+@order_direction NVARCHAR(4) = NULL,
+@where			 NVARCHAR(40) = NULL,
+@where_column	 NVARCHAR(40) = 'W.WORKSHOP_ID'
 )
 AS
 BEGIN
@@ -98,13 +99,11 @@ BEGIN
 							MODULE M ON W.MODULENUMMER = M.MODULENUMMER LEFT JOIN
 							WORKSHOPLEIDER WL ON W.WORKSHOPLEIDER_ID = WL.WORKSHOPLEIDER_ID INNER JOIN
 							ADVISEUR A ON W.ADVISEUR_ID = A.ADVISEUR_ID INNER JOIN
-							CONTACTPERSOON C ON W.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
-				'
+							CONTACTPERSOON C ON W.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID'
 	IF(@where IS NOT NULL) -- if the procedure was executed with an where statement, add the where statement to the select query
 		BEGIN
-			SET @sql += ' WHERE W.WORKSHOP_ID = @where'
+			SET @sql += ' WHERE ' + @where_column + ' = @where'
 		END
-	SET @sql += ' ORDER BY @order_by + @order_direction' -- add an order by statement to the query
 	IF(@order_by IS NULL)
 		BEGIN
 			SET @order_by = 'W.WORKSHOP_ID' -- if no order by statement was given with the execute, order by workshop_id's
@@ -113,7 +112,8 @@ BEGIN
 		BEGIN
 			SET @order_direction = 'ASC' -- if no order by direction was given, order by ascending
 		END
-	EXEC sp_executesql @sql, N'@order_by NVARCHAR(40), @order_direction NVARCHAR(4), @where INT', @order_by, @order_direction, @where
+	SET @sql += ' ORDER BY ' + @order_by + ' ' + @order_direction -- add an order by statement to the query
+	EXEC sp_executesql @sql, N'@order_by NVARCHAR(40), @order_direction NVARCHAR(4), @where NVARCHAR(40), @where_column NVARCHAR(40)', @order_by, @order_direction, @where, @where_column
 END
 GO
 
