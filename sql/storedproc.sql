@@ -12,7 +12,11 @@
 		-
    Modifications made by Jesse:
 		procedures made:
-		-
+		-SP_insert_workshoprequest 
+		-SP_insert_group_of_workshoprequest
+		-SP_add_date_and_time_to_request_from_group
+		-SP_grant_large_account
+		-SP_ungrant_large_account
 		procedures modified:
 		-
    Modifications made by Mark:

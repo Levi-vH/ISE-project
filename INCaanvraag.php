@@ -24,6 +24,7 @@ foreach ($row as $key => $value){
 
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
+    pre_r($_POST);
     foreach ($_POST['edit'] as $groep){
         $moduleNumber = 0;
         foreach($groep as $module){
