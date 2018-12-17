@@ -22,14 +22,16 @@ foreach ($row as $key => $value){
     }
 }
 
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-    $groepNumber = 0;
 
+if($_SERVER["REQUEST_METHOD"] == "POST"){
     foreach ($_POST['edit'] as $groep){
-        $groepNumber++;
         $moduleNumber = 0;
         foreach($groep as $module){
+
             $moduleNumber++;
+
+            $groepNumber = $module['GROEP_ID'];
+            $moduleNumber = $module['MODULENUMMER'];
 
             $moduleDate = $moduleStart = $moduleEind = null;
 
@@ -44,6 +46,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             if(!empty($module['Endtime'])){
                 $moduleEind = date('H:i',strtotime($module['Endtime']));
             }
+
+
 
             $sql6 = "exec SP_add_date_and_time_to_request_from_group ?, ?, ?, ?, ?";
             $stmt6 = $conn->prepare($sql6);
@@ -208,9 +212,6 @@ $groupnumber = getFirstGroup($aanvraag_id);
                     $i++;
                 }
 
-
-
-
                 $group_info = '';
                 for($i = 1; $i<=$row['AANTAL_GROEPEN']; $i++){
                     $sql3 = "exec SP_get_information_of_group ?";
@@ -309,7 +310,9 @@ $groupnumber = getFirstGroup($aanvraag_id);
                             }
                         }
 
-                        $group_info .= '<div class="card-header" id="heading_Module' . $j . '">
+                        $group_info .= '<input type="hidden" value="'.$GroupIDs[$i]['GROEP_ID'].'" name="edit[groep'.$i.'][module'. $j .'][GROEP_ID]">
+                                        <input type="hidden" value="'.$ModuleIDs[$j]['MODULENUMMER'].'" name="edit[groep'.$i.'][module'. $j .'][MODULENUMMER]">
+                                        <div class="card-header" id="heading_Module' . $j . '">
                                             <h5 class="mb-0">
                                                 <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse_Module' . $j . '" aria-expanded="false" aria-controls="collapse_Module' . $j . '">
                                                     Module ' . $ModuleIDs[$j]['MODULENUMMER'] . ': '  .  $ModuleIDs[$j]['MODULENAAM'] . '
