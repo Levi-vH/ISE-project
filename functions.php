@@ -52,6 +52,9 @@ function generate_header($title_of_page)
             </li>
             <li class="nav-item active">
                 <a class="nav-link" href="Openstaande_INC_aanvragen.php">Openstaande INC aanvragen</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="Organisatie_workshops.php">Workshops</a>
             </li>';
         } else if ($_SESSION['username'] == 'deelnemer') {
             $header .= '<li class="nav-item active">
@@ -337,5 +340,7 @@ function sendMail($to, $subject, $body)
         echo 'Message was sent!.';
     }
 }
+
+
 
 ?>
