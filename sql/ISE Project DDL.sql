@@ -344,6 +344,8 @@ CREATE TABLE GROEP (
    AANVRAAG_ID			Aanvraag_ID				 NOT NULL,
    CONTACTPERSOON_ID	Contactpersoon_ID		 NOT NULL,
    ADRES				Adres					 NOT NULL,
+   POSTCODE				Postcode				 NOT NULL,
+   PLAATSNAAM			Plaatsnaam				 NOT NULL,
    CONSTRAINT PK_GROEP PRIMARY KEY (GROEP_ID)
 )
 GO
