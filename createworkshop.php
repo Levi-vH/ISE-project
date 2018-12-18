@@ -160,5 +160,7 @@ if ($_SESSION['username'] == 'planner') {
     </html>
 <?php } else {
     echo '<h1> U mag deze pagina niet bezoeken</h1>';
+    header( "refresh:1;url=index.php" );
+
 }
 include 'footer.html';

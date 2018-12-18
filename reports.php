@@ -1,90 +1,71 @@
 <?php
 include 'functions.php';
 
+function percentageOf($number, $everything, $decimals = 2)
+{
+    return round($number / $everything * 100, $decimals);
+}
+
+$numbers = array();
+
+for ($i = 0; $i < sizeof(getCountOfTypeWorkshops()); $i++) {
+    $numbers[$i] = getCountOfTypeWorkshops()[$i]['AANTAL'];
+}
+
+$everything = array_sum($numbers);
+
 generate_header('Workshop overzicht voor sector');
 ?>
-
-<div class="container">
-    <h2 class="text-info text-center">Rapportages</h2>
-    <div>
-        <form method="POST">
-            <label>Type uw sector in</label>
-            <input type="text" name="sector"/>
-            <button type="submit">Submit</button>
-        </form>
-        <form method="POST">
-            <label>Druk op de knop voor geannuleerde workshops</label>
-            <button type="submit" name="cancelled">Submit</button>
-        </form>
-        <form method="POST">
-            <label>Type een workshopleider in</label>
-            <input type="text" name="workshopleader"/>
-            <button type="submit">Submit</button>
-        </form>
-        <?php
-        if (isset($_POST['sector'])) {
-            $sectorname = $_POST["sector"];
-            echo '<p>Aantal workshops voor sector ' . strtoupper($sectorname) . ': ' . getCountOfWorkshopsForSector($sectorname) . '</p>';
-        } elseif (isset($_POST['cancelled'])) {
-            $cancelled = getCountOfCancelledWorkshops();
-            echo '<p>Aantal geannuleerde workshops: ' . $cancelled . '</p>';
-        } elseif (isset($_POST['workshopleader'])) {
-            $workshopleader = $_POST['workshopleader'];
-            echo '<p>Aantal workshops van workshopleider ' . $workshopleader . ': ' . getCountOfWorkshopsForWorkshopLeader($workshopleader) . '</p>';
-
-        }
-
-        pre_r(getCountOfTypeWorkshops());
-
-
-        ?>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 col-sm-4 sidebar1">
+            <div class="left-navigation">
+                <ul class="list">
+                    <h5><strong>Rapportages</strong></h5>
+                    <li>
+                        <a class="active-page">Overzicht</a>
+                    </li>
+                    <li>
+                        <a href="workshoptypes_info.php">Verhouding workshoptypes</a>
+                    </li>
+                    <li>
+                        <a href="other_reports.php">Overige rapportages</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="container">
+            <h1 class="headcenter">Overzicht rapportages</h1>
+            <p>
+                Lorem Ipsum is slechts een proeftekst uit het drukkerij- en zetterijwezen. Lorem Ipsum is de standaard
+                proeftekst in deze bedrijfstak sinds de 16e eeuw, toen een onbekende drukker een zethaak met letters nam
+                en
+                ze door elkaar husselde om een font-catalogus te maken. Het heeft niet alleen vijf eeuwen overleefd maar
+                is
+                ook, vrijwel onveranderd, overgenomen in elektronische letterzetting. Het is in de jaren '60 populair
+                geworden met de introductie van Letraset vellen met Lorem Ipsum passages en meer recentelijk door
+                desktop
+                publishing software zoals Aldus PageMaker die versies van Lorem Ipsum bevatten.
+            </p>
+            <div class="row">
+                <div class="col-xs-12 col-md-6">
+                    <h3 class="text-center text-primary">Algemene informatie</h3>
+                    <ul class="list-group">
+                        <li class="list-group-item-action">Totaal aantal workshops: <?= getCountOfAllWorkshops() ?> </li>
+                        <li class="list-group-item-action">Totaal aantal geannuleerde workshops: <?= getCountOfCancelledWorkshops() ?></li>
+                        <li class="list-group-item-action">Totaal aantal workshops:</li>
+                        <li class="list-group-item-action">Totaal aantal workshops:</li>
+                        <li class="list-group-item-action">Totaal aantal workshops:</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<div>
-    <script>
-        <?php $dataPoints = getCountOfTypeWorkshops();
-        foreach ($dataPoints as $row) {
-            array("label" => $row['TYPE'], "y" => $row['AANTAL']);
-        }
-        
-
-
-        //            array("label" => "Firefox", "y" => 12.55),
-        //            array("label" => "IE", "y" => 8.47),
-        //            array("label" => "Safari", "y" => 6.08),
-        //            array("label" => "Edge", "y" => 4.29),
-        //            array("label" => "Others", "y" => 4.59)
-
-        ?>
-        window.onload = function () {
-
-
-            var chart = new CanvasJS.Chart("chartContainer", {
-                animationEnabled: true,
-                title: {
-                    text: "Verhouding type workshops"
-                },
-                subtitles: [{
-                    text: "All time"
-                }],
-                data: [{
-                    type: "pie",
-                    yValueFormatString: "#,##0.00\"%\"",
-                    indexLabel: "{label} ({y})",
-                    dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
-                }]
-            });
-            chart.render();
-
-        }
-    </script>
-    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-    </body>
-</div>
-<?php include 'footer.html'; ?>
+</body>
 </html>
-
+<?php include 'footer.html'; ?>
 
 
 

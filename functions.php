@@ -407,5 +407,17 @@ function getCountOfTypeWorkshops() {
     return $row;
 }
 
+function getCountOfAllWorkshops() {
+    $conn = connectToDB();
+
+    $sql = "SELECT COUNT(WORKSHOP_ID) AS AANTAL FROM WORKSHOP";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $row['AANTAL'];
+}
+
 
 ?>
