@@ -351,13 +351,36 @@ $groupnumber = getFirstGroup($aanvraag_id);
                                                   <div class="form-group"> 
                                                   <label class="control-label" for="Workshopleader">Workshopleider:</label>';
 
-                                    $group_info .= selectBox("Workshopleader", "WORKSHOPLEIDER", array("VOORNAAM, ACHTERNAAM, WORKSHOPLEIDER_ID"), "WORKSHOPLEIDER_ID", array("VOORNAAM, ACHTERNAAM"), "ACHTERNAAM");
+                                    $group_info .=  selectBox("edit[groep". $i ."][module". $j ."][Workshopleader]", "WORKSHOPLEIDER", array("WORKSHOPLEIDER_ID", "VOORNAAM", "ACHTERNAAM"), "WORKSHOPLEIDER_ID", array("VOORNAAM", "ACHTERNAAM"), "ACHTERNAAM");
+
+
+                                    ?>
+                        <script href="text/javascript">
+                            var dropdown = $("#edit[groep<?= $i ?>][module<?= $j ?>][Workshopleader]");
+                            dropdown.prepend("<option value='0'>Kies een workshopleider...</option>");
+
+                            var val = '<?php echo $moduleinfo['WORKSHOPLEIDER'] ?> ';
+                            console.log("edit[groep<?= $i ?>][module<?= $j ?>][Workshopleader]");
+                            if(val === 'Nog niet bekend'){
+                                dropdown.find('option[value=0]').attr('selected','selected');
+                            }else{
+                                dropdown.find('option[value='+val+']').attr('selected','selected');
+                            }
 
 
 
-                        $group_info .=            '</div>
+                            $('#edit[groep<?= $i ?>][module<?= $j ?>][Workshopleader] option').each(function (){
+                                if($(this).text() === val){
+                                    $(this).attr('selected', 'selected');
+                                    return false;
+                                }
+                                return true;
+                            });
+                        </script>
+
+<?php                        $group_info .=            '</div>
                                           </div>
-                                           </div>
+                                           </div> 
                                         </div>
                                         </div>
                                         ';
@@ -379,6 +402,8 @@ $groupnumber = getFirstGroup($aanvraag_id);
 </body>
 </html>
 <?php include 'footer.html'; ?>
+
+
 
 
 
