@@ -150,7 +150,7 @@ CREATE TYPE Bevestiging FROM BIT
 GO
 
 DROP TYPE IF EXISTS TypeNaam
-CREATE TYPE TypeNaam FROM INT
+CREATE TYPE TypeNaam FROM VARCHAR(20)
 GO
 
 /*==============================================================*/
