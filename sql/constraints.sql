@@ -18,6 +18,7 @@ GO
 --=========================================================================
 
 --=========================================================================
+-- BR1 / C1 / IR1
 -- Check if workshopstate = 'bevestigd' when WORKSHOPLEIDER_ID is not null
 --=========================================================================
 DROP TRIGGER IF EXISTS dbo.TR_workshop_state_bevestigd
@@ -55,6 +56,7 @@ END
 GO
 
 --=====================================================================================================================
+-- BR2 / C2 / IR2
 -- A workshop that received VERWERKT_BREIN, DEELNEMER_GEGEGEVENS_ONTVANGEN, OVK_BEVESTIGING, PRESENTIELIJST_VERSTUURD,
 -- PRESENTIELIJST_ONTVANGEN, BEWIJS_DEELNAME_MAIL_SBB_WSL has to have status 'afgehandeld'
 --=====================================================================================================================
@@ -106,18 +108,8 @@ BEGIN
 END
 GO
 
---==============================================
--- Check if workshop type = INC, IND etc.
---==============================================
-ALTER TABLE WORKSHOP
-DROP CONSTRAINT IF EXISTS CK_workshop_types
-GO
-
-ALTER TABLE WORKSHOP
-ADD CONSTRAINT CK_workshop_types	CHECK(TYPE IN ('INC', 'IND', 'COM', 'ROC', 'LA'))
-GO
-
 --===============================================
+-- BR3 / C3 / IR3
 -- Check if adviseur is not null when type = INC
 --===============================================
 ALTER TABLE WORKSHOP
@@ -128,7 +120,20 @@ ALTER TABLE WORKSHOP
 ADD CONSTRAINT CK_workshop_advisor CHECK(ADVISEUR_ID IS NOT NULL OR TYPE != 'INC')
 GO
 
+--==============================================
+-- BR4 / C4 / IR4
+-- Check if workshop type = INC, IND etc.
+--==============================================
+ALTER TABLE WORKSHOP
+DROP CONSTRAINT IF EXISTS CK_workshop_types
+GO
+
+ALTER TABLE WORKSHOP
+ADD CONSTRAINT CK_workshop_types	CHECK(TYPE IN ('INC', 'IND', 'COM', 'ROC', 'LA'))
+GO
+
 --========================================================================
+-- BR5 / C5 / IR5
 -- Check if the workshopdate is later than the date the workshop is added
 --========================================================================
 ALTER TABLE WORKSHOP
@@ -140,6 +145,19 @@ ADD CONSTRAINT CK_workshop_date CHECK(DATUM > GETDATE())
 GO
 
 --========================================================================================
+-- BR7 / C7 / IR6
+-- If workshop_type isn't IND, then SECTOR has to be NOT NULL
+--========================================================================================
+ALTER TABLE WORKSHOP
+DROP CONSTRAINT IF EXISTS CK_workshop_type_and_sector
+GO
+
+ALTER TABLE WORKSHOP
+ADD CONSTRAINT CK_workshop_type_and_sector CHECK(SECTORNAAM IS NOT NULL OR TYPE = 'IND')
+GO
+
+--========================================================================================
+-- BR9 / C9 / IR7
 -- Check if the workshopstatus is 'uitgezet', 'bevestigd', 'geannuleerd' or 'afgehandeld'
 --========================================================================================
 ALTER TABLE WORKSHOP
@@ -151,6 +169,7 @@ ADD CONSTRAINT CK_workshop_state CHECK (STATUS IN ('uitgezet', 'bevestigd', 'gea
 GO
 
 --========================================================================================
+-- BR17 / C16 / IR11
 -- The ending time of a workshop has to be after the starting time
 --========================================================================================
 ALTER TABLE WORKSHOP
@@ -161,22 +180,12 @@ ALTER TABLE WORKSHOP
 ADD CONSTRAINT CK_workshop_endtime CHECK (STARTTIJD < EINDTIJD)
 GO
 
---========================================================================================
--- If workshop_type isn't IND, then SECTOR has to be NOT NULL
---========================================================================================
-ALTER TABLE WORKSHOP
-DROP CONSTRAINT IF EXISTS CK_workshop_type_and_sector
-GO
-
-ALTER TABLE WORKSHOP
-ADD CONSTRAINT CK_workshop_type_and_sector CHECK(SECTORNAAM IS NOT NULL OR TYPE = 'IND')
-GO
-
 --=========================================================================
 -- DEELNEMER constraints
 --=========================================================================
 
 --========================================================================================
+-- BR13 / C12 / IR9
 -- Check if the e-mail contains a '@' and a '.'
 --========================================================================================
 ALTER TABLE DEELNEMER
@@ -188,6 +197,7 @@ ADD CONSTRAINT CK_deelnemer_email CHECK (EMAIL LIKE '%@%.%')
 GO
 
 --========================================================================================
+-- BR16 / C15 / IR10
 -- The date of birth can't be higher than the current date
 --========================================================================================
 ALTER TABLE DEELNEMER
@@ -199,6 +209,7 @@ ADD CONSTRAINT CK_deelnemer_birthdate CHECK (GEBOORTEDATUM < GETDATE())
 GO
 
 --========================================================================================
+-- IR11 / BR? / C?
 -- If IS_OPEN_INSCHRIJVING is 1 then GEWENST_BEGELEIDINGSNIVEAU, FUNCTIENAAM 
 -- and SECTORNAAM have to be NOT NULL
 --========================================================================================
@@ -212,14 +223,15 @@ AND FUNCTIENAAM IS NOT NULL AND SECTORNAAM IS NOT NULL))
 GO
 
 --========================================================================================
+-- IR12 / BR? / C?
 -- AANHEF has to be 'mevrouw' or 'meneer' **
 --========================================================================================
 ALTER TABLE DEELNEMER
-DROP CONSTRAINT IF EXISTS CK_open_inschrijving_values
+DROP CONSTRAINT IF EXISTS CK_salutation
 GO
 
 ALTER TABLE DEELNEMER
-ADD CONSTRAINT CK_open_inschrijving_values CHECK (AANHEF = 'mevrouw' OR AANHEF = 'meneer')
+ADD CONSTRAINT CK_salutation CHECK (AANHEF = 'mevrouw' OR AANHEF = 'meneer')
 GO
 
 --=========================================================================
