@@ -70,6 +70,7 @@ BEGIN
 							W.POSTCODE,
 							W.PLAATSNAAM,
 							W.SECTORNAAM,
+							W.WORKSHOPLEIDER_ID,
 							STATUS,
 							OPMERKING,
 							VERWERKT_BREIN,
@@ -88,6 +89,7 @@ BEGIN
 							A.ACHTERNAAM AS ADVISEUR_ACHTERNAAM,
 							A.TELEFOONNUMMER AS ADVISEUR_TELEFOON_NUMMER,
 							A.EMAIL AS ADVISEUR_EMAIL,
+							C.CONTACTPERSOON_ID,
 							C.VOORNAAM AS CONTACTPERSOON_VOORNAAM,
 							C.ACHTERNAAM AS CONTACTPERSOON_ACHTERNAAM,
 							C.TELEFOONNUMMER AS CONTACTPERSON_TELEFOONNUMMER,
@@ -956,28 +958,28 @@ GO
 --===========================================================
 -- SP_alter_workshop: updates the values of a workshop                    
 --===========================================================
-
 CREATE OR ALTER PROC SP_alter_workshop -- reference number M5
 (
 @workshop_id		INT,
 @workshoptype		NVARCHAR(3),
 @workshopdate		NVARCHAR(10),
+@workshopContact	INT,
 @modulenumber		INT,
-@organisationnumber	INT,
+@organisationnumber	VARCHAR(15),
 @workshopsector		NVARCHAR(20),
 @workshopstarttime	NVARCHAR(10),
 @workshopendtime	NVARCHAR(10),
 @workshopaddress	NVARCHAR(60),
 @workshoppostcode	NVARCHAR(7),
 @workshopcity		NVARCHAR(60),
-@workshopleader		NVARCHAR(100),
+@workshopleader		INT,
 @workshopnote		NVARCHAR(255)
 )
 AS
 BEGIN
 	SET NOCOUNT ON
 
-	IF(@workshopleader = 'null')
+	IF(@workshopleader = 0)
 	BEGIN
 		SET @workshopleader = null
 	END
@@ -988,6 +990,7 @@ BEGIN
 				SET		[TYPE] = @workshoptype,
 						DATUM = @workshopdate,
 						MODULENUMMER = @modulenumber,
+						CONTACTPERSOON_ID = @workshopContact,
 						ORGANISATIENUMMER = @organisationnumber,
 						SECTORNAAM = @workshopsector,
 						STARTTIJD = @workshopstarttime,
@@ -1003,20 +1006,22 @@ BEGIN
 								@workshoptype NVARCHAR(3),
 								@workshopdate NVARCHAR(10),
 								@modulenumber INT,
-								@organisationnumber INT,
+								@workshopContact INT,
+								@organisationnumber VARCHAR(15),
 								@workshopsector NVARCHAR(20),
 								@workshopstarttime NVARCHAR(10),
 								@workshopendtime NVARCHAR(10),
 								@workshopaddress NVARCHAR(60),
 								@workshoppostcode NVARCHAR(7),
 								@workshopcity NVARCHAR(60),
-								@workshopleader NVARCHAR(100),
+								@workshopleader INT,
 								@workshopnote NVARCHAR(255),
 								@workshop_id INT
 								',
 								@workshoptype,
 								@workshopdate,
 								@modulenumber,
+								@workshopContact,
 								@organisationnumber,
 								@workshopsector,
 								@workshopstarttime,

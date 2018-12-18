@@ -22,6 +22,16 @@ foreach ($row as $key => $value){
         $row[$key] = 'Nog niet bekend';
     }
 }
+
+pre_r($row);
+
+$workshopleader = $row['WORKSHOPLEIDER_VOORNAAM'] .' '. $row['WORKSHOPLEIDER_ACHTERNAAM'];
+
+if($row['WORKSHOPLEIDER_ACHTERNAAM'] OR $row['WORKSHOPLEIDER_VOORNAAM']){
+    $workshopleader = 'Nog niet bekend';
+}
+
+
 ?>
 <body>
 <div class="container-fluid">
@@ -149,7 +159,7 @@ foreach ($row as $key => $value){
                                 Workshopleider:
                             </div>
                             <div class="details-value">
-                                <?= $row['WORKSHOPLEIDER_VOORNAAM'] .' '. $row['WORKSHOPLEIDER_ACHTERNAAM']  ?>
+                                <?= $workshopleader ?>
                             </div>
 
                         </div>
