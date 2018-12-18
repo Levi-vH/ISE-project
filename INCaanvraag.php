@@ -27,7 +27,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     foreach ($_POST['edit'] as $groep){
         $moduleNumber = 0;
         foreach($groep as $module){
-
             $moduleNumber++;
 
             $groepNumber = $module['GROEP_ID'];
@@ -46,16 +45,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             if(!empty($module['Endtime'])){
                 $moduleEind = date('H:i',strtotime($module['Endtime']));
             }
+            if(!empty($module['workshopleader'])){
+                $moduleleader = $module['workshopleader'];
+            }
 
 
 
-            $sql6 = "exec SP_add_date_and_time_to_request_from_group ?, ?, ?, ?, ?";
+            $sql6 = "exec SP_add_date_and_time_to_request_from_group ?, ?, ?, ?, ?, ?";
             $stmt6 = $conn->prepare($sql6);
             $stmt6->bindParam(1, $groepNumber, PDO::PARAM_INT);
             $stmt6->bindParam(2, $moduleNumber, PDO::PARAM_INT);
             $stmt6->bindParam(3, $moduleDate, PDO::PARAM_STR);
             $stmt6->bindParam(4, $moduleStart, PDO::PARAM_STR);
             $stmt6->bindParam(5, $moduleEind, PDO::PARAM_STR);
+            $stmt6->bindParam(6, $moduleleader, PDO::PARAM_INT);
             $stmt6->execute();
 
         }

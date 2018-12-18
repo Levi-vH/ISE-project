@@ -1148,7 +1148,8 @@ CREATE OR ALTER PROC SP_add_date_and_time_to_request_from_group
 @Modulenumber INT,
 @Groep_Module_Date DATE = NULL,
 @Groep_Module_Starttime TIME = NULL,
-@Groep_Module_Endtime TIME = NULL
+@Groep_Module_Endtime TIME = NULL,
+@Groep_Module_workshopleader INT = NULL
 )
 AS
 BEGIN
@@ -1158,7 +1159,8 @@ BEGIN
 				UPDATE	MODULE_VAN_GROEP
 				SET		DATUM = @Groep_Module_Date,
 						STARTTIJD = @Groep_Module_Starttime,
-					    EINDTIJD = @Groep_Module_Endtime
+					    EINDTIJD = @Groep_Module_Endtime,
+						WORKSHOPLEIDER = @Groep_Module_workshopleader
 				WHERE	GROEP_ID = @Groupsnumber
 				AND		MODULENUMMER = @Modulenumber
 				'
@@ -1166,12 +1168,14 @@ BEGIN
 								  @Modulenumber INT,
 								  @Groep_Module_Date DATE,
 								  @Groep_Module_Starttime TIME,
-								  @Groep_Module_Endtime TIME',
+								  @Groep_Module_Endtime TIME,
+								  @Groep_Module_workshopleader INT',
 								  @Groupsnumber,
 								  @Modulenumber,
 								  @Groep_Module_Date,
 								  @Groep_Module_Starttime,
-								  @Groep_Module_Endtime
+								  @Groep_Module_Endtime,
+								  @Groep_Module_workshopleader
 END
 GO
 
@@ -1313,43 +1317,6 @@ BEGIN
 				'
 	EXEC sp_executesql @sql,	N'@request_id INT, @group_id INT, @participant_id INT',
 								@request_id, @group_id, @participant_id
-END
-GO
-
---===========================================================
--- SP_add_date_and_time_to_request_from_group                    
---===========================================================
-
-CREATE OR ALTER PROC SP_add_date_and_time_to_request_from_group
-(
-@Groupsnumber INT,
-@Modulenumber INT,
-@Groep_Module_Date DATE = NULL,
-@Groep_Module_Starttime TIME = NULL,
-@Groep_Module_Endtime TIME = NULL
-)
-AS
-BEGIN
-	SET NOCOUNT ON
-	DECLARE @sql NVARCHAR(4000)
-	SET @sql =	N'
-				UPDATE	MODULE_VAN_GROEP
-				SET		DATUM = @Groep_Module_Date,
-						STARTTIJD = @Groep_Module_Starttime,
-					    EINDTIJD = @Groep_Module_Endtime
-				WHERE	GROEP_ID = @Groupsnumber
-				AND		MODULENUMMER = @Modulenumber
-				'
-	EXEC sp_executesql @sql,	N'@Groupsnumber INT,
-								  @Modulenumber INT,
-								  @Groep_Module_Date DATE,
-								  @Groep_Module_Starttime TIME,
-								  @Groep_Module_Endtime TIME',
-								  @Groupsnumber,
-								  @Modulenumber,
-								  @Groep_Module_Date,
-								  @Groep_Module_Starttime,
-								  @Groep_Module_Endtime
 END
 GO
 
