@@ -56,6 +56,8 @@ if ($_SESSION['username'] == 'contactpersoon') {
                         $Group_Module2_voorkeur = NULL;
                         $Group_Module3_voorkeur = NULL;
                         $Adress = NULL;
+                        $Postcode = NULL;
+                        $placename = NULL;
                         $Contact_Person = NULL;
 
                         if (isset($_POST["group_" . $i . "_module1"])) {
@@ -77,11 +79,13 @@ if ($_SESSION['username'] == 'contactpersoon') {
                             $Group_Module3_voorkeur = check_input($_POST["group_" . $i . "_module3_Voorkeur"]);
                         }
                         $Adress = check_input($_POST["group_" . $i . "Workshop_Address"]);
+                        $Postcode = check_input($_POST["group_" . $i . "Workshop_postcode"]);
+                        $Placename = check_input($_POST["group_" . $i . "Workshop_placename"]);
                         $Contact_Person = check_input($_POST["group_" . $i . "Aanwezig_Contactpersoon"]);
 
                         if ((isset($Group_Module1) && isset($Group_Module1_voorkeur)) || (isset($Group_Module2) && isset($Group_Module2_voorkeur)) || (isset($Group_Module3) && isset($Group_Module3_voorkeur))) {
 
-                            if (!is_null($Contact_Person) && !is_null($Adress)) {
+                            if (!is_null($Contact_Person) && !is_null($Adress) && !is_null($Postcode) && !is_null($Placename)) {
 
                                 if (isset($Group_Module1)) {
                                     if (is_null($Group_Module1)) {
@@ -100,7 +104,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
                                     }
                                 }
                                 //Run the stored procedure
-                                $sql3 = "exec SP_insert_group_of_workshoprequest ?, ?, ?, ?, ?, ?, ?, ?, ?";
+                                $sql3 = "exec SP_insert_group_of_workshoprequest ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
                                 $stmt3 = $conn->prepare($sql3);
                                 $stmt3->bindParam(1, $Aanvraag_ID, PDO::PARAM_INT);
                                 $stmt3->bindParam(2, $Group_Module1, PDO::PARAM_INT);
@@ -110,7 +114,9 @@ if ($_SESSION['username'] == 'contactpersoon') {
                                 $stmt3->bindParam(6, $Group_Module2_voorkeur, PDO::PARAM_STR);
                                 $stmt3->bindParam(7, $Group_Module3_voorkeur, PDO::PARAM_STR);
                                 $stmt3->bindParam(8, $Adress, PDO::PARAM_STR);
-                                $stmt3->bindParam(9, $Contact_Person, PDO::PARAM_STR);
+                                $stmt3->bindParam(9, $Postcode, PDO::PARAM_STR);
+                                $stmt3->bindParam(10, $Placename, PDO::PARAM_STR);
+                                $stmt3->bindParam(11, $Contact_Person, PDO::PARAM_STR);
                                 $stmt3->execute();
 
                                 header('Location: INCaanvraag.php?aanvraag_id=' . $Aanvraag_ID . '');
@@ -501,6 +507,20 @@ include 'footer.html';
                     '               <label class="control-label" for="group_' + i + 'Workshop_Address">Adres:</label>\n' +
                     '                   <div class="col-sm-10">\n' +
                     '                       <input id="group_' + i + 'Workshop_Address" type="text" class="form-control" placeholder="Adres Workshop" name="group_' + i + 'Workshop_Address">\n' +
+                    '                   </div>\n' +
+                    '           </div>\n' +
+                    //POSTCODE
+                    '           <div class="form-group">\n' +
+                    '               <label class="control-label" for="group_' + i + 'Workshop_postcode">Postcode:</label>\n' +
+                    '                   <div class="col-sm-10">\n' +
+                    '                       <input id="group_' + i + 'Workshop_postcode" type="text" class="form-control" placeholder="Postcode Workshop" name="group_' + i + 'Workshop_postcode">\n' +
+                    '                   </div>\n' +
+                    '           </div>\n' +
+                    //PLAATSNAAM
+                    '           <div class="form-group">\n' +
+                    '               <label class="control-label" for="group_' + i + 'Workshop_placename">Plaatsnaam:</label>\n' +
+                    '                   <div class="col-sm-10">\n' +
+                    '                       <input id="group_' + i + 'Workshop_placename" type="text" class="form-control" placeholder="Plaatsnaam Workshop" name="group_' + i + 'Workshop_placename">\n' +
                     '                   </div>\n' +
                     '           </div>\n' +
                     //CONTACTPERSOON

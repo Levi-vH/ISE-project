@@ -19,6 +19,7 @@
 		-SP_add_date_and_time_to_request_from_group
 		-SP_grant_large_account
 		-SP_ungrant_large_account
+		-SP_confirm_workshoprequest
 
 		procedures modified:
 		-
@@ -755,6 +756,8 @@ CREATE OR ALTER PROC SP_insert_group_of_workshoprequest
 @preference2		NVARCHAR(20),
 @preference3		NVARCHAR(20),
 @address			NVARCHAR(60),
+@postcode			NVARCHAR(20),
+@placename			NVARCHAR(60),
 @contactperson_id	INT
 )
 AS
@@ -765,10 +768,10 @@ BEGIN
 	DECLARE @sql3 NVARCHAR(4000)
 	DECLARE @sql4 NVARCHAR(4000)
 	SET @sql =	N'
-				INSERT INTO	GROEP(AANVRAAG_ID, CONTACTPERSOON_ID, ADRES)
-				VALUES		(@request_id, @contactperson_id, @address)
+				INSERT INTO	GROEP(AANVRAAG_ID, CONTACTPERSOON_ID, ADRES, POSTCODE, PLAATSNAAM)
+				VALUES		(@request_id, @contactperson_id, @address, @postcode, @placename)	 
 				'
-	EXEC sp_executesql @sql, N'@request_id INT, @contactperson_id INT, @address NVARCHAR(60)', @request_id, @contactperson_id, @address
+	EXEC sp_executesql @sql, N'@request_id INT, @contactperson_id INT, @address NVARCHAR(60), @postcode	NVARCHAR(20), @placename NVARCHAR(60)', @request_id, @contactperson_id, @address, @postcode, @placename
 	DECLARE @group_id INT = (SELECT IDENT_CURRENT('GROEP'))
 	IF ((@module1 IS NOT NULL) AND (@preference1 IS NOT NULL))
 	BEGIN
@@ -873,6 +876,44 @@ BEGIN
 				VALUES		(@request_id, @participant_id)
 				'
 	EXEC sp_executesql @sql2, N'@request_id INT, @participant_id INT', @request_id, @participant_id
+END
+GO
+
+--=======================================================================
+-- SP_confirm_workshoprequest: turns request into workshop                       
+--=======================================================================
+
+CREATE OR ALTER PROC SP_confirm_workshoprequest
+(
+@request_id	INT
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	DECLARE @type NVARCHAR(3)
+	
+	IF((SELECT COUNT(GROEP_ID)
+		FROM GROEP
+		WHERE AANVRAAG_ID = @request_id) > 3)
+		BEGIN
+			SET @type = 'LA'
+		END
+	ELSE
+		BEGIN
+			SET @type = 'INC'
+		END
+
+	SET @sql =	N'
+				INSERT INTO	WORKSHOP(WORKSHOPLEIDER_ID, CONTACTPERSOON_ID, ORGANISATIENUMMER, MODULENUMMER, ADVISEUR_ID, DATUM, STARTTIJD, EINDTIJD, ADRES, POSTCODE, PLAATSNAAM, TYPE)
+				SELECT MG.WORKSHOPLEIDER, G.CONTACTPERSOON_ID, A.ORGANISATIENUMMER, MG.MODULENUMMER, A.ADVISEUR_ID, MG.DATUM, MG.STARTTIJD, MG.EINDTIJD, G.ADRES, G.POSTCODE, G.PLAATSNAAM, @type
+				FROM AANVRAAG A INNER JOIN GROEP G 
+					ON A.AANVRAAG_ID = G.AANVRAAG_ID
+								INNER JOIN MODULE_VAN_GROEP MG
+					ON G.GROEP_ID = MG.GROEP_ID
+				WHERE A.AANVRAAG_ID = @request_id
+				'
+	EXEC sp_executesql @sql,	N'@request_id INT, @type NVARCHAR(3)', @request_id, @type
 END
 GO
 
