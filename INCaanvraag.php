@@ -24,7 +24,6 @@ foreach ($row as $key => $value){
 
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-    pre_r($_POST);
     foreach ($_POST['edit'] as $groep){
         $moduleNumber = 0;
         foreach($groep as $module){
@@ -323,7 +322,8 @@ $groupnumber = getFirstGroup($aanvraag_id);
 
                                         <div id="collapse_Module' . $j . '" class="collapse" aria-labelledby="heading_Module' . $j . '" data-parent="#accordionModules">
                                             <div class="card-body">
-                                                
+                                               <div class="row">
+                                                   <div class="col-6">
                                                     <div class="form-group">
                                                         <label for="group_'. $i .'_module_'. $j .'_preference">Opgegeven Voorkeur:</label>
                                                         <input type="text" class="form-control" id="group_'. $i .'_module_'. $j .'_preference" name="edit[group'. $i .'][module'. $j .'][preference]" placeholder="' . $moduleinfo['VOORKEUR'] . '" disabled>
@@ -344,14 +344,29 @@ $groupnumber = getFirstGroup($aanvraag_id);
                                                       if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
                                     $group_info .=       '></div>';
                                                     if($_SESSION['username'] == 'planner'){ $group_info .= '<button type="submit" class="btn btn-primary">Submit</button>';}
-                                 $group_info .='
-                                            </div>
-                                        </div>';
+                                 $group_info .= '</div>
+                                               
+                                        
+                                         <div class="col-6">
+                                                  <div class="form-group"> 
+                                                  <label class="control-label" for="Workshopleader">Workshopleider:</label>';
+
+                                    $group_info .= selectBox("Workshopleader", "WORKSHOPLEIDER", array("VOORNAAM, ACHTERNAAM, WORKSHOPLEIDER_ID"), "WORKSHOPLEIDER_ID", array("VOORNAAM, ACHTERNAAM"), "ACHTERNAAM");
+
+
+
+                        $group_info .=            '</div>
+                                          </div>
+                                           </div>
+                                        </div>
+                                        </div>
+                                        ';
                     }
-                    $group_info .=                      '</div>
+                    $group_info .= '</div>
                                                 </div>
                                     </div>
-                          </div>';
+                                    </div>
+                         ';
                 }
                 $group_info .= '</form>';
 
