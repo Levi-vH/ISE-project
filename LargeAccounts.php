@@ -2,9 +2,10 @@
 
 include 'functions.php';
 
-generate_header('Incompany aanvraag');
+generate_header('Large Account');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
     //Try to make connection
     $conn = connectToDB();
     if(isset($_POST["Organisation_Name"])) {
@@ -37,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label class="control-label col-sm-2" for="Organisation_Name">Ongemachtigd:</label>
                 <div class="col-sm-10">
                     <?php
-                    echo selectBox("Organisation_Name", "Organisatie", array("Organisatienaam"), "Organisatienaam", array("Organisatienaam"), "Organisatienaam", "","LARGE_ACCOUNTS = 0");
+                    echo selectBox("Organisation_Name", "Organisatie", array("Organisatienaam", "Organisatienummer"), "Organisatienummer", array("Organisatienaam"), "Organisatienaam", "","LARGE_ACCOUNTS = 0");
                     ?>
                 </div>
             </div>
@@ -53,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label class="control-label col-sm-2" for="Organisation_Name">Gemachtigd:</label>
             <div class="col-sm-10">
                 <?php
-                echo selectBox("Organisation_Name2", "Organisatie", array("Organisatienaam"), "Organisatienaam", array("Organisatienaam"), "Organisatienaam", "","LARGE_ACCOUNTS = 1");
+                echo selectBox("Organisation_Name2", "Organisatie", array("Organisatienaam", "Organisatienummer"), "Organisatienummer", array("Organisatienaam"), "Organisatienaam", "","LARGE_ACCOUNTS = 1");
                 ?>
             </div>
         </div>

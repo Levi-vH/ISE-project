@@ -1135,7 +1135,7 @@ GO
 
 CREATE OR ALTER PROC SP_grant_large_account
 (
-@organisation	VARCHAR(60)
+@organisation	VARCHAR(15)
 )
 AS
 BEGIN
@@ -1144,8 +1144,8 @@ BEGIN
 	SET @sql =	N'
 				UPDATE	ORGANISATIE
 				SET		LARGE_ACCOUNTS = 1
-				WHERE	ORGANISATIENAAM = @organisation'
-	EXEC sp_executesql @sql, N'@organisation VARCHAR(60)', @organisation
+				WHERE	ORGANISATIENUMMER = @organisation'
+	EXEC sp_executesql @sql, N'@organisation VARCHAR(15)', @organisation
 END
 GO
 
@@ -1155,7 +1155,7 @@ GO
 
 CREATE OR ALTER PROC SP_ungrant_large_account
 (
-@organisation	VARCHAR(60)
+@organisation	VARCHAR(15)
 )
 AS
 BEGIN
@@ -1164,8 +1164,8 @@ BEGIN
 	SET @sql =	N'
 				UPDATE	ORGANISATIE
 				SET		LARGE_ACCOUNTS = 0
-				WHERE	ORGANISATIENAAM = @organisation'
-	EXEC sp_executesql @sql, N'@organisation VARCHAR(60)', @organisation
+				WHERE	ORGANISATIENUMMER = @organisation'
+	EXEC sp_executesql @sql, N'@organisation VARCHAR(15)', @organisation
 END
 GO
 
