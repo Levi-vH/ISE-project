@@ -75,17 +75,17 @@ CREATE TYPE Voornaam FROM VARCHAR(30)
 DROP TYPE IF EXISTS Achternaam
 CREATE TYPE Achternaam FROM VARCHAR(50)
 
-DROP TYPE IF EXISTS Naam
-CREATE TYPE Naam FROM VARCHAR(52)
+DROP TYPE IF EXISTS Plannernaam
+CREATE TYPE Plannernaam FROM VARCHAR(52)
 
 DROP TYPE IF EXISTS Kwartaal
 CREATE TYPE Kwartaal FROM CHAR(1)
 
-DROP TYPE IF EXISTS Jaar
-CREATE TYPE Jaar FROM SMALLINT
+DROP TYPE IF EXISTS Jaartal
+CREATE TYPE Jaartal FROM SMALLINT
 
-DROP TYPE IF EXISTS AantalUur
-CREATE TYPE AantalUur FROM SMALLINT
+DROP TYPE IF EXISTS Aantal_Uur
+CREATE TYPE Aantal_Uur FROM SMALLINT
 
 DROP TYPE IF EXISTS Aanhef
 CREATE TYPE Aanhef FROM VARCHAR(7)
@@ -99,11 +99,11 @@ CREATE TYPE Email FROM VARCHAR(100)
 DROP TYPE IF EXISTS Telefoonnummer
 CREATE TYPE Telefoonnummer FROM VARCHAR(12)
 
-DROP TYPE IF EXISTS Opleidinsniveau
-CREATE TYPE Opleidinsniveau FROM VARCHAR(100)
+DROP TYPE IF EXISTS Opleidingsniveau
+CREATE TYPE Opleidingsniveau FROM VARCHAR(100)
 
-DROP TYPE IF EXISTS GewenstBegeleidingsniveau
-CREATE TYPE GewenstBegeleidingsniveau FROM VARCHAR(100)
+DROP TYPE IF EXISTS Gewenst_Begeleidingsniveau
+CREATE TYPE Gewenst_Begeleidingsniveau FROM VARCHAR(100)
 
 DROP TYPE IF EXISTS Sectornaam
 CREATE TYPE Sectornaam FROM VARCHAR(20)
@@ -111,8 +111,8 @@ CREATE TYPE Sectornaam FROM VARCHAR(20)
 DROP TYPE IF EXISTS Toevoeging
 CREATE TYPE Toevoeging FROM TINYINT
 --
-DROP TYPE IF EXISTS IsOpenInschrijving
-CREATE TYPE IsOpenInschrijving FROM BIT
+DROP TYPE IF EXISTS Is_Open_Inschrijving
+CREATE TYPE Is_Open_Inschrijving FROM BIT
 
 DROP TYPE IF EXISTS FunctieNaam
 CREATE TYPE FunctieNaam	FROM VARCHAR(50)
@@ -141,22 +141,24 @@ CREATE TYPE Groep_ID FROM INT
 DROP TYPE IF EXISTS Voorkeur
 CREATE TYPE Voorkeur FROM VARCHAR(20)
 
-DROP TYPE IF EXISTS LargeAcount
-CREATE TYPE LargeAcount FROM BIT
+DROP TYPE IF EXISTS Large_Account
+CREATE TYPE Large_Account FROM BIT
 GO
 
 DROP TYPE IF EXISTS Bevestiging
 CREATE TYPE Bevestiging FROM BIT
 GO
 
-
+DROP TYPE IF EXISTS TypeNaam
+CREATE TYPE Groep_ID FROM INT
+GO
 
 /*==============================================================*/
 /* Table: WORKSHOPTYPE                                          */
 /*==============================================================*/
 CREATE TABLE WORKSHOPTYPE (
 	[TYPE]		[Type] NOT NULL,
-	TypeName	Naam NOT NULL,
+	TypeName	TypeNaam NOT NULL,
 	CONSTRAINT PK_WORKSHOPTYPE PRIMARY KEY ([TYPE])
 )
 GO
@@ -166,7 +168,7 @@ GO
 /* Table: PLANNER                                               */
 /*==============================================================*/
 CREATE TABLE PLANNER (
-	PLANNERNAAM		Naam		NOT NULL,
+	PLANNERNAAM		Plannernaam		NOT NULL,
 	CONSTRAINT PK_PLANNER PRIMARY KEY (PLANNERNAAM)
 )
 GO
@@ -189,7 +191,7 @@ CREATE TABLE ORGANISATIE (
    ADRES				 Adres						  NOT NULL,
    POSTCODE				 Postcode					  NOT NULL,
    PLAATSNAAM			 Plaatsnaam					  NOT NULL,
-   LARGE_ACCOUNTS		 LargeAcount	DEFAULT 0	  NOT NULL,
+   LARGE_ACCOUNTS		 Large_Account	DEFAULT 0	  NOT NULL,
    CONSTRAINT PK_ORGANISATIE PRIMARY KEY (ORGANISATIENUMMER)
 )
 GO
@@ -241,8 +243,8 @@ GO
 CREATE TABLE BESCHIKBAARHEID (
    WORKSHOPLEIDER_ID    WorkshopLeider_ID			         NOT NULL,
    KWARTAAL             Kwartaal             NOT NULL,
-   JAAR                 Jaar	             NOT NULL,
-   AANTAL_UUR           AantalUur            NOT NULL,
+   JAAR                 Jaartal              NOT NULL,
+   AANTAL_UUR           Aantal_Uur            NOT NULL,
    CONSTRAINT PK_BESCHIKBAARHEID PRIMARY KEY (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
 )
 GO
@@ -259,9 +261,9 @@ CREATE TABLE DEELNEMER (
    GEBOORTEDATUM				Geboortedatum				NOT NULL,
    EMAIL						Email						NULL,
    TELEFOONNUMMER				telefoonnummer				NULL,
-   OPLEIDINGSNIVEAU				Opleidinsniveau				NOT NULL,
-   IS_OPEN_INSCHRIJVING         IsOpenInschrijving		NOT NULL,
-   GEWENST_BEGELEIDINGSNIVEAU	GewenstBegeleidingsniveau	NULL,
+   OPLEIDINGSNIVEAU				Opleidingsniveau				NOT NULL,
+   IS_OPEN_INSCHRIJVING         Is_Open_Inschrijving		NOT NULL,
+   GEWENST_BEGELEIDINGSNIVEAU	Gewenst_Begeleidingsniveau	NULL,
    FUNCTIENAAM					Functienaam					NULL,
    SECTORNAAM					Sectornaam					NULL,
    CONSTRAINT PK_DEELNEMER PRIMARY KEY (DEELNEMER_ID)
@@ -328,7 +330,7 @@ CREATE TABLE AANVRAAG (
    ORGANISATIENUMMER	Organisatienummer	 NOT NULL,
    CONTACTPERSOON_ID	Contactpersoon_ID    NOT NULL,
    ADVISEUR_ID			Adviseur_ID	         NOT NULL,
-   PLANNERNAAM			Naam				 NOT NULL,
+   PLANNERNAAM			Plannernaam				 NOT NULL,
    AANVRAAG_DATUM		AanvraagDatum		 DEFAULT GETDATE(),
    CONSTRAINT PK_AANVRAAG PRIMARY KEY (AANVRAAG_ID)
 )
