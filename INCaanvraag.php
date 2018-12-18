@@ -350,10 +350,8 @@ $groupnumber = getFirstGroup($aanvraag_id);
                                          <div class="col-6">
                                                   <div class="form-group"> 
                                                   <label class="control-label" for="Workshopleader">Workshopleider:</label>';
-
-                                    $group_info .=  selectBox("edit[groep". $i ."][module". $j ."][Workshopleader]", "WORKSHOPLEIDER", array("WORKSHOPLEIDER_ID", "VOORNAAM", "ACHTERNAAM"), "WORKSHOPLEIDER_ID", array("VOORNAAM", "ACHTERNAAM"), "ACHTERNAAM");
-
-
+                if($_SESSION['username'] == 'contactpersoon'){ $group_info .= '<input type="text" class="form-control" id="group_'. $i .'_module_'. $j .'Workshopleader" name="edit[groep'. $i .'][module'. $j .'][Workshopleader]" placeholder="' . $moduleinfo['VOORNAAM'] . $moduleinfo['ACHTERNAAM']. '" disabled>'; }
+                else{ $group_info .=  selectBox("edit[groep". $i ."][module". $j ."][Workshopleader]", "WORKSHOPLEIDER", array("WORKSHOPLEIDER_ID", "VOORNAAM", "ACHTERNAAM"), "WORKSHOPLEIDER_ID", array("VOORNAAM", "ACHTERNAAM"), "ACHTERNAAM");}
                                     ?>
                         <script href="text/javascript">
                             var dropdown = $("#edit[groep<?= $i ?>][module<?= $j ?>][Workshopleader]");
