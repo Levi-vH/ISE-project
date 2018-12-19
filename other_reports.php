@@ -38,12 +38,8 @@ generate_header('Workshop overzicht voor sector');
         <div class="container">
             <form method="POST">
                 <label>Type uw sector in</label>
-                <input type="text" name="sector"/>
+                <input type="text" name="sector" required/>
                 <button type="submit">Submit</button>
-            </form>
-            <form method="POST">
-                <label>Druk op de knop voor geannuleerde workshops</label>
-                <button type="submit" name="cancelled">Submit</button>
             </form>
             <form method="POST">
                 <label>Type een workshopleider in</label>
@@ -53,10 +49,7 @@ generate_header('Workshop overzicht voor sector');
             <?php
             if (isset($_POST['sector'])) {
                 $sectorname = $_POST["sector"];
-                echo '<p>Aantal workshops voor sector ' . strtoupper($sectorname) . ': ' . getCountOfWorkshopsForSector($sectorname) . '</p>';
-            } elseif (isset($_POST['cancelled'])) {
-                $cancelled = getCountOfCancelledWorkshops();
-                echo '<p>Aantal geannuleerde workshops: ' . $cancelled . '</p>';
+                echo '<p>Aantal workshops voor sector <b>' . strtoupper($sectorname) . '</b>: <i>' . getCountOfWorkshopsForSector($sectorname) . '</i> van de '.getCountOfAllWorkshops().'</p>';
             } elseif (isset($_POST['workshopleader'])) {
                 $workshopleader = $_POST['workshopleader'];
                 echo '<p>Aantal workshops van workshopleider ' . $workshopleader . ': ' . getCountOfWorkshopsForWorkshopLeader($workshopleader) . '</p>';

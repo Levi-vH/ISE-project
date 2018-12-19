@@ -15,7 +15,6 @@ if ($_SESSION['username'] == 'planner') {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $workshoptype = $_POST["workshoptype"];
         $workshopdate = $_POST["workshopdate"];
-        $contactinfo = check_input($_POST["contactinfo"]);
         $workshopmodule = $_POST["workshopmodule"];
         $workshopcompany = $_POST["workshopcompany"];
         $workshopsector = $_POST["workshopsector"];
@@ -27,6 +26,18 @@ if ($_SESSION['username'] == 'planner') {
         $workshopleader = check_input($_POST["workshopleader"]);
         $workshopnotes = check_input(@$_POST['workshopnotes']);
 
+        echo "<br>TYPE:  ".$workshoptype;
+        echo "<br>DATUM:  ".$workshopdate;
+        echo "<br>MODULE:  ".$workshopmodule;
+        echo "<br>COMPANY: ".$workshopcompany;
+        echo "<br>SECTOR; ".$workshopsector;
+        echo "<br>STARTTIJD: ".$starttime;
+        echo "<br>EINDTIJD:  ".$endtime;
+        echo "<br>Adres: ".$workshopadress;
+        echo "<br>POSTCODE: ".$workshoppostcode;
+        echo "<br>STAD:  ".$workshopcity;
+        echo "<br>LEIDER:  ".$workshopleader;
+        echo "<br>OPMERKINGEN: ".$workshopnotes;
         //Try to make connection
         $conn = connectToDB();
 
@@ -35,7 +46,6 @@ if ($_SESSION['username'] == 'planner') {
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(1, $workshoptype, PDO::PARAM_STR);
         $stmt->bindParam(2, $workshopdate, PDO::PARAM_STR);
-        $stmt->bindParam(3, $contactinfo, PDO::PARAM_STR);
         $stmt->bindParam(3, $workshopmodule, PDO::PARAM_INT);
         $stmt->bindParam(4, $workshopcompany, PDO::PARAM_INT);
         $stmt->bindParam(5, $workshopsector, PDO::PARAM_STR);
@@ -62,7 +72,7 @@ if ($_SESSION['username'] == 'planner') {
                     <select class="form-control" name="workshoptype">
                         <option>TYPE...</option>
                         <option>INDIVIDUEEL</option>
-                        <option>LARGE ACCOUNTS</option>
+                        <option>LA</option>
                         <option>COM</option>
                     </select>
                 </div>
@@ -160,7 +170,7 @@ if ($_SESSION['username'] == 'planner') {
     </html>
 <?php } else {
     echo '<h1> U mag deze pagina niet bezoeken</h1>';
-    header( "refresh:1;url=index.php" );
+    header("refresh:1;url=index.php");
 
 }
 include 'footer.html';

@@ -62,6 +62,9 @@ function generate_header($title_of_page)
         } else if ($_SESSION['username'] == 'deelnemer') {
             $header .= '<li class="nav-item active">
                 <a class="nav-link" href="open_registrationform.php">Inschrijven voor open workshop</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="signed_up_workshops.php">Ingeschreven workshops</a>
             </li>';
         }
         $header .= '<li class="nav-item">
