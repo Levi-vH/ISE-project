@@ -326,8 +326,10 @@ $groupnumber = getFirstGroup($aanvraag_id);
                                                         <label for="group_'. $i .'_module_'. $j .'_Date">Datum:</label>
                                                         <input type="date" class="form-control" id="group_'. $i .'_module_'. $j .'_Date" name="edit[groep'. $i .'][module'. $j .'][Date]" placeholder="' . $moduleinfo['DATUM'] . '" value="'. $moduleinfo['DATUM']. '"';
                                                      if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
-                                    $group_info .=  '></div>
-                                                         <div class="form-group">
+                                    $group_info .=  '></div>';
+                                     if($_SESSION['username'] == 'planner'){ $group_info .= '<button type="submit" class="btn btn-primary">Submit</button>';}
+
+                        $group_info .=  '                  <div class="form-group">
                                                              <label for="group_'. $i .'_module_'. $j .'_Starttime">Starttijd:</label>
                                                              <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Starttime" name="edit[groep'. $i .'][module'. $j .'][Starttime]" placeholder="' . $moduleinfo['STARTTIJD'] . '" value="' . substr($moduleinfo['STARTTIJD'], 0 ,5) . '"';
                                                      if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
@@ -344,30 +346,20 @@ $groupnumber = getFirstGroup($aanvraag_id);
                                          <div class="col-6">
                                                   <div class="form-group"> 
                                                   <label class="control-label" for="Workshopleader">Workshopleider:</label>';
-                if($_SESSION['username'] == 'contactpersoon'){ $group_info .= '<input type="text" class="form-control" id="group_'. $i .'_module_'. $j .'Workshopleader" name="edit[groep'. $i .'][module'. $j .'][Workshopleader]" placeholder="' . $moduleinfo['VOORNAAM'] . $moduleinfo['ACHTERNAAM']. '" disabled>'; }
+                if($_SESSION['username'] == 'contactpersoon'){ $group_info .= '<input type="text" class="form-control" id="group_'. $i .'_module_'. $j .'Workshopleader" name="edit[groep'. $i .'][module'. $j .'][Workshopleader]" placeholder="' . $moduleinfo['VOORNAAM'] . " ". $moduleinfo['ACHTERNAAM']. '" disabled>'; }
                 else{ $group_info .=  selectBox("edit[groep". $i ."][module". $j ."][Workshopleader]", "WORKSHOPLEIDER", array("WORKSHOPLEIDER_ID", "VOORNAAM", "ACHTERNAAM"), "WORKSHOPLEIDER_ID", array("VOORNAAM", "ACHTERNAAM"), "ACHTERNAAM");}
                                     ?>
                         <script href="text/javascript">
-                            var dropdown = $("#edit[groep<?= $i ?>][module<?= $j ?>][Workshopleader]");
-                            dropdown.prepend("<option value='0'>Kies een workshopleider...</option>");
+                            var dropdown = $("#edit[groep" + <?= $i ?> +  "][module" + <?= $j ?> +  "][Workshopleader]");
+                                dropdown.prepend("<option value='0'>Kies een workshopleider...</option>");
 
-                            var val = '<?php echo $moduleinfo['WORKSHOPLEIDER'] ?> ';
-                            console.log("edit[groep<?= $i ?>][module<?= $j ?>][Workshopleader]");
-                            if(val === 'Nog niet bekend'){
-                                dropdown.find('option[value=0]').attr('selected','selected');
-                            }else{
-                                dropdown.find('option[value='+val+']').attr('selected','selected');
-                            }
-
-
-
-                            $('#edit[groep<?= $i ?>][module<?= $j ?>][Workshopleader] option').each(function (){
-                                if($(this).text() === val){
-                                    $(this).attr('selected', 'selected');
-                                    return false;
+                                var val = '<?php echo $moduleinfo['WORKSHOPLEIDER'] ?> ';
+                                console.log(dropdown);
+                                if (val === 'Nog niet bekend') {
+                                    dropdown.find('option[value=0]').attr('selected', 'selected');
+                                } else {
+                                    dropdown.find('option[value=' + val + ']').attr('selected', 'selected');
                                 }
-                                return true;
-                            });
                         </script>
 
 <?php                        $group_info .=            '</div>
