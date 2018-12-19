@@ -1313,10 +1313,10 @@ END
 GO
 
 --===========================================================
--- SP_add_date_and_time_to_request_from_group                    
+-- SP_add_date_and_time_and_workshopleader_to_request_from_group                    
 --===========================================================
 
-CREATE OR ALTER PROC SP_add_date_and_time_to_request_from_group
+CREATE OR ALTER PROC SP_add_date_and_time_and_workshopleader_to_request_from_group
 (
 @Groupsnumber INT,
 @Modulenumber INT,

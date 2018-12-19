@@ -22,11 +22,11 @@ foreach ($row as $key => $value){
     }
 }
 
-
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     foreach ($_POST['edit'] as $groep){
         $moduleNumber = 0;
         foreach($groep as $module){
+            pre_r($module);
             $moduleNumber++;
 
             $groepNumber = $module['GROEP_ID'];
@@ -45,13 +45,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             if(!empty($module['Endtime'])){
                 $moduleEind = date('H:i',strtotime($module['Endtime']));
             }
-            if(!empty($module['workshopleader'])){
-                $moduleleader = $module['workshopleader'];
+
+            if(!empty($module['Workshopleader'])){
+                $moduleleader = $module['Workshopleader'];
+
             }
 
-
-
-            $sql6 = "exec SP_add_date_and_time_to_request_from_group ?, ?, ?, ?, ?, ?";
+            $sql6 = "exec SP_add_date_and_time_and_workshopleader_to_request_from_group ?, ?, ?, ?, ?, ?";
             $stmt6 = $conn->prepare($sql6);
             $stmt6->bindParam(1, $groepNumber, PDO::PARAM_INT);
             $stmt6->bindParam(2, $moduleNumber, PDO::PARAM_INT);
@@ -60,11 +60,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $stmt6->bindParam(5, $moduleEind, PDO::PARAM_STR);
             $stmt6->bindParam(6, $moduleleader, PDO::PARAM_INT);
             $stmt6->execute();
-
         }
     }
-
-
 }
 
 $groupnumber = getFirstGroup($aanvraag_id);
@@ -105,7 +102,6 @@ $groupnumber = getFirstGroup($aanvraag_id);
                         <div class="details-value">
                             <?= $row['AANVRAAG_DATUM'] ?>
                         </div>
-
                     </div>
                     <div class="detail-row">
                         <div class="details-column">
@@ -114,7 +110,6 @@ $groupnumber = getFirstGroup($aanvraag_id);
                         <div class="details-value">
                             <?= $row['AANTAL_GROEPEN'] ?>
                         </div>
-
                     </div>
                 </div>
 
@@ -127,11 +122,8 @@ $groupnumber = getFirstGroup($aanvraag_id);
                         <div class="details-value">
                             <?= $row['PLANNERNAAM'] ?>
                         </div>
-
                     </div>
                 </div>
-
-
 
                 <div class="contactperson-details details">
                     <h3> Contactpersoon gegevens vanuit:      <BR>  <?= $row['ORGANISATIENAAM'] ?>  </h3>
@@ -160,7 +152,6 @@ $groupnumber = getFirstGroup($aanvraag_id);
                         <div class="details-value">
                             <?= $row['CONTACTPERSOONEMAIL'] ?>
                         </div>
-
                     </div>
                 </div>
 
