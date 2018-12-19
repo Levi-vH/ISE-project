@@ -734,7 +734,7 @@ BEGIN
 	BEGIN
 		
 
-	--SET @sql =	N'
+	SET @sql =	N'
 				INSERT INTO	DEELNEMER
 				VALUES		(
 							@organisationnumber,
@@ -750,7 +750,7 @@ BEGIN
 							@function_in_company,	
 							@sector			
 							)
-	--			'
+				'
 	EXEC sp_executesql @sql,	N'
 								@organisationnumber					INT,
 								@salutation							NVARCHAR(7),
