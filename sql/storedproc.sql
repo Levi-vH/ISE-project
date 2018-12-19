@@ -604,6 +604,28 @@ BEGIN
 END
 GO
 
+--=========================================================================================
+-- SP_get_participant_workshops: returns all workshops where the participant is signed in                              
+--=========================================================================================
+CREATE OR ALTER PROC SP_get_participant_workshops 
+(
+@participant_id	INT
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				select DW.WORKSHOP_ID, TYPE, DATUM, MODULENAAM, ORGANISATIENAAM from DEELNEMER_IN_WORKSHOP DW JOIN WORKSHOP W
+				ON DW.WORKSHOP_ID = W.WORKSHOP_ID JOIN MODULE M ON 
+				W.MODULENUMMER = M.MODULENUMMER JOIN ORGANISATIE O ON
+				W.ORGANISATIENUMMER = O.ORGANISATIENUMMER
+				WHERE DEELNEMER_ID = @participant_id
+				'
+	EXEC sp_executesql @sql, N'@participant_id INT', @participant_id
+END
+GO
+
 --============================================================================================
 -- SP_get_information_of_group: returns the information of a group                                       
 --============================================================================================
@@ -798,11 +820,9 @@ GO
 --=================================================
 CREATE OR ALTER PROC SP_insert_workshop
 (
-@workshoptype		NVARCHAR(3),
+@workshoptype		NVARCHAR(30),
 @workshopdate		NVARCHAR(10),
 @modulenumber		INT,
-@contactperson_id  INT,
-@advisor_id		INT,
 @organisationnumber	INT,
 @workshopsector		NVARCHAR(20),
 @workshopstarttime	NVARCHAR(10),
@@ -810,7 +830,7 @@ CREATE OR ALTER PROC SP_insert_workshop
 @workshopaddress	NVARCHAR(60),
 @workshoppostcode	NVARCHAR(7),
 @workshopcity		NVARCHAR(60),
-@workshopleader		NVARCHAR(100),
+@workshopleader		INT,
 @workshopnote		NVARCHAR(255)
 )
 AS
@@ -834,13 +854,11 @@ BEGIN
 			RAISERROR('Een workshop met type IND MOET een workshopsector hebben',16,1)
 		END
 	SET @sql =	N'
-				INSERT INTO	WORKSHOP
+				INSERT INTO	WORKSHOP(workshopleider_id, organisatienummer, modulenummer, sectornaam, datum, starttijd, eindtijd, adres, postcode, plaatsnaam, status, opmerking, type)
 				VALUES		(
 							@workshopleader,
-							@contactperson_id,
 							@organisationnumber,
 							@modulenumber,
-							@advisor_id,
 							@workshopsector,
 							@workshopdate,
 							@workshopstarttime,
@@ -850,16 +868,13 @@ BEGIN
 							@workshopcity,
 							@status,
 							@workshopnote,
-							@workshoptype,
-							NULL, NULL, NULL, NULL, NULL, NULL
+							@workshoptype	
 							)
 				'
 	EXEC sp_executesql @sql,	N'
-								@workshopleader		NVARCHAR(100),
-								@contactperson_id	INT,
+								@workshopleader		INT,
 								@organisationnumber	INT,
 								@modulenumber		INT,
-								@advisor_id		INT,
 								@workshopsector		NVARCHAR(20),
 								@workshopdate		NVARCHAR(10),
 								@workshopstarttime	NVARCHAR(10),
@@ -872,10 +887,8 @@ BEGIN
 								@workshoptype		NVARCHAR(3)
 								',
 								@workshopleader,
-								@contactperson_id,
 								@organisationnumber,
 								@modulenumber,
-								@advisor_id,
 								@workshopsector,
 								@workshopdate,
 								@workshopstarttime,
