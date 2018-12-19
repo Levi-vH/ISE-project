@@ -185,6 +185,20 @@ ADD CONSTRAINT CK_salutation CHECK (AANHEF = 'mevrouw' OR AANHEF = 'meneer')
 GO
 
 --========================================================================================
+-- IR6 / C6 / BR6
+-- If IS_OPEN_INSCHRIJVING is 1 then GEWENST_BEGELEIDINGSNIVEAU, FUNCTIENAAM 
+-- and SECTORNAAM have to be NOT NULL
+--========================================================================================
+ALTER TABLE DEELNEMER
+DROP CONSTRAINT IF EXISTS CK_open_inschrijving_values
+GO
+
+ALTER TABLE DEELNEMER
+ADD CONSTRAINT CK_open_inschrijving_values CHECK (IS_OPEN_INSCHRIJVING != 1 OR (GEWENST_BEGELEIDINGSNIVEAU IS NOT NULL
+AND FUNCTIENAAM IS NOT NULL AND SECTORNAAM IS NOT NULL))
+GO
+
+--========================================================================================
 -- IR13 / C13 / BR13
 -- Check if the e-mail contains a '@' and a '.'
 --========================================================================================
@@ -206,20 +220,6 @@ GO
 
 ALTER TABLE DEELNEMER
 ADD CONSTRAINT CK_deelnemer_birthdate CHECK (GEBOORTEDATUM < GETDATE())
-GO
-
---========================================================================================
--- IR? / C? / BR?
--- If IS_OPEN_INSCHRIJVING is 1 then GEWENST_BEGELEIDINGSNIVEAU, FUNCTIENAAM 
--- and SECTORNAAM have to be NOT NULL
---========================================================================================
-ALTER TABLE DEELNEMER
-DROP CONSTRAINT IF EXISTS CK_open_inschrijving_values
-GO
-
-ALTER TABLE DEELNEMER
-ADD CONSTRAINT CK_open_inschrijving_values CHECK (IS_OPEN_INSCHRIJVING != 1 OR (GEWENST_BEGELEIDINGSNIVEAU IS NOT NULL
-AND FUNCTIENAAM IS NOT NULL AND SECTORNAAM IS NOT NULL))
 GO
 
 --=========================================================================
