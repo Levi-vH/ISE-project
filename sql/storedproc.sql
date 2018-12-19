@@ -135,15 +135,15 @@ BEGIN
 							WORKSHOPLEIDER WL ON W.WORKSHOPLEIDER_ID = WL.WORKSHOPLEIDER_ID INNER JOIN
 							ADVISEUR A ON W.ADVISEUR_ID = A.ADVISEUR_ID INNER JOIN
 							CONTACTPERSOON C ON W.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID'
-	IF(@where IS NOT NULL) -- if the procedure was executed with an where statement, add the where statement to the select query
+	IF(@where IS NOT NULL OR @where = 'NULL') -- if the procedure was executed with an where statement, add the where statement to the select query
 		BEGIN
 			SET @sql += ' WHERE ' + @where_column + ' = @where'
 		END
-	IF(@order_by IS NULL)
+	IF(@order_by IS NULL OR @order_by = 'NULL')
 		BEGIN
 			SET @order_by = 'W.WORKSHOP_ID' -- if no order by statement was given with the execute, order by workshop_id's
 		END
-	IF(@order_direction IS NULL)
+	IF(@order_direction IS NULL OR @order_direction = 'NULL')
 		BEGIN
 			SET @order_direction = 'ASC' -- if no order by direction was given, order by ascending
 		END
