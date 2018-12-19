@@ -48,6 +48,29 @@ Procedure order:
 /*==============================================================*/
 
 --============================================================================================
+-- SP_get_where_and_when: returns all locations and times for all workshops for 1 module                                              
+--============================================================================================
+
+CREATE OR ALTER PROC SP_get_where_and_when
+(
+@modulenummer INT = NULL
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				SELECT WORKSHOP_ID, (''Op '' + CAST(DATUM AS VARCHAR(20)) + '' van '' + CAST(FORMAT(STARTTIJD, N''hh\:mm'') AS VARCHAR(20))
+				+ '' tot '' + CAST(FORMAT(EINDTIJD, N''hh\:mm'') AS VARCHAR(20)) + '' in '' + CAST(PLAATSNAAM AS VARCHAR(60))) AS waar_en_wanneer
+				FROM WORKSHOP
+				WHERE MODULENUMMER = @modulenummer
+				ORDER BY DATUM, STARTTIJD
+				'
+	 EXEC sp_executesql @sql, N'@modulenummer INT', @modulenummer
+END
+GO
+
+--============================================================================================
 -- SP_get_workshops: returns all workshops with their data for the workshop overview page                                              
 --============================================================================================
 
@@ -618,6 +641,157 @@ GO
 /*==============================================================*/
 /* SP Type: INSERT                                              */
 /*==============================================================*/
+
+--=========================================================================
+-- SP_insert_deelnemer_in_workshop: inserts a deelnemer in a IND workshop                            
+--=========================================================================
+
+CREATE OR ALTER PROC SP_insert_deelnemer_in_workshop
+(
+@workshop_id				INT,
+@deelnemer_id				INT
+)
+
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	-- Create a deelnemer based on the given parameters
+
+	DECLARE @sql NVARCHAR(4000)
+	DECLARE @volgnummer INT = (SELECT MAX(VOLGNUMMER + 1) FROM DEELNEMER_IN_WORKSHOP WHERE workshop_id = @workshop_id)
+
+	IF @volgnummer IS NULL
+	BEGIN
+		SET @volgnummer = 1
+	END
+
+	IF (EXISTS(	SELECT * 
+				FROM DEELNEMER_IN_WORKSHOP
+				WHERE WORKSHOP_ID = @workshop_id
+				AND DEELNEMER_ID = @deelnemer_id))
+
+	SET @sql =	N'
+				INSERT INTO	DEELNEMER_IN_WORKSHOP
+				VALUES		(
+							@workshop_id,
+							@deelnemer_id,
+							@volgnummer,
+							0
+							)
+				'
+	EXEC sp_executesql @sql,	N'
+								@workshop_id	INT,
+								@deelnemer_id	INT,
+								@volgnummer		INT 
+								',
+								@workshop_id,
+								@deelnemer_id,
+								@volgnummer
+
+END
+GO
+
+--=================================================================================
+-- SP_insert_IND_deelnemer: inserts a deelnemer and put's him in his IND workshop                            
+--=================================================================================
+
+CREATE OR ALTER PROC SP_insert_IND_deelnemer
+(
+@companyName						NVARCHAR(60),
+@salutation							NVARCHAR(7),
+@firstname							NVARCHAR(30),
+@lastname							NVARCHAR(50),
+@birth_date							DATE,
+@email								NVARCHAR(100),
+@phonenumber						NVARCHAR(12),
+@educational_attainment				NVARCHAR(100),
+@educational_attainment_students	NVARCHAR(100),
+@sector								NVARCHAR(20),
+@function_in_company				NVARCHAR(50),
+@workshop_id						INT
+)
+
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	-- Create a deelnemer based on the given parameters
+
+	DECLARE @sql NVARCHAR(4000)
+	DECLARE @openRegister BIT = 1
+	DECLARE @deelnemer_id INT
+	DECLARE @organisationnumber INT
+
+	SET @organisationnumber = (SELECT ORGANISATIENUMMER FROM ORGANISATIE WHERE ORGANISATIENAAM = @companyName)
+	IF NOT EXISTS( -- Check if there is already an participant in the database with the same email, name and company
+	SELECT * --		  if there is, don't insert the participant.
+	FROM DEELNEMER
+	WHERE VOORNAAM = @firstname
+	AND ACHTERNAAM = @lastname
+	AND EMAIL = @email
+	AND ORGANISATIENUMMER = @organisationnumber)
+	BEGIN
+		
+
+	--SET @sql =	N'
+				INSERT INTO	DEELNEMER
+				VALUES		(
+							@organisationnumber,
+							@salutation,
+							@firstname,
+							@lastname,
+							@birth_date,
+							@email,			
+							@phonenumber,	
+							@educational_attainment,
+							@openRegister,
+							@educational_attainment_students,
+							@function_in_company,	
+							@sector			
+							)
+	--			'
+	EXEC sp_executesql @sql,	N'
+								@organisationnumber					INT,
+								@salutation							NVARCHAR(7),
+								@firstname							NVARCHAR(30),
+								@lastname							NVARCHAR(50),
+								@birth_date							DATE,
+								@email								NVARCHAR(100),
+								@phonenumber						NVARCHAR(12),
+								@educational_attainment				NVARCHAR(100),
+								@openRegister						NVARCHAR(100),
+								@educational_attainment_students	NVARCHAR(100),
+								@function_in_company				NVARCHAR(50),
+								@sector								NVARCHAR(20)
+								',
+								@organisationnumber,
+								@salutation,
+								@firstname,
+								@lastname,
+								@birth_date,
+								@email,			
+								@phonenumber,	
+								@educational_attainment,
+								@openRegister,
+								@educational_attainment_students,
+								@function_in_company,	
+								@sector
+
+	SET @deelnemer_id = (SELECT (IDENT_CURRENT('DEELNEMER'))) -- if the participant just got inserted
+
+	END
+
+	SET @deelnemer_id = (SELECT DEELNEMER_ID 
+						FROM DEELNEMER 
+						WHERE VOORNAAM = @firstname
+						AND ACHTERNAAM = @lastname
+						AND EMAIL = @email
+						AND ORGANISATIENUMMER = @organisationnumber) -- if the participant already exists
+
+	EXEC SP_insert_deelnemer_in_workshop @workshop_id, @deelnemer_id
+END
+GO
 
 --=================================================
 -- SP_insert_workshop: inserts a new workshop                              
