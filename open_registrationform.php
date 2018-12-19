@@ -48,16 +48,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $Organisation_name = check_input($_POST["Organisation_Name"]);
     $functionInCompany = check_input($_POST["functionInCompanyInput"]);
 
+    pre_r($_POST);
+
     if(isset($salutation) && isset($firstname) && isset($lastname) && isset($birthDate) && isset($email) && isset($phonenumber) && isset($educationalAttainment)
         && isset($educationalAttainmentStudents) && isset($companyName) && isset($sector) && isset($companyLocation) && isset($Organisation_name) && isset($functionInCompany)) {
 
-        for ($i = 0; $i < $modulesCount; $i++) {
-            ${"module$i"} = "";
-            ${"workshop$i"} = "";
-        //    ${"module$i"} = check_input($_POST["Module_$i"]);
-            ${"workshop$i"} = check_input($_POST["Workshop_" . $i]);
+        foreach($_POST['post'] as $workshop){
+            pre_r($workshop);
 
-            if (${"workshop$i"} == "") {
+        if (isset($workshop['Module'])) {
 
                 $sqlInsertDeelnemer = "SP_insert_IND_deelnemer ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
                 $stmtInsertDeelnemer = $conn->prepare($sqlInsertDeelnemer);
@@ -72,17 +71,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmtInsertDeelnemer->bindParam(9, $educationalAttainmentStudents, PDO::PARAM_INT);
                 $stmtInsertDeelnemer->bindParam(10, $sector, PDO::PARAM_INT);
                 $stmtInsertDeelnemer->bindParam(11, $functionInCompany, PDO::PARAM_INT);
-                $stmtInsertDeelnemer->bindParam(12, ${"workshop$i"}, PDO::PARAM_INT);
+                $stmtInsertDeelnemer->bindParam(12, $workshop['module'], PDO::PARAM_INT);
 
                 $stmtInsertDeelnemer->execute();
-            } else {
-                $error_message = "U heeft geen workshop ingevoerd";
+
+                echo 'inserted!';
             }
         }
     } else {
-        $error_message = "U heeft een veld niet ingevoerd, ieder veld is verplicht.";
+        $error_message .= "U heeft een veld niet ingevoerd, ieder veld is verplicht.";
     }
-    $error_message = "Uw staat nu aangemeld voor de workshops bekijk uw mail voor meer informatie";
+    $error_message .= "Uw staat nu aangemeld voor de workshops bekijk uw mail voor meer informatie";
 }
 
 ?>
@@ -99,26 +98,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
             <?php
+
             $checkbox_module = '';
-            for($i = 0; $i<$modulesCount; $i++){
+            foreach($row as $module){
                  $checkbox_module .=  '<div class="form-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="Module_' . $i . '" value="'.$row[$i]["MODULENUMMER"].'" id="Module_' . $i . '" onchange="checked_module(' . $i . ', this)">
-                                                <label class="form-check-label" for="Module_' . $i . '">' .
-                                                    'Module ' . $row[$i]["MODULENUMMER"] . ': ' .  $row[$i]["MODULENAAM"]
+                                                <input class="form-check-input" type="checkbox" name="post['.$module["MODULENUMMER"].'][Module]" value="'.$module["MODULENUMMER"].'" id="Module_' . $module["MODULENUMMER"] . '" onchange="checked_module(' . $module["MODULENUMMER"] . ', this)">
+                                                <label class="form-check-label" for="Module_' . $module["MODULENUMMER"] . '">' .
+                                                    'Module ' . $module["MODULENUMMER"] . ': ' .  $module["MODULENAAM"]
                                             .'  </label>
                                             </div>
                                        </div>
-                                       <div id="hidden_when_and_where' . $i .'" class="d-none">
+                                       <div id="hidden_when_and_where' . $module["MODULENUMMER"] .'" class="d-none">
                                         <div class="form-group">
-                                            <label class="control-label col-sm-2" for="workshop_' . $i .'">Waar en wanneer?:</label>
+                                            <label class="control-label col-sm-2" for="workshop_' . $module["MODULENUMMER"] .'">Waar en wanneer?:</label>
                                             <div class="col-sm-10">';
 
-                $sql2 = "SP_get_where_and_when " . $row[$i]["MODULENUMMER"];
+                $sql2 = "SP_get_where_and_when " . $module["MODULENUMMER"];
                 $stmt2= $conn->prepare($sql2);
                 $stmt2->execute();
 
-                $checkbox_module .= '<select name ="Workshop_' . $i .'" >';
+                $checkbox_module .= '<select name ="post['.$module["MODULENUMMER"].'][Workshop]"" >';
                 while($resultaat = $stmt2->fetch(PDO::FETCH_ASSOC)){
 
                     $checkbox_module.= '<option value="'. $resultaat['WORKSHOP_ID'] . '">' . $resultaat['waar_en_wanneer'] . '</option>';
@@ -141,8 +141,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <h3>Persoonlijke gegevens</h3>
         <div class="form-group">
             <label for="salutationInput">Aanhef</label>
-            <label class="radio-inline"><input type="radio" name="salutationInput" checked>Dhr.</label>
-            <label class="radio-inline"><input type="radio" name="salutationInput">Mvr.</label>
+            <label class="radio-inline"><input type="radio" name="salutationInput" value="Dhr." checked>Dhr.</label>
+            <label class="radio-inline"><input type="radio" name="salutationInput" value="Mvr.">Mvr.</label>
         </div>
 
         <div class="form-group">

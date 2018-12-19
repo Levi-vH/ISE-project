@@ -23,8 +23,6 @@ foreach ($row as $key => $value){
     }
 }
 
-pre_r($row);
-
 $workshopleader = $row['WORKSHOPLEIDER_VOORNAAM'] .' '. $row['WORKSHOPLEIDER_ACHTERNAAM'];
 
 if($row['WORKSHOPLEIDER_ACHTERNAAM'] OR $row['WORKSHOPLEIDER_VOORNAAM']){
