@@ -18,7 +18,7 @@ GO
 --=========================================================================
 
 --=========================================================================
--- BR1 / C1 / IR1
+-- IR1 / C1 / BR1
 -- Check if workshopstate = 'bevestigd' when WORKSHOPLEIDER_ID is not null
 --=========================================================================
 DROP TRIGGER IF EXISTS dbo.TR_workshop_state_bevestigd
@@ -56,7 +56,7 @@ END
 GO
 
 --=====================================================================================================================
--- BR2 / C2 / IR2
+-- IR2 / C2 / BR2
 -- A workshop that received VERWERKT_BREIN, DEELNEMER_GEGEGEVENS_ONTVANGEN, OVK_BEVESTIGING, PRESENTIELIJST_VERSTUURD,
 -- PRESENTIELIJST_ONTVANGEN, BEWIJS_DEELNAME_MAIL_SBB_WSL has to have status 'afgehandeld'
 --=====================================================================================================================
@@ -109,7 +109,7 @@ END
 GO
 
 --===============================================
--- BR3 / C3 / IR3
+-- IR3 / C3 / BR3
 -- Check if adviseur is not null when type = INC
 --===============================================
 ALTER TABLE WORKSHOP
@@ -118,18 +118,6 @@ GO
 
 ALTER TABLE WORKSHOP
 ADD CONSTRAINT CK_workshop_advisor CHECK(ADVISEUR_ID IS NOT NULL OR TYPE != 'INC')
-GO
-
---==============================================
--- BR4 / C4 / IR4
--- Check if workshop type = INC, IND etc.
---==============================================
-ALTER TABLE WORKSHOP
-DROP CONSTRAINT IF EXISTS CK_workshop_types
-GO
-
-ALTER TABLE WORKSHOP
-ADD CONSTRAINT CK_workshop_types	CHECK(TYPE IN ('INC', 'IND', 'COM', 'ROC', 'LA'))
 GO
 
 --========================================================================
@@ -145,7 +133,7 @@ ADD CONSTRAINT CK_workshop_date CHECK(DATUM > GETDATE())
 GO
 
 --========================================================================================
--- BR7 / C7 / IR6
+-- IR7 / C7 / BR7
 -- If workshop_type isn't IND, then SECTOR has to be NOT NULL
 --========================================================================================
 ALTER TABLE WORKSHOP
@@ -157,7 +145,7 @@ ADD CONSTRAINT CK_workshop_type_and_sector CHECK(SECTORNAAM IS NOT NULL OR TYPE 
 GO
 
 --========================================================================================
--- BR9 / C9 / IR7
+-- IR9 / C9 / BR9
 -- Check if the workshopstatus is 'uitgezet', 'bevestigd', 'geannuleerd' or 'afgehandeld'
 --========================================================================================
 ALTER TABLE WORKSHOP
@@ -169,7 +157,7 @@ ADD CONSTRAINT CK_workshop_state CHECK (STATUS IN ('uitgezet', 'bevestigd', 'gea
 GO
 
 --========================================================================================
--- BR17 / C16 / IR11
+-- IR15 / C15 / BR15
 -- The ending time of a workshop has to be after the starting time
 --========================================================================================
 ALTER TABLE WORKSHOP
@@ -185,7 +173,19 @@ GO
 --=========================================================================
 
 --========================================================================================
--- BR13 / C12 / IR9
+-- IR4 / C4 / BR4
+-- AANHEF has to be 'mevrouw' or 'meneer' **
+--========================================================================================
+ALTER TABLE DEELNEMER
+DROP CONSTRAINT IF EXISTS CK_salutation
+GO
+
+ALTER TABLE DEELNEMER
+ADD CONSTRAINT CK_salutation CHECK (AANHEF = 'mevrouw' OR AANHEF = 'meneer')
+GO
+
+--========================================================================================
+-- IR13 / C13 / BR13
 -- Check if the e-mail contains a '@' and a '.'
 --========================================================================================
 ALTER TABLE DEELNEMER
@@ -197,7 +197,7 @@ ADD CONSTRAINT CK_deelnemer_email CHECK (EMAIL LIKE '%@%.%')
 GO
 
 --========================================================================================
--- BR16 / C15 / IR10
+-- IR14 / C14 / BR14
 -- The date of birth can't be higher than the current date
 --========================================================================================
 ALTER TABLE DEELNEMER
@@ -209,7 +209,7 @@ ADD CONSTRAINT CK_deelnemer_birthdate CHECK (GEBOORTEDATUM < GETDATE())
 GO
 
 --========================================================================================
--- IR11 / BR? / C?
+-- IR? / C? / BR?
 -- If IS_OPEN_INSCHRIJVING is 1 then GEWENST_BEGELEIDINGSNIVEAU, FUNCTIENAAM 
 -- and SECTORNAAM have to be NOT NULL
 --========================================================================================
@@ -222,23 +222,12 @@ ADD CONSTRAINT CK_open_inschrijving_values CHECK (IS_OPEN_INSCHRIJVING != 1 OR (
 AND FUNCTIENAAM IS NOT NULL AND SECTORNAAM IS NOT NULL))
 GO
 
---========================================================================================
--- IR12 / BR? / C?
--- AANHEF has to be 'mevrouw' or 'meneer' **
---========================================================================================
-ALTER TABLE DEELNEMER
-DROP CONSTRAINT IF EXISTS CK_salutation
-GO
-
-ALTER TABLE DEELNEMER
-ADD CONSTRAINT CK_salutation CHECK (AANHEF = 'mevrouw' OR AANHEF = 'meneer')
-GO
-
 --=========================================================================
 -- BESCHIKBAARHEID constraints
 --=========================================================================
 
 --========================================================================================
+-- IR? / C? / BR?
 -- KWARTAAL has to be 1, 2, 3 or 4 **
 --========================================================================================
 ALTER TABLE BESCHIKBAARHEID
@@ -250,6 +239,7 @@ ADD CONSTRAINT CK_kwartaal CHECK (KWARTAAL IN (1, 2, 3, 4))
 GO
 
 --========================================================================================
+-- IR? / C? / BR?
 -- JAAR has to be between 1900 and 2200 **
 --========================================================================================
 ALTER TABLE BESCHIKBAARHEID
