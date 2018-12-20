@@ -294,7 +294,7 @@ CREATE TABLE WORKSHOP (
    MODULENUMMER						ModuleNummer         NULL,
    ADVISEUR_ID						Adviseur_ID          NULL,
    SECTORNAAM						Sectornaam           NULL,
-   PLANNERNAAM						Plannernaam			NOT NULL,
+   PLANNERNAAM						Plannernaam			 NULL,
    DATUM							Datum	             NULL,
    STARTTIJD						Starttijd            NULL,
    EINDTIJD							Eindtijd             NULL,
