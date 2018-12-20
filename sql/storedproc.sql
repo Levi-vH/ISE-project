@@ -158,7 +158,7 @@ GO
 
 CREATE OR ALTER PROC SP_get_workshoprequests
 (
-@where			 NVARCHAR(40) = NULL
+@where			 NVARCHAR(40) = NULL,
 @where_column	 NVARCHAR(40) = 'A.AANVRAAG_ID'
 )
 AS
@@ -190,7 +190,7 @@ BEGIN
 						ADVISEUR AD ON A.ADVISEUR_ID = AD.ADVISEUR_ID INNER JOIN
 						PLANNER P ON A.PLANNERNAAM = P.PLANNERNAAM
 				'
-	IF(@request_id IS NOT NULL)
+		IF(@where IS NOT NULL and @where_column IS NOT NULL )
 		BEGIN
 				SET @sql += ' WHERE ' + @where_column + ' = @where'
 		END
@@ -821,18 +821,20 @@ GO
 --=================================================
 CREATE OR ALTER PROC SP_insert_workshop
 (
-@workshoptype		NVARCHAR(30),
-@workshopdate		NVARCHAR(10),
-@modulenumber		INT,
-@organisationnumber	INT,
-@workshopsector		NVARCHAR(20),
-@workshopstarttime	NVARCHAR(10),
-@workshopendtime	NVARCHAR(10),
-@workshopaddress	NVARCHAR(60),
-@workshoppostcode	NVARCHAR(7),
-@workshopcity		NVARCHAR(60),
-@workshopleader		INT,
-@workshopnote		NVARCHAR(255)
+@workshopdate				NVARCHAR(10),
+@contactperson_id			INT,
+@modulenumber				INT,
+@workshopsector				NVARCHAR(20),
+@workshopstarttime			NVARCHAR(10),
+@workshopendtime			NVARCHAR(10),
+@workshopaddress			NVARCHAR(60),
+@workshopcity				NVARCHAR(60),
+@workshoppostcode			NVARCHAR(7),
+@workshopleader				INT,
+@workshopnote				NVARCHAR(255),
+@contactperson_name			NVARCHAR(80),
+@contactperson_email		NVARCHAR(100),
+@contactperson_phonenumber	NVARCHAR(12)
 )
 AS
 BEGIN
@@ -848,58 +850,56 @@ BEGIN
 			SET @status = 'bevestigd'
 		END
 
-	-- If a workshop is NOT from IND, the workshopsector MUST be filled in
-
-	IF( @workshoptype != 'IND' AND @workshopsector IS NULL )
-		BEGIN
-			RAISERROR('Een workshop met type IND MOET een workshopsector hebben',16,1)
-		END
 	SET @sql =	N'
-				INSERT INTO	WORKSHOP(workshopleider_id, organisatienummer, modulenummer, sectornaam, datum, starttijd, eindtijd, adres, postcode, plaatsnaam, status, opmerking, type)
+				INSERT INTO	WORKSHOP(DATUM, CONTACTPERSOON_ID, MODULENUMMER, SECTORNAAM, STARTTIJD, EINDTIJD, ADRES, PLAATSNAAM, POSTCODE, WORKSHOPLEIDER_ID, OPMERKING, CONTACTPERSOON_NAAM, CONTACTPERSOON_EMAIL, CONTACTPERSOON_TELEFOONNUMMER, TYPE)
 				VALUES		(
-							@workshopleader,
-							@organisationnumber,
-							@modulenumber,
-							@workshopsector,
-							@workshopdate,
-							@workshopstarttime,
-							@workshopendtime,
-							@workshopaddress,
-							@workshoppostcode,
-							@workshopcity,
-							@status,
-							@workshopnote,
-							@workshoptype	
+							@workshopdate,				
+							@contactperson_id,			
+							@modulenumber,				
+							@workshopsector,			
+							@workshopstarttime,			
+							@workshopendtime,			
+							@workshopaddress,			
+							@workshopcity,				
+							@workshoppostcode,			
+							@workshopleader,			
+							@workshopnote,				
+							@contactperson_name,		
+							@contactperson_email,		
+							@contactperson_phonenumber,
+							''IND''
 							)
 				'
 	EXEC sp_executesql @sql,	N'
-								@workshopleader		INT,
-								@organisationnumber	INT,
-								@modulenumber		INT,
-								@workshopsector		NVARCHAR(20),
-								@workshopdate		NVARCHAR(10),
-								@workshopstarttime	NVARCHAR(10),
-								@workshopendtime	NVARCHAR(10),
-								@workshopaddress	NVARCHAR(60),
-								@workshoppostcode	NVARCHAR(7),
-								@workshopcity		NVARCHAR(60),
-								@status				NVARCHAR(40),
-								@workshopnote		NVARCHAR(255),
-								@workshoptype		NVARCHAR(3)
+								@workshopdate				NVARCHAR(10),
+								@contactperson_id			INT,
+								@modulenumber				INT,
+								@workshopsector				NVARCHAR(20),
+								@workshopstarttime			NVARCHAR(10),
+								@workshopendtime			NVARCHAR(10),
+								@workshopaddress			NVARCHAR(60),
+								@workshopcity				NVARCHAR(60),
+								@workshoppostcode			NVARCHAR(7),
+								@workshopleader				INT,
+								@workshopnote				NVARCHAR(255),
+								@contactperson_name			NVARCHAR(80),
+								@contactperson_email		NVARCHAR(100),
+								@contactperson_phonenumber	NVARCHAR(12)
 								',
-								@workshopleader,
-								@organisationnumber,
-								@modulenumber,
-								@workshopsector,
-								@workshopdate,
-								@workshopstarttime,
-								@workshopendtime,
-								@workshopaddress,
-								@workshoppostcode,
-								@workshopcity,
-								@status,
-								@workshopnote,
-								@workshoptype
+								@workshopdate,				
+								@contactperson_id,			
+								@modulenumber,				
+								@workshopsector,				
+								@workshopstarttime,			
+								@workshopendtime,			
+								@workshopaddress,			
+								@workshopcity,				
+								@workshoppostcode,			
+								@workshopleader,				
+								@workshopnote,				
+								@contactperson_name,			
+								@contactperson_email,		
+								@contactperson_phonenumber	
 END
 GO
 
