@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (isset($workshop['Module'])) {
 
-                $sqlInsertDeelnemer = "SP_insert_IND_deelnemer ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+                $sqlInsertDeelnemer = "SP_insert_participant_in_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
                 $stmtInsertDeelnemer = $conn->prepare($sqlInsertDeelnemer);
                 $stmtInsertDeelnemer->bindParam(1, $Organisation_name, PDO::PARAM_INT);
                 $stmtInsertDeelnemer->bindParam(2, $salutation, PDO::PARAM_INT);
@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $stmtInsertDeelnemer->execute();
 
-                echo 'inserted!';
+            sendMail($email, "Ingeschreven voor workshop", "Beste " . $firstname . " " . $lastname .   ", <br><br> U heeft zich succesvol aangemeld voor de onderstaande workshops: <br> ");
             }
         }
     } else {

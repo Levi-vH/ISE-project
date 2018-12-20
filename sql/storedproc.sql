@@ -719,7 +719,7 @@ GO
 /*==============================================================*/
 
 --=================================================================================
--- SP_insert_IND_deelnemer: inserts a deelnemer and put's him in his IND workshop                            
+-- SP_insert_participant_in_workshop: inserts a deelnemer and put's him in his IND workshop                            
 --=================================================================================
 
 CREATE OR ALTER PROC SP_insert_participant_in_workshop
@@ -747,7 +747,7 @@ BEGIN
 	DECLARE @sql NVARCHAR(4000)
 	DECLARE @is_open_registration BIT
 	DECLARE @participant_id INT
-	DECLARE @organisationnumber INT
+	DECLARE @organisationnumber NVARCHAR(15)
 
 	IF (SELECT [TYPE] FROM WORKSHOP WHERE WORKSHOP_ID = @workshop_id) = 'IND'
 		BEGIN
@@ -771,7 +771,7 @@ BEGIN
 			IF (@is_open_registration) = 0
 				BEGIN
 					SET @sql =	N'
-								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU)
+								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, IS_OPEN_INSCHRIJVING)
 								VALUES	(
 										@organisationnumber,
 										@salutation,
@@ -780,14 +780,15 @@ BEGIN
 										@birthdate,
 										@email,
 										@phonenumber,
-										@education
+										@education,
+										@is_open_registration
 										)
 								'
 				END
 			ELSE
 				BEGIN
 					SET @sql =	N'
-								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, GEWENST_BEGELEIDINGSNIVEAU, SECTORNAAM, FUNCTIENAAM)
+								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, GEWENST_BEGELEIDINGSNIVEAU, SECTORNAAM, FUNCTIENAAM, IS_OPEN_INSCHRIJVING)
 								VALUES	(
 										@organisationnumber,
 										@salutation,
@@ -799,21 +800,23 @@ BEGIN
 										@education,
 										@education_students,
 										@sector,
-										@function
+										@function,
+										@is_open_registration
 										)
 								'
 				END
 			IF (@is_open_registration) = 0
 				BEGIN
 					EXEC sp_executesql @sql,	N'
-												@companyName			NVARCHAR(60),
+												@organisationnumber			NVARCHAR(15),
 												@salutation				NVARCHAR(7),
 												@firstname				NVARCHAR(30),
 												@lastname				NVARCHAR(50),
 												@birthdate				DATE,
 												@email					NVARCHAR(100),
 												@phonenumber			NVARCHAR(12),
-												@education				NVARCHAR(100)
+												@education				NVARCHAR(100),
+												@is_open_registration   BIT
 												',
 												@companyName,
 												@salutation,	
@@ -822,7 +825,8 @@ BEGIN
 												@birthdate,	
 												@email,		
 												@phonenumber,
-												@education	
+												@education,
+												@is_open_registration
 				END
 			ELSE
 				BEGIN
@@ -837,7 +841,8 @@ BEGIN
 												@education				NVARCHAR(100),
 												@education_students		NVARCHAR(100),
 												@sector					NVARCHAR(20),
-												@function				NVARCHAR(50)
+												@function				NVARCHAR(50),
+												@is_open_registration   BIT
 												',
 												@companyName,
 												@salutation,	
@@ -849,7 +854,8 @@ BEGIN
 												@education,
 												@education_students,
 												@sector,
-												@function	
+												@function,	
+												@is_open_registration
 				END
 
 			SET @participant_id = (SELECT (IDENT_CURRENT('DEELNEMER'))) -- if the participant just got inserted
