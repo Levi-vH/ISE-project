@@ -47,7 +47,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
             if(!empty($module['Workshopleader'])){
                 $moduleleader = $module['Workshopleader'];
-
+            }else{
+                $moduleleader = null;
             }
 
             $sql6 = "exec SP_add_date_and_time_and_workshopleader_to_request_from_group ?, ?, ?, ?, ?, ?";
@@ -405,19 +406,6 @@ $workshopleaders = [];
        });
    };
 
-
-
-
-    //var dropdown = $("#edit[groep" + <?//= $i ?>// +  "][module" + <?//= $j ?>// +  "][Workshopleader]");
-    //dropdown.prepend("<option value='0'>Kies een workshopleider...</option>");
-    //
-    //var val = '<?php //echo $moduleinfo['WORKSHOPLEIDER'] ?>// ';
-    //console.log(dropdown);
-    //if (val === 'Nog niet bekend') {
-    //    dropdown.find('option[value=0]').attr('selected', 'selected');
-    //} else {
-    //    dropdown.find('option[value=' + val + ']').attr('selected', 'selected');
-    //}
 </script>
 
 <?php include 'footer.html'; ?>
