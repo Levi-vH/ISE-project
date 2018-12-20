@@ -718,6 +718,158 @@ GO
 /* SP Type: INSERT                                              */
 /*==============================================================*/
 
+--=================================================================================
+-- SP_insert_IND_deelnemer: inserts a deelnemer and put's him in his IND workshop                            
+--=================================================================================
+
+CREATE OR ALTER PROC SP_insert_participant_in_workshop
+(
+@companyName			NVARCHAR(60),
+@salutation				NVARCHAR(7),
+@firstname				NVARCHAR(30),
+@lastname				NVARCHAR(50),
+@birthdate				DATE,
+@email					NVARCHAR(100),
+@phonenumber			NVARCHAR(12),
+@education				NVARCHAR(100),
+@education_students		NVARCHAR(100) = NULL,
+@sector					NVARCHAR(20) = NULL,
+@function				NVARCHAR(50) = NULL,
+@workshop_id			INT
+)
+
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	-- Create a deelnemer based on the given parameters
+
+	DECLARE @sql NVARCHAR(4000)
+	DECLARE @is_open_registration BIT
+	DECLARE @participant_id INT
+	DECLARE @organisationnumber INT
+
+	IF (SELECT [TYPE] FROM WORKSHOP WHERE WORKSHOP_ID = @workshop_id) = 'IND'
+		BEGIN
+			SET @is_open_registration = 1
+		END
+	ELSE
+		BEGIN
+			SET @is_open_registration = 0
+		END
+
+	SET @organisationnumber = (SELECT ORGANISATIENUMMER FROM ORGANISATIE WHERE ORGANISATIENAAM = @companyName)
+	IF NOT EXISTS	( -- Check if there is already an participant in the database with the same email, name and company
+					SELECT * --		  if there is, don't insert the participant.
+					FROM DEELNEMER
+					WHERE VOORNAAM = @firstname
+					AND ACHTERNAAM = @lastname
+					AND EMAIL = @email
+					AND ORGANISATIENUMMER = @organisationnumber
+					)
+		BEGIN
+			IF (@is_open_registration) = 0
+				BEGIN
+					SET @sql =	N'
+								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER)
+								VALUES	(
+										@organisationnumber,
+										@salutation,
+										@firstname,
+										@lastname,
+										@birthdate,
+										@email,
+										@phonenumber,
+										@education
+										)
+								'
+				END
+			ELSE
+				BEGIN
+					SET @sql =	N'
+								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER)
+								VALUES	(
+										@organisationnumber,
+										@salutation,
+										@firstname,
+										@lastname,
+										@birthdate,
+										@email,
+										@phonenumber,
+										@education,
+										@education_students,
+										@sector,
+										@function
+										)
+								'
+				END
+			IF (@is_open_registration) = 0
+				BEGIN
+					EXEC sp_executesql @sql,	N'
+												@companyName			NVARCHAR(60),
+												@salutation				NVARCHAR(7),
+												@firstname				NVARCHAR(30),
+												@lastname				NVARCHAR(50),
+												@birthdate				DATE,
+												@email					NVARCHAR(100),
+												@phonenumber			NVARCHAR(12),
+												@education				NVARCHAR(100)
+												',
+												@companyName,
+												@salutation,	
+												@firstname,	
+												@lastname,	
+												@birthdate,	
+												@email,		
+												@phonenumber,
+												@education	
+				END
+			ELSE
+				BEGIN
+					EXEC sp_executesql @sql,	N'
+												@companyName			NVARCHAR(60),
+												@salutation				NVARCHAR(7),
+												@firstname				NVARCHAR(30),
+												@lastname				NVARCHAR(50),
+												@birthdate				DATE,
+												@email					NVARCHAR(100),
+												@phonenumber			NVARCHAR(12),
+												@education				NVARCHAR(100),
+												@education_students		NVARCHAR(100),
+												@sector					NVARCHAR(20),
+												@function				NVARCHAR(50)
+												',
+												@companyName,
+												@salutation,	
+												@firstname,	
+												@lastname,	
+												@birthdate,	
+												@email,		
+												@phonenumber,
+												@education,
+												@education_students,
+												@sector,
+												@function	
+				END
+
+			SET @participant_id = (SELECT (IDENT_CURRENT('DEELNEMER'))) -- if the participant just got inserted
+
+		END
+	ELSE
+		BEGIN
+			SET @participant_id =	(
+									SELECT DEELNEMER_ID 
+									FROM DEELNEMER 
+									WHERE VOORNAAM = @firstname
+									AND ACHTERNAAM = @lastname
+									AND EMAIL = @email
+									) -- if the participant already exists
+		END
+
+	EXEC SP_insert_deelnemer_in_workshop @workshop_id, @participant_id
+END
+GO
+
 --=========================================================================
 -- SP_insert_deelnemer_in_workshop: inserts a deelnemer in a IND workshop                            
 --=========================================================================
@@ -765,107 +917,6 @@ BEGIN
 								@deelnemer_id,
 								@volgnummer
 
-END
-GO
-
---=================================================================================
--- SP_insert_IND_deelnemer: inserts a deelnemer and put's him in his IND workshop                            
---=================================================================================
-
-CREATE OR ALTER PROC SP_insert_IND_deelnemer
-(
-@companyName						NVARCHAR(60),
-@salutation							NVARCHAR(7),
-@firstname							NVARCHAR(30),
-@lastname							NVARCHAR(50),
-@birth_date							DATE,
-@email								NVARCHAR(100),
-@phonenumber						NVARCHAR(12),
-@educational_attainment				NVARCHAR(100),
-@educational_attainment_students	NVARCHAR(100),
-@sector								NVARCHAR(20),
-@function_in_company				NVARCHAR(50),
-@workshop_id						INT
-)
-
-AS
-BEGIN
-	SET NOCOUNT ON
-
-	-- Create a deelnemer based on the given parameters
-
-	DECLARE @sql NVARCHAR(4000)
-	DECLARE @openRegister BIT = 1
-	DECLARE @deelnemer_id INT
-	DECLARE @organisationnumber INT
-
-	SET @organisationnumber = (SELECT ORGANISATIENUMMER FROM ORGANISATIE WHERE ORGANISATIENAAM = @companyName)
-	IF NOT EXISTS( -- Check if there is already an participant in the database with the same email, name and company
-	SELECT * --		  if there is, don't insert the participant.
-	FROM DEELNEMER
-	WHERE VOORNAAM = @firstname
-	AND ACHTERNAAM = @lastname
-	AND EMAIL = @email
-	AND ORGANISATIENUMMER = @organisationnumber)
-	BEGIN
-		
-
-	SET @sql =	N'
-				INSERT INTO	DEELNEMER
-				VALUES		(
-							@organisationnumber,
-							@salutation,
-							@firstname,
-							@lastname,
-							@birth_date,
-							@email,			
-							@phonenumber,	
-							@educational_attainment,
-							@openRegister,
-							@educational_attainment_students,
-							@function_in_company,	
-							@sector			
-							)
-				'
-	EXEC sp_executesql @sql,	N'
-								@organisationnumber					INT,
-								@salutation							NVARCHAR(7),
-								@firstname							NVARCHAR(30),
-								@lastname							NVARCHAR(50),
-								@birth_date							DATE,
-								@email								NVARCHAR(100),
-								@phonenumber						NVARCHAR(12),
-								@educational_attainment				NVARCHAR(100),
-								@openRegister						NVARCHAR(100),
-								@educational_attainment_students	NVARCHAR(100),
-								@function_in_company				NVARCHAR(50),
-								@sector								NVARCHAR(20)
-								',
-								@organisationnumber,
-								@salutation,
-								@firstname,
-								@lastname,
-								@birth_date,
-								@email,			
-								@phonenumber,	
-								@educational_attainment,
-								@openRegister,
-								@educational_attainment_students,
-								@function_in_company,	
-								@sector
-
-	SET @deelnemer_id = (SELECT (IDENT_CURRENT('DEELNEMER'))) -- if the participant just got inserted
-
-	END
-
-	SET @deelnemer_id = (SELECT DEELNEMER_ID 
-						FROM DEELNEMER 
-						WHERE VOORNAAM = @firstname
-						AND ACHTERNAAM = @lastname
-						AND EMAIL = @email
-						AND ORGANISATIENUMMER = @organisationnumber) -- if the participant already exists
-
-	EXEC SP_insert_deelnemer_in_workshop @workshop_id, @deelnemer_id
 END
 GO
 
