@@ -39,7 +39,8 @@ if (!isset($_SESSION['username'])) {?>
     <h3 class="text-center">Je bent ingelogt als <?= $_SESSION['username'] ?></h3>
 </div>
 <div class="row justify-content-md-center">
-    <button class="btn btn-danger btn-lg"><a href="?logout=1">Logout</a></button></div>
+    <a class="btn btn-danger btn-lg" href="?logout=1">Logout</a>
+</div>
 <?php
 }
 if (isset($_POST['planner'])) {
@@ -54,7 +55,8 @@ if (isset($_POST['planner'])) {
             echo selectBox("Organisation_Name", "Organisatie", array("Organisatienaam", "ORGANISATIENUMMER"), "ORGANISATIENUMMER", array("Organisatienaam"), "Organisatienaam");
             ?>
         </div>
-        <button class="bg-success" onclick="setOrganisation()">Log in</button>
+        <div class="row justify-content-md-center">
+            <button class="btn btn-success btn-lg" onclick="setOrganisation()">Logout</button></div>
     </div>
     <?php
 } elseif (isset($_POST['deelnemer'])) {
