@@ -22,11 +22,13 @@ if (isset($_GET['organisation_id'])) {
     $_SESSION['planner'] = $_GET['planner'];
     header('Location:  ' . $_SERVER['PHP_SELF']);
 }
-if (!isset($_SESSION['username'])) { ?>
+?>
 <body>
 <h1 class="text-center">Welcome to ISE-PROJECT SBB</h1>
 <br>
-<?php if ((!isset($_POST['planner'])) && (!isset($_POST['deelnemer'])) && (!isset($_POST['contactpersoon']))) { ?>
+<?php if (!isset($_SESSION['username'])) {
+      if ((!isset($_POST['planner'])) && (!isset($_POST['deelnemer'])) && (!isset($_POST['contactpersoon']))) { ?>
+
     <h3 class="text-center">Login als Planner / Leerbedrijf / Deelnemer</h3>
     <br>
     <div class="container">
@@ -54,6 +56,7 @@ if (isset($_POST['planner'])) { ?>
         <div class="row justify-content-md-center">
             <?php echo selectBox("Coordination_Contact", "planner", array("plannernaam"), "plannernaam", array("plannernaam"), "plannernaam"); ?>
         </div>
+        <br>
         <div class="row justify-content-md-center">
             <button class="btn btn-success btn-lg" onclick="setPlanner()">Login</button>
         </div>
@@ -68,6 +71,7 @@ if (isset($_POST['planner'])) { ?>
             echo selectBox("Organisation_Name", "Organisatie", array("Organisatienaam", "ORGANISATIENUMMER"), "ORGANISATIENUMMER", array("Organisatienaam"), "Organisatienaam");
             ?>
         </div>
+        <br>
         <div class="row justify-content-md-center">
             <button class="btn btn-success btn-lg" onclick="setOrganisation()">Login</button>
         </div>
