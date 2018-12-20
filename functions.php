@@ -117,7 +117,7 @@ function selectBox($naamWaarde, $tabelnaam, $kolommen, $optionvalue, $displayCol
 {
     $handler = connectToDB();
     $select = '<select class="form-control" id="' . $naamWaarde . '" name="' . $naamWaarde . '" onchange="' . $function . '">';
-
+    $select .= '<option value="">Selecteer uw optie.</option>';
     $kolomString = $kolommen[0];
 
     for ($i = 1; $i < sizeof($kolommen); $i++) {
