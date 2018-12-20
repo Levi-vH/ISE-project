@@ -822,7 +822,7 @@ GO
 CREATE OR ALTER PROC SP_insert_workshop
 (
 @workshopdate				NVARCHAR(10),
-@contactperson_id			INT,
+@plannername				NVARCHAR(52),
 @modulenumber				INT,
 @workshopsector				NVARCHAR(20),
 @workshopstarttime			NVARCHAR(10),
@@ -851,10 +851,10 @@ BEGIN
 		END
 
 	SET @sql =	N'
-				INSERT INTO	WORKSHOP(DATUM, CONTACTPERSOON_ID, MODULENUMMER, SECTORNAAM, STARTTIJD, EINDTIJD, ADRES, PLAATSNAAM, POSTCODE, WORKSHOPLEIDER_ID, OPMERKING, CONTACTPERSOON_NAAM, CONTACTPERSOON_EMAIL, CONTACTPERSOON_TELEFOONNUMMER, TYPE)
+				INSERT INTO	WORKSHOP(DATUM, PLANNERNAAM, MODULENUMMER, SECTORNAAM, STARTTIJD, EINDTIJD, ADRES, PLAATSNAAM, POSTCODE, WORKSHOPLEIDER_ID, OPMERKING, CONTACTPERSOON_NAAM, CONTACTPERSOON_EMAIL, CONTACTPERSOON_TELEFOONNUMMER, TYPE)
 				VALUES		(
 							@workshopdate,				
-							@contactperson_id,			
+							@plannername,			
 							@modulenumber,				
 							@workshopsector,			
 							@workshopstarttime,			
@@ -872,7 +872,7 @@ BEGIN
 				'
 	EXEC sp_executesql @sql,	N'
 								@workshopdate				NVARCHAR(10),
-								@contactperson_id			INT,
+								@plannername				NVARCHAR(52),
 								@modulenumber				INT,
 								@workshopsector				NVARCHAR(20),
 								@workshopstarttime			NVARCHAR(10),
@@ -887,7 +887,7 @@ BEGIN
 								@contactperson_phonenumber	NVARCHAR(12)
 								',
 								@workshopdate,				
-								@contactperson_id,			
+								@plannername,			
 								@modulenumber,				
 								@workshopsector,				
 								@workshopstarttime,			
