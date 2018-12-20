@@ -26,7 +26,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     foreach ($_POST['edit'] as $groep){
         $moduleNumber = 0;
         foreach($groep as $module){
-            pre_r($module);
             $moduleNumber++;
 
             $groepNumber = $module['GROEP_ID'];
@@ -65,6 +64,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 }
 
 $groupnumber = getFirstGroup($aanvraag_id);
+$workshopleaders = [];
 
 ?>
 
@@ -221,6 +221,7 @@ $groupnumber = getFirstGroup($aanvraag_id);
                         }
                     }
 
+
                     $group_info .= '<div class="card">
                                     <div class="card-header" id="heading' . $i . '">
                                         <h5 class="mb-0">
@@ -288,6 +289,8 @@ $groupnumber = getFirstGroup($aanvraag_id);
                         $k++;
                     }
 
+
+
                     for($j=1; $j<=$groupinfo['AANTAL_MODULES']; $j++){
 
                         $sql5 = "exec SP_get_module_information_of_group ?, ?";
@@ -303,6 +306,8 @@ $groupnumber = getFirstGroup($aanvraag_id);
                                 $moduleinfo[$key] = 'Nog niet bekend';
                             }
                         }
+
+                        array_push($workshopleaders, $moduleinfo['WORKSHOPLEIDER']);
 
                         $group_info .= '<input type="hidden" value="'.$GroupIDs[$i]['GROEP_ID'].'" name="edit[groep'.$i.'][module'. $j .'][GROEP_ID]">
                                         <input type="hidden" value="'.$ModuleIDs[$j]['MODULENUMMER'].'" name="edit[groep'.$i.'][module'. $j .'][MODULENUMMER]">
@@ -344,23 +349,12 @@ $groupnumber = getFirstGroup($aanvraag_id);
                                                
                                         
                                          <div class="col-6">
-                                                  <div class="form-group"> 
+                                                  <div class="form-group workshopleaders"> 
                                                   <label class="control-label" for="Workshopleader">Workshopleider:</label>';
                 if($_SESSION['username'] == 'contactpersoon'){ $group_info .= '<input type="text" class="form-control" id="group_'. $i .'_module_'. $j .'Workshopleader" name="edit[groep'. $i .'][module'. $j .'][Workshopleader]" placeholder="' . $moduleinfo['VOORNAAM'] . " ". $moduleinfo['ACHTERNAAM']. '" disabled>'; }
                 else{ $group_info .=  selectBox("edit[groep". $i ."][module". $j ."][Workshopleader]", "WORKSHOPLEIDER", array("WORKSHOPLEIDER_ID", "VOORNAAM", "ACHTERNAAM"), "WORKSHOPLEIDER_ID", array("VOORNAAM", "ACHTERNAAM"), "ACHTERNAAM");}
                                     ?>
-                        <script href="text/javascript">
-                            var dropdown = $("#edit[groep" + <?= $i ?> +  "][module" + <?= $j ?> +  "][Workshopleader]");
-                                dropdown.prepend("<option value='0'>Kies een workshopleider...</option>");
 
-                                var val = '<?php echo $moduleinfo['WORKSHOPLEIDER'] ?> ';
-                                console.log(dropdown);
-                                if (val === 'Nog niet bekend') {
-                                    dropdown.find('option[value=0]').attr('selected', 'selected');
-                                } else {
-                                    dropdown.find('option[value=' + val + ']').attr('selected', 'selected');
-                                }
-                        </script>
 
 <?php                        $group_info .=            '</div>
                                           </div>
@@ -385,6 +379,47 @@ $groupnumber = getFirstGroup($aanvraag_id);
 </div>
 </body>
 </html>
+
+<script href="text/javascript">
+
+    <?php
+    $js_array = json_encode($workshopleaders);
+    echo "var workshopleaders = ". $js_array .";\n";
+    ?>
+
+
+   window.onload = function(){
+       var dropdown = $('.workshopleaders');
+
+       dropdown.each(function (index, element) {
+           var select = $(element).find('select')[0];
+
+           if(workshopleaders[index] === 'Nog niet bekend'){
+               $(select).find('option[value=""]').attr('selected', 'selected');
+           }else{
+               $(select).find('option[value='+ workshopleaders[index] +']').attr('selected', 'selected');
+           }
+
+
+
+       });
+   };
+
+
+
+
+    //var dropdown = $("#edit[groep" + <?//= $i ?>// +  "][module" + <?//= $j ?>// +  "][Workshopleader]");
+    //dropdown.prepend("<option value='0'>Kies een workshopleider...</option>");
+    //
+    //var val = '<?php //echo $moduleinfo['WORKSHOPLEIDER'] ?>// ';
+    //console.log(dropdown);
+    //if (val === 'Nog niet bekend') {
+    //    dropdown.find('option[value=0]').attr('selected', 'selected');
+    //} else {
+    //    dropdown.find('option[value=' + val + ']').attr('selected', 'selected');
+    //}
+</script>
+
 <?php include 'footer.html'; ?>
 
 

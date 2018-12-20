@@ -275,11 +275,10 @@ if ($_SESSION['username'] == 'planner') {
                             ?>
                             <script>
                                var dropdown = $("#workshopleader");
-                               dropdown.prepend("<option value='0'>Kies een workshopleider...</option>");
 
                                 var val = '<?php echo $workshopleader; ?>';
                                 if(val === ''){
-                                    dropdown.find('option[value=0]').attr('selected','selected');
+                                    dropdown.find('option[value=""]').attr('selected','selected');
                                 }else{
                                     dropdown.find('option[value='+val+']').attr('selected','selected');
                                 }
