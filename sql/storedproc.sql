@@ -990,6 +990,60 @@ BEGIN
 END
 GO
 
+--=======================================================================
+-- SP_insert_participants_of_workshop: inserts participants of a workshop                      
+--=======================================================================
+
+CREATE OR ALTER PROC SP_insert_participant_of_workshop
+(
+@workshop_id		INT,
+@firstname			NVARCHAR(30),
+@lastname			NVARCHAR(50),
+@birthdate			DATE,
+@email				NVARCHAR(100),
+@phonenumber		NVARCHAR(12),
+@education			NVARCHAR(100)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	DECLARE @sql2 NVARCHAR(4000)
+	SET @sql =	N'
+				INSERT INTO	DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, IS_OPEN_INSCHRIJVING)
+				VALUES		(
+							@firstname,
+							@lastname,
+							@birthdate,
+							@email,
+							@phonenumber,
+							@education,
+							0
+							)
+				'
+	EXEC sp_executesql @sql,	N'
+								@firstname NVARCHAR(30),
+								@lastname NVARCHAR(50),
+								@birthdate DATE,
+								@email NVARCHAR(100),
+								@phonenumber NVARCHAR(12),
+								@education NVARCHAR(100)
+								',
+								@firstname,
+								@lastname,
+								@birthdate,
+								@email,
+								@phonenumber,
+								@education
+	DECLARE @participant_id INT = (SELECT IDENT_CURRENT('DEELNEMER'))
+	SET @sql2 =	N'
+				INSERT INTO	DEELNEMER_IN_WORKSHOP (WORKSHOP_ID, DEELNEMER_ID)
+				VALUES		(@workshop_id, @participant_id)
+				'
+	EXEC sp_executesql @sql2, N'@workshop_id INT, @participant_id INT', @workshop_id, @participant_id
+END
+GO
+
 --=================================================
 -- SP_insert_workshoprequest: inserts a new request                              
 --=================================================
