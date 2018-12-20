@@ -158,7 +158,8 @@ GO
 
 CREATE OR ALTER PROC SP_get_workshoprequests
 (
-@request_id INT = NULL
+@where			 NVARCHAR(40) = NULL
+@where_column	 NVARCHAR(40) = 'A.AANVRAAG_ID'
 )
 AS
 BEGIN
@@ -191,9 +192,9 @@ BEGIN
 				'
 	IF(@request_id IS NOT NULL)
 		BEGIN
-			SET @sql +=	N'WHERE A.AANVRAAG_ID = @request_id'
+				SET @sql += ' WHERE ' + @where_column + ' = @where'
 		END
-	EXEC sp_executesql @sql, N'@request_id INT', @request_id
+	EXEC sp_executesql @sql, N'@where NVARCHAR(40), @where_column NVARCHAR(40)', @where, @where_column
 END
 GO
 

@@ -31,10 +31,19 @@ generate_header('Incompany Aanvragen');
             $conn = connectToDB();
 
             //Run the stored procedure
-            $sql = "exec SP_get_workshoprequests";
-            $stmt = $conn->prepare($sql);
-            $stmt->execute();
+    if(isset($_SESSION['username']) && $_SESSION['username'] == 'contactpersoon') {
+        $where = $_SESSION['organisation'];
+        $where_column = 'O.ORGANISATIENUMMER';
 
+        $sql = "exec SP_get_workshoprequests ?, ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(1, $where, PDO::PARAM_STR);
+        $stmt->bindParam(2, $where_column, PDO::PARAM_STR);
+    }else{
+        $sql = "exec SP_get_workshoprequests";
+        $stmt = $conn->prepare($sql);
+    }
+            $stmt->execute();
             $nummer = 0;
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
