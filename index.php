@@ -12,11 +12,6 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
-$userinfo = array(
-    'planner' => 'planner',
-    'contactpersoon' => 'contactpersoon'
-);
-
 if (isset($_GET['logout'])) {
     unset($_SESSION['username']);
     header('Location:  ' . $_SERVER['PHP_SELF']);
