@@ -55,9 +55,10 @@ $workshoptype = getWorkshopType($workshop_id);
                     <li>
                         <a href="editworkshop.php?workshop_id=<?= $workshop_id ?>">Wijzig workshop</a>
                     </li>
-<!--                    <li>-->
-<!--                        <a href="addparticipant.php?workshop_id=--><?//= $workshop_id ?><!--">Voeg deelnemers toe</a>-->
-<!--                    </li>-->
+                    <!--                    <li>-->
+                    <!--                        <a href="addparticipant.php?workshop_id=-->
+                    <? //= $workshop_id ?><!--">Voeg deelnemers toe</a>-->
+                    <!--                    </li>-->
                 </ul>
                 <br>
             </div>
@@ -68,17 +69,18 @@ $workshoptype = getWorkshopType($workshop_id);
             <div>
                 <table class='table table-striped table-hover'>
                     <tr>
-                        <th>Nummer</th>
-                        <th>Voornaam</th>
-                        <th>Achternaam</th>
-                        <th>Afmelden</th>
+                        <th>Naam</th>
+                        <th>Geboortedatum</th>
+                        <th>Opleidingsniveau</th>
+                        <th>Email</th>
+                        <th>Telefoonnummer</th>
+                        <th>Verwijderen</th>
                     </tr>
                     <?php
-                    //Try to make connection
-                    $conn = connectToDB();
+                    $conn= connectToDB();
 
                     //Run the stored procedure
-                    $sql = "SP_get_list_of_approved_workshop_participants ?";
+                    $sql = "exec SP_get_list_of_approved_workshop_participants ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
                     $stmt->execute();
@@ -90,28 +92,32 @@ $workshoptype = getWorkshopType($workshop_id);
                         $html = '';
                         $html .= '<tr>';
                         $html .= '<td>';
-                        $html .= $nummer;
+                        $html .= $row['VOORNAAM'] . ' ' . $row['ACHTERNAAM'];
                         $html .= '</td>';
                         $html .= '<td>';
-                        $html .= $row['VOORNAAM'];
+                        $html .= $row['GEBOORTEDATUM'];
                         $html .= '</td>';
                         $html .= '<td>';
-                        $html .= $row['ACHTERNAAM'];
+                        $html .= $row['OPLEIDINGSNIVEAU'];
                         $html .= '</td>';
                         $html .= '<td>';
-                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt afmelden? Zijn of haar gegevens worden niet opgeslagen\')" href="open_workshop_participants.php?workshop_id=' . $workshop_id . '&participant_id=' . $row['DEELNEMER_ID'] . '&deleteUser=true"></a>';
+                        $html .= $row['EMAIL'];
+                        $html .= '</td>';
+                        $html .= '<td>';
+                        $html .= $row['TELEFOONNUMMER'];
+                        $html .= '</td>';
+                        $html .= '<td>';
+                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="addparticipant.php?workshop_id=' . $workshop_id . '&participant_id=' . $row['DEELNEMER_ID'] . '&deleteUser=true"></a>';
                         $html .= '</td>';
                         $html .= '</tr>';
 
                         echo $html;
-
                     }
                     if (isset($_GET['deleteUser'])) {
                         deleteUserWorkshop($workshop_id, $_GET['participant_id']);
                         updatePage($_SERVER['PHP_SELF'] . '?workshop_id=' . $workshop_id);
                     }
                     }
-
                     ?>
                 </table>
             </div>
