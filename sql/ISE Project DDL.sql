@@ -257,7 +257,7 @@ GO
 /*==============================================================*/
 CREATE TABLE DEELNEMER (
    DEELNEMER_ID					Deelnemer_ID IDENTITY		NOT NULL,
-   ORGANISATIENUMMER			Organisatienummer			NOT NULL,
+   ORGANISATIENUMMER			Organisatienummer			NULL,
    AANHEF						Aanhef						NULL,
    VOORNAAM						Voornaam					NOT NULL,
    ACHTERNAAM					Achternaam					NOT NULL,
