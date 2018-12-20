@@ -52,9 +52,9 @@ if ($row['WORKSHOPLEIDER_ACHTERNAAM'] OR $row['WORKSHOPLEIDER_VOORNAAM']) {
                     <li>
                         <a href="editworkshop.php?workshop_id=<?= $workshop_id ?>">Wijzig workshop</a>
                     </li>
-<!--                    <li>-->
-<!--                        <a href="addparticipant.php?workshop_id=--><?//= $workshop_id ?><!--">Voeg deelnemers toe</a>-->
-<!--                    </li>-->
+                    <li>
+                        <a href="addparticipant.php?workshop_id=<?= $workshop_id ?>">Voeg deelnemers toe</a>
+                    </li>
                 </ul>
             </div>
         </div>

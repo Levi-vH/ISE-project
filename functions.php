@@ -71,10 +71,12 @@ function generate_header($title_of_page)
                     <a class="nav-link">';
 
         if (isset($_SESSION['username'])) {
-            if ($_SESSION['username'] != 'contactpersoon') {
-                $header .= $_SESSION['username'];
+            if ($_SESSION['username'] == 'planner') {
+                $header .= $_SESSION['username'] . '(' . $_SESSION['planner'] . ')';
             } elseif ($_SESSION['username'] == 'contactpersoon') {
                 $header .= $_SESSION['username'] . '(' . getOrganisationName($_SESSION['organisation']) . ')';
+            } else {
+                $header .= $_SESSION['username'];
             }
         }
     }
