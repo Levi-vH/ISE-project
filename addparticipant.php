@@ -39,6 +39,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
 
     $group = getFirstGroup($aanvraag_id);
     ?>
+    <html lang="en">
     <body>
     <div class="container-fluid">
         <div class="row">
