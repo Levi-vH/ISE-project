@@ -44,24 +44,20 @@ $workshoptype = getWorkshopType($workshop_id);
                         <a href="workshop.php?workshop_id=<?php echo $workshop_id ?>">Details</a>
                     </li>
                     <li>
-                        <a class="active-page">Inzien deelnemers</a>
+                        <a class="active-page">Deelnemers</a>
+                    </li>
+                    <li>
+                        <a href="open_registrations.php?workshop_id=<?= $workshop_id ?>">Openstaande inschrijvingen</a>
+                    </li>
+                    <li>
+                        <a href="reservelist.php?workshop_id=<?= $workshop_id ?>">Reservelijst</a>
+                    </li>
+                    <li>
+                        <a href="editworkshop.php?workshop_id=<?= $workshop_id ?>">Wijzig workshop</a>
                     </li>
 <!--                    <li>-->
-<!--                        <a href="addparticipant.php?workshop_id=--><?php //echo $workshop_id ?><!--">Voeg deelnemers toe</a>-->
+<!--                        <a href="addparticipant.php?workshop_id=--><?//= $workshop_id ?><!--">Voeg deelnemers toe</a>-->
 <!--                    </li>-->
-                    <?php
-                    if($workshoptype != 'INC') {
-                        echo '<li>';
-                        echo  '<a href="open_registrations.php?workshop_id='.$workshop_id.'">Openstaande inschrijvingen</a>';
-                        echo '</li>';
-                        echo '<li>';
-                        echo  '<a href="reservelist.php?workshop_id='.$workshop_id.'">Reservelijst</a>';
-                        echo '</li>';
-                    }
-                    ?>
-                    <li>
-                        <a href="editworkshop.php?workshop_id=<?php echo $workshop_id?>">Wijzig workshop</a>
-                    </li>
                 </ul>
                 <br>
             </div>
@@ -113,7 +109,8 @@ $workshoptype = getWorkshopType($workshop_id);
                     if (isset($_GET['deleteUser'])) {
                         deleteUserWorkshop($workshop_id, $_GET['participant_id']);
                         updatePage($_SERVER['PHP_SELF'] . '?workshop_id=' . $workshop_id);
-                    }}
+                    }
+                    }
 
                     ?>
                 </table>
