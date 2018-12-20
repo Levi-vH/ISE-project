@@ -58,8 +58,33 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $stmt6->bindParam(3, $moduleDate, PDO::PARAM_STR);
             $stmt6->bindParam(4, $moduleStart, PDO::PARAM_STR);
             $stmt6->bindParam(5, $moduleEind, PDO::PARAM_STR);
-            $stmt6->bindParam(6, $moduleleader, PDO::PARAM_INT);
+            $stmt6->bindParam(6, $moduleleader,PDO::PARAM_INT);
             $stmt6->execute();
+
+            $detailToConfirm = null;
+
+            if(isset($module['confirmDate'])){
+                $detailToConfirm = 'dateSBB';
+            }elseif(isset($module['confirmWorkshopleader'])){
+                $detailToConfirm = 'workshopleader';
+            }elseif (isset($module['confirmContact'])){
+                $detailToConfirm = 'dateContact';
+            }
+
+            if($detailToConfirm !== null){
+
+                $sql7 = "exec SP_confirm_Workshop_Details ?, ?, ?";
+                $stmt7 = $conn->prepare($sql7);
+                $stmt7->bindParam(1, $detailToConfirm,PDO::PARAM_STR);
+                $stmt7->bindParam(2, $groepNumber,PDO::PARAM_INT);
+                $stmt7->bindParam(3, $moduleNumber,PDO::PARAM_INT);
+
+                $stmt7->execute();
+            }
+
+
+
+
         }
     }
 }
@@ -290,8 +315,6 @@ $workshopleaders = [];
                         $k++;
                     }
 
-
-
                     for($j=1; $j<=$groupinfo['AANTAL_MODULES']; $j++){
 
                         $sql5 = "exec SP_get_module_information_of_group ?, ?";
@@ -307,6 +330,10 @@ $workshopleaders = [];
                                 $moduleinfo[$key] = 'Nog niet bekend';
                             }
                         }
+
+                        $canConfirmDate = !($moduleinfo['DATUM'] == 'Nog niet bekend' && $moduleinfo['STARTTIJD'] == 'Nog niet bekend' && $moduleinfo['EINDTIJD'] == 'Nog niet bekend');
+                        $canConfirmDateSBB = ($canConfirmDate && $moduleinfo['BEVESTIGING_DATUM_SBB'] == 'Nog niet bekend');
+                        $canConfirmDateContact = ($canConfirmDate && $moduleinfo['BEVESTIGING_DATUM_LEERBEDRIJF'] == 'Nog niet bekend');
 
                         array_push($workshopleaders, $moduleinfo['WORKSHOPLEIDER']);
 
@@ -331,21 +358,31 @@ $workshopleaders = [];
                                                     <div class="form-group">
                                                         <label for="group_'. $i .'_module_'. $j .'_Date">Datum:</label>
                                                         <input type="date" class="form-control" id="group_'. $i .'_module_'. $j .'_Date" name="edit[groep'. $i .'][module'. $j .'][Date]" placeholder="' . $moduleinfo['DATUM'] . '" value="'. $moduleinfo['DATUM']. '"';
-                                                     if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
+                                                     if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'readonly';}
                                     $group_info .=  '></div>';
-                                     if($_SESSION['username'] == 'planner'){ $group_info .= '<button type="submit" class="btn btn-primary">Submit</button>';}
+
 
                         $group_info .=  '                  <div class="form-group">
                                                              <label for="group_'. $i .'_module_'. $j .'_Starttime">Starttijd:</label>
                                                              <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Starttime" name="edit[groep'. $i .'][module'. $j .'][Starttime]" placeholder="' . $moduleinfo['STARTTIJD'] . '" value="' . substr($moduleinfo['STARTTIJD'], 0 ,5) . '"';
-                                                     if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
+                                                     if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'readonly';}
                                     $group_info .=       '></div>
                                                           <div class="form-group">
                                                              <label for="group_'. $i .'_module_'. $j .'_Endtime">Eindtijd:</label>
                                                              <input type="time" class="form-control" id="group_'. $i .'_module_'. $j .'_Endtime" name="edit[groep'. $i .'][module'. $j .'][Endtime]" placeholder="' . $moduleinfo['EINDTIJD'] . '" value="' . substr($moduleinfo['EINDTIJD'], 0 ,5) . '"';
-                                                      if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'disabled';}
+                                                      if($_SESSION['username'] == 'contactpersoon'){ $group_info .= 'readonly';}
                                     $group_info .=       '></div>';
-                                                    if($_SESSION['username'] == 'planner'){ $group_info .= '<button type="submit" class="btn btn-primary">Submit</button>';}
+                                                    if($_SESSION['username'] == 'planner'){
+                                                        if($canConfirmDateSBB){
+                                                            $group_info .= '<button type="submit" class="btn btn-primary" name="edit[groep'. $i .'][module'. $j .'][confirmDate]">Bevestig datum</button> &nbsp;';
+                                                        }
+                                                        if($moduleinfo['WORKSHOPLEIDER'] !== 'Nog niet bekend' && $moduleinfo['BEVESTIGING_WORKSHOPLEIDER'] == 'Nog niet bekend'){
+                                                            $group_info .= '<button type="submit" class="btn btn-primary" name="edit[groep'. $i .'][module'. $j .'][confirmWorkshopleader]">Bevestig workshopleider</button>';
+                                                        }
+                                                    }elseif ($_SESSION['username'] == 'contactpersoon' && $canConfirmDateContact){
+                                                        $group_info .= '<button type="submit" class="btn btn-primary" name="edit[groep'. $i .'][module'. $j .'][confirmContact]">Bevestig datum</button>';
+                                                    }
+
                                  $group_info .= '</div>
                                                
                                         
@@ -355,8 +392,6 @@ $workshopleaders = [];
                 if($_SESSION['username'] == 'contactpersoon'){ $group_info .= '<input type="text" class="form-control" id="group_'. $i .'_module_'. $j .'Workshopleader" name="edit[groep'. $i .'][module'. $j .'][Workshopleader]" placeholder="' . $moduleinfo['VOORNAAM'] . " ". $moduleinfo['ACHTERNAAM']. '" disabled>'; }
                 else{ $group_info .=  selectBox("edit[groep". $i ."][module". $j ."][Workshopleader]", "WORKSHOPLEIDER", array("WORKSHOPLEIDER_ID", "VOORNAAM", "ACHTERNAAM"), "WORKSHOPLEIDER_ID", array("VOORNAAM", "ACHTERNAAM"), "ACHTERNAAM");}
                                     ?>
-
-
 <?php                        $group_info .=            '</div>
                                           </div>
                                            </div> 
@@ -370,6 +405,7 @@ $workshopleaders = [];
                                     </div>
                          ';
                 }
+                if($_SESSION['username'] == 'planner'){ $group_info .= '<button type="submit" class="btn btn-primary" name="Pas workshops aan">Pas workshops aan</button>';}
                 $group_info .= '</form>';
 
                 echo $group_info;
@@ -400,9 +436,6 @@ $workshopleaders = [];
            }else{
                $(select).find('option[value='+ workshopleaders[index] +']').attr('selected', 'selected');
            }
-
-
-
        });
    };
 
