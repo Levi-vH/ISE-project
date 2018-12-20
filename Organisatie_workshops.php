@@ -16,9 +16,10 @@ if ($_SESSION['username'] == 'contactpersoon') {
             <table class='table table-striped table-hover'>
                 <tr>
                     <th>Datum</th>
-                    <th>Aantal groepen</th>
-                    <th>Adviseur naam</th>
-                    <th>Datum aanvraag</th>
+                    <th>Starttijd</th>
+                    <th>Eindtijd</th>
+                    <th>Locatie</th>
+                    <th>Module</th>
                 </tr>
                 <?php
                 //Try to make connection
@@ -26,7 +27,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
 
                 //Run the stored procedure
                 $sql = "exec SP_get_workshops @where = ?, @where_column = ?";
-                $where = 'Educational Services';
+                $where = 'First Center';
                 $where_column = 'O.ORGANISATIENAAM';
                 $stmt = $conn->prepare($sql);
                 $stmt->bindParam(1, $where, PDO::PARAM_STR);
@@ -36,19 +37,22 @@ if ($_SESSION['username'] == 'contactpersoon') {
 
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $html = '';
-                    $link = $row['DATUM'];
-                    $html .= "<tr onclick=\"window.location='INCaanvraag.php?aanvraag_id=$link'\">";
+                    $link = $row['WORKSHOP_ID'];
+                    $html .= "<tr onclick=\"window.location='Organisatie_workshop_details.php?workshop_id=$link'\">";
                     $html .= '<td class="align-middle">';
-                    $html .= $row['DATUM'];
+                    $html .= date('j F Y', strtotime($row['DATUM']));
                     $html .= '</td>';
                     $html .= '<td class="align-middle">';
-                    $html .= $row['DATUM'];
+                    $html .= date('H:i',strtotime($row['STARTTIJD']));
                     $html .= '</td>';
                     $html .= '<td class="align-middle">';
-                    $html .= $row['ADVISEURVOORNAAM'] . ' ' . $row['ADVISEURACHTERNAAM'];
+                    $html .= date('H:i',strtotime($row['EINDTIJD']));
                     $html .= '</td>';
                     $html .= '<td class="align-middle">';
-                    $html .=  date('j F Y', strtotime($row['AANVRAAG_DATUM']));
+                    $html .= $row['ADRES'] . ' <BR>' . $row['POSTCODE'] . ', ' .$row['PLAATSNAAM'];
+                    $html .= '</td>';
+                    $html .= '<td class="align-middle">';
+                    $html .=  $row['MODULENUMMER'] . ': ' .$row['MODULENAAM'];
                     $html .= '</td>';
                     $html .= '</tr>';
                     echo $html;

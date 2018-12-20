@@ -1,6 +1,6 @@
 <?php
 include 'functions.php';
-generate_header('Deelnemers en Groepen');
+generate_header('Workshop Details');
 
 $workshop_id = $_GET['workshop_id'];
 $workshoptype = getWorkshopType($workshop_id);
@@ -9,7 +9,6 @@ $workshoptype = getWorkshopType($workshop_id);
 $conn = connectToDB();
 
 //Run the stored procedure
-// $sql = "SELECT * FROM VW_WORKSHOPS";
 $sql = "exec SP_get_workshops @where = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
