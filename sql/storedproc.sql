@@ -129,11 +129,11 @@ BEGIN
 									WHERE	WORKSHOP_ID = W.WORKSHOP_ID
 									AND		IS_GOEDGEKEURD = 1
 									), 0) AS AANTAL_GOEDGEKEURDE_DEELNEMERS
-				FROM		WORKSHOP W INNER JOIN
-							ORGANISATIE O ON W.ORGANISATIENUMMER = O.ORGANISATIENUMMER INNER JOIN
+				FROM		WORKSHOP W LEFT JOIN
+							ORGANISATIE O ON W.ORGANISATIENUMMER = O.ORGANISATIENUMMER LEFT JOIN
 							MODULE M ON W.MODULENUMMER = M.MODULENUMMER LEFT JOIN
-							WORKSHOPLEIDER WL ON W.WORKSHOPLEIDER_ID = WL.WORKSHOPLEIDER_ID INNER JOIN
-							ADVISEUR A ON W.ADVISEUR_ID = A.ADVISEUR_ID INNER JOIN
+							WORKSHOPLEIDER WL ON W.WORKSHOPLEIDER_ID = WL.WORKSHOPLEIDER_ID LEFT JOIN
+							ADVISEUR A ON W.ADVISEUR_ID = A.ADVISEUR_ID LEFT JOIN
 							CONTACTPERSOON C ON W.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID'
 	IF(@where IS NOT NULL OR @where != 'NULL') -- if the procedure was executed with an where statement, add the where statement to the select query
 		BEGIN
@@ -158,7 +158,8 @@ GO
 
 CREATE OR ALTER PROC SP_get_workshoprequests
 (
-@request_id INT = NULL
+@where			 NVARCHAR(40) = NULL
+@where_column	 NVARCHAR(40) = 'A.AANVRAAG_ID'
 )
 AS
 BEGIN
@@ -191,9 +192,9 @@ BEGIN
 				'
 	IF(@request_id IS NOT NULL)
 		BEGIN
-			SET @sql +=	N'WHERE A.AANVRAAG_ID = @request_id'
+				SET @sql += ' WHERE ' + @where_column + ' = @where'
 		END
-	EXEC sp_executesql @sql, N'@request_id INT', @request_id
+	EXEC sp_executesql @sql, N'@where NVARCHAR(40), @where_column NVARCHAR(40)', @where, @where_column
 END
 GO
 

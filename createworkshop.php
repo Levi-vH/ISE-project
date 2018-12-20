@@ -8,54 +8,60 @@ include 'functions.php';
 if ($_SESSION['username'] == 'planner') {
 
 // define (empty) variables
-    $workshoptype = $workshopdate = $contactinfo = $workshopmodule = $workshopcompany = $workshopsector = $starttime = $endtime =
-    $workshopadress = $workshoppostcode = $workshopcity = $workshopleader = $workshopnotes = '';
+    $workshopdate = $contactsbb = $workshopmodule = $workshopsector = $starttime = $endtime =
+    $workshopadress  = $workshopcity = $workshoppostcode = $workshopleader = $workshopnotes =
+    $contactcompanyname  = $contactcompanyemail = $contactcompanyphone = '';
 
 // The ones that do not get checked are dropdown or select.
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $workshoptype = $_POST["workshoptype"];
         $workshopdate = $_POST["workshopdate"];
+        $contactsbb = $_POST["Coordination_Contact"];
         $workshopmodule = $_POST["workshopmodule"];
-        $workshopcompany = $_POST["workshopcompany"];
         $workshopsector = $_POST["workshopsector"];
         $starttime = $_POST["workshopstarttime"];
         $endtime = $_POST["workshopendtime"];
         $workshopadress = check_input($_POST["workshopaddress"]);
-        $workshoppostcode = check_input($_POST["workshoppostcode"]);
         $workshopcity = check_input($_POST["workshopcity"]);
+        $workshoppostcode = check_input($_POST["workshoppostcode"]);
         $workshopleader = check_input($_POST["workshopleader"]);
-        $workshopnotes = check_input(@$_POST['workshopnotes']);
+        $workshopnotes = check_input($_POST["workshopnotes"]);
+        $contactcompanyname = check_input(@$_POST['$contactcompanyname']);
+        $contactcompanyemail = check_input(@$_POST['$contactcompanyemail']);
+        $contactcompanyphone = check_input(@$_POST['$contactcompanyphone']);
 
-        echo "<br>TYPE:  ".$workshoptype;
-        echo "<br>DATUM:  ".$workshopdate;
-        echo "<br>MODULE:  ".$workshopmodule;
-        echo "<br>COMPANY: ".$workshopcompany;
-        echo "<br>SECTOR; ".$workshopsector;
-        echo "<br>STARTTIJD: ".$starttime;
-        echo "<br>EINDTIJD:  ".$endtime;
-        echo "<br>Adres: ".$workshopadress;
-        echo "<br>POSTCODE: ".$workshoppostcode;
-        echo "<br>STAD:  ".$workshopcity;
-        echo "<br>LEIDER:  ".$workshopleader;
-        echo "<br>OPMERKINGEN: ".$workshopnotes;
+        echo "<br>DATUM:  " . $workshopdate;
+        echo "<br>MODULE:  " . $workshopmodule;
+        echo "<br>COMPANY: " . $workshopcompany;
+        echo "<br>SECTOR; " . $workshopsector;
+        echo "<br>STARTTIJD: " . $starttime;
+        echo "<br>EINDTIJD:  " . $endtime;
+        echo "<br>Adres: " . $workshopadress;
+        echo "<br>POSTCODE: " . $workshoppostcode;
+        echo "<br>STAD:  " . $workshopcity;
+        echo "<br>LEIDER:  " . $workshopleader;
+        echo "<br>OPMERKINGEN: " . $workshopnotes;
         //Try to make connection
         $conn = connectToDB();
 
         //Run the stored procedure
         $sql = "exec SP_insert_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
         $stmt = $conn->prepare($sql);
-        $stmt->bindParam(1, $workshoptype, PDO::PARAM_STR);
-        $stmt->bindParam(2, $workshopdate, PDO::PARAM_STR);
+        $stmt->bindParam(1, $workshopdate, PDO::PARAM_STR);
+        $stmt->bindParam(2, $contactsbb, PDO::PARAM_INT);
         $stmt->bindParam(3, $workshopmodule, PDO::PARAM_INT);
-        $stmt->bindParam(4, $workshopcompany, PDO::PARAM_INT);
-        $stmt->bindParam(5, $workshopsector, PDO::PARAM_STR);
-        $stmt->bindParam(6, $starttime, PDO::PARAM_STR);
-        $stmt->bindParam(7, $endtime, PDO::PARAM_STR);
-        $stmt->bindParam(8, $workshopadress, PDO::PARAM_STR);
+        $stmt->bindParam(4, $workshopsector, PDO::PARAM_STR);
+        $stmt->bindParam(5, $starttime, PDO::PARAM_STR);
+        $stmt->bindParam(6, $endtime, PDO::PARAM_STR);
+        $stmt->bindParam(7, $workshopadress, PDO::PARAM_STR);
+        $stmt->bindParam(8, $workshopcity, PDO::PARAM_STR);
         $stmt->bindParam(9, $workshoppostcode, PDO::PARAM_STR);
-        $stmt->bindParam(10, $workshopcity, PDO::PARAM_STR);
-        $stmt->bindParam(11, $workshopleader, PDO::PARAM_STR);
-        $stmt->bindParam(12, $workshopnotes, PDO::PARAM_STR);
+        $stmt->bindParam(10, $workshopleader, PDO::PARAM_STR);
+        $stmt->bindParam(11, $workshopnotes, PDO::PARAM_STR);
+        $stmt->bindParam(12, $contactcompanyname, PDO::PARAM_STR);
+        $stmt->bindParam(13, $contactcompanyemail, PDO::PARAM_STR);
+        $stmt->bindParam(14, $contactcompanyphone, PDO::PARAM_STR);
+
+
         $stmt->execute();
     }
 
@@ -66,25 +72,17 @@ if ($_SESSION['username'] == 'planner') {
     <div class="container">
         <h2 class="text-info text-center">Maak een nieuwe workshop</h2>
         <form class="form-horizontal" action="createworkshop.php" method="post">
-            <div class="form-group">
-                <label class="control-label col-sm-2 font-weight-bold" for="workshoptype">Type workshop:</label>
-                <div class="col-sm-10">
-                    <div class="col-sm-10">
-                        <?php
-                        echo selectBox("workshoptype", "WORKSHOPTYPE", array("type"), "type", array("type"), "type");
-                        ?>
-                </div>
-            </div>
+            <h2 class="text-info">Algemeen</h2>
             <div class="form-group">
                 <label class="control-label col-sm-2 font-weight-bold" for="workshopdate">Datum workshop:</label>
                 <div class="col-sm-10">
-                    <input type="date" class="form-control" placeholder="Enter password" name="workshopdate">
+                    <input type="date" class="form-control" name="workshopdate">
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-sm-2 font-weight-bold" for="contactinfo">Contactpersoon:</label>
+                <label class="control-label col-sm-6 font-weight-bold" for="Coordination_Contact">Contactpersoon SBB:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" placeholder="Contactpersoon gegevens" name="contactinfo">
+                    <?php echo selectBox("Coordination_Contact", "planner", array("plannernaam"), "plannernaam", array("plannernaam"), "plannernaam"); ?>
                 </div>
             </div>
             <div class="form-group">
@@ -92,14 +90,6 @@ if ($_SESSION['username'] == 'planner') {
                 <div class="col-sm-10">
                     <?php
                     echo selectBox("workshopmodule", "module", array("modulenummer", "modulenaam"), "modulenummer", array("modulenummer", "modulenaam"), "modulenummer");
-                    ?>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2 font-weight-bold" for="workshopcompany">Organisatie:</label>
-                <div class="col-sm-10">
-                    <?php
-                    echo selectBox("workshopcompany", "organisatie", array("organisatienaam", "organisatienummer"), "organisatienummer", array("organisatienaam"), "organisatienaam");
                     ?>
                 </div>
             </div>
@@ -131,15 +121,15 @@ if ($_SESSION['username'] == 'planner') {
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-sm-2 font-weight-bold" for="workshoppostcode">Postcode workshop:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" placeholder="Postcode" name="workshoppostcode">
-                </div>
-            </div>
-            <div class="form-group">
                 <label class="control-label col-sm-2 font-weight-bold" for="workshopcity">Plaats workshop:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" placeholder="Plaats" name="workshopcity">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2 font-weight-bold" for="workshopcity">Postcode workshop:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" placeholder="Plaats" name="workshoppostalcode">
                 </div>
             </div>
             <div class="form-group">
@@ -152,6 +142,25 @@ if ($_SESSION['username'] == 'planner') {
             </div>
             <div class="form-group">
                 <label class="control-label col-sm-2 font-weight-bold" for="workshopnotes">Opmerkingen:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" placeholder="Opmerkingen" name="workshopnotes">
+                </div>
+            </div>
+            <h2 class="text-info">Contactpersoon Bedrijf</h2>
+            <div class="form-group">
+                <label class="control-label col-sm-2 font-weight-bold" for="workshopnotes">Naam:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" placeholder="Opmerkingen" name="workshopnotes">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2 font-weight-bold" for="workshopnotes">Email:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" placeholder="Opmerkingen" name="workshopnotes">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2 font-weight-bold" for="workshopnotes">Telefoonnummer:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" placeholder="Opmerkingen" name="workshopnotes">
                 </div>

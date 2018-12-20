@@ -78,6 +78,9 @@ CREATE TYPE Achternaam FROM VARCHAR(50)
 DROP TYPE IF EXISTS Plannernaam
 CREATE TYPE Plannernaam FROM VARCHAR(52)
 
+DROP TYPE IF EXISTS Contactpersoon_naam
+CREATE TYPE Contactpersoon_naam FROM VARCHAR(80)
+
 DROP TYPE IF EXISTS Kwartaal
 CREATE TYPE Kwartaal FROM CHAR(1)
 
@@ -157,8 +160,8 @@ GO
 /* Table: WORKSHOPTYPE                                          */
 /*==============================================================*/
 CREATE TABLE WORKSHOPTYPE (
-	[TYPE]		[Type] NOT NULL,
-	TypeName	TypeNaam NOT NULL,
+	[TYPE]		[Type]		NOT NULL,
+	TypeName	TypeNaam	NOT NULL,
 	CONSTRAINT PK_WORKSHOPTYPE PRIMARY KEY ([TYPE])
 )
 GO
@@ -241,10 +244,10 @@ GO
 /* Table: BESCHIKBAARHEID                                       */
 /*==============================================================*/
 CREATE TABLE BESCHIKBAARHEID (
-   WORKSHOPLEIDER_ID    WorkshopLeider_ID			         NOT NULL,
+   WORKSHOPLEIDER_ID    WorkshopLeider_ID	 NOT NULL,
    KWARTAAL             Kwartaal             NOT NULL,
    JAAR                 Jaartal              NOT NULL,
-   AANTAL_UUR           Aantal_Uur            NOT NULL,
+   AANTAL_UUR           Aantal_Uur           NOT NULL,
    CONSTRAINT PK_BESCHIKBAARHEID PRIMARY KEY (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
 )
 GO
@@ -261,11 +264,11 @@ CREATE TABLE DEELNEMER (
    GEBOORTEDATUM				Geboortedatum				NOT NULL,
    EMAIL						Email						NULL,
    TELEFOONNUMMER				telefoonnummer				NULL,
-   OPLEIDINGSNIVEAU				Opleidingsniveau				NOT NULL,
+   OPLEIDINGSNIVEAU				Opleidingsniveau			NOT NULL,
    IS_OPEN_INSCHRIJVING         Is_Open_Inschrijving		NOT NULL,
-   GEWENST_BEGELEIDINGSNIVEAU	Gewenst_Begeleidingsniveau	NULL,
-   FUNCTIENAAM					Functienaam					NULL,
-   SECTORNAAM					Sectornaam					NULL,
+   GEWENST_BEGELEIDINGSNIVEAU	Gewenst_Begeleidingsniveau	NULL, -- only necessary if IS_OPEN_INSCHRIJVING is '1'
+   FUNCTIENAAM					Functienaam					NULL, -- only necessary if IS_OPEN_INSCHRIJVING is '1'
+   SECTORNAAM					Sectornaam					NULL, -- only necessary if IS_OPEN_INSCHRIJVING is '1'
    CONSTRAINT PK_DEELNEMER PRIMARY KEY (DEELNEMER_ID)
 )
 GO
@@ -306,6 +309,9 @@ CREATE TABLE WORKSHOP (
    PRESENTIELIJST_VERSTUURD			Datum	             NULL,
    PRESENTIELIJST_ONTVANGEN			Datum	             NULL,
    BEWIJS_DEELNAME_MAIL_SBB_WSL		Datum	             NULL,
+   CONTACTPERSOON_NAAM				Contactpersoon_naam	 NULL, -- only necessary if TYPE is 'IND'
+   CONTACTPERSOON_EMAIL				Email				 NULL, -- only necessary if TYPE is 'IND'
+   CONTACTPERSOON_TELEFOONNUMMER	Telefoonnummer		 NULL, -- only necessary if TYPE is 'IND'
    CONSTRAINT PK_WORKSHOP PRIMARY KEY (WORKSHOP_ID)
 )
 GO
@@ -330,7 +336,7 @@ CREATE TABLE AANVRAAG (
    ORGANISATIENUMMER	Organisatienummer	 NOT NULL,
    CONTACTPERSOON_ID	Contactpersoon_ID    NOT NULL,
    ADVISEUR_ID			Adviseur_ID	         NOT NULL,
-   PLANNERNAAM			Plannernaam				 NOT NULL,
+   PLANNERNAAM			Plannernaam			 NOT NULL,
    AANVRAAG_DATUM		AanvraagDatum		 DEFAULT GETDATE(),
    CONSTRAINT PK_AANVRAAG PRIMARY KEY (AANVRAAG_ID)
 )
@@ -511,6 +517,6 @@ ALTER TABLE MODULE_VAN_GROEP
 GO
 
 ALTER TABLE WORKSHOP
-	ADD CONSTRAINT FK_TYPE_ref_TYPE FOREIGN KEY ([TYPE])
+	ADD CONSTRAINT FK_WORKSHOP_ref_WORKSHOPTYPE FOREIGN KEY ([TYPE])
 	REFERENCES WORKSHOPTYPE([TYPE])
 GO

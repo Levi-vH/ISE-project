@@ -71,7 +71,11 @@ function generate_header($title_of_page)
                     <a class="nav-link">';
 
         if (isset($_SESSION['username'])) {
-            $header .= $_SESSION['username'];
+            if ($_SESSION['username'] != 'contactpersoon') {
+                $header .= $_SESSION['username'];
+            } elseif ($_SESSION['username'] == 'contactpersoon') {
+                $header .= $_SESSION['username'] . '(' . getOrganisationName($_SESSION['organisation']) . ')';
+            }
         }
     }
     $header .= '</a>
@@ -347,7 +351,8 @@ function sendMail($to, $subject, $body)
     }
 }
 
-function getCountOfWorkshopsForSector($sectorname) {
+function getCountOfWorkshopsForSector($sectorname)
+{
     $conn = connectToDB();
 
     $sql = "EXEC SP_get_workshops_for_sector ?";
@@ -364,7 +369,8 @@ function getCountOfWorkshopsForSector($sectorname) {
     return $nummer;
 }
 
-function getCountOfCancelledWorkshops() {
+function getCountOfCancelledWorkshops()
+{
     $conn = connectToDB();
 
     $sql = "EXEC SP_get_cancelled_workshops";
@@ -380,7 +386,8 @@ function getCountOfCancelledWorkshops() {
     return $nummer;
 }
 
-function getCountOfWorkshopsForWorkshopLeader($workshopleader) {
+function getCountOfWorkshopsForWorkshopLeader($workshopleader)
+{
     $conn = connectToDB();
 
     $sql = "EXEC SP_get_workshops_for_workshopleader ?";
@@ -397,7 +404,8 @@ function getCountOfWorkshopsForWorkshopLeader($workshopleader) {
     return $nummer;
 }
 
-function getCountOfTypeWorkshops() {
+function getCountOfTypeWorkshops()
+{
     $conn = connectToDB();
 
     $sql = "EXEC SP_get_count_workshoptypes";
@@ -410,7 +418,8 @@ function getCountOfTypeWorkshops() {
     return $row;
 }
 
-function getCountOfAllWorkshops() {
+function getCountOfAllWorkshops()
+{
     $conn = connectToDB();
 
     $sql = "SELECT COUNT(WORKSHOP_ID) AS AANTAL FROM WORKSHOP";
@@ -422,10 +431,24 @@ function getCountOfAllWorkshops() {
     return $row['AANTAL'];
 }
 
-function notLoggedIn() {
+function notLoggedIn()
+{
     echo '<h1> U mag deze pagina niet bezoeken</h1>';
     header("refresh:1;url=index.php");
 }
 
+function getOrganisationName($organisationnumber)
+{
+    $conn = connectToDB();
+
+    $sql = "SELECT ORGANISATIENAAM FROM ORGANISATIE WHERE ORGANISATIENUMMER = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $organisationnumber, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $row['ORGANISATIENAAM'];
+}
 
 ?>

@@ -124,31 +124,24 @@ if ($_SESSION['username'] == 'planner') {
                     <ul class="list">
                         <h5><strong>Workshop Opties</strong></h5>
                         <li>
-                            <a href="workshop.php?workshop_id=<?php echo $workshop_id ?>">Details</a>
+                            <a href="workshop.php?workshop_id=<?= $workshop_id ?>">Details</a>
                         </li>
                         <li>
-                            <a href="open_workshop_participants.php?workshop_id=<?php echo $workshop_id ?>">Inzien deelnemers</a>
+                            <a href="open_workshop_participants.php?workshop_id=<?= $workshop_id ?>">Inzien
+                                deelnemers</a>
                         </li>
-                        <?php
-                        if ($workshoptypeget != 'INC') {
-                            echo '<li>';
-                            echo '<a href="open_registrations.php?workshop_id=' . $workshop_id . '">Openstaande inschrijvingen</a>';
-                            echo '</li>';
-                            echo '<li>';
-                            echo '<a href="reservelist.php?workshop_id=' . $workshop_id . '">Reservelijst</a>';
-                            echo '</li>';
-                        }
-                        ?>
                         <li>
-                            <a class="active-page">Wijzig workshop</a>
+                            <a href="open_registrations.php?workshop_id=<?= $workshop_id ?>">Openstaande inschrijvingen</a>
                         </li>
-                        <?php
-                        if ($workshoptypeget == 'INC') {
-                            echo '<li>';
-                            echo '<a href="addparticipant.php?workshop_id=' . $workshop_id . '">Voeg deelnemers toe</a>';
-                            echo '</li>';
-                        }
-                        ?>
+                        <li>
+                            <a href="reservelist.php?workshop_id=<?= $workshop_id ?>">Reservelijst</a>
+                        </li>
+                        <li>
+                            <a class="active-page" >Wijzig workshop</a>
+                        </li>
+<!--                        <li>-->
+<!--                            <a href="addparticipant.php?workshop_id=--><?//= $workshop_id ?><!--">Voeg deelnemers toe</a>-->
+<!--                        </li>-->
                     </ul>
                     <br>
                 </div>
