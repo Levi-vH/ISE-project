@@ -894,11 +894,6 @@ BEGIN
 		SET @volgnummer = 1
 	END
 
-	IF (EXISTS(	SELECT * 
-				FROM DEELNEMER_IN_WORKSHOP
-				WHERE WORKSHOP_ID = @workshop_id
-				AND DEELNEMER_ID = @deelnemer_id))
-
 	SET @sql =	N'
 				INSERT INTO	DEELNEMER_IN_WORKSHOP
 				VALUES		(
