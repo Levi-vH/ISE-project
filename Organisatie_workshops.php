@@ -27,7 +27,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
 
                 //Run the stored procedure
                 $sql = "exec SP_get_workshops @where = ?, @where_column = ?";
-                $where = 'First Center';
+                $where = getOrganisationName($_SESSION['organisation']);
                 $where_column = 'O.ORGANISATIENAAM';
                 $stmt = $conn->prepare($sql);
                 $stmt->bindParam(1, $where, PDO::PARAM_STR);

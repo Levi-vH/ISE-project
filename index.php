@@ -22,6 +22,7 @@ if (!isset($_SESSION['username'])) {?>
 <body>
 <h1 class="text-center">Welcome to ISE-PROJECT SBB</h1>
 <br>
+<?php if ((!isset($_POST['planner'])) && (!isset($_POST['deelnemer'])) && (!isset($_POST['contactpersoon']))){ ?>
 <h3 class="text-center">Login als Planner / Leerbedrijf / Deelnemer</h3>
 <br>
 <div class="container">
@@ -33,7 +34,7 @@ if (!isset($_SESSION['username'])) {?>
         </form>
     </div>
 </div>
-<?php }elseif (isset($_SESSION['username'])) { ?>
+<?php }}elseif (isset($_SESSION['username'])) { ?>
 <div class="container">
     <h3 class="text-center">Je bent ingelogt als <?= $_SESSION['username'] ?></h3>
 </div>
