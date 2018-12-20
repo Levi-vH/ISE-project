@@ -714,40 +714,6 @@ BEGIN
 END
 GO
 
---============================================================================================
--- SP_get_information_of_group: returns the information of a group                                       
---============================================================================================
-/*
-CREATE OR ALTER PROC SP_get_information_of_group
-(
-@request_id INT = NULL
-)
-AS
-BEGIN
-	SET NOCOUNT ON
-	DECLARE @sql NVARCHAR(4000)
-	--SET @sql =	N'
-				SELECT	C.VOORNAAM,
-						C.ACHTERNAAM,
-						G.ADRES,
-						ISNULL(	(
-								SELECT		COUNT(GROEP_ID)
-								FROM		DEELNEMER_IN_AANVRAAG DA
-								WHERE		DA.AANVRAAG_ID = G.AANVRAAG_ID
-								GROUP BY	GROEP_ID
-								), 0) AS AANTAL_DEELNEMERS,
-						G.GROEP_ID
-				FROM	GROEP G INNER JOIN
-						CONTACTPERSOON C ON G.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
-				WHERE	G.AANVRAAG_ID = @request_id
-	--			'
-	EXEC sp_executesql @sql, N'@request_id INT', @request_id
-END
-GO
-*/
-
--- groep meegeven adres naam telefoon contactpersoon aantal modules namen modules
-
 /*==============================================================*/
 /* SP Type: INSERT                                              */
 /*==============================================================*/
@@ -1262,55 +1228,6 @@ BEGIN
 	EXEC sp_executesql @sql,	N'@request_id INT, @type NVARCHAR(3)', @request_id, @type
 END
 GO
-
-/*
-CREATE OR ALTER PROC SP_insert_participant_of_incompany_workshop
-(
-@workshop_id		INT,
-@firstname			NVARCHAR(30),
-@lastname			NVARCHAR(50),
-@birthdate		DATE,
-@email				NVARCHAR(100),
-@phonenumber		NVARCHAR(12),
-@organisationnumber	INT,
-@education	NVARCHAR(100)
-)
-AS
-BEGIN
-	SET NOCOUNT ON
-	INSERT INTO DEELNEMER (VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, ORGANISATIENUMMER, IS_OPEN_INSCHRIJVING)
-		VALUES	(
-				@firstname,
-				@lastname,
-				@birthdate,
-				@email,
-				@phonenumber,
-				@education,
-				@organisationnumber,
-				0
-				)
-
-	DECLARE @participant_id INT = (SELECT DEELNEMER_ID FROM inserted)
-	DECLARE @volgnummer INT
-	IF NOT EXISTS (SELECT * FROM DEELNEMER_IN_WORKSHOP WHERE WORKSHOP_ID = @workshop_id)
-		BEGIN
-			SET @volgnummer = 1
-		END
-	ELSE
-		BEGIN
-			SET @volgnummer = (SELECT TOP 1 VOLGNUMMER FROM DEELNEMER_IN_WORKSHOP WHERE WORKSHOP_ID = @workshop_id ORDER BY VOLGNUMMER DESC) + 1
-		END
-
-	INSERT INTO DEELNEMER_IN_WORKSHOP (WORKSHOP_ID, DEELNEMER_ID, VOLGNUMMER, IS_GOEDGEKEURD)
-		VALUES	(
-				@workshop_id,
-				@participant_id,
-				@volgnummer,
-				1
-				)
-END
-GO
-*/
 
 /*==============================================================*/
 /* SP Type: UPDATE                                              */
