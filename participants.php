@@ -203,7 +203,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
     </body>
     </html>
 <?php } else {
-    echo '<h1> U mag deze pagina niet bezoeken</h1>';
+    notLoggedIn();
 }
 
 

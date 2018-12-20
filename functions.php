@@ -422,5 +422,10 @@ function getCountOfAllWorkshops() {
     return $row['AANTAL'];
 }
 
+function notLoggedIn() {
+    echo '<h1> U mag deze pagina niet bezoeken</h1>';
+    header("refresh:1;url=index.php");
+}
+
 
 ?>

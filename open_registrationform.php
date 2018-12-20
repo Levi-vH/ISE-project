@@ -212,9 +212,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </body>
 <?php
 include 'footer.html';
-
 } else {
-    echo '<h1> Alleen deelnemers kunnen deze pagina bezoeken</h1>';
+    notLoggedIn();
 }
 ?>
 </html>

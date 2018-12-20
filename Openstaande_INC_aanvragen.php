@@ -70,6 +70,6 @@ generate_header('Incompany Aanvragen');
 </body>
 </html>
 <?php } else {
-    echo '<h1> U mag deze pagina niet bezoeken</h1>';
+    notLoggedIn();
 }
 include 'footer.html';

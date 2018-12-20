@@ -69,12 +69,10 @@ if ($_SESSION['username'] == 'planner') {
             <div class="form-group">
                 <label class="control-label col-sm-2 font-weight-bold" for="workshoptype">Type workshop:</label>
                 <div class="col-sm-10">
-                    <select class="form-control" name="workshoptype">
-                        <option>TYPE...</option>
-                        <option>INDIVIDUEEL</option>
-                        <option>LA</option>
-                        <option>COM</option>
-                    </select>
+                    <div class="col-sm-10">
+                        <?php
+                        echo selectBox("workshoptype", "WORKSHOPTYPE", array("type"), "type", array("type"), "type");
+                        ?>
                 </div>
             </div>
             <div class="form-group">
@@ -169,8 +167,6 @@ if ($_SESSION['username'] == 'planner') {
     </body>
     </html>
 <?php } else {
-    echo '<h1> U mag deze pagina niet bezoeken</h1>';
-    header("refresh:1;url=index.php");
-
+    notLoggedIn();
 }
 include 'footer.html';

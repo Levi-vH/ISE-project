@@ -136,7 +136,7 @@ $workshoptype = getWorkshopType($workshop_id);
 </body>
 </html>
 <?php } else {
-    echo '<h1> Alleen planners kunnen deze pagina bezoeken</h1>';
+    notLoggedIn();
 }
 include 'footer.html';
 
