@@ -71,6 +71,89 @@ END
 GO
 
 --============================================================================================
+-- SP_get_workshops: returns all workshops with the filters addes                                              
+--============================================================================================
+
+CREATE OR ALTER PROC SP_get_workshops_filtered
+(
+@workshop_type		 NVARCHAR(6),
+@modulenaam			 NVARCHAR(50),
+@workshopleider_ID	 NVARCHAR(10),
+@company_name		 NVARCHAR(60),
+@firstname			 NVARCHAR(30),
+@lastname			 NVARCHAR(50)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				SELECT		W.WORKSHOP_ID,
+							W.TYPE,W.DATUM,
+							STARTTIJD,
+							EINDTIJD,
+							W.ADRES,
+							W.POSTCODE,
+							W.PLAATSNAAM,
+							W.SECTORNAAM,
+							W.WORKSHOPLEIDER_ID,
+							STATUS,
+							OPMERKING,
+							VERWERKT_BREIN,
+							DEELNEMER_GEGEVENS_ONTVANGEN,
+							OVK_BEVESTIGING,
+							PRESENTIELIJST_VERSTUURD,
+							PRESENTIELIJST_ONTVANGEN,
+							BEWIJS_DEELNAME_MAIL_SBB_WSL,
+							O.ORGANISATIENAAM,
+							M.MODULENAAM,
+							M.MODULENUMMER,
+							WL.VOORNAAM AS WORKSHOPLEIDER_VOORNAAM,
+							WL.ACHTERNAAM AS WORKSHOPLEIDER_ACHTERNAAM,
+							WL.TOEVOEGING,
+							A.VOORNAAM AS ADVISEUR_VOORNAAM,
+							A.ACHTERNAAM AS ADVISEUR_ACHTERNAAM,
+							A.TELEFOONNUMMER AS ADVISEUR_TELEFOON_NUMMER,
+							A.EMAIL AS ADVISEUR_EMAIL,
+							C.CONTACTPERSOON_ID,
+							C.VOORNAAM AS CONTACTPERSOON_VOORNAAM,
+							C.ACHTERNAAM AS CONTACTPERSOON_ACHTERNAAM,
+							C.TELEFOONNUMMER AS CONTACTPERSON_TELEFOONNUMMER,
+							C.EMAIL AS CONTACTPERSOON_EMAIL,
+							ISNULL(	(
+									SELECT	COUNT(*)
+									FROM	DEELNEMER_IN_WORKSHOP
+									WHERE	WORKSHOP_ID = W.WORKSHOP_ID
+									), 0) AS AANTAL_DEELNEMERS,
+							ISNULL(	(
+									SELECT	COUNT(*)
+									FROM	DEELNEMER_IN_WORKSHOP
+									WHERE	WORKSHOP_ID = W.WORKSHOP_ID
+									AND		IS_GOEDGEKEURD = 1
+									), 0) AS AANTAL_GOEDGEKEURDE_DEELNEMERS
+				FROM		WORKSHOP W INNER JOIN
+							ORGANISATIE O ON W.ORGANISATIENUMMER = O.ORGANISATIENUMMER INNER JOIN
+							MODULE M ON W.MODULENUMMER = M.MODULENUMMER LEFT JOIN
+							WORKSHOPLEIDER WL ON W.WORKSHOPLEIDER_ID = WL.WORKSHOPLEIDER_ID INNER JOIN
+							ADVISEUR A ON W.ADVISEUR_ID = A.ADVISEUR_ID INNER JOIN
+							CONTACTPERSOON C ON W.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
+
+							WHERE EXISTS (SELECT * FROM WORKSHOP W
+							INNER JOIN DEELNEMER_IN_WORKSHOP DIW ON DIW.WORKSHOP_ID = W.WORKSHOP_ID
+							INNER JOIN DEELNEMER D ON DIW.DEELNEMER_ID = D.DEELNEMER_ID 
+							WHERE D.VOORNAAM LIKE @firstname AND D.ACHTERNAAM LIKE @lastname)
+							
+							
+				AND		W.TYPE LIKE @workshop_type AND MODULENAAM LIKE @modulenaam AND WL.WORKSHOPLEIDER_ID LIKE @workshopleider_ID
+							AND  O.ORGANISATIENAAM LIKE @company_name'
+
+	EXEC sp_executesql @sql, N'@workshop_type NVARCHAR(6), @modulenaam NVARCHAR(50), @workshopleider_ID NVARCHAR(10), @company_name NVARCHAR(60),
+	 @firstname NVARCHAR(30), @lastname NVARCHAR(50)', @workshop_type, @modulenaam, @workshopleider_ID, @company_name, @firstname, @lastname
+
+END  
+GO
+
+--============================================================================================
 -- SP_get_workshops: returns all workshops with their data for the workshop overview page                                              
 --============================================================================================
 
