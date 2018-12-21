@@ -25,7 +25,10 @@ foreach ($row as $key => $value){
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     if(isset($_POST['Zet_om_naar_workshop'])){
-        $sql8 = "exec "
+        $sql8 = "exec SP_confirm_workshoprequest ?";
+        $stmt8 = $conn->prepare($sql8);
+        $stmt8->bindParam(1,$aanvraag_id, PDO::PARAM_INT);
+        $stmt8->execute();
     };
 
     foreach ($_POST['edit'] as $groep){
@@ -423,7 +426,7 @@ $turnIntoWorkshop = true;
                 }
                 if($_SESSION['username'] == 'planner'){ $group_info .= '<button type="submit" class="btn btn-primary" name="Pas workshops aan">Pas workshops aan</button> &nbsp;';}
 
-                if($turnIntoWorkshop == true){
+                if($turnIntoWorkshop == true && $_SESSION['username'] == 'planner'){
                     $group_info .= '<button type="submit" class="btn btn-primary" name="Zet om naar workshop">Zet om naar workshop</button>';
                 }
 
