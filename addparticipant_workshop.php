@@ -103,8 +103,8 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     </ul>
                 </div>
             </div>
-            <div class="col-md-10 col-sm-8 main-content">
-                <h2 class="text-info text-center">Inschrijven open workshop</h2>
+            <div class="container">
+                <h2 class="text-info text-center">Voeg deelnemer toe aan workshop</h2>
                 <form action="addparticipant_workshop.php?workshop_id=<?= $workshop_id ?>" method="post">
                     <h3>Persoonlijke gegevens</h3>
                     <div class="form-group">

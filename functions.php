@@ -453,4 +453,18 @@ function getOrganisationName($organisationnumber)
     return $row['ORGANISATIENAAM'];
 }
 
+function getWorkshopleaderName($workshopleader_id)
+{
+    $conn = connectToDB();
+
+    $sql = "select voornaam, achternaam from WORKSHOPLEIDER where WORKSHOPLEIDER_ID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $workshopleader_id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $row;
+}
+
 ?>
