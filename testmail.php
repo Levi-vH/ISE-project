@@ -8,5 +8,5 @@ include 'functions.php';
 //https://10minutemail.com/10MinuteMail/index.html
 $firstname = "Jesse";
 $lastname = "van Dijk";
-sendMail("o4796106@nwytg.net", "Testingss", "Beste " . $firstname . " " . $lastname .   ", <br><br> U heeft zich succesvol aangemeld voor de onderstaande workshops: <br> ");
+sendMail("jesse-28@hotmail.com", "Testingss", "Beste " . $firstname . " " . $lastname .   ", <br><br> U heeft zich succesvol aangemeld voor de onderstaande workshops: <br> ");
 ?>
