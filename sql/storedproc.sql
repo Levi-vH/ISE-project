@@ -778,17 +778,16 @@ BEGIN
 			SET @is_open_registration = 0
 		END
 
-	IF NOT EXISTS	( -- Check if there is already an participant in the database with the same email, name and company
+			IF ((@is_open_registration) = 0) AND 
+				 NOT EXISTS	( -- Check if there is already an participant in the database with the same email, name and company
 					SELECT * --		  if there is, don't insert the participant.
 					FROM DEELNEMER
 					WHERE VOORNAAM = @firstname
 					AND ACHTERNAAM = @lastname
 					AND EMAIL = @email
 					AND ORGANISATIENUMMER = @companyNumber
-					AND IS_OPEN_INSCHRIJVING = 1
-					)
-		BEGIN
-			IF (@is_open_registration) = 0
+					AND IS_OPEN_INSCHRIJVING = 0
+				)
 				BEGIN
 					SET @sql =	N'
 								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, IS_OPEN_INSCHRIJVING)
@@ -804,30 +803,8 @@ BEGIN
 										@is_open_registration
 										)
 								'
-				END
-			ELSE
-				BEGIN
-					SET @sql =	N'
-								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, GEWENST_BEGELEIDINGSNIVEAU, SECTORNAAM, FUNCTIENAAM, IS_OPEN_INSCHRIJVING)
-								VALUES	(
-										@companyNumber,
-										@salutation,
-										@firstname,
-										@lastname,
-										@birthdate,
-										@email,
-										@phonenumber,
-										@education,
-										@education_students,
-										@sector,
-										@function,
-										@is_open_registration
-										)
-								'
-				END
-			IF (@is_open_registration) = 1
-				BEGIN
-					EXEC sp_executesql @sql,	N'
+
+								EXEC sp_executesql @sql,	N'
 												@companyNumber			NVARCHAR(15),
 												@salutation				NVARCHAR(7),
 												@firstname				NVARCHAR(30),
@@ -848,9 +825,35 @@ BEGIN
 												@education,
 												@is_open_registration
 				END
-			ELSE
+			ELSE IF ((@is_open_registration) = 1) AND 
+					 NOT EXISTS	( -- Check if there is already an participant in the database with the same email, name and company
+					SELECT * --		  if there is, don't insert the participant.
+					FROM DEELNEMER
+					WHERE VOORNAAM = @firstname
+					AND ACHTERNAAM = @lastname
+					AND EMAIL = @email
+					AND ORGANISATIENUMMER = @companyNumber
+					AND IS_OPEN_INSCHRIJVING = 1
+				)
 				BEGIN
-					EXEC sp_executesql @sql,	N'
+					SET @sql =	N'
+								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, GEWENST_BEGELEIDINGSNIVEAU, SECTORNAAM, FUNCTIENAAM, IS_OPEN_INSCHRIJVING)
+								VALUES	(
+										@companyNumber,
+										@salutation,
+										@firstname,
+										@lastname,
+										@birthdate,
+										@email,
+										@phonenumber,
+										@education,
+										@education_students,
+										@sector,
+										@function,
+										@is_open_registration
+										)
+								'
+								EXEC sp_executesql @sql,	N'
 												@companyNumber			NVARCHAR(15),
 												@salutation				NVARCHAR(7),
 												@firstname				NVARCHAR(30),
@@ -878,19 +881,14 @@ BEGIN
 												@is_open_registration
 				END
 
-			SET @participant_id = (SELECT (IDENT_CURRENT('DEELNEMER'))) -- if the participant just got inserted
-
-		END
-	ELSE
-		BEGIN
 			SET @participant_id =	(
 									SELECT DEELNEMER_ID 
 									FROM DEELNEMER 
 									WHERE VOORNAAM = @firstname
 									AND ACHTERNAAM = @lastname
 									AND EMAIL = @email
-									) -- if the participant already exists
-		END
+									) 
+
 
 	EXEC SP_insert_deelnemer_in_workshop @workshop_id, @participant_id
 END

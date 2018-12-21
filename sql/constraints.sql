@@ -181,7 +181,7 @@ DROP CONSTRAINT IF EXISTS CK_salutation
 GO
 
 ALTER TABLE DEELNEMER
-ADD CONSTRAINT CK_salutation CHECK (AANHEF = 'mevrouw' OR AANHEF = 'meneer')
+ADD CONSTRAINT CK_salutation CHECK (AANHEF = 'Mvr.' OR AANHEF = 'Dhr.')
 GO
 
 --========================================================================================
