@@ -11,19 +11,22 @@
 USE master
 GO
 
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_AANVRAAG]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[AANVRAAG]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER_IN_WORKSHOP]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOP]
-DELETE FROM [SBBWorkshopOmgeving].[dbo].[MODULE]
-DELETE FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[BESCHIKBAARHEID]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPLEIDER]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[ADVISEUR]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[DEELNEMER]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[ORGANISATIE]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[MODULE_VAN_GROEP]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPTYPE]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[GROEP]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[SECTOR]
 DELETE FROM [SBBWorkshopOmgeving].[dbo].[PLANNER]
-DELETE FROM [SBBWorkshopOmgeving].[dbo].[WORKSHOPTYPE]
+DELETE FROM [SBBWorkshopOmgeving].[dbo].[MODULE]
 GO
 
 
