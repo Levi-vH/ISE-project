@@ -1473,6 +1473,7 @@ GO
 -- SP_add_date_and_time_and_workshopleader_to_request_from_group                    
 --===========================================================
 
+
 CREATE OR ALTER PROC SP_add_date_and_time_and_workshopleader_to_request_from_group
 (
 @Groupsnumber INT,
@@ -1490,11 +1491,18 @@ BEGIN
 				UPDATE	MODULE_VAN_GROEP
 				SET		DATUM = @Groep_Module_Date,
 						STARTTIJD = @Groep_Module_Starttime,
-					    EINDTIJD = @Groep_Module_Endtime,
+					    EINDTIJD = @Groep_Module_Endtime'
+				IF(@Groep_Module_workshopleader IS NOT NULL)
+					BEGIN
+					SET @sql = @sql + ',
 						WORKSHOPLEIDER = @Groep_Module_workshopleader
-				WHERE	GROEP_ID = @Groupsnumber
+					'
+					END
+
+		SET @sql = @sql + '	WHERE GROEP_ID = @Groupsnumber
 				AND		MODULENUMMER = @Modulenumber
 				'
+
 	EXEC sp_executesql @sql,	N'@Groupsnumber INT,
 								  @Modulenumber INT,
 								  @Groep_Module_Date DATE,
@@ -1550,6 +1558,36 @@ BEGIN
 END
 GO
 
+--=============================================================================================================================
+-- SP SP_confirm_Workshop_Details: Confirm workshopleader / date on sbb's side or the contactperson's side based on parameters                     
+--=============================================================================================================================
+
+
+CREATE OR ALTER PROC SP_confirm_Workshop_Details
+(
+@detailToConfirm VARCHAR(400),
+@groep_id INT,
+@modulenummer INT
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	DECLARE @column NVARCHAR(60)
+	SET @column = CASE @detailToConfirm
+					WHEN 'dateSBB' THEN 'BEVESTIGING_DATUM_SBB'
+					WHEN 'workshopleader' THEN 'BEVESTIGING_WORKSHOPLEIDER'
+					WHEN 'dateContact' THEN 'BEVESTIGING_DATUM_LEERBEDRIJF'
+				END
+
+	SET @sql =  N'UPDATE MODULE_VAN_GROEP
+					SET ' + @column + ' = 1
+					WHERE GROEP_ID = ' + CAST(@groep_id AS varchar(7)) + '
+					AND MODULENUMMER = ' + CAST(@modulenummer AS varchar(1))
+	EXEC sp_executesql @sql, N'@detailToConfirm VARCHAR(400),@groep_id INT, @modulenummer INT', @detailToConfirm, @groep_id, @modulenummer
+END
+GO
+
 /*==============================================================*/
 /* SP Type: DELETE                                              */
 /*==============================================================*/
@@ -1589,6 +1627,3 @@ BEGIN
 	EXEC sp_executesql @sql, N'@request_id INT, @participant_id INT', @request_id, @participant_id
 END
 GO
-
-select * from DEELNEMER_IN_WORKSHOP WHERE DEELNEMER_ID = 257
-
