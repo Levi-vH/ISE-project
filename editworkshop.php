@@ -123,9 +123,17 @@ if ($_SESSION['username'] == 'planner') {
                 <div class="left-navigation">
                     <ul class="list">
                         <h5><strong>Workshop Opties</strong></h5>
-                        <li>
-                            <a href="workshop.php?workshop_id=<?= $workshop_id ?>">Details</a>
-                        </li>
+                        <?php
+                        if ($_SESSION['username'] == "planner") {
+                            echo '<li>';
+                            echo '<a href="workshop.php?workshop_id='.$workshop_id.'">Details</a>';
+                            echo '</li>';
+                        } elseif($_SESSION['username'] == "contactpersoon") {
+                            echo '<li>';
+                            echo '<a href="Organisatie_workshop_details.php?workshop_id='.$workshop_id.'">Details</a>';
+                            echo '</li>';
+                        }
+                        ?>
                         <li>
                             <a href="open_workshop_participants.php?workshop_id=<?= $workshop_id ?>">Deelnemers</a>
                         </li>
@@ -186,7 +194,7 @@ if ($_SESSION['username'] == 'planner') {
                             <script href="text/javascript">
                                 var sel = document.getElementById("workshopmodule");
                                 var modulenummer;
-                                modulenummer = <?php echo getModuleNummer($workshop_id)?> -1;
+                                modulenummer = <?php echo getModuleNummer($workshop_id)?>;
                                 sel.selectedIndex = modulenummer;
                             </script>
                         </div>

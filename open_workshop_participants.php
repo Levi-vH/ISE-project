@@ -6,7 +6,7 @@ if (!isset($_SESSION)) {
 include 'functions.php';
 generate_header('Deelnemers');
 
-if ($_SESSION['username'] == 'planner') {
+if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactpersoon') {
 
 $workshop_id = $_GET['workshop_id'];
 $workshoptype = getWorkshopType($workshop_id);
@@ -56,9 +56,13 @@ $workshoptype = getWorkshopType($workshop_id);
                     <li>
                         <a href="reservelist.php?workshop_id=<?= $workshop_id ?>">Reservelijst</a>
                     </li>
-                    <li>
-                        <a href="editworkshop.php?workshop_id=<?= $workshop_id ?>">Wijzig workshop</a>
-                    </li>
+                    <?php
+                    if ($_SESSION['username'] == "planner") {
+                        echo '<li>';
+                        echo '<a href="editworkshop.php?workshop_id=' . $workshop_id . '">Wijzig workshop</a>';
+                        echo '</li>';
+                    }
+                    ?>
                     <li>
                         <a href="addparticipant_workshop.php?workshop_id=<?= $workshop_id ?>">Voeg deelnemers toe</a>
                     </li>
@@ -114,7 +118,7 @@ $workshoptype = getWorkshopType($workshop_id);
                         $html .= $row['TELEFOONNUMMER'];
                         $html .= '</td>';
                         $html .= '<td>';
-                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="addparticipant_request.php?workshop_id=' . $workshop_id . '&participant_id=' . $row['DEELNEMER_ID'] . '&deleteUser=true"></a>';
+                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="open_workshop_participants.php?workshop_id=' . $workshop_id . '&participant_id=' . $row['DEELNEMER_ID'] . '&deleteUser=true"></a>';
                         $html .= '</td>';
                         $html .= '</tr>';
 

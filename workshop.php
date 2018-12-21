@@ -53,9 +53,13 @@ if ($row['WORKSHOPLEIDER_ACHTERNAAM'] OR $row['WORKSHOPLEIDER_VOORNAAM']) {
                     <li>
                         <a href="reservelist.php?workshop_id=<?= $workshop_id ?>">Reservelijst</a>
                     </li>
-                    <li>
-                        <a href="editworkshop.php?workshop_id=<?= $workshop_id ?>">Wijzig workshop</a>
-                    </li>
+                    <?php
+                    if ($_SESSION['username'] == "planner") {
+                        echo '<li>';
+                        echo '<a href="editworkshop.php?workshop_id=' . $workshop_id . '">Wijzig workshop</a>';
+                        echo '</li>';
+                    }
+                    ?>
                     <li>
                         <a href="addparticipant_workshop.php?workshop_id=<?= $workshop_id ?>">Voeg deelnemers toe</a>
                     </li>

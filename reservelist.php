@@ -6,7 +6,7 @@ if (!isset($_SESSION)) {
 include 'functions.php';
 generate_header('Reservelijst');
 
-if ($_SESSION['username'] == 'planner') {
+if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactpersoon') {
 
 $workshop_id = $_GET['workshop_id'];
 $workshoptype = getWorkshopType($workshop_id);
@@ -19,9 +19,17 @@ $workshoptype = getWorkshopType($workshop_id);
             <div class="left-navigation">
                 <ul class="list">
                     <h5><strong>Workshop Opties</strong></h5>
-                    <li>
-                        <a href="workshop.php?workshop_id=<?= $workshop_id ?>">Details</a>
-                    </li>
+                    <?php
+                    if ($_SESSION['username'] == "planner") {
+                        echo '<li>';
+                        echo '<a href="workshop.php?workshop_id='.$workshop_id.'">Details</a>';
+                        echo '</li>';
+                    } elseif($_SESSION['username'] == "contactpersoon") {
+                        echo '<li>';
+                        echo '<a href="Organisatie_workshop_details.php?workshop_id='.$workshop_id.'">Details</a>';
+                        echo '</li>';
+                    }
+                    ?>
                     <li>
                         <a href="open_workshop_participants.php?workshop_id=<?= $workshop_id ?>">Deelnemers</a>
                     </li>
@@ -35,9 +43,13 @@ $workshoptype = getWorkshopType($workshop_id);
                     <li>
                         <a class="active-page">Reservelijst</a>
                     </li>
-                    <li>
-                        <a href="editworkshop.php?workshop_id=<?= $workshop_id ?>">Wijzig workshop</a>
-                    </li>
+                    <?php
+                    if ($_SESSION['username'] == "planner") {
+                        echo '<li>';
+                        echo '<a href="editworkshop.php?workshop_id=' . $workshop_id . '">Wijzig workshop</a>';
+                        echo '</li>';
+                    }
+                    ?>
                     <li>
                         <a href="addparticipant_workshop.php?workshop_id=<?= $workshop_id ?>">Voeg deelnemers toe</a>
                     </li>
