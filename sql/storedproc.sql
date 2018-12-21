@@ -1273,6 +1273,10 @@ AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
+	DECLARE @sql1 NVARCHAR(2000)
+	DECLARE @sql2 NVARCHAR(2000)
+	DECLARE @sql3 NVARCHAR(2000)
+	DECLARE @sql4 NVARCHAR(2000)
 	DECLARE @type NVARCHAR(3)
 	
 	IF((SELECT COUNT(GROEP_ID)
@@ -1295,7 +1299,31 @@ BEGIN
 					ON G.GROEP_ID = MG.GROEP_ID
 				WHERE A.AANVRAAG_ID = @request_id
 				'
+
+	SET @sql1 = N'DELETE MVG
+					FROM AANVRAAG A
+					INNER JOIN GROEP G ON G.AANVRAAG_ID = A.AANVRAAG_ID
+					INNER JOIN MODULE_VAN_GROEP MVG ON MVG.GROEP_ID = G.GROEP_ID
+					WHERE A.AANVRAAG_ID = @request_id'
+
+	SET @sql2 = N'DELETE G
+					FROM AANVRAAG A
+					INNER JOIN GROEP G ON G.AANVRAAG_ID = A.AANVRAAG_ID
+					WHERE A.AANVRAAG_ID = @request_id'
+
+	SET @sql3 = N'DELETE A
+					FROM AANVRAAG A
+					WHERE A.AANVRAAG_ID = @request_id'
+
+	SET @sql4 = N'DELETE FROM DEELNEMER_IN_AANVRAAG WHERE AANVRAAG_ID = @request_id'
+
+
 	EXEC sp_executesql @sql,	N'@request_id INT, @type NVARCHAR(3)', @request_id, @type
+	EXEC sp_executesql @sql1,	N'@request_id INT', @request_id
+	EXEC sp_executesql @sql4,	N'@request_id INT', @request_id
+	EXEC sp_executesql @sql2,	N'@request_id INT', @request_id
+	EXEC sp_executesql @sql3,	N'@request_id INT', @request_id
+	
 END
 GO
 
