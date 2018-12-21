@@ -40,7 +40,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                             <a class="active-page">Deelnemers en Groepen</a>
                         </li>
                         <li>
-                            <a href="addparticipant.php?aanvraag_id=<?php echo $aanvraag_id ?>">Deelnemers beheren</a>
+                            <a href="addparticipant_request.php?aanvraag_id=<?php echo $aanvraag_id ?>">Deelnemers beheren</a>
                         </li>
                     </ul>
                     <br>

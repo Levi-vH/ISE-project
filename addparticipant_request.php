@@ -105,7 +105,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $html .= $row['TELEFOONNUMMER'];
                         $html .= '</td>';
                         $html .= '<td>';
-                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="addparticipant.php?aanvraag_id=' . $aanvraag_id . '&participant_id=' . $row['DEELNEMER_ID'] . '&deleteUser=true"></a>';
+                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="addparticipant_request.php?aanvraag_id=' . $aanvraag_id . '&participant_id=' . $row['DEELNEMER_ID'] . '&deleteUser=true"></a>';
                         $html .= '</td>';
                         $html .= '</tr>';
 

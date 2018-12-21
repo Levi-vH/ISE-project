@@ -18,7 +18,7 @@ generate_header('Groepen in aanvraag');
                         <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id?>">Deelnemers en Groepen</a>
                     </li>
                     <li>
-                        <a href="addparticipant.php?aanvraag_id=<?php echo $aanvraag_id?>">Voeg deelnemers toe</a>
+                        <a href="addparticipant_request.php?aanvraag_id=<?php echo $aanvraag_id?>">Voeg deelnemers toe</a>
                     </li>
                 </ul>
                 <br>

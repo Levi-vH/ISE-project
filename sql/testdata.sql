@@ -287,8 +287,8 @@ SELECT	sectorname,
 		organizationnumber,
 		honorific =
 			CASE
-				WHEN randomhonorific = 0 THEN 'meneer'
-				ELSE 'mevrouw'
+				WHEN randomhonorific = 0 THEN 'Dhr.'
+				ELSE 'Mvr.'
 			END,
 		firstname,
 		lastname,

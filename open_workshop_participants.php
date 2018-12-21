@@ -6,7 +6,7 @@ if (!isset($_SESSION)) {
 include 'functions.php';
 generate_header('Deelnemers');
 
-if ($_SESSION['username'] == 'planner') {
+if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactpersoon') {
 
 $workshop_id = $_GET['workshop_id'];
 $workshoptype = getWorkshopType($workshop_id);
@@ -46,19 +46,26 @@ $workshoptype = getWorkshopType($workshop_id);
                     <li>
                         <a class="active-page">Deelnemers</a>
                     </li>
-                    <li>
-                        <a href="open_registrations.php?workshop_id=<?= $workshop_id ?>">Openstaande inschrijvingen</a>
-                    </li>
+                    <?php
+                    if ($workshoptype == "IND") {
+                        echo '<li>';
+                        echo '<a href="open_registrations.php?workshop_id=' . $workshop_id . '">Openstaande inschrijvingen</a>';
+                        echo '</li>';
+                    }
+                    ?>
                     <li>
                         <a href="reservelist.php?workshop_id=<?= $workshop_id ?>">Reservelijst</a>
                     </li>
+                    <?php
+                    if ($_SESSION['username'] == "planner") {
+                        echo '<li>';
+                        echo '<a href="editworkshop.php?workshop_id=' . $workshop_id . '">Wijzig workshop</a>';
+                        echo '</li>';
+                    }
+                    ?>
                     <li>
-                        <a href="editworkshop.php?workshop_id=<?= $workshop_id ?>">Wijzig workshop</a>
+                        <a href="addparticipant_workshop.php?workshop_id=<?= $workshop_id ?>">Voeg deelnemers toe</a>
                     </li>
-                    <!--                    <li>-->
-                    <!--                        <a href="addparticipant.php?workshop_id=-->
-                    <? //= $workshop_id ?><!--">Voeg deelnemers toe</a>-->
-                    <!--                    </li>-->
                 </ul>
                 <br>
             </div>
@@ -69,6 +76,7 @@ $workshoptype = getWorkshopType($workshop_id);
             <div>
                 <table class='table table-striped table-hover'>
                     <tr>
+                        <th>Nummer</th>
                         <th>Naam</th>
                         <th>Geboortedatum</th>
                         <th>Opleidingsniveau</th>
@@ -92,6 +100,9 @@ $workshoptype = getWorkshopType($workshop_id);
                         $html = '';
                         $html .= '<tr>';
                         $html .= '<td>';
+                        $html .= $nummer;
+                        $html .= '</td>';
+                        $html .= '<td>';
                         $html .= $row['VOORNAAM'] . ' ' . $row['ACHTERNAAM'];
                         $html .= '</td>';
                         $html .= '<td>';
@@ -107,7 +118,7 @@ $workshoptype = getWorkshopType($workshop_id);
                         $html .= $row['TELEFOONNUMMER'];
                         $html .= '</td>';
                         $html .= '<td>';
-                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="addparticipant.php?workshop_id=' . $workshop_id . '&participant_id=' . $row['DEELNEMER_ID'] . '&deleteUser=true"></a>';
+                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="open_workshop_participants.php?workshop_id=' . $workshop_id . '&participant_id=' . $row['DEELNEMER_ID'] . '&deleteUser=true"></a>';
                         $html .= '</td>';
                         $html .= '</tr>';
 
