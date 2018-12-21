@@ -5,177 +5,141 @@ if (!isset($_SESSION)) {
 
 include 'functions.php';
 
-if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactpersoon') {
+generate_header('Deelnemer toevoegen');
+
+
+if ($_SESSION['username'] == 'planner') {
+    $error_message = NULL;
 
     $workshop_id = $_GET['workshop_id'];
 
-    $name = $surname = $dateofbirth = $email = $phonenumber = $educational_attainment = '';
-
-    $conn = connectToDB();
-
 // The ones that do not get checked are dropdown or select.
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $name = check_input($_POST["name"]);
-        $surname = check_input($_POST["surname"]);
-        $dateofbirth = ($_POST["dateofbirth"]);
-        $email = check_input($_POST["emailaddress"]);
-        $phonenumber = check_input(@$_POST['phonenumber']);
-        $educational_attainment = check_input(@$_POST['educational_attainment']);
+        $salutation = check_input($_POST["salutationInput"]);
+        $firstname = check_input($_POST["firstnameInput"]);
+        $lastname = check_input($_POST["lastnameInput"]);
+        $birthDate = check_input($_POST["birthDateInput"]);
+        $email = check_input($_POST["emailInput"]);
+        $phonenumber = check_input($_POST["phonenumberInput"]);
+        $educationalAttainment = check_input($_POST["educationalAttainmentInput"]);
+        $educationalAttainmentStudents = check_input($_POST["educationalAttainmentStudentsInput"]);
+        $companyName = check_input($_POST["Organisation_Name"]);
+        $sector = check_input($_POST["sectorInput"]);
+        $companyLocation = check_input($_POST["companyLocationInput"]);
+        $Organisation_name = check_input($_POST["Organisation_Name"]);
+        $functionInCompany = check_input($_POST["functionInCompanyInput"]);
 
-        //Run the stored procedure
-        $sql = "exec SP_insert_deelnemer_in_workshop ?, ?, ?, ?, ?, ?, ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
-        $stmt->bindParam(2, $name, PDO::PARAM_STR);
-        $stmt->bindParam(3, $surname, PDO::PARAM_STR);
-        $stmt->bindParam(4, $dateofbirth, PDO::PARAM_STR);
-        $stmt->bindParam(5, $email, PDO::PARAM_STR);
-        $stmt->bindParam(6, $phonenumber, PDO::PARAM_STR);
-        $stmt->bindParam(7, $educational_attainment, PDO::PARAM_STR);
-        $stmt->execute();
+//        if (isset($salutation) && isset($firstname) && isset($lastname) && isset($birthDate) && isset($email) && isset($phonenumber) && isset($educationalAttainment)
+//            && isset($educationalAttainmentStudents) && isset($companyName) && isset($sector) && isset($companyLocation) && isset($Organisation_name) && isset($functionInCompany)) {
+//
+        $conn = connectToDB();
+
+        $sqlInsertDeelnemer = "SP_insert_participant_in_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+        $stmtInsertDeelnemer = $conn->prepare($sqlInsertDeelnemer);
+        $stmtInsertDeelnemer->bindParam(1, $Organisation_name, PDO::PARAM_INT);
+        $stmtInsertDeelnemer->bindParam(2, $salutation, PDO::PARAM_INT);
+        $stmtInsertDeelnemer->bindParam(3, $firstname, PDO::PARAM_INT);
+        $stmtInsertDeelnemer->bindParam(4, $lastname, PDO::PARAM_INT);
+        $stmtInsertDeelnemer->bindParam(5, $birthDate, PDO::PARAM_INT);
+        $stmtInsertDeelnemer->bindParam(6, $email, PDO::PARAM_INT);
+        $stmtInsertDeelnemer->bindParam(7, $phonenumber, PDO::PARAM_INT);
+        $stmtInsertDeelnemer->bindParam(8, $educationalAttainment, PDO::PARAM_INT);
+        $stmtInsertDeelnemer->bindParam(9, $educationalAttainmentStudents, PDO::PARAM_INT);
+        $stmtInsertDeelnemer->bindParam(10, $sector, PDO::PARAM_INT);
+        $stmtInsertDeelnemer->bindParam(11, $functionInCompany, PDO::PARAM_INT);
+        $stmtInsertDeelnemer->bindParam(12, $workshop_id, PDO::PARAM_INT);
+        $stmtInsertDeelnemer->execute();
+
+        pre_r($_POST);
+//              }
+//    } else {
+//        $error_message .= "U heeft een veld niet ingevoerd, ieder veld is verplicht.";
+//    }
     }
 
-    generate_header('Deelnemers toevoegen');
-
-    $group = getFirstGroup($aanvraag_id);
     ?>
-    <html lang="en">
+
     <body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-2 col-sm-4 sidebar1">
-                <div class="left-navigation">
-                    <ul class="list">
-                        <h5><strong>Workshop Opties</strong></h5>
-                        <li>
-                            <a href="workshop.php?workshop_id=<?= $workshop_id ?>">Details</a>
-                        </li>
-                        <li>
-                            <a href="open_workshop_participants.php?workshop_id=<?= $workshop_id ?>">Deelnemers</a>
-                        </li>
-                        <li>
-                            <a href="open_registrations.php?workshop_id=<?= $workshop_id ?>">Openstaande inschrijvingen</a>
-                        </li>
-                        <li>
-                            <a href="reservelist.php?workshop_id=<?= $workshop_id ?>">Reservelijst</a>
-                        </li>
-                        <li>
-                            <a href="editworkshop.php?workshop_id=<?= $workshop_id ?>" >Wijzig workshop</a>
-                        </li>
-                        <li>
-                            <a class="active-page">Voeg deelnemers toe</a>
-                        </li>
-                    </ul>
+    <div class="container">
+        <h2 class="text-info text-center">Inschrijven open workshop</h2>
+        <form action="addparticipant_workshop.php?workshop_id=<?= $workshop_id ?>" method="post">
+            <h3>Persoonlijke gegevens</h3>
+            <div class="form-group">
+                <label for="salutationInput">Aanhef</label>
+                <label class="radio-inline"><input type="radio" name="salutationInput" value="Dhr." checked>Dhr.</label>
+                <label class="radio-inline"><input type="radio" name="salutationInput" value="Mvr.">Mvr.</label>
+            </div>
+            <div class="form-group">
+                <label for="firstnameInput">Voornaam</label>
+                <input name="firstnameInput" type="text" class="form-control" id="firstnameInput" placeholder="Voornaam"
+                       required>
+            </div>
+            <div class="form-group">
+                <label for="lastnameInput">Achternaam</label>
+                <input name="lastnameInput" type="text" class="form-control" id="lastnameInput" placeholder="Achternaam"
+                       required>
+            </div>
+            <div class="form-group">
+                <label for="birthDateInput">Geboortedatum</label>
+                <input name="birthDateInput" type="date" class="form-control" id="birthDateInput"
+                       placeholder="Geboortedatum" required>
+            </div>
+            <div class="form-group">
+                <label for="emailInput">Email</label>
+                <input name="emailInput" type="text" class="form-control" id="emailInput" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <label for="phonenumberInput">Telefoonnummer</label>
+                <input name="phonenumberInput" type="text" class="form-control" id="phonenumberInputInput"
+                       placeholder="Telefoonnummer" required>
+            </div>
+            <div class="form-group">
+                <label for="educationalAttainmentInput">Opleidingsniveau</label>
+                <input name="educationalAttainmentInput" type="text" class="form-control"
+                       id="educationalAttainmentInput"
+                       placeholder="Opleidingsniveau" required>
+            </div>
+            <div class="form-group">
+                <label for="educationalAttainmentStudentsInput">Niveau begeleide studenten</label>
+                <input name="educationalAttainmentStudentsInput" type="text" class="form-control"
+                       id="educationalAttainmentStudentsInput" placeholder="Niveau Begeleide Studenten" required>
+            </div>
+            <br>
+            <h3>Gegevens bedrijf</h3>
+            <div class="form-group">
+                <label for="Organisation_Name">Naam Organisatie:</label>
+                <?php
+                echo selectBox("Organisation_Name", "Organisatie", array("Organisatienaam"), "Organisatienaam", array("Organisatienaam"), "Organisatienaam", "get_organisatie()");
+                ?>
+            </div>
+
+            <div class="form-group">
+                <label for="sectorInput">Sector</label>
+                <?php
+                echo selectBox("sectorInput", "Sector", array("Sectornaam"), "Sectornaam", array("Sectornaam"), "Sectornaam");
+                ?>
+            </div>
+            <div class="form-group">
+                <label for="companyLocationInput">Vestigingplaats</label>
+                <input name="companyLocationInput" type="text" class="form-control" id="companyLocationInput"
+                       placeholder="Vestigingplaats" required>
+            </div>
+            <div class="form-group">
+                <label for="functionInCompanyInput">Functie in bedrijf</label>
+                <input name="functionInCompanyInput" type="text" class="form-control" id="functionInCompanyInput"
+                       placeholder="Functie in bedrijf" required>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-5 col-sm-10">
+                    <button type="submit" class="btn btn-success btn-lg">Maak deelnemer</button>
                 </div>
             </div>
-            <div class="col-md-10 col-sm-8 main-content">
-                <h1>Deelnemers</h1>
-                <table class='table table-striped table-hover'>
-                    <tr>
-                        <th>Naam</th>
-                        <th>Geboortedatum</th>
-                        <th>Opleidingsniveau</th>
-                        <th>Groep</th>
-                        <th>Email</th>
-                        <th>Telefoonnummer</th>
-                        <th>Verwijderen</th>
-                    </tr>
-                    <?php
-
-                    //Run the stored procedure
-                    $sql = "exec SP_get_participants_of_workshoprequest ?";
-                    $stmt = $conn->prepare($sql);
-                    $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
-                    $stmt->execute();
-
-                    $nummer = 0;
-
-                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        $nummer++;
-                        $html = '';
-                        $html .= '<tr>';
-                        $html .= '<td>';
-                        $html .= $row['VOORNAAM'] . ' ' . $row['ACHTERNAAM'];
-                        $html .= '</td>';
-                        $html .= '<td>';
-                        $html .= $row['GEBOORTEDATUM'];
-                        $html .= '</td>';
-                        $html .= '<td>';
-                        $html .= $row['OPLEIDINGSNIVEAU'];
-                        $html .= '</td>';
-                        $html .= '<td>';
-                        $html .= getRightGroepsNummer($row['GROEP_ID']);
-                        $html .= '</td>';
-                        $html .= '<td>';
-                        $html .= $row['EMAIL'];
-                        $html .= '</td>';
-                        $html .= '<td>';
-                        $html .= $row['TELEFOONNUMMER'];
-                        $html .= '</td>';
-                        $html .= '<td>';
-                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="addparticipant.php?aanvraag_id=' . $aanvraag_id . '&participant_id=' . $row['DEELNEMER_ID'] . '&deleteUser=true"></a>';
-                        $html .= '</td>';
-                        $html .= '</tr>';
-
-                        echo $html;
-
-                    }
-                    if (isset($_GET['deleteUser'])) {
-                        deleteUserAanvraag($aanvraag_id, $_GET['participant_id']);
-                        updatePage($_SERVER['PHP_SELF'] . '?aanvraag_id=' . $aanvraag_id);
-                    }
-
-                    ?>
-                </table>
-                <h1 class="headcenter">Voeg deelnemers toe</h1>
-                <div>
-                    <form action="?aanvraag_id=<?= $aanvraag_id ?>" method="post">
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="name">Voornaam</label>
-                                <input type="text" class="form-control" placeholder="Voornaam" name="name" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="surname">Achternaam</label>
-                                <input type="text" class="form-control" placeholder="Achternaam" name="surname"
-                                       required>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="dateofbirth">Geboortedatum</label>
-                                <input type="date" class="form-control" placeholder="Geboortedatum" name="dateofbirth"
-                                       required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="dateofbirth">Opleidingsniveau</label>
-                                <input type="text" class="form-control" placeholder="Opleidingsniveau"
-                                       name="educational_attainment" required>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="phonenumber">Telefoonnummer</label>
-                                <input type="number" class="form-control" placeholder="Telefoonnummer"
-                                       name="phonenumber" max="999999999999" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="emailaddress">Emailadres</label>
-                                <input type="email" class="form-control" placeholder="Emailadres" name="emailaddress"
-                                       required>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Maak nieuwe deelnemer</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
     </body>
-    </html>
-<?php } else {
+    <?php
+    include 'footer.html';
+} else {
     notLoggedIn();
 }
-include 'footer.html';
-
-
+?>

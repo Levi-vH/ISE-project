@@ -180,7 +180,7 @@ function deleteUserWorkshop($workshop_id, $participant_id)
     $conn = connectToDB();
 
     //Run the stored procedure
-    $sql = "exec SP_disapprove_workshop_participant ?, ?";
+    $sql = "exec SP_disapprove_participant_of_workshop ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);
@@ -204,7 +204,7 @@ function addUser($workshop_id, $participant_id)
     $conn = connectToDB();
 
     //Run the stored procedure
-    $sql = "exec SP_approve_workshop_participant ?, ?";
+    $sql = "exec SP_approve_participant_of_workshop ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);

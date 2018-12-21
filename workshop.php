@@ -43,9 +43,13 @@ if ($row['WORKSHOPLEIDER_ACHTERNAAM'] OR $row['WORKSHOPLEIDER_VOORNAAM']) {
                     <li>
                         <a href="open_workshop_participants.php?workshop_id=<?= $workshop_id ?>">Deelnemers</a>
                     </li>
-                    <li>
-                        <a href="open_registrations.php?workshop_id=<?= $workshop_id ?>">Openstaande inschrijvingen</a>
-                    </li>
+                    <?php
+                    if ($workshoptype == "IND") {
+                        echo '<li>';
+                        echo '<a href="open_registrations.php?workshop_id=' . $workshop_id . '">Openstaande inschrijvingen</a>';
+                        echo '</li>';
+                    }
+                    ?>
                     <li>
                         <a href="reservelist.php?workshop_id=<?= $workshop_id ?>">Reservelijst</a>
                     </li>
@@ -53,7 +57,7 @@ if ($row['WORKSHOPLEIDER_ACHTERNAAM'] OR $row['WORKSHOPLEIDER_VOORNAAM']) {
                         <a href="editworkshop.php?workshop_id=<?= $workshop_id ?>">Wijzig workshop</a>
                     </li>
                     <li>
-                        <a href="addparticipant.php?workshop_id=<?= $workshop_id ?>">Voeg deelnemers toe</a>
+                        <a href="addparticipant_workshop.php?workshop_id=<?= $workshop_id ?>">Voeg deelnemers toe</a>
                     </li>
                 </ul>
             </div>

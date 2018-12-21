@@ -25,18 +25,22 @@ $workshoptype = getWorkshopType($workshop_id);
                     <li>
                         <a href="open_workshop_participants.php?workshop_id=<?= $workshop_id ?>">Deelnemers</a>
                     </li>
-                    <li>
-                        <a href="open_registrations.php?workshop_id=<?= $workshop_id ?>">Openstaande inschrijvingen</a>
-                    </li>
+                    <?php
+                    if ($workshoptype == "IND") {
+                        echo '<li>';
+                        echo '<a href="open_registrations.php?workshop_id=' . $workshop_id . '">Openstaande inschrijvingen</a>';
+                        echo '</li>';
+                    }
+                    ?>
                     <li>
                         <a class="active-page">Reservelijst</a>
                     </li>
                     <li>
                         <a href="editworkshop.php?workshop_id=<?= $workshop_id ?>">Wijzig workshop</a>
                     </li>
-<!--                    <li>-->
-<!--                        <a href="addparticipant.php?workshop_id=--><?//= $workshop_id ?><!--">Voeg deelnemers toe</a>-->
-<!--                    </li>-->
+                    <li>
+                        <a href="addparticipant_workshop.php?workshop_id=<?= $workshop_id ?>">Voeg deelnemers toe</a>
+                    </li>
                 </ul>
                 <br>
             </div>

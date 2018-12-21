@@ -1571,3 +1571,6 @@ BEGIN
 	EXEC sp_executesql @sql, N'@request_id INT, @participant_id INT', @request_id, @participant_id
 END
 GO
+
+select * from DEELNEMER_IN_WORKSHOP WHERE DEELNEMER_ID = 257
+
