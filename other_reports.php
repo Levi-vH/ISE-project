@@ -37,22 +37,26 @@ generate_header('Workshop overzicht voor sector');
         </div>
         <div class="container">
             <form method="POST">
-                <label>Type uw sector in</label>
-                <input type="text" name="sector" required/>
+                <label>Selecteer een sector</label>
+                <?php
+                echo selectBox("workshopsector", "sector", array("sectornaam"), "sectornaam", array("sectornaam"), "sectornaam");
+                ?>
                 <button type="submit">Submit</button>
             </form>
             <form method="POST">
-                <label>Type een workshopleider in</label>
-                <input type="text" name="workshopleader"/>
+                <label>Selecteer een workshopleider</label>
+                <?php
+                echo selectBox("workshopleader", "workshopleider", array("achternaam", "voornaam", "workshopleider_id"), "workshopleider_id", array("achternaam", "voornaam"), "achternaam, voornaam");
+                ?>
                 <button type="submit">Submit</button>
             </form>
             <?php
-            if (isset($_POST['sector'])) {
-                $sectorname = $_POST["sector"];
+            if (isset($_POST['workshopsector'])) {
+                $sectorname = $_POST["workshopsector"];
                 echo '<p>Aantal workshops voor sector <b>' . strtoupper($sectorname) . '</b>: <i>' . getCountOfWorkshopsForSector($sectorname) . '</i> van de '.getCountOfAllWorkshops().'</p>';
             } elseif (isset($_POST['workshopleader'])) {
                 $workshopleader = $_POST['workshopleader'];
-                echo '<p>Aantal workshops van workshopleider ' . $workshopleader . ': ' . getCountOfWorkshopsForWorkshopLeader($workshopleader) . '</p>';
+                echo '<p>Aantal workshops van workshopleider <b>' . getWorkshopleaderName($workshopleader)['voornaam'] . " " . getWorkshopleaderName($workshopleader)['achternaam'].'</b>: ' . getCountOfWorkshopsForWorkshopLeader($workshopleader) . '</p>';
 
             }
             ?>

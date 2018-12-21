@@ -157,7 +157,6 @@ if ($_SESSION['username'] == 'planner') {
                     <br>
                 </div>
             </div>
-
             <div class="container">
                 <h2 class="text-info text-center">Wijzig workshop <?php echo $workshop_id ?></h2>
                 <form class="form-horizontal" action="editworkshop.php?workshop_id=<?php echo $workshop_id ?>" method="post">

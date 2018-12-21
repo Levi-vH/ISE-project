@@ -88,6 +88,11 @@ generate_header('Workshop overzicht voor sector');
                 </script>
                 <div id="chartContainer" style="height: 370px; width: 100%; float: left;"></div>
                 <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+                <?php
+                for($i = -1; $i < sizeof(getCountOfTypeWorkshops(), $i++);) {
+                    echo '<p class="alert-heading"> Aantal '.getCountOfTypeWorkshops()[$i]['TYPE'].' workshops: '.getCountOfTypeWorkshops()[$i]['AANTAL'];
+                }
+                ?>
             </div>
         </div>
     </div>

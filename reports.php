@@ -54,9 +54,6 @@ generate_header('Workshop overzicht voor sector');
                     <ul class="list-group">
                         <li class="list-group-item-action">Totaal aantal workshops: <?= getCountOfAllWorkshops() ?> </li>
                         <li class="list-group-item-action">Totaal aantal geannuleerde workshops: <?= getCountOfCancelledWorkshops() ?></li>
-                        <li class="list-group-item-action">Totaal aantal workshops:</li>
-                        <li class="list-group-item-action">Totaal aantal workshops:</li>
-                        <li class="list-group-item-action">Totaal aantal workshops:</li>
                     </ul>
                 </div>
             </div>
