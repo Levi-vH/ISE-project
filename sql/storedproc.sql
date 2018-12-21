@@ -83,6 +83,7 @@ BEGIN
 				+ '' tot '' + CAST(FORMAT(EINDTIJD, N''hh\:mm'') AS VARCHAR(20)) + '' in '' + CAST(PLAATSNAAM AS VARCHAR(60))) AS waar_en_wanneer
 				FROM WORKSHOP
 				WHERE MODULENUMMER = @modulenummer
+				AND TYPE = ''IND''
 				ORDER BY DATUM, STARTTIJD
 				'
 	 EXEC sp_executesql @sql, N'@modulenummer INT', @modulenummer
@@ -743,7 +744,7 @@ GO
 
 CREATE OR ALTER PROC SP_insert_participant_in_workshop
 (
-@companyName			NVARCHAR(60),
+@companyNumber			NVARCHAR(15),
 @salutation				NVARCHAR(7),
 @firstname				NVARCHAR(30),
 @lastname				NVARCHAR(50),
@@ -768,7 +769,7 @@ BEGIN
 	DECLARE @participant_id INT
 	DECLARE @organisationnumber NVARCHAR(15)
 
-	IF (SELECT [TYPE] FROM WORKSHOP WHERE WORKSHOP_ID = @workshop_id) = 'IND'
+	IF ((SELECT [TYPE] FROM WORKSHOP WHERE WORKSHOP_ID = @workshop_id) = 'IND')
 		BEGIN
 			SET @is_open_registration = 1
 		END
@@ -777,14 +778,14 @@ BEGIN
 			SET @is_open_registration = 0
 		END
 
-	SET @organisationnumber = (SELECT ORGANISATIENUMMER FROM ORGANISATIE WHERE ORGANISATIENAAM = @companyName)
 	IF NOT EXISTS	( -- Check if there is already an participant in the database with the same email, name and company
 					SELECT * --		  if there is, don't insert the participant.
 					FROM DEELNEMER
 					WHERE VOORNAAM = @firstname
 					AND ACHTERNAAM = @lastname
 					AND EMAIL = @email
-					AND ORGANISATIENUMMER = @organisationnumber
+					AND ORGANISATIENUMMER = @companyNumber
+					AND IS_OPEN_INSCHRIJVING = 1
 					)
 		BEGIN
 			IF (@is_open_registration) = 0
@@ -792,7 +793,7 @@ BEGIN
 					SET @sql =	N'
 								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, IS_OPEN_INSCHRIJVING)
 								VALUES	(
-										@organisationnumber,
+										@companyNumber,
 										@salutation,
 										@firstname,
 										@lastname,
@@ -809,7 +810,7 @@ BEGIN
 					SET @sql =	N'
 								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, GEWENST_BEGELEIDINGSNIVEAU, SECTORNAAM, FUNCTIENAAM, IS_OPEN_INSCHRIJVING)
 								VALUES	(
-										@organisationnumber,
+										@companyNumber,
 										@salutation,
 										@firstname,
 										@lastname,
@@ -824,10 +825,10 @@ BEGIN
 										)
 								'
 				END
-			IF (@is_open_registration) = 0
+			IF (@is_open_registration) = 1
 				BEGIN
 					EXEC sp_executesql @sql,	N'
-												@organisationnumber			NVARCHAR(15),
+												@companyNumber			NVARCHAR(15),
 												@salutation				NVARCHAR(7),
 												@firstname				NVARCHAR(30),
 												@lastname				NVARCHAR(50),
@@ -837,7 +838,7 @@ BEGIN
 												@education				NVARCHAR(100),
 												@is_open_registration   BIT
 												',
-												@companyName,
+												@companyNumber,
 												@salutation,	
 												@firstname,	
 												@lastname,	
@@ -850,7 +851,7 @@ BEGIN
 			ELSE
 				BEGIN
 					EXEC sp_executesql @sql,	N'
-												@companyName			NVARCHAR(60),
+												@companyNumber			NVARCHAR(15),
 												@salutation				NVARCHAR(7),
 												@firstname				NVARCHAR(30),
 												@lastname				NVARCHAR(50),
@@ -863,7 +864,7 @@ BEGIN
 												@function				NVARCHAR(50),
 												@is_open_registration   BIT
 												',
-												@companyName,
+												@companyNumber,
 												@salutation,	
 												@firstname,	
 												@lastname,	
