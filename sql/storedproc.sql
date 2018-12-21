@@ -885,8 +885,10 @@ BEGIN
 									SELECT DEELNEMER_ID 
 									FROM DEELNEMER 
 									WHERE VOORNAAM = @firstname
-									AND ACHTERNAAM = @lastname
-									AND EMAIL = @email
+											AND ACHTERNAAM = @lastname
+											AND EMAIL = @email
+											AND ORGANISATIENUMMER = @companyNumber
+											AND IS_OPEN_INSCHRIJVING = @is_open_registration
 									) 
 
 
@@ -907,35 +909,37 @@ CREATE OR ALTER PROC SP_insert_deelnemer_in_workshop
 AS
 BEGIN
 	SET NOCOUNT ON
-
-	-- Create a deelnemer based on the given parameters
-
-	DECLARE @sql NVARCHAR(4000)
-	DECLARE @volgnummer INT = (SELECT MAX(VOLGNUMMER + 1) FROM DEELNEMER_IN_WORKSHOP WHERE workshop_id = @workshop_id)
-
-	IF @volgnummer IS NULL
-	BEGIN
-		SET @volgnummer = 1
-	END
-
-	SET @sql =	N'
-				INSERT INTO	DEELNEMER_IN_WORKSHOP
-				VALUES		(
-							@workshop_id,
-							@deelnemer_id,
-							@volgnummer,
-							0
-							)
-				'
-	EXEC sp_executesql @sql,	N'
-								@workshop_id	INT,
-								@deelnemer_id	INT,
-								@volgnummer		INT 
-								',
+	IF NOT EXISTS (SELECT * FROM DEELNEMER_IN_WORKSHOP WHERE DEELNEMER_ID = @deelnemer_id AND WORKSHOP_ID = @workshop_id)
+		BEGIN
+		-- Create a deelnemer based on the given parameters
+	
+		DECLARE @sql NVARCHAR(4000)
+		DECLARE @volgnummer INT = (SELECT MAX(VOLGNUMMER + 1) FROM DEELNEMER_IN_WORKSHOP WHERE workshop_id = @workshop_id)
+	
+		IF @volgnummer IS NULL
+		BEGIN
+			SET @volgnummer = 1
+		END
+	
+		SET @sql =	N'
+					INSERT INTO	DEELNEMER_IN_WORKSHOP
+					VALUES		(
 								@workshop_id,
 								@deelnemer_id,
-								@volgnummer
-
+								@volgnummer,
+								0
+								)
+					'
+		EXEC sp_executesql @sql,	N'
+									@workshop_id	INT,
+									@deelnemer_id	INT,
+									@volgnummer		INT 
+									',
+									@workshop_id,
+									@deelnemer_id,
+									@volgnummer
+	
+	END
 END
 GO
 

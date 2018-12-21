@@ -48,16 +48,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $Organisation_name = check_input($_POST["Organisation_Name"]);
     $functionInCompany = check_input($_POST["functionInCompanyInput"]);
 
-    pre_r($_POST);
 
     if(isset($salutation) && isset($firstname) && isset($lastname) && isset($birthDate) && isset($email) && isset($phonenumber) && isset($educationalAttainment)
         && isset($educationalAttainmentStudents) && isset($companyName) && isset($sector) && isset($companyLocation) && isset($Organisation_name) && isset($functionInCompany)) {
 
         foreach($_POST['post'] as $workshop){
 
-pre_r($workshop);
+//pre_r($workshop);
         if (isset($workshop['Module'])) {
-            pre_r ($workshop['Workshop']);
+//            pre_r ($workshop['Workshop']);
                 $sqlInsertDeelnemer = "exec SP_insert_participant_in_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
                 $stmtInsertDeelnemer = $conn->prepare($sqlInsertDeelnemer);
                 $stmtInsertDeelnemer->bindParam(1, $Organisation_name, PDO::PARAM_INT);
@@ -66,21 +65,20 @@ pre_r($workshop);
                 $stmtInsertDeelnemer->bindParam(4, $lastname, PDO::PARAM_STR);
                 $stmtInsertDeelnemer->bindParam(5, $birthDate, PDO::PARAM_STR);
                 $stmtInsertDeelnemer->bindParam(6, $email, PDO::PARAM_STR);
-                $stmtInsertDeelnemer->bindParam(7, $phonenumber, PDO::PARAM_INT);
+                $stmtInsertDeelnemer->bindParam(7, $phonenumber, PDO::PARAM_STR);
                 $stmtInsertDeelnemer->bindParam(8, $educationalAttainment, PDO::PARAM_STR);
                 $stmtInsertDeelnemer->bindParam(9, $educationalAttainmentStudents, PDO::PARAM_STR);
                 $stmtInsertDeelnemer->bindParam(10, $sector, PDO::PARAM_STR);
                 $stmtInsertDeelnemer->bindParam(11, $functionInCompany, PDO::PARAM_STR);
                 $stmtInsertDeelnemer->bindParam(12, $workshop['Workshop'], PDO::PARAM_INT);
-
                 $stmtInsertDeelnemer->execute();
-                $error_message .= "Uw staat nu aangemeld voor de workshops bekijk uw mail voor meer informatie";
-//            sendMail($email, "Ingeschreven voor workshop", "Beste " . $firstname . " " . $lastname .   ", <br><br> U heeft zich succesvol aangemeld voor de onderstaande workshops: <br> ");
             }
         }
     } else {
         $error_message .= "U heeft een veld niet ingevoerd, ieder veld is verplicht.";
     }
+    sendMail("jesse-28@hotmail.com", "Ingeschreven voor workshop", "Beste " . $firstname . " " . $lastname .   ", <br><br> U heeft zich succesvol aangemeld voor de onderstaande workshops: <br>" .  $workshop['Module'] . " ");
+    $error_message .= "Uw staat nu aangemeld voor de workshops bekijk uw mail voor meer informatie";
 }
 
 ?>
