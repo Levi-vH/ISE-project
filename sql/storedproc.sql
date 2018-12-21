@@ -26,10 +26,29 @@
 
    Modifications made by Mark:
 		procedures made:
-		-
+		-SP_get_row_numbers_of_group_ids
+		-SP_get_groups
+		-SP_get_list_of_approved_workshop_participants
+		-SP_get_reservelist_of_approved_workshop_participants
+		-SP_get_list_of_to_approve_workshop_participants
+		-SP_get_participants_of_workshoprequest
+		-SP_get_participants_of_workshoprequest_without_group
+		-SP_get_participants_of_group
+		-SP_insert_deelnemer_in_workshop
+		-SP_insert_participant_of_workshop
+		-SP_insert_workshoprequest
+		-SP_insert_participant_of_workshoprequest
+		-SP_approve_participant_of_workshop
+		-SP_add_participant_to_group
+		-SP_remove_participant_from_group
+		-SP_disapprove_participant_of_workshop
+		-SP_remove_participant_from_workshoprequest
 
 		procedures modified:
-		-
+		-SP_get_workshops
+		-SP_get_workshoprequests
+		-SP_insert_participant_in_workshop
+		-SP_insert_group_of_workshoprequest
    ==================================================================== */
 
 USE SBBWorkshopOmgeving
