@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $error_message .= "U heeft een veld niet ingevoerd, ieder veld is verplicht.";
     }
-    sendMail("jesse-28@hotmail.com", "Ingeschreven voor workshop", "Beste " . $firstname . " " . $lastname .   ", <br><br> U heeft zich succesvol aangemeld voor de onderstaande workshops: <br>" .  $workshop['Module'] . " ");
+    sendMail("$email", "Ingeschreven voor workshop(s)", "Beste " . $firstname . " " . $lastname .   ", <br><br> U heeft zich succesvol aangemeld voor de onderstaande workshop(s): <br><br> Module 1: (modulenaam) 'waar en wanneer' <br> Module 2: (modulenaam) 'waar en wanneer' <br> Module 3: (modulenaam) 'waar en wanneer' <br><br> Wilt alle informatie van de workshops nog eens bekijken of wilt u zich afmelden voor een workshop? <br> Log dan in op de Site met de volgende code: (generated code)<br><br> Met vriendelijk groet, <br> Het SBB Team");
     $error_message .= "Uw staat nu aangemeld voor de workshops bekijk uw mail voor meer informatie";
 }
 
