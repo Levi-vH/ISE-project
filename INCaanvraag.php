@@ -25,10 +25,18 @@ foreach ($row as $key => $value){
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     if(isset($_POST['Zet_om_naar_workshop'])){
-        $sql8 = "exec SP_confirm_workshoprequest ?";
-        $stmt8 = $conn->prepare($sql8);
-        $stmt8->bindParam(1,$aanvraag_id, PDO::PARAM_INT);
-        $stmt8->execute();
+        foreach($_POST['edit'] as $groep){
+            foreach($groep as $module){
+                pre_r($module);
+
+                $sql8 = "EXEC SP_confirm_workshoprequest ?, ?, ?";
+                $stmt8 = $conn->prepare($sql8);
+                $stmt8->bindParam(1,$aanvraag_id, PDO::PARAM_INT);
+                $stmt8->bindParam(2,$module['GROEP_ID'], PDO::PARAM_INT);
+                $stmt8->bindParam(3,$module['MODULENUMMER'],PDO::PARAM_INT);
+                $stmt8->execute();
+            }
+        }
     };
 
     foreach ($_POST['edit'] as $groep){
