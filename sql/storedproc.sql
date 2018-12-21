@@ -1310,7 +1310,8 @@ BEGIN
 				AND		MG.MODULENUMMER = @modulenumber
 				'
 
-	DECLARE @workshop_id INT = (SELECT IDENT_CURRENT('WORKSHOP'))
+	DECLARE @workshop_id INT 
+	SET @workshop_id = (SELECT IDENT_CURRENT('WORKSHOP'))
 
 	SET @sql5 =	N'
 				INSERT INTO DEELNEMER_IN_WORKSHOP (WORKSHOP_ID, DEELNEMER_ID, VOLGNUMMER, IS_GOEDGEKEURD)
@@ -1343,8 +1344,8 @@ BEGIN
 	*/
 
 
-	EXEC sp_executesql @sql,	N'@request_id INT, @type NVARCHAR(3)', @request_id, @type
-	EXEC sp_executesql @sql5,	N'@request_id INT, @group_id INT, @modulenumber INT', @request_id, @group_id, @modulenumber
+	EXEC sp_executesql @sql,	N'@request_id INT, @type NVARCHAR(3), @group_id INT, @modulenumber INT', @request_id, @type, @group_id, @modulenumber
+	EXEC sp_executesql @sql5,	N'@request_id INT, @group_id INT, @modulenumber INT, @workshop_id INT', @request_id, @group_id, @modulenumber, @workshop_id
 	EXEC sp_executesql @sql1,	N'@request_id INT, @group_id INT, @modulenumber INT', @request_id, @group_id, @modulenumber
 	/*
 	EXEC sp_executesql @sql4,	N'@request_id INT', @request_id
@@ -1365,7 +1366,6 @@ BEGIN
 
 END
 GO
-
 /*==============================================================*/
 /* SP Type: UPDATE                                              */
 /*==============================================================*/

@@ -23,7 +23,6 @@ foreach ($row as $key => $value){
 }
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
-
     if(isset($_POST['Zet_om_naar_workshop'])){
         foreach($_POST['edit'] as $groep){
             foreach($groep as $module){
