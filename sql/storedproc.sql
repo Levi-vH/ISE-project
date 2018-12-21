@@ -1271,7 +1271,9 @@ GO
 
 CREATE OR ALTER PROC SP_confirm_workshoprequest
 (
-@request_id	INT
+@request_id		INT,
+@group_id		INT,
+@modulenumber	INT
 )
 AS
 BEGIN
@@ -1281,6 +1283,8 @@ BEGIN
 	DECLARE @sql2 NVARCHAR(2000)
 	DECLARE @sql3 NVARCHAR(2000)
 	DECLARE @sql4 NVARCHAR(2000)
+	DECLARE @sql5 NVARCHAR(4000)
+	DECLARE @sql6 NVARCHAR(4000)
 	DECLARE @type NVARCHAR(3)
 	
 	IF((SELECT COUNT(GROEP_ID)
@@ -1296,20 +1300,36 @@ BEGIN
 
 	SET @sql =	N'
 				INSERT INTO	WORKSHOP(WORKSHOPLEIDER_ID, CONTACTPERSOON_ID, ORGANISATIENUMMER, MODULENUMMER, ADVISEUR_ID, DATUM, STARTTIJD, EINDTIJD, ADRES, POSTCODE, PLAATSNAAM, TYPE)
-				SELECT MG.WORKSHOPLEIDER, G.CONTACTPERSOON_ID, A.ORGANISATIENUMMER, MG.MODULENUMMER, A.ADVISEUR_ID, MG.DATUM, MG.STARTTIJD, MG.EINDTIJD, G.ADRES, G.POSTCODE, G.PLAATSNAAM, @type
-				FROM AANVRAAG A INNER JOIN GROEP G 
-					ON A.AANVRAAG_ID = G.AANVRAAG_ID
-								INNER JOIN MODULE_VAN_GROEP MG
-					ON G.GROEP_ID = MG.GROEP_ID
-				WHERE A.AANVRAAG_ID = @request_id
+				SELECT	MG.WORKSHOPLEIDER, G.CONTACTPERSOON_ID, A.ORGANISATIENUMMER, MG.MODULENUMMER, A.ADVISEUR_ID, MG.DATUM, MG.STARTTIJD, MG.EINDTIJD, G.ADRES, G.POSTCODE, G.PLAATSNAAM, @type
+				FROM	AANVRAAG A INNER JOIN
+						GROEP G ON A.AANVRAAG_ID = G.AANVRAAG_ID INNER JOIN
+						MODULE_VAN_GROEP MG
+						ON G.GROEP_ID = MG.GROEP_ID
+				WHERE	A.AANVRAAG_ID = @request_id
+				AND		MG.GROEP_ID = @group_id
+				AND		MG.MODULENUMMER = @modulenumber
+				'
+
+	DECLARE @workshop_id INT = (SELECT IDENT_CURRENT('WORKSHOP'))
+
+	SET @sql5 =	N'
+				INSERT INTO DEELNEMER_IN_WORKSHOP (WORKSHOP_ID, DEELNEMER_ID, VOLGNUMMER, IS_GOEDGEKEURD)
+				SELECT	@workshop_id, DEELNEMER_ID, 1, 1
+				FROM	DEELNEMER_IN_AANVRAAG DIA INNER JOIN
+						MODULE_VAN_GROEP MG ON DIA.GROEP_ID = MG.GROEP_ID
+				WHERE	DIA.AANVRAAG_ID = @request_id
+				AND		DIA.GROEP_ID = @group_id
+				AND		MG.MODULENUMMER = @modulenumber
 				'
 
 	SET @sql1 = N'DELETE MVG
 					FROM AANVRAAG A
 					INNER JOIN GROEP G ON G.AANVRAAG_ID = A.AANVRAAG_ID
 					INNER JOIN MODULE_VAN_GROEP MVG ON MVG.GROEP_ID = G.GROEP_ID
-					WHERE A.AANVRAAG_ID = @request_id'
-
+					WHERE A.AANVRAAG_ID = @request_id
+					AND G.GROEP_ID = @group_id
+					AND MVG.MODULENUMMER = @modulenumber'
+/*
 	SET @sql2 = N'DELETE G
 					FROM AANVRAAG A
 					INNER JOIN GROEP G ON G.AANVRAAG_ID = A.AANVRAAG_ID
@@ -1320,14 +1340,29 @@ BEGIN
 					WHERE A.AANVRAAG_ID = @request_id'
 
 	SET @sql4 = N'DELETE FROM DEELNEMER_IN_AANVRAAG WHERE AANVRAAG_ID = @request_id'
+	*/
 
 
 	EXEC sp_executesql @sql,	N'@request_id INT, @type NVARCHAR(3)', @request_id, @type
-	EXEC sp_executesql @sql1,	N'@request_id INT', @request_id
+	EXEC sp_executesql @sql5,	N'@request_id INT, @group_id INT, @modulenumber INT', @request_id, @group_id, @modulenumber
+	EXEC sp_executesql @sql1,	N'@request_id INT, @group_id INT, @modulenumber INT', @request_id, @group_id, @modulenumber
+	/*
 	EXEC sp_executesql @sql4,	N'@request_id INT', @request_id
 	EXEC sp_executesql @sql2,	N'@request_id INT', @request_id
 	EXEC sp_executesql @sql3,	N'@request_id INT', @request_id
-	
+	*/
+
+	IF NOT EXISTS	(
+					SELECT	*
+					FROM	MODULE_VAN_GROEP MVG INNER JOIN
+							GROEP G ON MVG.GROEP_ID = G.GROEP_ID
+					WHERE	G.AANVRAAG_ID = @request_id
+					--AND		G.GROEP_ID = @group_id
+					)
+	BEGIN
+		EXEC SP_delete_workshoprequest @request_id
+	END
+
 END
 GO
 
@@ -1659,3 +1694,24 @@ BEGIN
 	EXEC sp_executesql @sql, N'@request_id INT, @participant_id INT', @request_id, @participant_id
 END
 GO
+
+CREATE OR ALTER PROC SP_delete_workshoprequest
+(
+@request_id	INT
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	DELETE
+	FROM	DEELNEMER_IN_AANVRAAG
+	WHERE	AANVRAAG_ID = @request_id
+
+	DELETE
+	FROM	GROEP
+	WHERE	AANVRAAG_ID = @request_id
+
+	DELETE
+	FROM	AANVRAAG
+	WHERE	AANVRAAG_ID = @request_id
+END
