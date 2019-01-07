@@ -168,6 +168,20 @@ ALTER TABLE WORKSHOP
 ADD CONSTRAINT CK_workshop_endtime CHECK (STARTTIJD < EINDTIJD)
 GO
 
+--========================================================================================
+-- IR? / C? / BR?
+-- If TYPE is 'IND' then CONTACTPERSOON_NAAM, CONTACTPERSOON_EMAIL 
+-- and CONTACTPERSOON_TELEFOONNUMMER have to be NOT NULL
+--========================================================================================
+ALTER TABLE WORKSHOP
+DROP CONSTRAINT IF EXISTS CK_ind_workshop_values
+GO
+
+ALTER TABLE WORKSHOP
+ADD CONSTRAINT CK_ind_workshop_values CHECK ([TYPE] != 'IND' OR (CONTACTPERSOON_NAAM IS NOT NULL
+AND CONTACTPERSOON_EMAIL IS NOT NULL AND CONTACTPERSOON_TELEFOONNUMMER IS NOT NULL))
+GO
+
 --=========================================================================
 -- DEELNEMER constraints
 --=========================================================================
