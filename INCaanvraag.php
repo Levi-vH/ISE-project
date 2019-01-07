@@ -268,12 +268,18 @@ $turnIntoWorkshop = true;
                         }
                     }
 
+                    if($groupinfo['AANTAL_MODULES'] == $groupinfo['AantalGoedGekeurdeModules']){
+                        $status = 'Bevestigd';
+                    }else{
+                        $status = 'Niet Bevestigd';
+                    }
+
 
                     $group_info .= '<div class="card">
                                     <div class="card-header" id="heading' . $i . '">
                                         <h5 class="mb-0">
                                             <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse' . $i . '" aria-expanded="false" aria-controls="collapse' . $i . '">
-                                                Groep ' . $i . ' 
+                                                Groep ' . $i . ' --  Status : '.$status.'
                                             </button>
                                         </h5>
                                     </div>
@@ -354,6 +360,9 @@ $turnIntoWorkshop = true;
 
                         if($moduleinfo['BEVESTIGING_DATUM_SBB'] == 'Nog niet bekend' || $moduleinfo['BEVESTIGING_DATUM_LEERBEDRIJF'] == 'Nog niet bekend' || $moduleinfo['BEVESTIGING_WORKSHOPLEIDER'] == 'Nog niet bekend'){
                             $turnIntoWorkshop = false;
+                            $status = 'Niet Bevestigd';
+                        }else{
+                            $status = 'Bevestigd';
                         }
 
                         $canConfirmDate = !($moduleinfo['DATUM'] == 'Nog niet bekend' && $moduleinfo['STARTTIJD'] == 'Nog niet bekend' && $moduleinfo['EINDTIJD'] == 'Nog niet bekend');
@@ -368,7 +377,7 @@ $turnIntoWorkshop = true;
                                         <div class="card-header" id="heading_Module' . $j . '">
                                             <h5 class="mb-0">
                                                 <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapse_Module' . $j . '" aria-expanded="false" aria-controls="collapse_Module' . $j . '">
-                                                    Module ' . $ModuleIDs[$j]['MODULENUMMER'] . ': '  .  $ModuleIDs[$j]['MODULENAAM'] . '
+                                                    Module ' . $ModuleIDs[$j]['MODULENUMMER'] . ': '  .  $ModuleIDs[$j]['MODULENAAM'] . ' -- Status : ' . $status . '
                                                 </button>
                                             </h5>
                                         </div>
