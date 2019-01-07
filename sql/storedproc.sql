@@ -43,12 +43,14 @@
 		-SP_remove_participant_from_group
 		-SP_disapprove_participant_of_workshop
 		-SP_remove_participant_from_workshoprequest
+		-SP_delete_workshoprequest
 
 		procedures modified:
 		-SP_get_workshops
 		-SP_get_workshoprequests
 		-SP_insert_participant_in_workshop
 		-SP_insert_group_of_workshoprequest
+		-SP_confirm_workshoprequest
    ==================================================================== */
 
 USE SBBWorkshopOmgeving
