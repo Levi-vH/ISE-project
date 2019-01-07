@@ -895,6 +895,29 @@ BEGIN
 												@function,	
 												@is_open_registration
 				END
+			ELSE 
+				BEGIN 
+					SET @sql = N' UPDATE DEELNEMER
+								  SET INLOGCODE = @INLOGCODE
+								  WHERE VOORNAAM = @firstname
+										AND ACHTERNAAM = @lastname
+										AND EMAIL = @email
+										AND ORGANISATIENUMMER = @companyNumber'
+					EXEC sp_executesql @sql,	N'
+												@companyNumber			NVARCHAR(15),
+												@firstname				NVARCHAR(30),
+												@lastname				NVARCHAR(50),
+												@email					NVARCHAR(100),
+												@inlogcode              NVARCHAR(8)
+												',
+												@companyNumber,
+												@firstname,	
+												@lastname,	
+				
+												@email,		
+												@inlogcode
+				END
+
 
 			SET @participant_id =	(
 									SELECT DEELNEMER_ID 

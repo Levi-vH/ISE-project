@@ -34,7 +34,6 @@ $error_message = NULL;
 
 // The ones that do not get checked are dropdown or select.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    pre_r($_POST);
     $salutation = check_input($_POST["salutationInput"]);
     $firstname = check_input($_POST["firstnameInput"]);
     $lastname = check_input($_POST["lastnameInput"]);
@@ -55,7 +54,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         foreach($_POST['post'] as $workshop){
 
-//pre_r($workshop);
         if (isset($workshop['Module'])) {
             $sql3 = "SP_get_where_and_when @workshop_ID = " . $workshop['Workshop'];
             $stmt3 = $conn->prepare($sql3);
@@ -79,7 +77,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmtInsertDeelnemer->bindParam(12, $functionInCompany, PDO::PARAM_STR);
                 $stmtInsertDeelnemer->bindParam(13, $workshop['Workshop'], PDO::PARAM_INT);
                 $stmtInsertDeelnemer->execute();
-                pre_r($module);
             }
         }
         }
@@ -91,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $moduletekst .= $modulenummer . "<br>";
     }
 
-    sendMail("$email", "Ingeschreven voor workshop(s)", "Beste " . $firstname . " " . $lastname . ", <br><br> U heeft zich succesvol aangemeld voor de onderstaande workshop(s): <br><br>" . $moduletekst . "<br> Wilt alle informatie van de workshops nog eens bekijken of wilt u zich afmelden voor een workshop? <br> Log dan in op de Site met de volgende code: " . $code . "<br><br> Met vriendelijk groet, <br> Het SBB Team");
+    sendMail("$email", "Ingeschreven voor workshop(s)", "Beste " . $firstname . " " . $lastname . ", <br><br> U heeft zich succesvol aangemeld voor de onderstaande workshop(s): <br><br>" . $moduletekst . "<br> Wilt alle informatie van de workshops nog eens bekijken of wilt u zich afmelden voor een workshop? <br> Log dan in op de Site met de volgende code: " . $code . " (<b>LET OP: Als u al eerder een code heeft ontvangen vervalt de oude code!</b>) <br><br> Met vriendelijk groet, <br> Het SBB Team");
     $error_message .= "Uw staat nu aangemeld voor de workshops bekijk uw mail voor meer informatie";
 }
 
