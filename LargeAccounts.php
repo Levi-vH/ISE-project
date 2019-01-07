@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-5 col-sm-10">
-                    <button type="submit" class="btn btn-success btn-lg">Machtig</button>
+                    <button type="submit" class="btn btn-success btn-lg">Machtigen</button>
                 </div>
             </div>
         </form>
@@ -60,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="form-group">
             <div class="col-sm-offset-5 col-sm-10">
-                <button type="submit" class="btn btn-danger btn-lg">Onmachtig</button>
+                <button type="submit" class="btn btn-danger btn-lg">Machtiging intrekken</button>
             </div>
         </div>
     </form>

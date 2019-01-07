@@ -38,13 +38,13 @@ generate_header('Workshop overzicht voor sector');
         <div class="container">
             <div>
                 <script>
-                    dataPointss = [];
-                    for (var i = 0; i < 4; i++) {
-                        dataPointss.y = i;
-                        dataPointss.label = "";
-                    }
-                    console.log(dataPointss);
-                    console.log("HEEEEEEEEEY");
+                    // dataPointss = [];
+                    // for (var i = 0; i < 4; i++) {
+                    //     dataPointss.y = i;
+                    //     dataPointss.label = "";
+                    // }
+                    // console.log(dataPointss[0].y);
+                    // console.log(dataPointss.length);
                     window.onload = function () {
                         var chart = new CanvasJS.Chart("chartContainer", {
                                 theme: "light1", // "light1", "light2", "dark1", "dark2"
