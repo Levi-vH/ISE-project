@@ -4,7 +4,7 @@ include 'functions.php';
 
 generate_header('Ingeschreven workshops');
 
-$deelnemer_id = 4;
+$deelnemer_id = $_SESSION['deelnemer_id'];
 ?>
 <html lang="en">
 <body>
