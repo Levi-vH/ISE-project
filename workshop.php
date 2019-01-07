@@ -174,17 +174,17 @@ if ($row['WORKSHOPLEIDER_ACHTERNAAM'] OR $row['WORKSHOPLEIDER_VOORNAAM']) {
                         </div>
 
                     </div>
-                    <div class="detail-row">
+                    <!--<div class="detail-row">
                         <div class="details-column">
                             Deelnemer gegevens ontvangen:
                         </div>
                         <div class="details-value">
-                            <?= $row['DEELNEMER_GEGEVENS_ONTVANGEN'] ?>
+                            < ?= $row['DEELNEMER_GEGEVENS_ONTVANGEN'] ?>
                         </div>
 
-                    </div>
+                    </div>-->
                     <?php
-                    if ($row['TYPE'] == 'IND') {
+                    if ($row['TYPE'] !== 'IND') {
                         ?>
 
                         <div class="detail-row">
@@ -208,6 +208,9 @@ if ($row['WORKSHOPLEIDER_ACHTERNAAM'] OR $row['WORKSHOPLEIDER_VOORNAAM']) {
                     </div>
                 </div>
 
+                <?php
+                if ($row['TYPE'] !== 'IND') {
+                ?>
                 <div class="adviseur-details details">
                     <h3> Adviseur vanuit SBB</h3>
                     <div class="detail-row">
@@ -238,7 +241,11 @@ if ($row['WORKSHOPLEIDER_ACHTERNAAM'] OR $row['WORKSHOPLEIDER_VOORNAAM']) {
 
                     </div>
                 </div>
+                <?php } ?>
 
+                <?php
+                if ($row['TYPE'] !== 'IND') {
+                ?>
                 <div class="contactperson-details details">
                     <h3> Contactpersoon gegevens vanuit <?= $row['ORGANISATIENAAM'] ?> </h3>
                     <div class="detail-row">
@@ -269,6 +276,7 @@ if ($row['WORKSHOPLEIDER_ACHTERNAAM'] OR $row['WORKSHOPLEIDER_VOORNAAM']) {
 
                     </div>
                 </div>
+                <?php } ?>
 
             </div>
 
