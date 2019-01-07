@@ -4,8 +4,8 @@
    Description: this script is used to create the constraints
    for the 'SBBWorkshopOmgeving' database
    --------------------------------
-   Modified by:
-   Modifications made by :
+   Modified by: Mark
+   Modifications made by Mark: made CK_ind_workshop_values
    ================================================================ */
 
 -- Constraints with a ** have no tests 
