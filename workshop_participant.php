@@ -72,15 +72,6 @@ if($row['WORKSHOPLEIDER_ACHTERNAAM'] OR $row['WORKSHOPLEIDER_VOORNAAM']){
                     </div>
                     <div class="detail-row">
                         <div class="details-column">
-                            Type:
-                        </div>
-                        <div class="details-value">
-                            <?= $row['TYPE'] ?>
-                        </div>
-
-                    </div>
-                    <div class="detail-row">
-                        <div class="details-column">
                             Datum:
                         </div>
                         <div class="details-value">
@@ -139,51 +130,6 @@ if($row['WORKSHOPLEIDER_ACHTERNAAM'] OR $row['WORKSHOPLEIDER_VOORNAAM']){
                         </div>
                         <div class="details-value">
                             <?= $workshopleader ?>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="recieved-details details">
-                    <h3> Ontvangen gegevens</h3>
-                    <div class="detail-row">
-                        <div class="details-column">
-                            Verwerkt in BREIN:
-                        </div>
-                        <div class="details-value">
-                            <?= $row['VERWERKT_BREIN'] ?>
-                        </div>
-
-                    </div>
-                    <div class="detail-row">
-                        <div class="details-column">
-                            Deelnemer gegevens ontvangen:
-                        </div>
-                        <div class="details-value">
-                            <?= $row['DEELNEMER_GEGEVENS_ONTVANGEN'] ?>
-                        </div>
-
-                    </div>
-                    <?php
-                    if($row['TYPE'] == 'IND'){
-                        ?>
-
-                        <div class="detail-row">
-                            <div class="details-column">
-                                OVK_Bevestiging:
-                            </div>
-                            <div class="details-value">
-                                <?=$row['OVK_BEVESTIGING']?>
-                            </div>
-
-                        </div>
-                    <?php } ?>
-                    <div class="detail-row">
-                        <div class="details-column">
-                            Presentielijst verstuurd:
-                        </div>
-                        <div class="details-value">
-                            <?= $row['PRESENTIELIJST_VERSTUURD'] ?>
                         </div>
 
                     </div>
