@@ -50,6 +50,7 @@
 		-SP_get_workshoprequests
 		-SP_insert_participant_in_workshop
 		-SP_insert_group_of_workshoprequest
+		-SP_insert_workshop
 		-SP_confirm_workshoprequest
    ==================================================================== */
 
@@ -1007,6 +1008,7 @@ BEGIN
 
 	-- Create a workshop based on the given parameters
 
+	DECLARE @organisationnumber NVARCHAR(15) = (SELECT ORGANISATIENUMMER FROM ORGANISATIE WHERE ORGANISATIENAAM LIKE 'SBB')
 	DECLARE @sql NVARCHAR(4000)
 	DECLARE @status NVARCHAR(40) = 'uitgezet'
 
@@ -1016,7 +1018,7 @@ BEGIN
 		END
 
 	SET @sql =	N'
-				INSERT INTO	WORKSHOP(DATUM, PLANNERNAAM, MODULENUMMER, SECTORNAAM, STARTTIJD, EINDTIJD, ADRES, PLAATSNAAM, POSTCODE, WORKSHOPLEIDER_ID, OPMERKING, CONTACTPERSOON_NAAM, CONTACTPERSOON_EMAIL, CONTACTPERSOON_TELEFOONNUMMER, TYPE)
+				INSERT INTO	WORKSHOP(DATUM, PLANNERNAAM, MODULENUMMER, SECTORNAAM, STARTTIJD, EINDTIJD, ADRES, PLAATSNAAM, POSTCODE, WORKSHOPLEIDER_ID, OPMERKING, CONTACTPERSOON_NAAM, CONTACTPERSOON_EMAIL, CONTACTPERSOON_TELEFOONNUMMER, TYPE, ORGANISATIENUMMER)
 				VALUES		(
 							@workshopdate,				
 							@plannername,			
@@ -1032,7 +1034,8 @@ BEGIN
 							@contactperson_name,		
 							@contactperson_email,		
 							@contactperson_phonenumber,
-							''IND''
+							''IND'',
+							@organisationnumber
 							)
 				'
 	EXEC sp_executesql @sql,	N'
@@ -1049,7 +1052,8 @@ BEGIN
 								@workshopnote				NVARCHAR(255),
 								@contactperson_name			NVARCHAR(80),
 								@contactperson_email		NVARCHAR(100),
-								@contactperson_phonenumber	NVARCHAR(12)
+								@contactperson_phonenumber	NVARCHAR(12),
+								@organisationnumber			NVARCHAR(15)
 								',
 								@workshopdate,				
 								@plannername,			
@@ -1064,7 +1068,8 @@ BEGIN
 								@workshopnote,				
 								@contactperson_name,			
 								@contactperson_email,		
-								@contactperson_phonenumber	
+								@contactperson_phonenumber,
+								@organisationnumber	
 END
 GO
 
@@ -1484,7 +1489,7 @@ BEGIN
 								@workshopdate NVARCHAR(10),
 								@modulenumber INT,
 								@workshopContact INT,
-								@organisationnumber VARCHAR(15),
+								@organisationnumber NVARCHAR(15),
 								@workshopsector NVARCHAR(20),
 								@workshopstarttime NVARCHAR(10),
 								@workshopendtime NVARCHAR(10),
@@ -1639,7 +1644,7 @@ BEGIN
 				UPDATE	ORGANISATIE
 				SET		LARGE_ACCOUNTS = 1
 				WHERE	ORGANISATIENUMMER = @organisation'
-	EXEC sp_executesql @sql, N'@organisation VARCHAR(15)', @organisation
+	EXEC sp_executesql @sql, N'@organisation NVARCHAR(15)', @organisation
 END
 GO
 
@@ -1659,7 +1664,7 @@ BEGIN
 				UPDATE	ORGANISATIE
 				SET		LARGE_ACCOUNTS = 0
 				WHERE	ORGANISATIENUMMER = @organisation'
-	EXEC sp_executesql @sql, N'@organisation VARCHAR(15)', @organisation
+	EXEC sp_executesql @sql, N'@organisation NVARCHAR(15)', @organisation
 END
 GO
 
@@ -1670,7 +1675,7 @@ GO
 
 CREATE OR ALTER PROC SP_confirm_Workshop_Details
 (
-@detailToConfirm VARCHAR(400),
+@detailToConfirm NVARCHAR(400),
 @groep_id INT,
 @modulenummer INT
 )
@@ -1689,7 +1694,7 @@ BEGIN
 					SET ' + @column + ' = 1
 					WHERE GROEP_ID = ' + CAST(@groep_id AS varchar(7)) + '
 					AND MODULENUMMER = ' + CAST(@modulenummer AS varchar(1))
-	EXEC sp_executesql @sql, N'@detailToConfirm VARCHAR(400),@groep_id INT, @modulenummer INT', @detailToConfirm, @groep_id, @modulenummer
+	EXEC sp_executesql @sql, N'@detailToConfirm NVARCHAR(400),@groep_id INT, @modulenummer INT', @detailToConfirm, @groep_id, @modulenummer
 END
 GO
 
