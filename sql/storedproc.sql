@@ -74,21 +74,28 @@ Procedure order:
 
 CREATE OR ALTER PROC SP_get_where_and_when
 (
-@modulenummer INT = NULL
+@modulenummer INT = NULL,
+@workshop_ID INT = NULL
 )
 AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
 	SET @sql =	N'
-				SELECT WORKSHOP_ID, (''Op '' + CAST(DATUM AS VARCHAR(20)) + '' van '' + CAST(FORMAT(STARTTIJD, N''hh\:mm'') AS VARCHAR(20))
+				SELECT WORKSHOP_ID, (''Op '' + CAST(FORMAT(DATUM, ''d'', ''nl-nl'') AS VARCHAR(20)) + '' van '' + CAST(FORMAT(STARTTIJD, N''hh\:mm'') AS VARCHAR(20))
 				+ '' tot '' + CAST(FORMAT(EINDTIJD, N''hh\:mm'') AS VARCHAR(20)) + '' in '' + CAST(PLAATSNAAM AS VARCHAR(60))) AS waar_en_wanneer
-				FROM WORKSHOP
-				WHERE MODULENUMMER = @modulenummer
-				AND TYPE = ''IND''
-				ORDER BY DATUM, STARTTIJD
-				'
-	 EXEC sp_executesql @sql, N'@modulenummer INT', @modulenummer
+				FROM WORKSHOP '
+		IF(@modulenummer IS NOT NULL)
+			BEGIN
+				SET @sql += ' WHERE MODULENUMMER = @modulenummer '
+			END
+		IF(@workshop_ID IS NOT NULL)
+			BEGIN
+				SET @sql += ' WHERE WORKSHOP_ID = @workshop_ID '
+			END
+	SET @sql +=	' AND TYPE = ''IND''
+				ORDER BY DATUM, STARTTIJD'
+	 EXEC sp_executesql @sql, N'@modulenummer INT, @workshop_ID INT', @modulenummer, @workshop_ID
 END
 GO
 
@@ -752,6 +759,7 @@ CREATE OR ALTER PROC SP_insert_participant_in_workshop
 @lastname				NVARCHAR(50),
 @birthdate				DATE,
 @email					NVARCHAR(100),
+@inlogcode              NVARCHAR(8),
 @phonenumber			NVARCHAR(12),
 @education				NVARCHAR(100),
 @education_students		NVARCHAR(100) = NULL,
@@ -792,7 +800,7 @@ BEGIN
 				)
 				BEGIN
 					SET @sql =	N'
-								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, IS_OPEN_INSCHRIJVING)
+								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, INLOGCODE, TELEFOONNUMMER, OPLEIDINGSNIVEAU, IS_OPEN_INSCHRIJVING)
 								VALUES	(
 										@companyNumber,
 										@salutation,
@@ -800,6 +808,7 @@ BEGIN
 										@lastname,
 										@birthdate,
 										@email,
+										@inlogcode,
 										@phonenumber,
 										@education,
 										@is_open_registration
@@ -813,6 +822,7 @@ BEGIN
 												@lastname				NVARCHAR(50),
 												@birthdate				DATE,
 												@email					NVARCHAR(100),
+												@inlogcode              NVARCHAR(8),
 												@phonenumber			NVARCHAR(12),
 												@education				NVARCHAR(100),
 												@is_open_registration   BIT
@@ -839,7 +849,7 @@ BEGIN
 				)
 				BEGIN
 					SET @sql =	N'
-								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, TELEFOONNUMMER, OPLEIDINGSNIVEAU, GEWENST_BEGELEIDINGSNIVEAU, SECTORNAAM, FUNCTIENAAM, IS_OPEN_INSCHRIJVING)
+								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, INLOGCODE, TELEFOONNUMMER, OPLEIDINGSNIVEAU, GEWENST_BEGELEIDINGSNIVEAU, SECTORNAAM, FUNCTIENAAM, IS_OPEN_INSCHRIJVING)
 								VALUES	(
 										@companyNumber,
 										@salutation,
@@ -847,6 +857,7 @@ BEGIN
 										@lastname,
 										@birthdate,
 										@email,
+										@inlogcode,
 										@phonenumber,
 										@education,
 										@education_students,
@@ -862,6 +873,7 @@ BEGIN
 												@lastname				NVARCHAR(50),
 												@birthdate				DATE,
 												@email					NVARCHAR(100),
+												@inlogcode              NVARCHAR(8),
 												@phonenumber			NVARCHAR(12),
 												@education				NVARCHAR(100),
 												@education_students		NVARCHAR(100),
@@ -875,6 +887,7 @@ BEGIN
 												@lastname,	
 												@birthdate,	
 												@email,		
+												@inlogcode,
 												@phonenumber,
 												@education,
 												@education_students,

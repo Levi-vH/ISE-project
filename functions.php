@@ -467,4 +467,15 @@ function getWorkshopleaderName($workshopleader_id)
     return $row;
 }
 
+function getCode() {
+    $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    $code = array(); //remember to declare $pass as an array
+    $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+    for ($i = 0; $i < 8; $i++) {
+        $n = rand(0, $alphaLength);
+        $code[] = $alphabet[$n];
+    }
+    return implode($code); //turn the array into a string
+}
+
 ?>

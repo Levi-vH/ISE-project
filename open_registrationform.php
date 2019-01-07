@@ -34,6 +34,7 @@ $error_message = NULL;
 
 // The ones that do not get checked are dropdown or select.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    pre_r($_POST);
     $salutation = check_input($_POST["salutationInput"]);
     $firstname = check_input($_POST["firstnameInput"]);
     $lastname = check_input($_POST["lastnameInput"]);
@@ -47,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $companyLocation = check_input($_POST["companyLocationInput"]);
     $Organisation_name = check_input($_POST["Organisation_Name"]);
     $functionInCompany = check_input($_POST["functionInCompanyInput"]);
-
+    $code = getCode();
 
     if(isset($salutation) && isset($firstname) && isset($lastname) && isset($birthDate) && isset($email) && isset($phonenumber) && isset($educationalAttainment)
         && isset($educationalAttainmentStudents) && isset($companyName) && isset($sector) && isset($companyLocation) && isset($Organisation_name) && isset($functionInCompany)) {
@@ -56,8 +57,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 //pre_r($workshop);
         if (isset($workshop['Module'])) {
-//            pre_r ($workshop['Workshop']);
-                $sqlInsertDeelnemer = "exec SP_insert_participant_in_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+            $sql3 = "SP_get_where_and_when @workshop_ID = " . $workshop['Workshop'];
+            $stmt3 = $conn->prepare($sql3);
+            $stmt3->execute();
+
+            while ($resultaat = $stmt3->fetch(PDO::FETCH_ASSOC)) {
+                $module[$workshop['Module']] = "<b>Module " . $workshop['Module'] . ": " . $workshop['Modulenaam'] . "</b><br>" . $resultaat['waar_en_wanneer'];
+                $sqlInsertDeelnemer = "exec SP_insert_participant_in_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
                 $stmtInsertDeelnemer = $conn->prepare($sqlInsertDeelnemer);
                 $stmtInsertDeelnemer->bindParam(1, $Organisation_name, PDO::PARAM_INT);
                 $stmtInsertDeelnemer->bindParam(2, $salutation, PDO::PARAM_STR);
@@ -65,19 +71,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmtInsertDeelnemer->bindParam(4, $lastname, PDO::PARAM_STR);
                 $stmtInsertDeelnemer->bindParam(5, $birthDate, PDO::PARAM_STR);
                 $stmtInsertDeelnemer->bindParam(6, $email, PDO::PARAM_STR);
-                $stmtInsertDeelnemer->bindParam(7, $phonenumber, PDO::PARAM_STR);
-                $stmtInsertDeelnemer->bindParam(8, $educationalAttainment, PDO::PARAM_STR);
-                $stmtInsertDeelnemer->bindParam(9, $educationalAttainmentStudents, PDO::PARAM_STR);
-                $stmtInsertDeelnemer->bindParam(10, $sector, PDO::PARAM_STR);
-                $stmtInsertDeelnemer->bindParam(11, $functionInCompany, PDO::PARAM_STR);
-                $stmtInsertDeelnemer->bindParam(12, $workshop['Workshop'], PDO::PARAM_INT);
+                $stmtInsertDeelnemer->bindParam(7, $code, PDO::PARAM_STR);
+                $stmtInsertDeelnemer->bindParam(8, $phonenumber, PDO::PARAM_STR);
+                $stmtInsertDeelnemer->bindParam(9, $educationalAttainment, PDO::PARAM_STR);
+                $stmtInsertDeelnemer->bindParam(10, $educationalAttainmentStudents, PDO::PARAM_STR);
+                $stmtInsertDeelnemer->bindParam(11, $sector, PDO::PARAM_STR);
+                $stmtInsertDeelnemer->bindParam(12, $functionInCompany, PDO::PARAM_STR);
+                $stmtInsertDeelnemer->bindParam(13, $workshop['Workshop'], PDO::PARAM_INT);
                 $stmtInsertDeelnemer->execute();
+                pre_r($module);
             }
+        }
         }
     } else {
         $error_message .= "U heeft een veld niet ingevoerd, ieder veld is verplicht.";
     }
-    sendMail("$email", "Ingeschreven voor workshop(s)", "Beste " . $firstname . " " . $lastname .   ", <br><br> U heeft zich succesvol aangemeld voor de onderstaande workshop(s): <br><br> Module 1: (modulenaam) 'waar en wanneer' <br> Module 2: (modulenaam) 'waar en wanneer' <br> Module 3: (modulenaam) 'waar en wanneer' <br><br> Wilt alle informatie van de workshops nog eens bekijken of wilt u zich afmelden voor een workshop? <br> Log dan in op de Site met de volgende code: (generated code)<br><br> Met vriendelijk groet, <br> Het SBB Team");
+    $moduletekst = "";
+    foreach ($module as $modulenummer){
+        $moduletekst .= $modulenummer . "<br>";
+    }
+
+    sendMail("$email", "Ingeschreven voor workshop(s)", "Beste " . $firstname . " " . $lastname . ", <br><br> U heeft zich succesvol aangemeld voor de onderstaande workshop(s): <br><br>" . $moduletekst . "<br> Wilt alle informatie van de workshops nog eens bekijken of wilt u zich afmelden voor een workshop? <br> Log dan in op de Site met de volgende code: " . $code . "<br><br> Met vriendelijk groet, <br> Het SBB Team");
     $error_message .= "Uw staat nu aangemeld voor de workshops bekijk uw mail voor meer informatie";
 }
 
@@ -101,6 +115,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                  $checkbox_module .=  '<div class="form-group">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" name="post['.$module["MODULENUMMER"].'][Module]" value="'.$module["MODULENUMMER"].'" id="Module_' . $module["MODULENUMMER"] . '" onchange="checked_module(' . $module["MODULENUMMER"] . ', this)">
+                                                <input class="d-none" type="text" name="post['.$module["MODULENUMMER"].'][Modulenaam]" value="'.$module["MODULENAAM"].'" id="Module_' . $module["MODULENAAM"] . '">
+
                                                 <label class="form-check-label" for="Module_' . $module["MODULENUMMER"] . '">' .
                                                     'Module ' . $module["MODULENUMMER"] . ': ' .  $module["MODULENAAM"]
                                             .'  </label>
@@ -111,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <label class="control-label col-sm-2" for="workshop_' . $module["MODULENUMMER"] .'">Waar en wanneer?:</label>
                                             <div class="col-sm-10">';
 
-                $sql2 = "SP_get_where_and_when " . $module["MODULENUMMER"];
+                $sql2 = "SP_get_where_and_when @modulenummer=" . $module["MODULENUMMER"];
                 $stmt2= $conn->prepare($sql2);
                 $stmt2->execute();
 

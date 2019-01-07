@@ -156,6 +156,10 @@ DROP TYPE IF EXISTS TypeNaam
 CREATE TYPE TypeNaam FROM VARCHAR(20)
 GO
 
+DROP TYPE IF EXISTS Code
+CREATE TYPE Code FROM VARCHAR(8)
+GO
+
 /*==============================================================*/
 /* Table: WORKSHOPTYPE                                          */
 /*==============================================================*/
@@ -263,6 +267,7 @@ CREATE TABLE DEELNEMER (
    ACHTERNAAM					Achternaam					NOT NULL,
    GEBOORTEDATUM				Geboortedatum				NOT NULL,
    EMAIL						Email						NULL,
+   INLOGCODE					Code						NULL,
    TELEFOONNUMMER				telefoonnummer				NULL,
    OPLEIDINGSNIVEAU				Opleidingsniveau			NOT NULL,
    IS_OPEN_INSCHRIJVING         Is_Open_Inschrijving		NOT NULL,
