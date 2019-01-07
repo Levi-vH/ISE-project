@@ -75,6 +75,8 @@ function generate_header($title_of_page)
                 $header .= $_SESSION['username'] . '(' . $_SESSION['planner'] . ')';
             } elseif ($_SESSION['username'] == 'contactpersoon') {
                 $header .= $_SESSION['username'] . '(' . getOrganisationName($_SESSION['organisation']) . ')';
+            } elseif ($_SESSION['username'] == 'deelnemer'){
+                $header .= $_SESSION['username']. '(' . $_SESSION['deelnemer_id'] . ')';
             } else {
                 $header .= $_SESSION['username'];
             }

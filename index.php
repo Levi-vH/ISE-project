@@ -14,6 +14,7 @@ if (isset($_GET['logout'])) {
     header('Location:  ' . $_SERVER['PHP_SELF']);
 }
 
+
 if (isset($_GET['organisation_id'])) {
     $_SESSION['username'] = 'contactpersoon';
     $_SESSION['organisation'] = $_GET['organisation_id'];
@@ -22,13 +23,16 @@ if (isset($_GET['organisation_id'])) {
     $_SESSION['username'] = 'planner';
     $_SESSION['planner'] = $_GET['planner'];
     header('Location:  ' . $_SERVER['PHP_SELF']);
-}
+} elseif (isset($_GET['email'])){
+    if(!is_null(getParticipantId($_GET['email'], $_GET['code']))) {
+        $_SESSION['username'] = 'deelnemer';
+        $_SESSION['deelnemer_id'] = getParticipantId($_GET['email'], $_GET['code']);
+        header('Location:  ' . $_SERVER['PHP_SELF']);
+    }else{
+        header('Location: index.php');
 
-//if (isset($_POST['deelnemer']) && $_SERVER["REQUEST_METHOD"] == "POST") {
-//    $_SESSION['username'] = 'deelnemer';
-//    $_SESSION['deelnemer_id'] = getParticipantId($_POST['email'], $_POST['code']);
-//    header('Location:  ' . $_SERVER['PHP_SELF']);
-//}
+    }
+}
 
 function getParticipantId($email, $code) {
     $conn = connectToDB();
@@ -41,7 +45,7 @@ function getParticipantId($email, $code) {
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    return $row;
+    return $row['deelnemer_id'];
 
 }
 
@@ -105,11 +109,11 @@ if (isset($_POST['planner'])) { ?>
     <div class="container">
         <h3 class="text-center">Log hieronder in met uw email en code</h3>
         <div class="row justify-content-md-center">
-            <form method="post" action="index.php">
                 <input id="email" type="email" class="form-control" placeholder="Email" name="email" required>
-                <input type="text" class="form-control" placeholder="Code" name="code" required>
+                <br>
+                <input id= "code" type="text" class="form-control" placeholder="Code" name="code" required>
+                <br>
                 <button class="btn btn-success btn-lg" onclick="setParticipant()">Login</button>
-            </form>
         </div>
     </div>
     <?php
@@ -136,9 +140,10 @@ include 'footer.html'; ?>
     }
 
     function setParticipant() {
-        var element = document.getElementById('Coordination_Contact').value;
-        if (element !== "") {
-            window.location.href = "index.php?deelnemer_id=" + element;
+        var element = document.getElementById('email').value;
+        var element2 = document.getElementById('code').value;
+        if (element !== "" && element2 !== "") {
+            window.location.href = "index.php?email=" + element + "&code=" + element2;
         } else {
             alert("Log aub in")
         }
