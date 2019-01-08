@@ -170,11 +170,18 @@ BEGIN
 
 							WHERE WORKSHOP_ID IN (SELECT W.WORKSHOP_ID FROM WORKSHOP W
 							LEFT JOIN DEELNEMER_IN_WORKSHOP DIW ON DIW.WORKSHOP_ID = W.WORKSHOP_ID
-							LEFT JOIN DEELNEMER D ON DIW.DEELNEMER_ID = D.DEELNEMER_ID 
-							WHERE D.VOORNAAM LIKE @firstname AND D.ACHTERNAAM LIKE @lastname)
+							LEFT JOIN DEELNEMER D ON DIW.DEELNEMER_ID = D.DEELNEMER_ID'
+
+							IF (@firstname = '%%' OR @lastname = '%%')
+								BEGIN
+									SET @sql += ' WHERE D.VOORNAAM LIKE @firstname AND D.ACHTERNAAM LIKE @lastname)'
+								END
+							ELSE
+								BEGIN
+									SET @sql += ' WHERE D.VOORNAAM IS NULL AND D.ACHTERNAAM IS NULL)'
+								END
 							
-							
-				AND		W.TYPE LIKE @workshop_type AND MODULENAAM LIKE @modulenaam AND WL.WORKSHOPLEIDER_ID LIKE @workshopleider_ID
+				SET @sql += ' AND W.TYPE LIKE @workshop_type AND MODULENAAM LIKE @modulenaam AND WL.WORKSHOPLEIDER_ID LIKE @workshopleider_ID
 							AND  O.ORGANISATIENAAM LIKE @company_name'
 
 	EXEC sp_executesql @sql, N'@workshop_type NVARCHAR(6), @modulenaam NVARCHAR(50), @workshopleider_ID NVARCHAR(10), @company_name NVARCHAR(60),
@@ -182,6 +189,9 @@ BEGIN
 
 END  
 GO
+
+EXEC SP_get_workshops_filtered @workshop_type = '%%', @modulenaam = '%%', @workshopleider_ID = '%%',
+                @company_name = '%%', @firstname = '%%', @lastname = '%%'
 
 --============================================================================================
 -- SP_get_workshops: returns all workshops with their data for the workshop overview page                                              
