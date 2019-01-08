@@ -757,8 +757,8 @@ END
 GO
 
 --======================================================================================
--- Test for when IS_OPEN_INSCHRIJVING is 1 then GEWENST_BEGELEIDINGSNIVEAU, FUNCTIENAAM 
--- and SECTORNAAM have to be NOT NULL
+-- Test for when IS_OPEN_INSCHRIJVING is 1 then GEWENST_BEGELEIDINGSNIVEAU 
+-- and FUNCTIENAAM have to be NOT NULL
 --======================================================================================
 
 -- Test for IS_OPEN_INSCHRIJVING is 1 AND the rest is NOT NULL 
@@ -778,7 +778,7 @@ BEGIN
 	INSERT INTO DEELNEMER ( [ORGANISATIENUMMER], [AANHEF], [VOORNAAM], [ACHTERNAAM],
 							[GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [IS_OPEN_INSCHRIJVING],
 							[GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM], [SECTORNAAM])
-	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'niveau', 'functienaam', 'sector'); 
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'niveau', 'functienaam', NULL); 
 END
 GO
 
@@ -799,7 +799,7 @@ BEGIN
 	INSERT INTO DEELNEMER ([ORGANISATIENUMMER], [AANHEF], [VOORNAAM], [ACHTERNAAM],
 							[GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [IS_OPEN_INSCHRIJVING],
 							[GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM], [SECTORNAAM])
-	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'niveau', 'functienaam', 'sector'); 
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 'niveau', 'functienaam', NULL); 
 END
 GO
 
@@ -820,6 +820,68 @@ BEGIN
 	INSERT INTO DEELNEMER ([ORGANISATIENUMMER], [AANHEF], [VOORNAAM], [ACHTERNAAM],
 							[GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [IS_OPEN_INSCHRIJVING],
 							[GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM], [SECTORNAAM])
-	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'niveau', NULL, 'sector'); 
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'niveau', NULL, NULL); 
+END
+GO
+
+--======================================================================================
+-- Test for when TYPE is 'IND' then CONTACTPERSOON_NAAM, CONTACTPERSOON_EMAIL
+-- and CONTACTPERSOON_TELEFOONUMMER have to be NOT NULL
+--======================================================================================
+
+-- Test for TYPE is 'IND' and the rest is not NULL 
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for type ind 1]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for type ind 1]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_ind_workshop_values';
+
+	EXEC tSQLt.ExpectnoException
+
+	INSERT INTO WORKSHOP ([TYPE], CONTACTPERSOON_NAAM, CONTACTPERSOON_EMAIL, CONTACTPERSOON_TELEFOONNUMMER)
+	VALUES('IND', 'naam1', 'email@hotmail.com', '0612345678'); 
+END
+GO
+
+-- Test for TYPE is not 'IND' and the rest is not NULL 
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for type ind 2]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for type ind 2]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_ind_workshop_values';
+
+	EXEC tSQLt.ExpectnoException
+
+	INSERT INTO WORKSHOP ([TYPE], CONTACTPERSOON_NAAM, CONTACTPERSOON_EMAIL, CONTACTPERSOON_TELEFOONNUMMER)
+	VALUES('INC', 'naam2', 'email@hotmail.com', '0612345678');
+END
+GO
+
+-- Test for TYPE is 'IND' and CONTACTPERSOON_EMAIL is NULL 
+DROP PROCEDURE IF EXISTS [testWorkshop].[test for type ind 3]
+GO
+
+CREATE PROCEDURE [testWorkshop].[test for type ind 3]
+AS
+BEGIN
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
+	
+	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_ind_workshop_values';
+
+	EXEC tSQLt.ExpectException
+
+	INSERT INTO WORKSHOP ([TYPE], CONTACTPERSOON_NAAM, CONTACTPERSOON_EMAIL, CONTACTPERSOON_TELEFOONNUMMER)
+	VALUES('IND', 'naam3', NULL, '0612345678');
 END
 GO
