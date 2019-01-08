@@ -261,7 +261,7 @@ GO
 /*==============================================================*/
 CREATE TABLE DEELNEMER (
    DEELNEMER_ID					Deelnemer_ID IDENTITY		NOT NULL,
-   ORGANISATIENUMMER			Organisatienummer			NULL,
+   ORGANISATIENUMMER			Organisatienummer			NOT NULL,
    AANHEF						Aanhef						NULL,
    VOORNAAM						Voornaam					NOT NULL,
    ACHTERNAAM					Achternaam					NOT NULL,
@@ -273,7 +273,7 @@ CREATE TABLE DEELNEMER (
    IS_OPEN_INSCHRIJVING         Is_Open_Inschrijving		NOT NULL,
    GEWENST_BEGELEIDINGSNIVEAU	Gewenst_Begeleidingsniveau	NULL, -- only necessary if IS_OPEN_INSCHRIJVING is '1'
    FUNCTIENAAM					Functienaam					NULL, -- only necessary if IS_OPEN_INSCHRIJVING is '1'
-   SECTORNAAM					Sectornaam					NULL, -- only necessary if IS_OPEN_INSCHRIJVING is '1'
+   SECTORNAAM					Sectornaam					NULL,
    CONSTRAINT PK_DEELNEMER PRIMARY KEY (DEELNEMER_ID)
 )
 GO

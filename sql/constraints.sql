@@ -209,7 +209,7 @@ GO
 
 ALTER TABLE DEELNEMER
 ADD CONSTRAINT CK_open_inschrijving_values CHECK (IS_OPEN_INSCHRIJVING != 1 OR (GEWENST_BEGELEIDINGSNIVEAU IS NOT NULL
-AND FUNCTIENAAM IS NOT NULL AND SECTORNAAM IS NOT NULL))
+AND FUNCTIENAAM IS NOT NULL))
 GO
 
 --========================================================================================
