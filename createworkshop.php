@@ -51,9 +51,17 @@ if ($_SESSION['username'] == 'planner') {
         $stmt->bindParam(12, $contactcompanyname, PDO::PARAM_STR);
         $stmt->bindParam(13, $contactcompanyemail, PDO::PARAM_STR);
         $stmt->bindParam(14, $contactcompanyphone, PDO::PARAM_STR);
-
-
         $stmt->execute();
+
+
+        $sql2 = "SELECT TOP 1 WORKSHOP_ID FROM WORKSHOP ORDER BY WORKSHOP_ID DESC";
+        $stmt2 = $conn->prepare($sql2);
+        $stmt2->execute();
+
+        $row = $stmt2->fetch(PDO::FETCH_ASSOC);
+
+        
+        header('Location: workshop.php?workshop_id='.$row['WORKSHOP_ID']);
     }
 
     generate_header('Workshop aanmaken');
