@@ -487,12 +487,12 @@ include 'footer.html';
                     '                                       <label class="form-check-label" for="group_' + i + '_module2_ochtend">Ochtend</label>\n' +
                     '                                   </div>\n' +
                     '                                   <div class="form-check form-check-inline">\n' +
-                    '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module2_Voorkeur" id="group_' + i + '_module2middag" value="Middag">\n' +
+                    '                                       <input class="form-check-input" type="radio" name="group_' + i + '_module2_Voorkeur" id="group_' + i + '_module2_middag" value="Middag">\n' +
                     '                                       <label class="form-check-label" for="group_' + i + '_module2_middag">Middag</label>\n' +
                     '                                   </div>\n' +
                     '                                          <div class="form-check form-check-inline">\n' +
                     '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module2_Voorkeur" id="group_' + i + '_module2_geen" value="Geen Voorkeur">\n' +
-                    '                                           <label class="form-check-label" for="group_' + i + '_module1_geen">Geen Voorkeur</label>\n' +
+                    '                                           <label class="form-check-label" for="group_' + i + '_module2_geen">Geen Voorkeur</label>\n' +
                     '                                       </div>\n' +
                     '                          </div>\n' +
                     '                       </div>\n' +
@@ -512,7 +512,7 @@ include 'footer.html';
                     '                                   </div>\n' +
                     '                                          <div class="form-check form-check-inline">\n' +
                     '                                           <input class="form-check-input" type="radio" name="group_' + i + '_module3_Voorkeur" id="group_' + i + '_module3_geen" value="Geen Voorkeur">\n' +
-                    '                                           <label class="form-check-label" for="group_' + i + '_module1_geen">Geen Voorkeur</label>\n' +
+                    '                                           <label class="form-check-label" for="group_' + i + '_module3_geen">Geen Voorkeur</label>\n' +
                     '                                       </div>\n' +
                     '                           </div>\n' +
                     '                       </div>\n' +
