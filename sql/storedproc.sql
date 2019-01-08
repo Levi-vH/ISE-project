@@ -172,7 +172,7 @@ BEGIN
 							LEFT JOIN DEELNEMER_IN_WORKSHOP DIW ON DIW.WORKSHOP_ID = W.WORKSHOP_ID
 							LEFT JOIN DEELNEMER D ON DIW.DEELNEMER_ID = D.DEELNEMER_ID'
 
-							IF (@firstname = '%%' OR @lastname = '%%')
+							IF (@firstname != '%%' OR @lastname != '%%')
 								BEGIN
 									SET @sql += ' WHERE D.VOORNAAM LIKE @firstname AND D.ACHTERNAAM LIKE @lastname)'
 								END
