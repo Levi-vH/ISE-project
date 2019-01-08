@@ -101,7 +101,7 @@ END
 GO
 
 --============================================================================================
--- SP_get_workshops: returns all workshops with the filters addes                                              
+-- SP_get_workshops: returns all workshops with the filters added                                        
 --============================================================================================
 
 CREATE OR ALTER PROC SP_get_workshops_filtered
@@ -170,7 +170,7 @@ BEGIN
 
 							WHERE WORKSHOP_ID IN (SELECT W.WORKSHOP_ID FROM WORKSHOP W
 							LEFT JOIN DEELNEMER_IN_WORKSHOP DIW ON DIW.WORKSHOP_ID = W.WORKSHOP_ID
-							INNER JOIN DEELNEMER D ON DIW.DEELNEMER_ID = D.DEELNEMER_ID 
+							LEFT JOIN DEELNEMER D ON DIW.DEELNEMER_ID = D.DEELNEMER_ID 
 							WHERE D.VOORNAAM LIKE @firstname AND D.ACHTERNAAM LIKE @lastname)
 							
 							
