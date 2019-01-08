@@ -71,10 +71,11 @@ function getParticipantId($email, $code) {
 } elseif (isset($_SESSION['username'])) { ?>
     <div class="container">
         <h3 class="text-center">Je bent ingelogt als <?= $_SESSION['username'] ?></h3>
+        <div class="row justify-content-md-center">
+            <a class="btn btn-danger btn-lg" href="?logout=1">Logout</a>
+        </div>
     </div>
-    <div class="row justify-content-md-center">
-        <a class="btn btn-danger btn-lg" href="?logout=1">Logout</a>
-    </div>
+
     <?php
 }
 if (isset($_POST['planner'])) { ?>

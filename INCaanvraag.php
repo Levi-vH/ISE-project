@@ -36,6 +36,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 $stmt8->execute();
             }
         }
+        header("refresh:0;url=allworkshops.php");
     };
 
     foreach ($_POST['edit'] as $groep){
