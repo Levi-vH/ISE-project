@@ -760,6 +760,27 @@ BEGIN
 END
 GO
 
+--=================================================================================
+-- SP_get_participant_code: Gets the logincode of a participant based on given ID                           
+--=================================================================================
+
+CREATE OR ALTER PROC SP_get_participant_code
+(
+@participant_id INT = NULL
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				SELECT INLOGCODE 
+				FROM DEELNEMER
+				WHERE DEELNEMER_ID = @participant_id
+				'
+	 EXEC sp_executesql @sql, N'@participant_id INT', @participant_id
+END
+GO
+
 /*==============================================================*/
 /* SP Type: INSERT                                              */
 /*==============================================================*/
@@ -1687,9 +1708,6 @@ GO
 --=============================================================================================================================
 -- SP SP_confirm_Workshop_Details: Confirm workshopleader / date on sbb's side or the contactperson's side based on parameters                     
 --=============================================================================================================================
-select *
-from MODULE_VAN_GROEP
-
 CREATE OR ALTER PROC SP_confirm_Workshop_Details
 (
 @detailToConfirm NVARCHAR(400),
