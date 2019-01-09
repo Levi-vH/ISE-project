@@ -60,9 +60,7 @@ function generate_header($title_of_page)
                 <a class="nav-link" href="Organisatie_workshops.php">Workshops</a>
             </li>';
         } else if ($_SESSION['username'] == 'deelnemer') {
-            $header .= '<li class="nav-item active">
-                <a class="nav-link" href="open_registrationform.php">Inschrijven voor open workshop</a>
-            </li>
+            $header .= '
             <li class="nav-item active">
                 <a class="nav-link" href="signed_up_workshops.php">Ingeschreven workshops</a>
             </li>';
@@ -81,6 +79,10 @@ function generate_header($title_of_page)
                 $header .= $_SESSION['username'];
             }
         }
+    }else{
+        $header .= '<li class="nav-item active">
+                <a class="nav-link" href="open_registrationform.php">Inschrijven voor open workshop</a>
+            </li>';
     }
     $header .= '</a>
                 </li>

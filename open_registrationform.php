@@ -7,29 +7,25 @@ include 'functions.php';
 
 generate_header('Inschrijven open workshop');
 
-
-if ($_SESSION['username'] == 'deelnemer') {
-
 $error_message = NULL;
+//
+$conn = connectToDB();
 
-    $conn = connectToDB();
+$sql = "SELECT MODULENAAM, MODULENUMMER FROM MODULE";
+$stmt= $conn->prepare($sql);
+$stmt->execute();
 
-    $sql = "SELECT MODULENAAM, MODULENUMMER FROM MODULE";
-    $stmt= $conn->prepare($sql);
-    $stmt->execute();
+$row = $stmt->fetchALL(PDO::FETCH_ASSOC);
 
-    $row = $stmt->fetchALL(PDO::FETCH_ASSOC);
+$sqlModulesCount = "SELECT COUNT(*) AS aantal_modules FROM MODULE";
+$stmtModulesCount= $conn->prepare($sqlModulesCount);
+$stmtModulesCount->execute();
 
-    $sqlModulesCount = "SELECT COUNT(*) AS aantal_modules FROM MODULE";
-    $stmtModulesCount= $conn->prepare($sqlModulesCount);
-    $stmtModulesCount->execute();
+$resultsModulesCount = $stmtModulesCount ->fetchALL(PDO::FETCH_ASSOC);
+$modulesCount = $resultsModulesCount[0]['aantal_modules'];
 
-    $resultsModulesCount = $stmtModulesCount ->fetchALL(PDO::FETCH_ASSOC);
-    $modulesCount = $resultsModulesCount[0]['aantal_modules'];
-
-//    echo $modulesCount;
-// define (empty) variables
-//$Organisation_Relationnumber = $Contact_ID = $SBB_Planner = $Advisor_practical_learning = $Groups = $Aanvraag_ID = $Group_Module1 = $Group_Module2 = $Group_Module3 = $Group_Module1_voorkeur = $Group_Module2_voorkeur = $Group_Module3_voorkeur = $Adress = $Contact_Person = '';
+ // define (empty) variables
+$Organisation_Relationnumber = $Contact_ID = $SBB_Planner = $Advisor_practical_learning = $Groups = $Aanvraag_ID = $Group_Module1 = $Group_Module2 = $Group_Module3 = $Group_Module1_voorkeur = $Group_Module2_voorkeur = $Group_Module3_voorkeur = $Adress = $Contact_Person = '';
 
 
 // The ones that do not get checked are dropdown or select.
@@ -222,9 +218,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </body>
 <?php
 include 'footer.html';
-} else {
-    notLoggedIn();
-}
 ?>
 </html>
 

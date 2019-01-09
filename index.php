@@ -11,6 +11,7 @@ if (isset($_GET['logout'])) {
     unset($_SESSION['username']);
     unset($_SESSION['organisation']);
     unset($_SESSION['deelnemer_id']);
+    unset($_SESSION['planner']);
     header('Location:  ' . $_SERVER['PHP_SELF']);
 }
 
