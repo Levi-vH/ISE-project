@@ -656,7 +656,40 @@ GO
 -- test when workshopleader isn't with a group anymore,
 -- he/she gets the available hours back
 --======================================================
+CREATE OR ALTER PROCEDURE [testModuleVanGroep].[test for the automatic change on table beschikbaarheid 1]
+AS
+BEGIN
+	IF OBJECT_ID('[testBeschikbaarheid]','Table') IS NOT NULL
+	DROP TABLE [testBeschikbaarheid]
 
+
+	SELECT * 
+	INTO testBeschikbaarheid
+	FROM dbo.BESCHIKBAARHEID
+	WHERE 1=0
+
+	INSERT INTO	testBeschikbaarheid (WORKSHOPLEIDER_ID, JAAR, KWARTAAL, AANTAL_UREN)
+	VALUES		(1, 0, 0, 10)
+
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.BESCHIKBAARHEID'; 
+	EXEC tSQLt.FakeTable @Tablename = 'dbo.MODULE_VAN_GROEP'; 
+
+	INSERT INTO	BESCHIKBAARHEID (WORKSHOPLEIDER_ID, JAAR, KWARTAAL, AANTAL_UREN)
+	VALUES		(1, 0, 0, 9)
+
+	INSERT INTO	MODULE_VAN_GROEP (WORKSHOPLEIDER_ID, STARTTIJD, EINDTIJD)
+	VALUES		(1, '13:00', '14:00') 
+
+	EXEC [tSQLt].[ApplyTrigger] @tablename = 'dbo.MODULE_VAN_GROEP', @triggername = 'TR_module_van_groep_return_hours'
+
+	DELETE FROM MODULE_VAN_GROEP
+	WHERE WORKSHOPLEIDER_ID = 1
+
+	EXEC [tSQLt].[AssertEqualsTable] @Expected='testBeschikbaarheid', @Actual='dbo.BESCHIKBAARHEID'
+END;
+GO
+
+EXEC 
 
 --===============================
 -- tests for the deelnemer table
