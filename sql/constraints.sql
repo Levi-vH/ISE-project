@@ -183,6 +183,86 @@ AND CONTACTPERSOON_EMAIL IS NOT NULL AND CONTACTPERSOON_TELEFOONNUMMER IS NOT NU
 GO
 
 --=========================================================================
+-- IR? / C? / BR?
+-- Give a workshopleader his/her available hours back if he/she is no longer
+-- leading the workshop.
+--=========================================================================
+DROP TRIGGER IF EXISTS dbo.TR_workshop_return_hours
+GO
+
+CREATE TRIGGER TR_workshop_return_hours
+ON WORKSHOP
+AFTER UPDATE, DELETE
+AS
+BEGIN
+	DECLARE @RECORDSAFFECTED INT = @@ROWCOUNT
+	IF @RECORDSAFFECTED = 0
+		RETURN
+
+	SET NOCOUNT ON
+
+	BEGIN TRY
+		IF UPDATE(WORKSHOPLEIDER_ID)
+			BEGIN
+				DECLARE @workshopleader_ID INT = (SELECT WORKSHOPLEIDER_ID FROM deleted)
+				DECLARE @start_workshop TIME(7) = (SELECT STARTTIJD FROM deleted)
+				DECLARE @end_workshop TIME(7) = (SELECT EINDTIJD FROM deleted)
+				DECLARE @year INT = (SELECT YEAR(DATUM) FROM deleted)
+				DECLARE @quarter INT = (SELECT DATEPART(QUARTER, DATUM) FROM deleted)
+
+				UPDATE	BESCHIKBAARHEID
+				SET		AANTAL_UUR = (AANTAL_UUR + (CAST(DATEDIFF(minute, @start_workshop , @end_workshop) AS NUMERIC(5,2)) / 60.00))
+				WHERE	WORKSHOPLEIDER_ID = @workshopleader_ID
+				AND		JAAR = @year
+				AND		KWARTAAL = @quarter
+			END
+	END TRY
+	BEGIN CATCH
+		THROW
+	END CATCH
+END
+GO
+
+--=========================================================================
+-- MODULE_VAN_GROEP constraints
+--=========================================================================
+DROP TRIGGER IF EXISTS dbo.TR_module_van_groep_return_hours
+GO
+
+CREATE TRIGGER TR_module_van_groep_return_hours
+ON MODULE_VAN_GROEP
+AFTER UPDATE, DELETE
+AS
+BEGIN
+	DECLARE @RECORDSAFFECTED INT = @@ROWCOUNT
+	IF @RECORDSAFFECTED = 0
+		RETURN
+
+	SET NOCOUNT ON
+
+	BEGIN TRY
+		IF UPDATE(WORKSHOPLEIDER_ID)
+			BEGIN
+				DECLARE @workshopleader_ID INT = (SELECT WORKSHOPLEIDER FROM deleted)
+				DECLARE @start_workshop TIME(7) = (SELECT STARTTIJD FROM deleted)
+				DECLARE @end_workshop TIME(7) = (SELECT EINDTIJD FROM deleted)
+				DECLARE @year INT = (SELECT YEAR(DATUM) FROM deleted)
+				DECLARE @quarter INT = (SELECT DATEPART(QUARTER, DATUM) FROM deleted)
+
+				UPDATE	BESCHIKBAARHEID
+				SET		AANTAL_UUR = (AANTAL_UUR + (CAST(DATEDIFF(minute, @start_workshop , @end_workshop) AS NUMERIC(5,2)) / 60.00))
+				WHERE	WORKSHOPLEIDER_ID = @workshopleader_ID
+				AND		JAAR = @year
+				AND		KWARTAAL = @quarter
+			END
+	END TRY
+	BEGIN CATCH
+		THROW
+	END CATCH
+END
+GO
+
+--=========================================================================
 -- DEELNEMER constraints
 --=========================================================================
 
