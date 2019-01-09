@@ -190,9 +190,6 @@ BEGIN
 END  
 GO
 
-EXEC SP_get_workshops_filtered @workshop_type = '%%', @modulenaam = '%%', @workshopleider_ID = '%%',
-                @company_name = '%%', @firstname = '%%', @lastname = '%%'
-
 --============================================================================================
 -- SP_get_workshops: returns all workshops with their data for the workshop overview page                                              
 --============================================================================================
