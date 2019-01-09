@@ -548,6 +548,28 @@ BEGIN
 END
 GO
 
+--===================================================================================================================================================
+-- SP_get_workshopleader_first_and_lastname: returns the firstname, lastname of a workshopleader                                    
+--===================================================================================================================================================
+
+CREATE OR ALTER PROC SP_get_workshopleader_first_and_lastname
+(
+@workshopleader_id INT
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				SELECT VOORNAAM, ACHTERNAAM, TOEVOEGING
+				FROM WORKSHOPLEIDER
+				WHERE WORKSHOPLEIDER_ID = @workshopleader_id
+				'
+	 EXEC sp_executesql @sql, N'@workshopleader_id INT', @workshopleader_id
+END
+GO
+
+
 --===================================================================================================================
 -- SP_get_list_of_to_approve_workshop_participants: returns all participants of a workshop that are not approved                                 
 --===================================================================================================================
