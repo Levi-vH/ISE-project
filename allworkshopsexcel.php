@@ -18,17 +18,18 @@ $spreadsheet->getProperties()
     ->setKeywords('office PhpSpreadsheet php')
     ->setCategory('Test result file');
 
-function connectToDB(){
+function connectToDB()
+{
     $hostnaam = '(local)';
-    $dbnaam ='SBBWorkshopOmgeving';
+    $dbnaam = 'SBBWorkshopOmgeving';
     $username = 'iseprojectuser';
     $wachtwoord = 'iseprojectww';
 
     try {
         $handler = new PDO("sqlsrv:Server=$hostnaam; Database=$dbnaam; ConnectionPooling=0", "$username", "$wachtwoord");
 
-        $handler->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-    }catch (PDOException $e){
+        $handler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
         echo "Er ging iets mis met de database.<br>";
         echo "De melding is {$e->getMessage()}<br><br>";
     }
@@ -55,12 +56,12 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         ->setCellValue('D1', 'Datum')
         ->setCellValue('E1', 'Adviseurnaam')
         ->setCellValue('F1', 'Organisatie')
-        ->setCellValue('A'.$nummer, $row['WORKSHOP_ID'])
-        ->setCellValue('B'.$nummer, $row['TYPE'])
-        ->setCellValue('C'.$nummer, $row['MODULENAAM'])
-        ->setCellValue('D'.$nummer, date('j F Y', strtotime($row['DATUM'])))
-        ->setCellValue('E'.$nummer, $row['ADVISEUR_VOORNAAM'] . ' ' . $row['ADVISEUR_ACHTERNAAM'])
-        ->setCellValue('F'.$nummer, $row['ORGANISATIENAAM']);
+        ->setCellValue('A' . $nummer, $row['WORKSHOP_ID'])
+        ->setCellValue('B' . $nummer, $row['TYPE'])
+        ->setCellValue('C' . $nummer, $row['MODULENAAM'])
+        ->setCellValue('D' . $nummer, date('j F Y', strtotime($row['DATUM'])))
+        ->setCellValue('E' . $nummer, $row['ADVISEUR_VOORNAAM'] . ' ' . $row['ADVISEUR_ACHTERNAAM'])
+        ->setCellValue('F' . $nummer, $row['ORGANISATIENAAM']);
 
 }
 
@@ -94,4 +95,20 @@ $spreadsheet->getActiveSheet()
     ->setTitle('Workshop');
 
 // Save
-$helper->write($spreadsheet, 'workshops.php');
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $helper->write($spreadsheet, 'Workshops.xlsx');
+    //$helper->writeFile($spreadsheet, 'Workshops.xlsx');
+
+}
+
+
+?>
+
+<form action="allworkshopsexcel.php" method="post">
+    <button type="submit">Download</button>
+</form>
+
+
+
+
+

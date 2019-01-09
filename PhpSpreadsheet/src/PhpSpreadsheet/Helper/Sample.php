@@ -132,6 +132,28 @@ class Sample
         $this->logEndingNotes();
     }
 
+    public function writeFile(Spreadsheet $spreadsheet, $filename, array $writers = ['Xlsx'])
+    {
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $spreadsheet->setActiveSheetIndex(0);
+
+        // Write documents
+        foreach ($writers as $writerType) {
+            $path = $this->getFilename($filename, mb_strtolower($writerType));
+            $writer = IOFactory::createWriter($spreadsheet, $writerType);
+            if ($writer instanceof Pdf) {
+                // PDF writer needs temporary directory
+                $tempDir = $this->getTemporaryFolder();
+                $writer->setTempDir("C:\Projecten\phpspreadsheet");
+            }
+            $callStartTime = microtime(true);
+            $writer->save('php://output');
+            $this->logWrite($writer, $path, $callStartTime);
+        }
+
+        $this->logEndingNotes();
+    }
+
     /**
      * Returns the temporary directory and make sure it exists.
      *

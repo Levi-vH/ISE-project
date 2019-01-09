@@ -60,7 +60,7 @@ if ($_SESSION['username'] == 'planner') {
 
         $row = $stmt2->fetch(PDO::FETCH_ASSOC);
 
-        
+
         header('Location: workshop.php?workshop_id='.$row['WORKSHOP_ID']);
     }
 
