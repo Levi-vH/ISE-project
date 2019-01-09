@@ -2,6 +2,8 @@
 include 'functions.php';
 
 generate_header('Workshop overzicht');
+
+$search_string = null;
 ?>
 
 <div class="container">
@@ -72,6 +74,7 @@ generate_header('Workshop overzicht');
             // $sql = "SELECT * FROM VW_WORKSHOPS";
 
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                $search_string = null;
                 $search_workshop = "'%%'";
                 $search_module = "'%%'";
                 $search_leader = "'%%'";
@@ -80,22 +83,59 @@ generate_header('Workshop overzicht');
                 $lastname = "'%%'";
 
                 if (isset($_POST["Workshop_type"])) {
+                 //   $search_string.= 'workshoptype komt binnen';
                     $search_workshop ="'%". check_input($_POST["Workshop_type"]) . "%'";
                 }
                 if (isset($_POST["Module_type"])) {
+                //    $search_string.= 'moduletype komt binnen';
                     $search_module ="'%". check_input($_POST["Module_type"]) . "%'";
                 }
                 if (isset($_POST["WORKSHOPLEIDER_ID"])) {
+                 //   $search_string.= 'workshopleider komt binnen';
                     $search_leader ="'%". check_input($_POST["WORKSHOPLEIDER_ID"]) . "%'";
                 }
                 if (isset($_POST["Organisation_Name"])) {
+                 //   $search_string.= 'organisatie naam komt binnen';
                     $search_company_name ="'%". check_input($_POST["Organisation_Name"]) . "%'";
                 }
                 if (isset($_POST["inputParticipantFirstName"])) {
+                 //   $search_string.= 'voornaam komt binnen';
                     $firstname ="'%". check_input($_POST["inputParticipantFirstName"]) . "%'";
                 }
                 if (isset($_POST["inputParticipantLastName"])) {
+                 //   $search_string.= 'achternaam komt binnen';
                     $lastname ="'%". check_input($_POST["inputParticipantLastName"]) . "%'";
+                }
+
+                // setting the search string to match the values that were selected.
+
+                if($search_workshop != "'%%'") {
+                    $search_string .= 'workshop_type = ' . check_input($_POST["Workshop_type"]) . ' ';
+                }
+
+                if($search_module != "'%%'") {
+                    $search_string .= 'module_type = ' . check_input($_POST["Module_type"]) . ' ';
+                }
+
+                if($search_company_name != "'%%'") {
+                    $search_string .= 'organisatienaam = ' . check_input($_POST["Organisation_Name"]) . ' ';
+                }
+
+                if($firstname != "'%%'") {
+                    $search_string .= 'deelnemer voornaam = ' . check_input($_POST["inputParticipantFirstName"]) . ' ';
+                }
+
+                if($lastname != "'%%'") {
+                    $search_string .= 'deelnemer achternaam = ' . check_input($_POST["inputParticipantLastName"]) . ' ';
+                }
+
+                if($search_leader != "'%%'") {
+                    $workshopleader_id = check_input($_POST["WORKSHOPLEIDER_ID"]);
+                    $get_advisorname = "EXEC SP_get_workshopleader_first_and_lastname @workshopleader_id = $workshopleader_id";
+                    $stmt2 = $conn->prepare($get_advisorname);
+                    $stmt2->execute();
+                    $advisor_results = $stmt2->fetch(PDO::FETCH_ASSOC);
+                    $search_string .= 'workshopleider = ' . $advisor_results ["VOORNAAM"] . ' ' . $advisor_results["ACHTERNAAM"];
                 }
 
                 $sql = "EXEC SP_get_workshops_filtered @workshop_type = $search_workshop, @modulenaam = $search_module, @workshopleider_ID = $search_leader,
@@ -110,6 +150,9 @@ generate_header('Workshop overzicht');
 
             $stmt = $conn->prepare($sql);
             $stmt->execute();
+            if ($search_string !== NULL) {
+                echo '<div class ="container"> <p>' . $search_string . '</p> </div>';
+            }
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
