@@ -92,11 +92,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
             if($detailToConfirm !== null){
 
-                $sql7 = "exec SP_confirm_Workshop_Details ?, ?, ?";
+                $sql7 = "exec SP_confirm_Workshop_Details ?, ?, ?, ?";
                 $stmt7 = $conn->prepare($sql7);
                 $stmt7->bindParam(1, $detailToConfirm,PDO::PARAM_STR);
                 $stmt7->bindParam(2, $groepNumber,PDO::PARAM_INT);
                 $stmt7->bindParam(3, $moduleNumber,PDO::PARAM_INT);
+                $stmt7->bindParam(4, $moduleleader,PDO::PARAM_INT);
 
                 $stmt7->execute();
             }
