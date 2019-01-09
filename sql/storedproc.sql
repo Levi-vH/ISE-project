@@ -1687,7 +1687,8 @@ GO
 --=============================================================================================================================
 -- SP SP_confirm_Workshop_Details: Confirm workshopleader / date on sbb's side or the contactperson's side based on parameters                     
 --=============================================================================================================================
-
+select *
+from MODULE_VAN_GROEP
 
 CREATE OR ALTER PROC SP_confirm_Workshop_Details
 (
@@ -1711,9 +1712,18 @@ BEGIN
 					WHERE GROEP_ID = ' + CAST(@groep_id AS varchar(7)) + '
 					AND MODULENUMMER = ' + CAST(@modulenummer AS varchar(1))
 	EXEC sp_executesql @sql, N'@detailToConfirm NVARCHAR(400),@groep_id INT, @modulenummer INT', @detailToConfirm, @groep_id, @modulenummer
+
+	IF @column = 'workshopleader'
+		BEGIN
+			DECLARE @workshopleader_ID INT = (SELECT WORKSHOPLEIDER FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR (7)))
+			DECLARE @start_workshop TIME(7) = (SELECT STARTTIJD FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR(7)))
+			DECLARE @end_workshop TIME(7) = (SELECT EINDTIJD FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR(7)))
+
+			UPDATE BESCHIKBAARHEID
+			SET AANTAL_UUR = (AANTAL_UUR - (CAST(DATEDIFF(minute, @start_workshop , @end_workshop) AS NUMERIC(5,2)) / 60.00))
+		END
 END
 GO
-
 /*==============================================================*/
 /* SP Type: DELETE                                              */
 /*==============================================================*/
