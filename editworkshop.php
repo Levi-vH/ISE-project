@@ -3,6 +3,8 @@ if (!isset($_SESSION)) {
     session_start();
 }
 
+$errorMessage = null;
+
 include 'functions.php';
 if ($_SESSION['username'] == 'planner') {
 
@@ -56,26 +58,31 @@ if ($_SESSION['username'] == 'planner') {
         $workshopleader = check_input($_POST["workshopleader"]);
         $workshopnotes = check_input($_POST['workshopnotes']);
 
-        //Run the stored procedure
-        $sql = "exec SP_alter_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
-        $stmt->bindParam(2, $workshoptype, PDO::PARAM_STR);
-        $stmt->bindParam(3, $workshopdate, PDO::PARAM_STR);
-        $stmt->bindParam(4, $contactinfo, PDO::PARAM_INT);
-        $stmt->bindParam(5, $workshopmodule, PDO::PARAM_INT);
-        $stmt->bindParam(6, $workshopcompany, PDO::PARAM_STR);
-        $stmt->bindParam(7, $workshopsector, PDO::PARAM_STR);
-        $stmt->bindParam(8, $starttime, PDO::PARAM_STR);
-        $stmt->bindParam(9, $endtime, PDO::PARAM_STR);
-        $stmt->bindParam(10, $workshopadress, PDO::PARAM_STR);
-        $stmt->bindParam(11, $workshoppostcode, PDO::PARAM_STR);
-        $stmt->bindParam(12, $workshopcity, PDO::PARAM_STR);
-        $stmt->bindParam(13, $workshopleader, PDO::PARAM_INT);
-        $stmt->bindParam(14, $workshopnotes, PDO::PARAM_STR);
-        $stmt->execute();
+        if(strtotime($workshopdate) < time()){
+            $errorMessage = 'De workshop mag niet in het verleden liggen';
+            $workshopdate = $row['DATUM'];
+        }else {
 
+            //Run the stored procedure
+            $sql = "exec SP_alter_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
+            $stmt->bindParam(2, $workshoptype, PDO::PARAM_STR);
+            $stmt->bindParam(3, $workshopdate, PDO::PARAM_STR);
+            $stmt->bindParam(4, $contactinfo, PDO::PARAM_INT);
+            $stmt->bindParam(5, $workshopmodule, PDO::PARAM_INT);
+            $stmt->bindParam(6, $workshopcompany, PDO::PARAM_STR);
+            $stmt->bindParam(7, $workshopsector, PDO::PARAM_STR);
+            $stmt->bindParam(8, $starttime, PDO::PARAM_STR);
+            $stmt->bindParam(9, $endtime, PDO::PARAM_STR);
+            $stmt->bindParam(10, $workshopadress, PDO::PARAM_STR);
+            $stmt->bindParam(11, $workshoppostcode, PDO::PARAM_STR);
+            $stmt->bindParam(12, $workshopcity, PDO::PARAM_STR);
+            $stmt->bindParam(13, $workshopleader, PDO::PARAM_INT);
+            $stmt->bindParam(14, $workshopnotes, PDO::PARAM_STR);
+            $stmt->execute();
 
+        }
     }
 
     generate_header('Workshop aanpassen');
@@ -124,6 +131,7 @@ if ($_SESSION['username'] == 'planner') {
                     <ul class="list">
                         <h5><strong>Workshop Opties</strong></h5>
                         <?php
+
                         if ($_SESSION['username'] == "planner") {
                             echo '<li>';
                             echo '<a href="workshop.php?workshop_id='.$workshop_id.'">Details</a>';
@@ -159,6 +167,7 @@ if ($_SESSION['username'] == 'planner') {
             </div>
             <div class="container">
                 <h2 class="text-info text-center">Wijzig workshop <?php echo $workshop_id ?></h2>
+                <?= $errorMessage ?>
                 <form class="form-horizontal" action="editworkshop.php?workshop_id=<?php echo $workshop_id ?>" method="post">
                     <div class="form-group">
                         <label class="control-label col-sm-2 font-weight-bold" for="workshoptype">Type workshop:</label>

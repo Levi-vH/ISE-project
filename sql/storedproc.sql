@@ -782,6 +782,27 @@ BEGIN
 END
 GO
 
+--=================================================================================
+-- SP_get_participant_code: Gets the logincode of a participant based on given ID                           
+--=================================================================================
+
+CREATE OR ALTER PROC SP_get_participant_code
+(
+@participant_id INT = NULL
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				SELECT INLOGCODE 
+				FROM DEELNEMER
+				WHERE DEELNEMER_ID = @participant_id
+				'
+	 EXEC sp_executesql @sql, N'@participant_id INT', @participant_id
+END
+GO
+
 /*==============================================================*/
 /* SP Type: INSERT                                              */
 /*==============================================================*/
@@ -1709,9 +1730,6 @@ GO
 --=============================================================================================================================
 -- SP SP_confirm_Workshop_Details: Confirm workshopleader / date on sbb's side or the contactperson's side based on parameters                     
 --=============================================================================================================================
-select *
-from MODULE_VAN_GROEP
-
 CREATE OR ALTER PROC SP_confirm_Workshop_Details
 (
 @detailToConfirm NVARCHAR(400),
@@ -1740,9 +1758,14 @@ BEGIN
 			DECLARE @workshopleader_ID INT = (SELECT WORKSHOPLEIDER FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR (7)))
 			DECLARE @start_workshop TIME(7) = (SELECT STARTTIJD FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR(7)))
 			DECLARE @end_workshop TIME(7) = (SELECT EINDTIJD FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR(7)))
+			DECLARE @year INT = (SELECT YEAR(DATUM) FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR(7)))
+			DECLARE @quarter INT = (SELECT DATEPART(QUARTER, DATUM) FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR(7)))
 
-			UPDATE BESCHIKBAARHEID
-			SET AANTAL_UUR = (AANTAL_UUR - (CAST(DATEDIFF(minute, @start_workshop , @end_workshop) AS NUMERIC(5,2)) / 60.00))
+			UPDATE	BESCHIKBAARHEID
+			SET		AANTAL_UUR = (AANTAL_UUR - (CAST(DATEDIFF(minute, @start_workshop , @end_workshop) AS NUMERIC(5,2)) / 60.00))
+			WHERE	WORKSHOPLEIDER_ID = @workshopleader_ID
+			AND		JAAR = @year
+			AND		KWARTAAL = @quarter
 		END
 END
 GO

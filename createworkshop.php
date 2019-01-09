@@ -5,8 +5,9 @@ if (!isset($_SESSION)) {
 
 include 'functions.php';
 
-if ($_SESSION['username'] == 'planner') {
+$errorMessage = null;
 
+if ($_SESSION['username'] == 'planner') {
 // define (empty) variables
     $workshopdate = $contactsbb = $workshopmodule = $workshopsector = $starttime = $endtime =
     $workshopadress  = $workshopcity = $workshoppostcode = $workshopleader = $workshopnotes =
@@ -29,39 +30,41 @@ if ($_SESSION['username'] == 'planner') {
         $contactcompanyemail = check_input($_POST['contactcompanyemail']);
         $contactcompanyphone = check_input($_POST["contactcompanyphone"]);
 
-        pre_r($_POST);
+        if(strtotime($workshopdate) < time()){
+            $errorMessage = 'De workshop mag niet in het verleden liggen';
+        }else{
+            //Try to make connection
+            $conn = connectToDB();
 
-        //Try to make connection
-        $conn = connectToDB();
-
-        //Run the stored procedure
-        $sql = "exec SP_insert_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(1, $workshopdate, PDO::PARAM_STR);
-        $stmt->bindParam(2, $contactsbb, PDO::PARAM_INT);
-        $stmt->bindParam(3, $workshopmodule, PDO::PARAM_INT);
-        $stmt->bindParam(4, $workshopsector, PDO::PARAM_STR);
-        $stmt->bindParam(5, $starttime, PDO::PARAM_STR);
-        $stmt->bindParam(6, $endtime, PDO::PARAM_STR);
-        $stmt->bindParam(7, $workshopadress, PDO::PARAM_STR);
-        $stmt->bindParam(8, $workshopcity, PDO::PARAM_STR);
-        $stmt->bindParam(9, $workshoppostcode, PDO::PARAM_STR);
-        $stmt->bindParam(10, $workshopleader, PDO::PARAM_INT);
-        $stmt->bindParam(11, $workshopnotes, PDO::PARAM_STR);
-        $stmt->bindParam(12, $contactcompanyname, PDO::PARAM_STR);
-        $stmt->bindParam(13, $contactcompanyemail, PDO::PARAM_STR);
-        $stmt->bindParam(14, $contactcompanyphone, PDO::PARAM_STR);
-        $stmt->execute();
-
-
-        $sql2 = "SELECT TOP 1 WORKSHOP_ID FROM WORKSHOP ORDER BY WORKSHOP_ID DESC";
-        $stmt2 = $conn->prepare($sql2);
-        $stmt2->execute();
-
-        $row = $stmt2->fetch(PDO::FETCH_ASSOC);
+            //Run the stored procedure
+            $sql = "exec SP_insert_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(1, $workshopdate, PDO::PARAM_STR);
+            $stmt->bindParam(2, $contactsbb, PDO::PARAM_INT);
+            $stmt->bindParam(3, $workshopmodule, PDO::PARAM_INT);
+            $stmt->bindParam(4, $workshopsector, PDO::PARAM_STR);
+            $stmt->bindParam(5, $starttime, PDO::PARAM_STR);
+            $stmt->bindParam(6, $endtime, PDO::PARAM_STR);
+            $stmt->bindParam(7, $workshopadress, PDO::PARAM_STR);
+            $stmt->bindParam(8, $workshopcity, PDO::PARAM_STR);
+            $stmt->bindParam(9, $workshoppostcode, PDO::PARAM_STR);
+            $stmt->bindParam(10, $workshopleader, PDO::PARAM_INT);
+            $stmt->bindParam(11, $workshopnotes, PDO::PARAM_STR);
+            $stmt->bindParam(12, $contactcompanyname, PDO::PARAM_STR);
+            $stmt->bindParam(13, $contactcompanyemail, PDO::PARAM_STR);
+            $stmt->bindParam(14, $contactcompanyphone, PDO::PARAM_STR);
+            $stmt->execute();
 
 
-        header('Location: workshop.php?workshop_id='.$row['WORKSHOP_ID']);
+            $sql2 = "SELECT TOP 1 WORKSHOP_ID FROM WORKSHOP ORDER BY WORKSHOP_ID DESC";
+            $stmt2 = $conn->prepare($sql2);
+            $stmt2->execute();
+
+            $row = $stmt2->fetch(PDO::FETCH_ASSOC);
+
+
+            header('Location: workshop.php?workshop_id='.$row['WORKSHOP_ID']);
+        }
     }
 
     generate_header('Workshop aanmaken');
@@ -71,6 +74,7 @@ if ($_SESSION['username'] == 'planner') {
     <div class="container">
         <h2 class="text-info text-center">Maak een nieuwe workshop</h2>
         <form class="form-horizontal" action="createworkshop.php" method="post">
+            <?= $errorMessage ?>
             <h2 class="text-info">Algemeen</h2>
             <div class="form-group">
                 <label class="control-label col-sm-2 font-weight-bold" for="workshopdate">Datum workshop:</label>
