@@ -414,15 +414,20 @@ pname AS -- placename/plaatsnaam
 SELECT TOP 250 City AS placename, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
 FROM [AdventureWorks2014].[Person].[Address]
 ),
-wtype AS
+wtype AS -- workshoptype
 (
 SELECT 1 id, CAST(RAND(CHECKSUM(NEWID()))*4+1 AS INT) randomtype
 UNION ALL
 SELECT id + 1, CAST(RAND(CHECKSUM(NEWID()))*4+1 AS INT) randomtype
 FROM wtype
 WHERE id < 250 -- amount of rows/hoeveelheid rijen
+),
+cp_info AS -- contactperson info/contactpersoon info
+(
+SELECT TOP 250 (VOORNAAM + ' ' + ACHTERNAAM) AS cp_name, EMAIL AS cp_email, TELEFOONNUMMER AS cp_phonenumber, ROW_NUMBER() OVER (ORDER BY NEWID()) AS id
+FROM [SBBWorkshopOmgeving].[dbo].[CONTACTPERSOON]
 )
-INSERT INTO [SBBWorkshopOmgeving].[dbo].[WORKSHOP] (WORKSHOPLEIDER_ID, CONTACTPERSOON_ID, ORGANISATIENUMMER, MODULENUMMER, ADVISEUR_ID, SECTORNAAM, DATUM, STARTTIJD, EINDTIJD, ADRES, POSTCODE, PLAATSNAAM, [STATUS], OPMERKING, TYPE, VERWERKT_BREIN, DEELNEMER_GEGEVENS_ONTVANGEN, OVK_BEVESTIGING, PRESENTIELIJST_VERSTUURD, PRESENTIELIJST_ONTVANGEN, BEWIJS_DEELNAME_MAIL_SBB_WSL)
+INSERT INTO [SBBWorkshopOmgeving].[dbo].[WORKSHOP] (WORKSHOPLEIDER_ID, CONTACTPERSOON_ID, ORGANISATIENUMMER, MODULENUMMER, ADVISEUR_ID, SECTORNAAM, DATUM, STARTTIJD, EINDTIJD, ADRES, POSTCODE, PLAATSNAAM, [STATUS], OPMERKING, TYPE, VERWERKT_BREIN, DEELNEMER_GEGEVENS_ONTVANGEN, OVK_BEVESTIGING, PRESENTIELIJST_VERSTUURD, PRESENTIELIJST_ONTVANGEN, BEWIJS_DEELNAME_MAIL_SBB_WSL, CONTACTPERSOON_NAAM, CONTACTPERSOON_EMAIL, CONTACTPERSOON_TELEFOONNUMMER)
 SELECT	workshopleader_id,
 		contactperson_id,
 		organizationnumber,
@@ -449,8 +454,23 @@ SELECT	workshopleader_id,
 		NULL AS OVK_BEVESTIGING,
 		NULL AS PRESENTIELIJST_VERSTUURD,
 		NULL AS PRESENTIELIJST_ONTVANGEN,
-		NULL AS BEWIJS_DEELNAME_MAIL_SBB_WSL
-FROM wl_id_sname ws, cp_id cid, orgnum o, modnum m, ad_id aid, wdate w, stime_etime se, adrs a, housenum h, pcode p, pname pl, wtype wo
+		NULL AS BEWIJS_DEELNAME_MAIL_SBB_WSL,
+		contactperson_name =
+			CASE
+				WHEN randomtype = 1 THEN cp_name -- workshoptype = 'IND'
+				ELSE NULL -- workshoptype is something else
+			END,
+		contactperson_email =
+			CASE
+				WHEN randomtype = 1 THEN cp_email -- workshoptype = 'IND'
+				ELSE NULL -- workshoptype is something else
+			END,
+		contactperson_phonenumber =
+			CASE
+				WHEN randomtype = 1 THEN cp_phonenumber -- workshoptype = 'IND'
+				ELSE NULL -- workshoptype is something else
+			END
+FROM wl_id_sname ws, cp_id cid, orgnum o, modnum m, ad_id aid, wdate w, stime_etime se, adrs a, housenum h, pcode p, pname pl, wtype wo, cp_info cinfo
 WHERE ws.id = cid.id
 AND ws.id = o.id
 AND ws.id = m.id
@@ -462,6 +482,7 @@ AND ws.id = h.id
 AND ws.id = p.id
 AND ws.id = pl.id
 AND ws.id = wo.id
+AND ws.id = cinfo.id
 OPTION (MAXRECURSION 0)
 GO
 
