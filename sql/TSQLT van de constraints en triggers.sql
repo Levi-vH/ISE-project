@@ -15,9 +15,11 @@ USE [UnitTesting SBB]
 
 EXEC tSQLt.NewTestClass 'testWorkshop';
 EXEC tSQLt.NewTestClass 'testDeelnemer';
+EXEC tSQLt.NewTestClass 'testModuleVanGroep';
 
 EXEC tSQLt.run 'testWorkshop'
 EXEC tSQLt.run 'testDeelnemer'
+EXEC tSQLt.run 'testModuleVanGroep'
 
 -- the select statement can be used to drop all tables in the tSQLt database
 /*
@@ -39,7 +41,8 @@ AND		TABLE_SCHEMA LIKE ('dbo%')
 -- test with type = 'afgehandeld'
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 1]
 GO
-CREATE PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 1]
+
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 1]
 AS
 BEGIN
 	IF OBJECT_ID('[testWorkshopStateTrigger]','Table') IS NOT NULL
@@ -76,7 +79,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 2]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 2]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 2]
 AS
 BEGIN
 	IF OBJECT_ID('[testWorkshopStateTrigger2]','Table') IS NOT NULL
@@ -113,7 +116,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 3]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 3]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 3]
 AS
 BEGIN
 	IF OBJECT_ID('[testWorkshopStateTrigger3]','Table') IS NOT NULL
@@ -150,7 +153,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 4]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 4]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for the automatic change to the bevestigd state 4]
 AS
 BEGIN
 	IF OBJECT_ID('[testWorkshopStateTrigger4]','Table') IS NOT NULL
@@ -191,7 +194,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for advisor in INC workshops 1]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for advisor in INC workshops 1]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for advisor in INC workshops 1]
 AS
 BEGIN
 	
@@ -214,7 +217,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for advisor in INC workshops 2]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for advisor in INC workshops 2]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for advisor in INC workshops 2]
 AS
 BEGIN
 	
@@ -237,7 +240,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for advisor in INC workshops 3]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for advisor in INC workshops 3]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for advisor in INC workshops 3]
 AS
 BEGIN
 	
@@ -260,7 +263,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for advisor in INC workshops 4]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for advisor in INC workshops 4]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for advisor in INC workshops 4]
 AS
 BEGIN
 		
@@ -287,7 +290,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopdate 1]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for workshopdate 1]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for workshopdate 1]
 AS
 BEGIN
 		
@@ -310,7 +313,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopdate 2]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for workshopdate 2]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for workshopdate 2]
 AS
 BEGIN
 	
@@ -337,7 +340,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopstatus 1]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for workshopstatus 1]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for workshopstatus 1]
 AS
 BEGIN
 
@@ -360,7 +363,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopstatus 2]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for workshopstatus 2]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for workshopstatus 2]
 AS
 BEGIN
 
@@ -387,7 +390,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopEndtime 1]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for workshopEndtime 1]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for workshopEndtime 1]
 AS
 BEGIN
 
@@ -410,7 +413,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopEndtime 2]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for workshopEndtime 2]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for workshopEndtime 2]
 AS
 BEGIN
 
@@ -438,7 +441,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopConcluded 1]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for workshopConcluded 1]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for workshopConcluded 1]
 AS
 BEGIN
 IF OBJECT_ID('[testWorkshopStateTrigger]','Table') IS NOT NULL
@@ -475,7 +478,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopConcluded 2]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for workshopConcluded 2]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for workshopConcluded 2]
 AS
 BEGIN
 IF OBJECT_ID('[testWorkshopStateTrigger]','Table') IS NOT NULL
@@ -512,7 +515,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopConcluded 3]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for workshopConcluded 3]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for workshopConcluded 3]
 AS
 BEGIN
 IF OBJECT_ID('[testWorkshopStateTrigger]','Table') IS NOT NULL
@@ -552,7 +555,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopTypeAndSector 1]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for workshopTypeAndSector 1]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for workshopTypeAndSector 1]
 AS
 BEGIN
 
@@ -575,7 +578,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopTypeAndSector 2]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for workshopTypeAndSector 2]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for workshopTypeAndSector 2]
 AS
 BEGIN
 	EXEC tSQLt.FakeTable @Tablename = 'dbo.WORKSHOP';  
@@ -597,7 +600,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopTypeAndSector 3]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for workshopTypeAndSector 3]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for workshopTypeAndSector 3]
 AS
 BEGIN
 
@@ -620,7 +623,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for workshopTypeAndSector 4]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for workshopTypeAndSector 4]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for workshopTypeAndSector 4]
 AS
 BEGIN
 
@@ -639,6 +642,22 @@ BEGIN
 END
 GO
 
+--=========================================================
+-- test when workshopleader isn't with a workshop anymore,
+-- he/she gets the available hours back
+--=========================================================
+
+
+--======================================
+-- tests for the module_van_groep table
+--======================================
+
+--======================================================
+-- test when workshopleader isn't with a group anymore,
+-- he/she gets the available hours back
+--======================================================
+
+
 --===============================
 -- tests for the deelnemer table
 --===============================
@@ -651,7 +670,7 @@ GO
 DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer emails 1]
 GO
 
-CREATE PROCEDURE [testDeelnemer].[test for deelnemer emails 1]
+CREATE OR ALTER PROCEDURE [testDeelnemer].[test for deelnemer emails 1]
 AS
 BEGIN
 
@@ -672,7 +691,7 @@ GO
 DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer emails 2]
 GO
 
-CREATE PROCEDURE [testDeelnemer].[test for deelnemer emails 2]
+CREATE OR ALTER PROCEDURE [testDeelnemer].[test for deelnemer emails 2]
 AS
 BEGIN
 
@@ -693,7 +712,7 @@ GO
 DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer emails 3]
 GO
 
-CREATE PROCEDURE [testDeelnemer].[test for deelnemer emails 3]
+CREATE OR ALTER PROCEDURE [testDeelnemer].[test for deelnemer emails 3]
 AS
 BEGIN
 
@@ -718,7 +737,7 @@ GO
 DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer birthdates 1]
 GO
 
-CREATE PROCEDURE [testDeelnemer].[test for deelnemer birthdates 1]
+CREATE OR ALTER PROCEDURE [testDeelnemer].[test for deelnemer birthdates 1]
 AS
 BEGIN
 
@@ -739,7 +758,7 @@ GO
 DROP PROCEDURE IF EXISTS [testDeelnemer].[test for deelnemer birthdates 2]
 GO
 
-CREATE PROCEDURE [testDeelnemer].[test for deelnemer birthdates 2]
+CREATE OR ALTER PROCEDURE [testDeelnemer].[test for deelnemer birthdates 2]
 AS
 BEGIN
 
@@ -765,7 +784,7 @@ GO
 DROP PROCEDURE IF EXISTS [testDeelnemer].[test for open inschrvijving 1]
 GO
 
-CREATE PROCEDURE [testDeelnemer].[test for open inschrvijving 1]
+CREATE OR ALTER PROCEDURE [testDeelnemer].[test for open inschrvijving 1]
 AS
 BEGIN
 
@@ -786,7 +805,7 @@ GO
 DROP PROCEDURE IF EXISTS [testDeelnemer].[test for open inschrvijving 2]
 GO
 
-CREATE PROCEDURE [testDeelnemer].[test for open inschrvijving 2]
+CREATE OR ALTER PROCEDURE [testDeelnemer].[test for open inschrvijving 2]
 AS
 BEGIN
 
@@ -807,7 +826,7 @@ GO
 DROP PROCEDURE IF EXISTS [testDeelnemer].[test for open inschrvijving 3]
 GO
 
-CREATE PROCEDURE [testDeelnemer].[test for open inschrvijving 3]
+CREATE OR ALTER PROCEDURE [testDeelnemer].[test for open inschrvijving 3]
 AS
 BEGIN
 
@@ -833,7 +852,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for type ind 1]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for type ind 1]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for type ind 1]
 AS
 BEGIN
 
@@ -852,7 +871,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for type ind 2]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for type ind 2]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for type ind 2]
 AS
 BEGIN
 
@@ -871,7 +890,7 @@ GO
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for type ind 3]
 GO
 
-CREATE PROCEDURE [testWorkshop].[test for type ind 3]
+CREATE OR ALTER PROCEDURE [testWorkshop].[test for type ind 3]
 AS
 BEGIN
 

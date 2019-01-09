@@ -21,10 +21,7 @@ GO
 -- IR1 / C1 / BR1
 -- Check if workshopstate = 'bevestigd' when WORKSHOPLEIDER_ID is not null
 --=========================================================================
-DROP TRIGGER IF EXISTS dbo.TR_workshop_state_bevestigd
-GO
-
-CREATE TRIGGER TR_workshop_state_bevestigd
+CREATE OR ALTER TRIGGER TR_workshop_state_bevestigd
 ON WORKSHOP
 AFTER INSERT, UPDATE
 AS
@@ -69,10 +66,7 @@ ADD CONSTRAINT CK_workshop_concluded CHECK((VERWERKT_BREIN IS NULL AND DEELNEMER
 PRESENTIELIJST_VERSTUURD IS NULL AND BEWIJS_DEELNAME_MAIL_SBB_WSL IS NULL AND PRESENTIELIJST_ONTVANGEN IS NULL) OR STATUS = 'afgehandeld')
 GO
 
-DROP TRIGGER IF EXISTS dbo.TR_workshop_concluded
-GO
-
-CREATE TRIGGER TR_workshop_concluded
+CREATE OR ALTER TRIGGER TR_workshop_concluded
 ON WORKSHOP
 AFTER INSERT, UPDATE
 AS
@@ -187,10 +181,7 @@ GO
 -- Give a workshopleader his/her available hours back if he/she is no longer
 -- leading the workshop.
 --=========================================================================
-DROP TRIGGER IF EXISTS dbo.TR_workshop_return_hours
-GO
-
-CREATE TRIGGER TR_workshop_return_hours
+CREATE OR ALTER TRIGGER TR_workshop_return_hours
 ON WORKSHOP
 AFTER UPDATE, DELETE
 AS
@@ -226,10 +217,7 @@ GO
 --=========================================================================
 -- MODULE_VAN_GROEP constraints
 --=========================================================================
-DROP TRIGGER IF EXISTS dbo.TR_module_van_groep_return_hours
-GO
-
-CREATE TRIGGER TR_module_van_groep_return_hours
+CREATE OR ALTER TRIGGER TR_module_van_groep_return_hours
 ON MODULE_VAN_GROEP
 AFTER UPDATE, DELETE
 AS
