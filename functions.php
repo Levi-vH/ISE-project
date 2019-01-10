@@ -79,7 +79,7 @@ function generate_header($title_of_page)
                 $header .= $_SESSION['username'];
             }
         }
-    }else{
+    } else {
         $header .= '<li class="nav-item active">
                 <a class="nav-link" href="open_registrationform.php">Inschrijven voor open workshop</a>
             </li>';
@@ -501,7 +501,7 @@ function getCode()
     return implode($code); //turn the array into a string
 }
 
-function createExcel($sql)
+function createExcelWorkshop($sql)
 {
 
     require_once('PhpSpreadsheet/samples/Header.php');
@@ -551,7 +551,65 @@ function createExcel($sql)
     $spreadsheet->getActiveSheet()
         ->setTitle('Workshop');
 
-    $helper->write($spreadsheet, 'Workshops.xlsx');
-    //$helper->writeFile($spreadsheet, 'Workshops.xlsx');
+    try {
+        $helper->write($spreadsheet, 'Workshops.xlsx');
+    } catch (Exception $exception) {
+        updatePage($_SERVER['PHP_SELF'] . '?error=true');
+        //echo 'Sluit eerst het bestand voordat je een nieuwe download.';
+    }
+}
 
+function createExcelParticipants($sql, $workshop_id)
+{
+
+    require_once('PhpSpreadsheet/samples/Header.php');
+
+    $spreadsheet = new PhpOffice\PhpSpreadsheet\Spreadsheet;
+    $helper = new PhpOffice\PhpSpreadsheet\Helper\Sample();
+
+// Set document properties
+    $spreadsheet->getProperties()
+        ->setCreator('ISE projectgroep B2')
+        ->setLastModifiedBy('ISE Projectgroep B2')
+        ->setTitle('PhpSpreadsheet Test Document')
+        ->setSubject('PhpSpreadsheet Test Document')
+        ->setDescription('Test document for PhpSpreadsheet, generated using PHP classes.')
+        ->setKeywords('office PhpSpreadsheet php')
+        ->setCategory('Test result file');
+
+
+//Try to make connection
+    $conn = connectToDB();
+
+//Run the stored procedure
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+
+
+    $nummer = 1;
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $nummer++;
+        $spreadsheet->setActiveSheetIndex(0)
+            ->setCellValue('A1', 'Naam')
+            ->setCellValue('B1', 'Geboortedatum')
+            ->setCellValue('C1', 'Opleidingsniveau')
+            ->setCellValue('D1', 'Email')
+            ->setCellValue('E1', 'Telefoonnummer')
+            ->setCellValue('A' . $nummer, $row['VOORNAAM'] . ' ' . $row['ACHTERNAAM'])
+            ->setCellValue('B' . $nummer, date('j F Y', strtotime($row['GEBOORTEDATUM'])))
+            ->setCellValue('C' . $nummer, $row['OPLEIDINGSNIVEAU'])
+            ->setCellValue('D' . $nummer, $row['EMAIL'])
+            ->setCellValue('E' . $nummer, $row['TELEFOONNUMMER']);
+
+    }
+// Rename worksheet
+    //$helper->log('Rename worksheet');
+    $spreadsheet->getActiveSheet()
+        ->setTitle('Deelnemers');
+    try {
+        $helper->write($spreadsheet, 'Deelnemers.xlsx');
+    } catch (Exception $exception) {
+        updatePage($_SERVER['PHP_SELF'] . '?workshop_id=' . $workshop_id . '&error=true');
+        //echo 'Sluit eerst het bestand voordat je een nieuwe download.';
+    }
 }

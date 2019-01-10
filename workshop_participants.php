@@ -85,7 +85,7 @@ $workshoptype = getWorkshopType($workshop_id);
                         <th>Verwijderen</th>
                     </tr>
                     <?php
-                    $conn= connectToDB();
+                    $conn = connectToDB();
 
                     //Run the stored procedure
                     $sql = "exec SP_get_list_of_approved_workshop_participants ?";
@@ -129,8 +129,24 @@ $workshoptype = getWorkshopType($workshop_id);
                         updatePage($_SERVER['PHP_SELF'] . '?workshop_id=' . $workshop_id);
                     }
                     }
+
+                    if (isset($_POST['downloadexcel'])) {
+                        $newSql = 'exec SP_get_list_of_approved_workshop_participants ' . $workshop_id;
+                        echo $newSql;
+                        createExcelParticipants($newSql, $workshop_id);
+                        updatePage('workshop_participants.php?workshop_id=' . $workshop_id);
+                    }
+                    if (isset($_GET['error'])) {
+                        echo '<p class="alert-danger warning">Fout! Sluit eerst het oude bestand <br>Elke download wordt in het zelfde bestand geschreven<br>Verander eerst de bestandsnaam voordat je het opnieuw download</p>';
+                    }
                     ?>
                 </table>
+                <div class="float-right">
+                    <form method="post">
+                        <button name="downloadexcel" type="submit" class="btn btn-secondary btn-lg">Download Excel
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
