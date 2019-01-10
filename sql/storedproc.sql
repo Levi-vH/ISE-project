@@ -557,7 +557,7 @@ GO
 
 CREATE OR ALTER PROC SP_get_workshopleader_first_and_lastname
 (
-@workshopleader_id INT
+@workshopleader_id NVARCHAR(10)
 )
 AS
 BEGIN
@@ -566,9 +566,9 @@ BEGIN
 	SET @sql =	N'
 				SELECT VOORNAAM, ACHTERNAAM, TOEVOEGING
 				FROM WORKSHOPLEIDER
-				WHERE WORKSHOPLEIDER_ID = @workshopleader_id
+				WHERE WORKSHOPLEIDER_ID LIKE @workshopleader_id
 				'
-	 EXEC sp_executesql @sql, N'@workshopleader_id INT', @workshopleader_id
+	 EXEC sp_executesql @sql, N'@workshopleader_id NVARCHAR(10)', @workshopleader_id
 END
 GO
 
