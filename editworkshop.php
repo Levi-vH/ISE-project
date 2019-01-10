@@ -288,9 +288,9 @@ if ($_SESSION['username'] == 'planner') {
                                 "workshopleider w INNER JOIN beschikbaarheid b ON w.workshopleider_id = b.workshopleider_id",
                                 array("achternaam", "voornaam", "workshopleider_id"), "workshopleider_id",
                                 array("achternaam", "voornaam"), "achternaam, voornaam", NULL,
-                                "AANTAL_UUR - (CAST(DATEDIFF(minute, $starttime , $endtime) AS NUMERIC(5,2)) / 60.00) >= 0
+                                "AANTAL_UUR - (CAST(DATEDIFF(minute, '$starttime', '$endtime') AS NUMERIC(5,2)) / 60.00) >= 0
                                  AND    JAAR = YEAR($workshopdate)
-                                 AND    KWARTAAL = DATEPART(QUARTER, $workshopdate)");
+                                 AND    KWARTAAL = DATEPART(QUARTER, '$workshopdate')");
                             ?>
                             <script>
                                var dropdown = $("#workshopleader");
