@@ -111,7 +111,8 @@ CREATE OR ALTER PROC SP_get_workshops_filtered
 @workshopleider_ID	 NVARCHAR(10),
 @company_name		 NVARCHAR(60),
 @firstname			 NVARCHAR(30),
-@lastname			 NVARCHAR(50)
+@lastname			 NVARCHAR(50),
+@status				 NVARCHAR(20)
 )
 AS
 BEGIN
@@ -127,7 +128,7 @@ BEGIN
 							W.PLAATSNAAM,
 							W.SECTORNAAM,
 							W.WORKSHOPLEIDER_ID,
-							STATUS,
+							W.STATUS,
 							OPMERKING,
 							VERWERKT_BREIN,
 							DEELNEMER_GEGEVENS_ONTVANGEN,
@@ -182,10 +183,11 @@ BEGIN
 								END
 							
 				SET @sql += ' AND W.TYPE LIKE @workshop_type AND MODULENAAM LIKE @modulenaam AND WL.WORKSHOPLEIDER_ID LIKE @workshopleider_ID
-							AND  O.ORGANISATIENAAM LIKE @company_name'
+							AND  O.ORGANISATIENAAM LIKE @company_name
+							AND	 W.STATUS LIKE @status'
 
 	EXEC sp_executesql @sql, N'@workshop_type NVARCHAR(6), @modulenaam NVARCHAR(50), @workshopleider_ID NVARCHAR(10), @company_name NVARCHAR(60),
-	 @firstname NVARCHAR(30), @lastname NVARCHAR(50)', @workshop_type, @modulenaam, @workshopleider_ID, @company_name, @firstname, @lastname
+	 @firstname NVARCHAR(30), @lastname NVARCHAR(50), @status @NVARCHAR(20)', @workshop_type, @modulenaam, @workshopleider_ID, @company_name, @firstname, @lastname, @status
 
 END  
 GO
