@@ -1753,7 +1753,7 @@ BEGIN
 					AND MODULENUMMER = ' + CAST(@modulenummer AS varchar(1))
 	EXEC sp_executesql @sql, N'@detailToConfirm NVARCHAR(400),@groep_id INT, @modulenummer INT', @detailToConfirm, @groep_id, @modulenummer
 
-	IF @column = 'workshopleader'
+	IF @column = 'BEVESTIGING_WORKSHOPLEIDER'
 		BEGIN
 			DECLARE @workshopleader_ID INT = (SELECT WORKSHOPLEIDER FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR (7)))
 			DECLARE @start_workshop TIME(7) = (SELECT STARTTIJD FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR(7)))
