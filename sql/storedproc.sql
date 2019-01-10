@@ -1225,23 +1225,25 @@ CREATE OR ALTER PROC SP_insert_workshoprequest
 @organisationnumber	INT,
 @contactperson_id	INT,
 @advisor_id		INT,
-@plannername		NVARCHAR(52)
+@plannername		NVARCHAR(52),
+@sectornaam		NVARCHAR(20)
 )
 AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
 	SET @sql =	N'
-				INSERT INTO	AANVRAAG(ORGANISATIENUMMER, CONTACTPERSOON_ID, ADVISEUR_ID, PLANNERNAAM)
+				INSERT INTO	AANVRAAG(ORGANISATIENUMMER, CONTACTPERSOON_ID, ADVISEUR_ID, PLANNERNAAM, SECTORNAAM)
 				VALUES		(
 							@organisationnumber,
 							@contactperson_id,
 							@advisor_id,
-							@plannername
+							@plannername,
+							@sectotnaam
 							)
 				'
-	EXEC sp_executesql @sql,	N'@organisationnumber INT, @contactperson_id INT, @advisor_id INT, @plannername NVARCHAR(52)',
-								@organisationnumber, @contactperson_id, @advisor_id, @plannername
+	EXEC sp_executesql @sql,	N'@organisationnumber INT, @contactperson_id INT, @advisor_id INT, @plannername NVARCHAR(52), @sectornaam NVARCHAR(20)',
+								@organisationnumber, @contactperson_id, @advisor_id, @plannername, @sectornaam
 END
 GO
 
