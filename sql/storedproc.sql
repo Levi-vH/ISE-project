@@ -187,7 +187,7 @@ BEGIN
 							AND	 W.STATUS LIKE @status'
 
 	EXEC sp_executesql @sql, N'@workshop_type NVARCHAR(6), @modulenaam NVARCHAR(50), @workshopleider_ID NVARCHAR(10), @company_name NVARCHAR(60),
-	 @firstname NVARCHAR(30), @lastname NVARCHAR(50), @status @NVARCHAR(20)', @workshop_type, @modulenaam, @workshopleider_ID, @company_name, @firstname, @lastname, @status
+	 @firstname NVARCHAR(30), @lastname NVARCHAR(50), @status NVARCHAR(20)', @workshop_type, @modulenaam, @workshopleider_ID, @company_name, @firstname, @lastname, @status
 
 END  
 GO
