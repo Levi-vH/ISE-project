@@ -35,6 +35,12 @@ $search_string = null;
                 echo selectBox("Organisation_Name", "Organisatie", array("Organisatienaam"), "Organisatienaam", array("Organisatienaam"), "Organisatienaam");
                 ?>
             </div>
+            <div class="form-group col-md-3">
+                <label for="inputZip">Workshop Status</label>
+                <?php
+                echo selectBox("Workshop_status", "WORKSHOP", array("DISTINCT STATUS"), "STATUS", array("STATUS"), "STATUS");
+                ?>
+            </div>
         </div>
         <h4>Zoeken op deelnemer:</h4>
         <div class="form-row">
@@ -82,6 +88,7 @@ $search_string = null;
                 $search_module = "'%%'";
                 $search_leader = "'%%'";
                 $search_company_name = "'%%'";
+                $search_status = "'%%'";
                 $firstname = "'%%'";
                 $lastname = "'%%'";
 
@@ -108,6 +115,9 @@ $search_string = null;
                 if (isset($_POST["inputParticipantLastName"])) {
                     //   $search_string.= 'achternaam komt binnen';
                     $lastname = "'%" . check_input($_POST["inputParticipantLastName"]) . "%'";
+                }
+                if (isset($_POST["Workshop_status"])) {
+                    $workshopStatus = "'%" . check_input($_POST["Workshop_status"]) . "%'";
                 }
 
                 // setting the search string to match the values that were selected.
@@ -165,7 +175,7 @@ $search_string = null;
                 }
 
                 $sql = "EXEC SP_get_workshops_filtered @workshop_type = $search_workshop, @modulenaam = $search_module, @workshopleider_ID = $search_leader,
-                @company_name = $search_company_name, @firstname = $firstname, @lastname = $lastname";
+                @company_name = $search_company_name, @firstname = $firstname, @lastname = $lastname, @status = $workshopStatus";
 
                 $user_searched = true;
             }
@@ -217,7 +227,7 @@ $search_string = null;
 //                if($time + 10000 > time()) {
 //                    updatePage('allworkshops.php');
 //                }
-               // updatePage('allworkshops.php');
+                // updatePage('allworkshops.php');
             }
             ?>
         </table>
