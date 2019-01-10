@@ -808,6 +808,35 @@ GO
 /*==============================================================*/
 
 --=================================================================================
+-- SP_insert_workshopleader_availability: inserts the availability for a workshopleader                          
+--=================================================================================
+CREATE OR ALTER PROC SP_insert_workshopleader_availability
+(
+@workshopleader_id	INT,
+@quarter			NCHAR(1),
+@year				SMALLINT,
+@amount_of_hours	SMALLINT
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				INSERT INTO	BESCHIKBAARHEID (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
+				VALUES		(@workshopleader_id, @quarter, @year, @amount_of_hours)
+				'
+	EXEC sp_executesql @sql,	N'
+								@workshopleader_id	INT,
+								@quarter			NCHAR(1),
+								@year				SMALLINT,
+								@amount_of_hours	SMALLINT
+								',
+								@workshopleader_id, @quarter, @year, @amount_of_hours
+END
+GO
+
+--=================================================================================
 -- SP_insert_participant_in_workshop: inserts a deelnemer and put's him in his IND workshop                            
 --=================================================================================
 
@@ -827,7 +856,6 @@ CREATE OR ALTER PROC SP_insert_participant_in_workshop
 @function				NVARCHAR(50) = NULL,
 @workshop_id			INT
 )
-
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -1758,8 +1786,8 @@ BEGIN
 			DECLARE @workshopleader_ID INT = (SELECT WORKSHOPLEIDER FROM MODULE_VAN_GROEP WHERE GROEP_ID = @groep_id)
 			DECLARE @start_workshop TIME(7) = (SELECT STARTTIJD FROM MODULE_VAN_GROEP WHERE GROEP_ID = @groep_id)
 			DECLARE @end_workshop TIME(7) = (SELECT EINDTIJD FROM MODULE_VAN_GROEP WHERE GROEP_ID = @groep_id)
-			DECLARE @year INT = (SELECT YEAR(DATUM) FROM MODULE_VAN_GROEP WHERE GROEP_ID = @groep_id)
-			DECLARE @quarter INT = (SELECT DATEPART(QUARTER, DATUM) FROM MODULE_VAN_GROEP WHERE GROEP_ID = @groep_id)
+			DECLARE @year SMALLINT = (SELECT CAST(YEAR(DATUM) AS SMALLINT) FROM MODULE_VAN_GROEP WHERE GROEP_ID = @groep_id)
+			DECLARE @quarter CHAR(1) = (SELECT CAST(DATEPART(QUARTER, DATUM) AS CHAR(1)) FROM MODULE_VAN_GROEP WHERE GROEP_ID = @groep_id)
 
 			UPDATE	BESCHIKBAARHEID
 			SET		AANTAL_UUR = (AANTAL_UUR - (CAST(DATEDIFF(minute, @start_workshop , @end_workshop) AS NUMERIC(5,2)) / 60.00))

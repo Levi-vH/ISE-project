@@ -198,8 +198,8 @@ BEGIN
 				DECLARE @workshopleader_ID INT = (SELECT WORKSHOPLEIDER_ID FROM inserted)
 				DECLARE @start_workshop TIME(7) = (SELECT STARTTIJD FROM inserted)
 				DECLARE @end_workshop TIME(7) = (SELECT EINDTIJD FROM inserted)
-				DECLARE @year INT = (SELECT YEAR(DATUM) FROM inserted)
-				DECLARE @quarter INT = (SELECT DATEPART(QUARTER, DATUM) FROM inserted)
+				DECLARE @year SMALLINT = (SELECT CAST(YEAR(DATUM) AS SMALLINT) FROM inserted)
+				DECLARE @quarter CHAR(1) = (SELECT CAST(DATEPART(QUARTER, DATUM) AS CHAR(1)) FROM inserted)
 
 				UPDATE	BESCHIKBAARHEID
 				SET		AANTAL_UUR = (AANTAL_UUR - (CAST(DATEDIFF(minute, @start_workshop , @end_workshop) AS NUMERIC(5,2)) / 60.00))
@@ -236,8 +236,8 @@ BEGIN
 				DECLARE @workshopleader_ID INT = (SELECT WORKSHOPLEIDER_ID FROM deleted)
 				DECLARE @start_workshop TIME(7) = (SELECT STARTTIJD FROM deleted)
 				DECLARE @end_workshop TIME(7) = (SELECT EINDTIJD FROM deleted)
-				DECLARE @year INT = (SELECT YEAR(DATUM) FROM deleted)
-				DECLARE @quarter INT = (SELECT DATEPART(QUARTER, DATUM) FROM deleted)
+				DECLARE @year SMALLINT = (SELECT CAST(YEAR(DATUM) AS SMALLINT) FROM deleted)
+				DECLARE @quarter CHAR(1) = (SELECT CAST(DATEPART(QUARTER, DATUM) AS CHAR(1)) FROM deleted)
 
 				UPDATE	BESCHIKBAARHEID
 				SET		AANTAL_UUR = (AANTAL_UUR + (CAST(DATEDIFF(minute, @start_workshop , @end_workshop) AS NUMERIC(5,2)) / 60.00))
@@ -278,8 +278,8 @@ BEGIN
 				DECLARE @workshopleader_ID INT = (SELECT WORKSHOPLEIDER FROM deleted)
 				DECLARE @start_workshop TIME(7) = (SELECT STARTTIJD FROM deleted)
 				DECLARE @end_workshop TIME(7) = (SELECT EINDTIJD FROM deleted)
-				DECLARE @year INT = (SELECT YEAR(DATUM) FROM deleted)
-				DECLARE @quarter INT = (SELECT DATEPART(QUARTER, DATUM) FROM deleted)
+				DECLARE @year SMALLINT = (SELECT CAST(YEAR(DATUM) AS SMALLINT) FROM deleted)
+				DECLARE @quarter CHAR(1) = (SELECT CAST(DATEPART(QUARTER, DATUM) AS CHAR(1)) FROM deleted)
 
 				UPDATE	BESCHIKBAARHEID
 				SET		AANTAL_UUR = (AANTAL_UUR + (CAST(DATEDIFF(minute, @start_workshop , @end_workshop) AS NUMERIC(5,2)) / 60.00))
