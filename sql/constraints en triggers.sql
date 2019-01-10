@@ -300,7 +300,7 @@ GO
 
 --========================================================================================
 -- IR4 / C4 / BR4
--- AANHEF has to be 'mevrouw' or 'meneer' **
+-- AANHEF has to be 'Mvr.' or 'Dhr.'
 --========================================================================================
 ALTER TABLE DEELNEMER
 DROP CONSTRAINT IF EXISTS CK_salutation
