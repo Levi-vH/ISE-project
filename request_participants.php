@@ -136,7 +136,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                             $html .= $row['OPLEIDINGSNIVEAU'];
                             $html .= '</td>';
                             $html .= '<td>';
-                            $html .= '<a class="fas fa-check" id="approvebutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt toevoegen?\')" href="participants.php?aanvraag_id='.$aanvraag_id.'&groeps_id='.$_GET['groeps_id'].'&participant_id='.$row['DEELNEMER_ID'].'&addUserToGroup=true"></a>';
+                            $html .= '<a class="fas fa-check" id="approvebutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt toevoegen?\')" href="request_participants.php?aanvraag_id='.$aanvraag_id.'&groeps_id='.$_GET['groeps_id'].'&participant_id='.$row['DEELNEMER_ID'].'&addUserToGroup=true"></a>';
                             $html .= '</td>';
                             $html .= '</tr>';
 
@@ -182,7 +182,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                             $html .= $row['OPLEIDINGSNIVEAU'];
                             $html .= '</td>';
                             $html .= '<td>';
-                            $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon uit de groep wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="participants.php?aanvraag_id='.$aanvraag_id.'&groeps_id='.$_GET['groeps_id'].'&participant_id='.$row['DEELNEMER_ID'].'&deleteUserFromGroup=true"></a>';
+                            $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon uit de groep wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="request_participants.php?aanvraag_id='.$aanvraag_id.'&groeps_id='.$_GET['groeps_id'].'&participant_id='.$row['DEELNEMER_ID'].'&deleteUserFromGroup=true"></a>';
                             $html .= '</td>';
                             $html .= '</tr>';
 

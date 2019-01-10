@@ -40,7 +40,7 @@ if($row['WORKSHOPLEIDER_ACHTERNAAM'] OR $row['WORKSHOPLEIDER_VOORNAAM']){
                         <a class="active-page">Details</a>
                     </li>
                     <li>
-                        <a href="open_workshop_participants.php?workshop_id=<?= $workshop_id ?>">Deelnemers</a>
+                        <a href="workshop_participants.php?workshop_id=<?= $workshop_id ?>">Deelnemers</a>
                     </li>
                     <?php
                     if ($workshoptype == "IND") {

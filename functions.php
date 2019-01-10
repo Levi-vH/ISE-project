@@ -73,8 +73,8 @@ function generate_header($title_of_page)
                 $header .= $_SESSION['username'] . '(' . $_SESSION['planner'] . ')';
             } elseif ($_SESSION['username'] == 'contactpersoon') {
                 $header .= $_SESSION['username'] . '(' . getOrganisationName($_SESSION['organisation']) . ')';
-            } elseif ($_SESSION['username'] == 'deelnemer'){
-                $header .= $_SESSION['username']. '(' . $_SESSION['deelnemer_id'] . ')';
+            } elseif ($_SESSION['username'] == 'deelnemer') {
+                $header .= $_SESSION['username'] . '(' . $_SESSION['deelnemer_id'] . ')';
             } else {
                 $header .= $_SESSION['username'];
             }
@@ -410,6 +410,24 @@ function getCountOfWorkshopsForWorkshopLeader($workshopleader)
     return $nummer;
 }
 
+function getCountOfWorkshopsFromOrganisation($organisation)
+{
+    $conn = connectToDB();
+
+    $sql = "SELECT * FROM WORKSHOP WHERE ORGANISATIENUMMER = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $organisation, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $nummer = 0;
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $nummer++;
+    }
+
+    return $nummer;
+}
+
 function getCountOfTypeWorkshops()
 {
     $conn = connectToDB();
@@ -471,7 +489,8 @@ function getWorkshopleaderName($workshopleader_id)
     return $row;
 }
 
-function getCode() {
+function getCode()
+{
     $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
     $code = array(); //remember to declare $pass as an array
     $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
@@ -482,4 +501,57 @@ function getCode() {
     return implode($code); //turn the array into a string
 }
 
-?>
+function createExcel($sql)
+{
+
+    require_once('PhpSpreadsheet/samples/Header.php');
+
+    $spreadsheet = new PhpOffice\PhpSpreadsheet\Spreadsheet;
+    $helper = new PhpOffice\PhpSpreadsheet\Helper\Sample();
+
+// Set document properties
+    $spreadsheet->getProperties()
+        ->setCreator('ISE projectgroep B2')
+        ->setLastModifiedBy('ISE Projectgroep B2')
+        ->setTitle('PhpSpreadsheet Test Document')
+        ->setSubject('PhpSpreadsheet Test Document')
+        ->setDescription('Test document for PhpSpreadsheet, generated using PHP classes.')
+        ->setKeywords('office PhpSpreadsheet php')
+        ->setCategory('Test result file');
+
+
+//Try to make connection
+    $conn = connectToDB();
+
+//Run the stored procedure
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+
+
+    $nummer = 1;
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $nummer++;
+        $spreadsheet->setActiveSheetIndex(0)
+            ->setCellValue('A1', 'Workshop_ID')
+            ->setCellValue('B1', 'Workshop_TYPE')
+            ->setCellValue('C1', 'Module')
+            ->setCellValue('D1', 'Datum')
+            ->setCellValue('E1', 'Adviseurnaam')
+            ->setCellValue('F1', 'Organisatie')
+            ->setCellValue('A' . $nummer, $row['WORKSHOP_ID'])
+            ->setCellValue('B' . $nummer, $row['TYPE'])
+            ->setCellValue('C' . $nummer, $row['MODULENAAM'])
+            ->setCellValue('D' . $nummer, date('j F Y', strtotime($row['DATUM'])))
+            ->setCellValue('E' . $nummer, $row['ADVISEUR_VOORNAAM'] . ' ' . $row['ADVISEUR_ACHTERNAAM'])
+            ->setCellValue('F' . $nummer, $row['ORGANISATIENAAM']);
+
+    }
+// Rename worksheet
+    //$helper->log('Rename worksheet');
+    $spreadsheet->getActiveSheet()
+        ->setTitle('Workshop');
+
+    $helper->write($spreadsheet, 'Workshops.xlsx');
+    //$helper->writeFile($spreadsheet, 'Workshops.xlsx');
+
+}

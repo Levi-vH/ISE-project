@@ -128,7 +128,7 @@ $turnIntoWorkshop = true;
                         <a class="active-page">Details</a>
                     </li>
                     <li>
-                        <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id?>&groeps_id=<?= $groupnumber ?>">Deelnemers en Groepen</a>
+                        <a href="request_participants.php?aanvraag_id=<?php echo $aanvraag_id?>&groeps_id=<?= $groupnumber ?>">Deelnemers en Groepen</a>
                     </li>
                     <li>
                         <a href="addparticipant_request.php?aanvraag_id=<?php echo $aanvraag_id?>">Deelnemers toevoegen</a>

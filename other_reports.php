@@ -36,6 +36,7 @@ generate_header('Workshop overzicht voor sector');
             </div>
         </div>
         <div class="container">
+            <h2>Kies hieronder een optie om het aantal workshops te zien</h2>
             <form method="POST">
                 <label>Selecteer een sector</label>
                 <?php
@@ -50,6 +51,13 @@ generate_header('Workshop overzicht voor sector');
                 ?>
                 <button type="submit">Submit</button>
             </form>
+            <form method="POST">
+                <label>Selecteer een Organisatie</label>
+                <?php
+                echo selectBox("Organisation_Name", "Organisatie", array("Organisatienaam", "ORGANISATIENUMMER"), "ORGANISATIENUMMER", array("Organisatienaam"), "Organisatienaam");
+                ?>
+                <button type="submit">Submit</button>
+            </form>
             <?php
             if (isset($_POST['workshopsector'])) {
                 $sectorname = $_POST["workshopsector"];
@@ -57,7 +65,9 @@ generate_header('Workshop overzicht voor sector');
             } elseif (isset($_POST['workshopleader'])) {
                 $workshopleader = $_POST['workshopleader'];
                 echo '<p>Aantal workshops van workshopleider <b>' . getWorkshopleaderName($workshopleader)['voornaam'] . " " . getWorkshopleaderName($workshopleader)['achternaam'].'</b>: ' . getCountOfWorkshopsForWorkshopLeader($workshopleader) . '</p>';
-
+            } elseif (isset($_POST['Organisation_Name'])) {
+                $organisation = $_POST['Organisation_Name'];
+                echo '<p>Aantal workshops van Organisatie <b>'. getOrganisationName($organisation) .'</b>: ' . getCountOfWorkshopsFromOrganisation($organisation) . '</p>';
             }
             ?>
         </div>

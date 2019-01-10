@@ -7,7 +7,7 @@ $search_string = null;
 ?>
 
 <div class="container">
-    <h2 class="text-info text-center" >Overzicht workshops</h2>
+    <h2 class="text-info text-center">Overzicht workshops</h2>
     <form class="form-horizontal" action="" method="post">
         <h4>Filteren workshop:</h4>
         <div class="form-row">
@@ -40,11 +40,11 @@ $search_string = null;
         <div class="form-row">
             <div class="form-group col-md-3">
                 <label for="inputParticipantFirstName">Deelnemer voornaam</label>
-                <input type="text" name ="inputParticipantFirstName" class="form-control" id="inputParticipantFirstName">
+                <input type="text" name="inputParticipantFirstName" class="form-control" id="inputParticipantFirstName">
             </div>
             <div class="form-group col-md-3">
                 <label for="inputParticipantLastName">Deelnemer achternaam</label>
-                <input type="text" name ="inputParticipantLastName" class="form-control" id="inputParticipantLastName">
+                <input type="text" name="inputParticipantLastName" class="form-control" id="inputParticipantLastName">
             </div>
 
         </div>
@@ -52,6 +52,9 @@ $search_string = null;
         <div class="form-group">
             <div class="col-sm-offset-5 col-sm-10">
                 <button type="submit" class="btn btn-success btn-lg">Zoeken</button>
+                <button name="download" type="submit" class="btn btn-secondary btn-lg">Download Excel</button>
+                <button class="btn btn-danger btn-lg" onclick="resetSearch()">Reset</button>
+
             </div>
         </div>
     </form>
@@ -83,53 +86,76 @@ $search_string = null;
                 $lastname = "'%%'";
 
                 if (isset($_POST["Workshop_type"])) {
-                 //   $search_string.= 'workshoptype komt binnen';
-                    $search_workshop ="'%". check_input($_POST["Workshop_type"]) . "%'";
+                    //   $search_string.= 'workshoptype komt binnen';
+                    $search_workshop = "'%" . check_input($_POST["Workshop_type"]) . "%'";
                 }
                 if (isset($_POST["Module_type"])) {
-                //    $search_string.= 'moduletype komt binnen';
-                    $search_module ="'%". check_input($_POST["Module_type"]) . "%'";
+                    //    $search_string.= 'moduletype komt binnen';
+                    $search_module = "'%" . check_input($_POST["Module_type"]) . "%'";
                 }
                 if (isset($_POST["WORKSHOPLEIDER_ID"])) {
-                 //   $search_string.= 'workshopleider komt binnen';
-                    $search_leader ="'%". check_input($_POST["WORKSHOPLEIDER_ID"]) . "%'";
+                    //   $search_string.= 'workshopleider komt binnen';
+                    $search_leader = "'%" . check_input($_POST["WORKSHOPLEIDER_ID"]) . "%'";
                 }
                 if (isset($_POST["Organisation_Name"])) {
-                 //   $search_string.= 'organisatie naam komt binnen';
-                    $search_company_name ="'%". check_input($_POST["Organisation_Name"]) . "%'";
+                    //   $search_string.= 'organisatie naam komt binnen';
+                    $search_company_name = "'%" . check_input($_POST["Organisation_Name"]) . "%'";
                 }
                 if (isset($_POST["inputParticipantFirstName"])) {
-                 //   $search_string.= 'voornaam komt binnen';
-                    $firstname ="'%". check_input($_POST["inputParticipantFirstName"]) . "%'";
+                    //   $search_string.= 'voornaam komt binnen';
+                    $firstname = "'%" . check_input($_POST["inputParticipantFirstName"]) . "%'";
                 }
                 if (isset($_POST["inputParticipantLastName"])) {
-                 //   $search_string.= 'achternaam komt binnen';
-                    $lastname ="'%". check_input($_POST["inputParticipantLastName"]) . "%'";
+                    //   $search_string.= 'achternaam komt binnen';
+                    $lastname = "'%" . check_input($_POST["inputParticipantLastName"]) . "%'";
                 }
 
                 // setting the search string to match the values that were selected.
 
-                if($search_workshop != "'%%'") {
-                    $search_string .= 'workshop_type = ' . check_input($_POST["Workshop_type"]) . ' ';
-                }
+            if ($search_workshop != "'%%'") { ?>
+                <script type="text/javascript">
+                    var element = document.getElementById("Workshop_type");
+                    var value = "<?= $_POST['Workshop_type']?>";
+                    element.value = value;
+                </script>
+            <?php
+            }
+            if ($search_module != "'%%'") { ?>
+                <script type="text/javascript">
+                    var element = document.getElementById("Module_type");
+                    var value = "<?= $_POST['Module_type']?>";
+                    element.value = value;
+                </script>
+            <?php
+            }
 
-                if($search_module != "'%%'") {
-                    $search_string .= 'module_type = ' . check_input($_POST["Module_type"]) . ' ';
-                }
+            if ($search_company_name != "'%%'") { ?>
+                <script type="text/javascript">
+                    var element = document.getElementById("Organisation_Name");
+                    var value = "<?= $_POST['Organisation_Name']?>";
+                    element.value = value;
+                </script>
+            <?php
+            }
+            if ($firstname != "'%%'") { ?>
+                <script type="text/javascript">
+                    var element = document.getElementById("inputParticipantFirstName");
+                    var value = "<?= $_POST['inputParticipantFirstName']?>";
+                    element.value = value;
+                </script>
+            <?php
+            }
 
-                if($search_company_name != "'%%'") {
-                    $search_string .= 'organisatienaam = ' . check_input($_POST["Organisation_Name"]) . ' ';
-                }
+            if ($lastname != "'%%'") { ?>
+                <script type="text/javascript">
+                    var element = document.getElementById("inputParticipantLastName");
+                    var value = "<?= $_POST['inputParticipantLastName']?>";
+                    element.value = value;
+                </script>
+                <?php
+            }
 
-                if($firstname != "'%%'") {
-                    $search_string .= 'deelnemer voornaam = ' . check_input($_POST["inputParticipantFirstName"]) . ' ';
-                }
-
-                if($lastname != "'%%'") {
-                    $search_string .= 'deelnemer achternaam = ' . check_input($_POST["inputParticipantLastName"]) . ' ';
-                }
-
-                if($search_leader != "'%%'") {
+                if ($search_leader != "'%%'") {
                     $workshopleader_id = check_input($_POST["WORKSHOPLEIDER_ID"]);
                     $get_advisorname = "EXEC SP_get_workshopleader_first_and_lastname @workshopleader_id = $workshopleader_id";
                     $stmt2 = $conn->prepare($get_advisorname);
@@ -179,10 +205,28 @@ $search_string = null;
 
                 echo $html;
             }
+
+            if (isset($_POST['download'])) {
+                createExcel($sql);
+                updatePage('allworkshops.php');
+            }
             ?>
         </table>
     </div>
+    <script type="text/javascript">
+        function resetSearch() {
+            var element1 = document.getElementById("Workshop_type");
+            var element2 = document.getElementById("Module_type");
+            var element3 = document.getElementById("Organisation_Name");
+            var element4 = document.getElementById("inputParticipantFirstName");
+            var element5 = document.getElementById("inputParticipantLastName");
+            element1.selectedIndex = element2.selectedIndex = element3.selectedIndex = 0;
+            element4.value = element5.value = '';
+        }
+
+    </script>
 </div>
 </body>
 <?php include 'footer.html'; ?>
 </html>
+

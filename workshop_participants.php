@@ -118,7 +118,7 @@ $workshoptype = getWorkshopType($workshop_id);
                         $html .= $row['TELEFOONNUMMER'];
                         $html .= '</td>';
                         $html .= '<td>';
-                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="open_workshop_participants.php?workshop_id=' . $workshop_id . '&participant_id=' . $row['DEELNEMER_ID'] . '&deleteUser=true"></a>';
+                        $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="workshop_participants.php?workshop_id=' . $workshop_id . '&participant_id=' . $row['DEELNEMER_ID'] . '&deleteUser=true"></a>';
                         $html .= '</td>';
                         $html .= '</tr>';
 

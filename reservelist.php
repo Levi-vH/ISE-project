@@ -31,7 +31,7 @@ $workshoptype = getWorkshopType($workshop_id);
                     }
                     ?>
                     <li>
-                        <a href="open_workshop_participants.php?workshop_id=<?= $workshop_id ?>">Deelnemers</a>
+                        <a href="workshop_participants.php?workshop_id=<?= $workshop_id ?>">Deelnemers</a>
                     </li>
                     <?php
                     if ($workshoptype == "IND") {

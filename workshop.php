@@ -2,6 +2,10 @@
 include 'functions.php';
 generate_header('Workshop Details');
 
+if (!isset($_SESSION)) {
+    session_start();
+}
+
 $workshop_id = $_GET['workshop_id'];
 $workshoptype = getWorkshopType($workshop_id);
 
@@ -41,7 +45,7 @@ if ($row['WORKSHOPLEIDER_VOORNAAM'] == 'Nog niet bekend' OR $row['WORKSHOPLEIDER
                         <a class="active-page">Details</a>
                     </li>
                     <li>
-                        <a href="open_workshop_participants.php?workshop_id=<?= $workshop_id ?>">Deelnemers</a>
+                        <a href="workshop_participants.php?workshop_id=<?= $workshop_id ?>">Deelnemers</a>
                     </li>
                     <?php
                     if ($workshoptype == "IND") {

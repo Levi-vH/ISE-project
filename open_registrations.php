@@ -46,7 +46,7 @@ if ($_SESSION['username'] == 'planner') {
                             <a href="workshop.php?workshop_id=<?= $workshop_id ?>">Details</a>
                         </li>
                         <li>
-                            <a href="open_workshop_participants.php?workshop_id=<?= $workshop_id ?>">Deelnemers</a>
+                            <a href="workshop_participants.php?workshop_id=<?= $workshop_id ?>">Deelnemers</a>
                         </li>
                         <li>
                             <a class="active-page">Openstaande inschrijvingen</a>

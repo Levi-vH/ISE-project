@@ -51,7 +51,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                             <a href="INCaanvraag.php?aanvraag_id=<?= $aanvraag_id ?>">Details</a>
                         </li>
                         <li>
-                            <a href="participants.php?aanvraag_id=<?= $aanvraag_id ?>&groeps_id=<?= $group ?>">Deelnemers
+                            <a href="request_participants.php?aanvraag_id=<?= $aanvraag_id ?>&groeps_id=<?= $group ?>">Deelnemers
                                 en Groepen</a>
                         </li>
                         <li>

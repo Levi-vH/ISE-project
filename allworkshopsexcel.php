@@ -41,7 +41,7 @@ function connectToDB()
 $conn = connectToDB();
 
 //Run the stored procedure
-$sql = "EXEC SP_get_workshops";
+$sql = $_SESSION['sql'];
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 

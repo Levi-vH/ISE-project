@@ -15,7 +15,7 @@ generate_header('Groepen in aanvraag');
                 <ul class="list">
                     <h5><strong>Aanvraag Opties</strong></h5>
                     <li>
-                        <a href="participants.php?aanvraag_id=<?php echo $aanvraag_id?>">Deelnemers en Groepen</a>
+                        <a href="request_participants.php?aanvraag_id=<?php echo $aanvraag_id?>">Deelnemers en Groepen</a>
                     </li>
                     <li>
                         <a href="addparticipant_request.php?aanvraag_id=<?php echo $aanvraag_id?>">Voeg deelnemers toe</a>
