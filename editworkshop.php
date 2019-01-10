@@ -43,46 +43,54 @@ if ($_SESSION['username'] == 'planner') {
     $workshopnotes = $row['OPMERKING'];
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        
-        $workshoptype = $_POST["workshoptype"];
-        $workshopdate = $_POST["workshopdate"];
-        $contactinfo = check_input($_POST["workshopContact"]);
-        $workshopmodule = $_POST["workshopmodule"];
-        $workshopcompany = $_POST["workshopcompany"];
-        $workshopsector = $_POST["workshopsector"];
-        $starttime = $_POST["workshopstarttime"];
-        $endtime = $_POST["workshopendtime"];
-        $workshopadress = check_input($_POST["workshopaddress"]);
-        $workshoppostcode = check_input($_POST["workshoppostcode"]);
-        $workshopcity = check_input($_POST["workshopcity"]);
-        $workshopleader = check_input($_POST["workshopleader"]);
-        $workshopnotes = check_input($_POST['workshopnotes']);
+        if(isset($_POST['update'])){
 
-        if(strtotime($workshopdate) < time()){
-            $errorMessage = 'De workshop mag niet in het verleden liggen';
-            $workshopdate = $row['DATUM'];
-        }else {
+            $workshoptype = $_POST["workshoptype"];
+            $workshopdate = $_POST["workshopdate"];
+            $contactinfo = check_input($_POST["workshopContact"]);
+            $workshopmodule = $_POST["workshopmodule"];
+            $workshopcompany = $_POST["workshopcompany"];
+            $workshopsector = $_POST["workshopsector"];
+            $starttime = $_POST["workshopstarttime"];
+            $endtime = $_POST["workshopendtime"];
+            $workshopadress = check_input($_POST["workshopaddress"]);
+            $workshoppostcode = check_input($_POST["workshoppostcode"]);
+            $workshopcity = check_input($_POST["workshopcity"]);
+            $workshopleader = check_input($_POST["workshopleader"]);
+            $workshopnotes = check_input($_POST['workshopnotes']);
 
-            //Run the stored procedure
-            $sql = "exec SP_alter_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
-            $stmt->bindParam(2, $workshoptype, PDO::PARAM_STR);
-            $stmt->bindParam(3, $workshopdate, PDO::PARAM_STR);
-            $stmt->bindParam(4, $contactinfo, PDO::PARAM_INT);
-            $stmt->bindParam(5, $workshopmodule, PDO::PARAM_INT);
-            $stmt->bindParam(6, $workshopcompany, PDO::PARAM_STR);
-            $stmt->bindParam(7, $workshopsector, PDO::PARAM_STR);
-            $stmt->bindParam(8, $starttime, PDO::PARAM_STR);
-            $stmt->bindParam(9, $endtime, PDO::PARAM_STR);
-            $stmt->bindParam(10, $workshopadress, PDO::PARAM_STR);
-            $stmt->bindParam(11, $workshoppostcode, PDO::PARAM_STR);
-            $stmt->bindParam(12, $workshopcity, PDO::PARAM_STR);
-            $stmt->bindParam(13, $workshopleader, PDO::PARAM_INT);
-            $stmt->bindParam(14, $workshopnotes, PDO::PARAM_STR);
-            $stmt->execute();
+            if(strtotime($workshopdate) < time()){
+                $errorMessage = 'De workshop mag niet in het verleden liggen';
+                $workshopdate = $row['DATUM'];
+            }else {
 
+                //Run the stored procedure
+                $sql = "exec SP_alter_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
+                $stmt->bindParam(2, $workshoptype, PDO::PARAM_STR);
+                $stmt->bindParam(3, $workshopdate, PDO::PARAM_STR);
+                $stmt->bindParam(4, $contactinfo, PDO::PARAM_INT);
+                $stmt->bindParam(5, $workshopmodule, PDO::PARAM_INT);
+                $stmt->bindParam(6, $workshopcompany, PDO::PARAM_STR);
+                $stmt->bindParam(7, $workshopsector, PDO::PARAM_STR);
+                $stmt->bindParam(8, $starttime, PDO::PARAM_STR);
+                $stmt->bindParam(9, $endtime, PDO::PARAM_STR);
+                $stmt->bindParam(10, $workshopadress, PDO::PARAM_STR);
+                $stmt->bindParam(11, $workshoppostcode, PDO::PARAM_STR);
+                $stmt->bindParam(12, $workshopcity, PDO::PARAM_STR);
+                $stmt->bindParam(13, $workshopleader, PDO::PARAM_INT);
+                $stmt->bindParam(14, $workshopnotes, PDO::PARAM_STR);
+                $stmt->execute();
+
+            }
+        }elseif(isset($_POST['cancel'])){
+           $sql = 'exec SP_cancel_workshop ?';
+           $stmt = $conn->prepare($sql);
+           $stmt->bindParam(1,$workshop_id, PDO::PARAM_INT);
+           $stmt->execute();
         }
+
     }
 
     generate_header('Workshop aanpassen');
@@ -305,9 +313,16 @@ if ($_SESSION['username'] == 'planner') {
                                    value="<?php echo $workshopnotes ?>">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-default">Update workshop</button>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-3">
+                                <button type="submit" class="btn btn-default" name="update">Update workshop</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-3">
+                                <button type="submit" class="btn btn-danger" name="cancel">Annuleer workshop</button>
+                            </div>
                         </div>
                     </div>
                 </form>
