@@ -291,7 +291,14 @@ if ($_SESSION['username'] == 'planner') {
                                for="workshopleader">Workshopleider:</label>
                         <div class="col-sm-10">
                             <?php
-                            echo selectBox("workshopleader", "workshopleider", array("achternaam", "voornaam", "workshopleider_id"), "workshopleider_id", array("achternaam", "voornaam"), "achternaam, voornaam");
+                            echo selectBox(
+                                "workshopleader",
+                                "workshopleider w INNER JOIN beschikbaarheid b ON w.workshopleider_id = b.workshopleider_id",
+                                array("achternaam", "voornaam", "W.workshopleider_id"), "workshopleider_id",
+                                array("achternaam", "voornaam"), "achternaam, voornaam", NULL,
+                                "AANTAL_UUR - (CAST(DATEDIFF(minute, '$starttime', '$endtime') AS NUMERIC(5,2)) / 60.00) >= 0
+                                 AND    JAAR = YEAR('$workshopdate')
+                                 AND    KWARTAAL = DATEPART(QUARTER, '$workshopdate')");
                             ?>
                             <script>
                                var dropdown = $("#workshopleader");

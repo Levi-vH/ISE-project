@@ -52,6 +52,7 @@
 		-SP_insert_group_of_workshoprequest
 		-SP_insert_workshop
 		-SP_confirm_workshoprequest
+		-SP_confirm_workshop_details
    ==================================================================== */
 
 USE SBBWorkshopOmgeving
@@ -187,7 +188,7 @@ BEGIN
 							AND	 W.STATUS LIKE @status'
 
 	EXEC sp_executesql @sql, N'@workshop_type NVARCHAR(6), @modulenaam NVARCHAR(50), @workshopleider_ID NVARCHAR(10), @company_name NVARCHAR(60),
-	 @firstname NVARCHAR(30), @lastname NVARCHAR(50), @status @NVARCHAR(20)', @workshop_type, @modulenaam, @workshopleider_ID, @company_name, @firstname, @lastname, @status
+	 @firstname NVARCHAR(30), @lastname NVARCHAR(50), @status NVARCHAR(20)', @workshop_type, @modulenaam, @workshopleider_ID, @company_name, @firstname, @lastname, @status
 
 END  
 GO
@@ -491,7 +492,7 @@ GO
 -- SP_get_list_of_approved_workshop_participants: returns all approved workshop participants for a workshop                                      
 --===========================================================================================================
 
-CREATE OR ALTER PROC SP_get_list_of_approved_workshop_participants -- reference number M1
+CREATE OR ALTER PROC SP_get_list_of_approved_workshop_participants
 (
 @workshop_id INT
 )
@@ -521,7 +522,7 @@ GO
 -- SP_get_reservelist_of_approved_workshop_participants: returns all approved workshop participants for a workshop that are on the reservelist                                      
 --===================================================================================================================================================
 
-CREATE OR ALTER PROC SP_get_reservelist_of_approved_workshop_participants -- reference number M2
+CREATE OR ALTER PROC SP_get_reservelist_of_approved_workshop_participants
 (
 @workshop_id INT
 )
@@ -576,7 +577,7 @@ GO
 -- SP_get_list_of_to_approve_workshop_participants: returns all participants of a workshop that are not approved                                 
 --===================================================================================================================
 
-CREATE OR ALTER PROC SP_get_list_of_to_approve_workshop_participants -- reference number M3
+CREATE OR ALTER PROC SP_get_list_of_to_approve_workshop_participants
 (
 @workshop_id INT
 )
@@ -1225,23 +1226,25 @@ CREATE OR ALTER PROC SP_insert_workshoprequest
 @organisationnumber	INT,
 @contactperson_id	INT,
 @advisor_id		INT,
-@plannername		NVARCHAR(52)
+@plannername		NVARCHAR(52),
+@sectornaam		NVARCHAR(20)
 )
 AS
 BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
 	SET @sql =	N'
-				INSERT INTO	AANVRAAG(ORGANISATIENUMMER, CONTACTPERSOON_ID, ADVISEUR_ID, PLANNERNAAM)
+				INSERT INTO	AANVRAAG(ORGANISATIENUMMER, CONTACTPERSOON_ID, ADVISEUR_ID, PLANNERNAAM, SECTORNAAM)
 				VALUES		(
 							@organisationnumber,
 							@contactperson_id,
 							@advisor_id,
-							@plannername
+							@plannername,
+							@sectornaam
 							)
 				'
-	EXEC sp_executesql @sql,	N'@organisationnumber INT, @contactperson_id INT, @advisor_id INT, @plannername NVARCHAR(52)',
-								@organisationnumber, @contactperson_id, @advisor_id, @plannername
+	EXEC sp_executesql @sql,	N'@organisationnumber INT, @contactperson_id INT, @advisor_id INT, @plannername NVARCHAR(52), @sectornaam NVARCHAR(20)',
+								@organisationnumber, @contactperson_id, @advisor_id, @plannername, @sectornaam
 END
 GO
 
@@ -1506,7 +1509,7 @@ GO
 -- SP SP_approve_participant_of_workshop: updates participants of a workshop to approved                       
 --=======================================================================================
 
-CREATE OR ALTER PROC SP_approve_participant_of_workshop -- reference number M4
+CREATE OR ALTER PROC SP_approve_participant_of_workshop
 (
 @workshop_id	INT,
 @participant_id	INT
@@ -1529,7 +1532,7 @@ GO
 --===========================================================
 -- SP_alter_workshop: updates the values of a workshop                    
 --===========================================================
-CREATE OR ALTER PROC SP_alter_workshop -- reference number M5
+CREATE OR ALTER PROC SP_alter_workshop
 (
 @workshop_id		INT,
 @workshoptype		NVARCHAR(3),
@@ -1804,7 +1807,7 @@ GO
 /* SP Type: DELETE                                              */
 /*==============================================================*/
 
-CREATE OR ALTER PROC SP_disapprove_participant_of_workshop -- reference number M6
+CREATE OR ALTER PROC SP_disapprove_participant_of_workshop
 (
 @workshop_id	INT,
 @participant_id	INT

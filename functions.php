@@ -48,6 +48,9 @@ function generate_header($title_of_page)
                         </li>
                         <li class="nav-item active">
                             <a class="nav-link" href="reports.php">Rapportages</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="workshopleaders.php">Workshopleiders</a>
                         </li>';
         } else if ($_SESSION['username'] == 'contactpersoon') {
             $header .= '<li class="nav-item active">

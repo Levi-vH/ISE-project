@@ -1,0 +1,110 @@
+<?php
+if (!isset($_SESSION)) {
+    session_start();
+}
+
+include 'functions.php';
+generate_header('Workshopleiders');
+
+if ($_SESSION['username'] == 'planner') {
+
+
+// The ones that do not get checked are dropdown or select.
+
+
+    ?>
+
+    <body>
+    <div class="container">
+        <h2 class="text-info text-center">Workshopleiders</h2>
+        <form class="form-horizontal" action="workshopleaders.php" method="post">
+            <div class="form-group">
+                <label class="control-label col-sm-2 font-weight-bold" for="workshopmodule">Workshopleider:</label>
+                <div class="col-sm-10">
+                    <?php
+                    echo selectBox("workshopleader", "workshopleider", array("achternaam", "voornaam", "workshopleider_id"), "workshopleider_id", array("achternaam", "voornaam"), "achternaam, voornaam");
+                    ?>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-dark">Kies workshopleider</button>
+            </div>
+        </form>
+        <?php
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $workshopleader_id = $_POST['workshopleader'];
+        ?>
+        <script type="text/javascript">
+            var element = document.getElementById("workshopleader");
+            var value = "<?= $workshopleader_id ?>";
+            element.value = value;
+        </script>
+        <h2>Plan nieuwe uren in</h2>
+        <form class="form-horizontal" action="workshopleaders.php?add=true" method="post">
+            <div class="form-group">
+                <label class="control-label col-sm-2 font-weight-bold" for="year">Jaar</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" placeholder="Jaar" name="year" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2 font-weight-bold" for="quarter">Kwartaal:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" placeholder="Kwartaal" name="quarter" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2 font-weight-bold" for="hours">Aantal uur:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" placeholder="Aantal uur" name="hours" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-dark">Voeg toe</button>
+        </form>
+        <h2>Overzicht</h2>
+        <div>
+            <table class='table table-striped table-hover'>
+                <tr>
+                    <th>Jaar</th>
+                    <th>Kwartaal</th>
+                    <th>Aantal uur</th>
+                    <th>Verwijder uren</th>
+                </tr>
+                <?php
+
+                $conn = connectToDB();
+
+                $sql = "SELECT * FROM BESCHIKBAARHEID WHERE WORKSHOPLEIDER_ID = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(1, $workshopleader_id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $html = '';
+                    $html .= '<tr>';
+                    $html .= '<td>';
+                    $html .= $row['JAAR'];
+                    $html .= '</td>';
+                    $html .= '<td>';
+                    $html .= $row['KWARTAAL'];
+                    $html .= '</td>';
+                    $html .= '<td>';
+                    $html .= $row['AANTAL_UUR'];
+                    $html .= '</td>';
+                    $html .= '<td>';
+                    $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href=""></a>';
+                    $html .= '</td>';
+                    $html .= '</tr>';
+
+                    echo $html;
+                }
+                }
+                ?>
+            </table>
+    </body>
+    </html>
+
+    <?php
+} else {
+    notLoggedIn();
+}
+include 'footer.html';
