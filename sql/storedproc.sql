@@ -1239,7 +1239,7 @@ BEGIN
 							@contactperson_id,
 							@advisor_id,
 							@plannername,
-							@sectotnaam
+							@sectornaam
 							)
 				'
 	EXEC sp_executesql @sql,	N'@organisationnumber INT, @contactperson_id INT, @advisor_id INT, @plannername NVARCHAR(52), @sectornaam NVARCHAR(20)',

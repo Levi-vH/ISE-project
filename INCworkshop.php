@@ -13,9 +13,12 @@ if ($_SESSION['username'] == 'contactpersoon') {
 
 // The ones that do not get checked are dropdown or select.
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        pre_r($_POST);
         $Organisation_Relationnumber = check_input($_POST["Organisation_Relationnumber"]);
         $Contact_ID = check_input($_POST["Contact_Name"]);
         $SBB_Planner = check_input($_POST["Coordination_Contact"]);
+        $Sector = check_input($_POST["Advisor_Sector"]);
+
         $Advisor_practical_learning = check_input($_POST["Advisor_practical_learning"]);
         $Groups = check_input($_POST["Groups"]);
 
@@ -37,12 +40,13 @@ if ($_SESSION['username'] == 'contactpersoon') {
                         if($isEverythingFilled == true){
                             //Run the stored procedure
 
-                            $sql = "exec SP_insert_workshoprequest ?, ?, ?, ?";
+                            $sql = "exec SP_insert_workshoprequest ?, ?, ?, ?, ?";
                             $stmt = $conn->prepare($sql);
                             $stmt->bindParam(1, $Organisation_Relationnumber, PDO::PARAM_INT);
                             $stmt->bindParam(2, $Contact_ID, PDO::PARAM_INT);
                             $stmt->bindParam(3, $Advisor_practical_learning, PDO::PARAM_INT);
                             $stmt->bindParam(4, $SBB_Planner, PDO::PARAM_STR);
+                            $stmt->bindParam(5, $Sector, PDO::PARAM_STR);
                             $stmt->execute();
 
                             //get aanvraagID
@@ -270,14 +274,6 @@ if ($_SESSION['username'] == 'contactpersoon') {
             <br>
 
             <h3>Workshop informatie</h3>
-<!--            <div class="form-group">-->
-<!--                <label class="control-label col-sm-2 font-weight-bold" for="workshopsector">Sector:</label>-->
-<!--                <div class="col-sm-10">-->
-<!--                    --><?php
-//                    echo selectBox("workshopsector", "sector", array("sectornaam"), "sectornaam", array("sectornaam"), "sectornaam");
-//                    ?>
-<!--                </div>-->
-<!--            </div>-->
             <div class="form-group">
                 <label class="control-label col-sm-2" for="Groups">Aantal groepen:</label>
                 <div class="col-sm-10">
