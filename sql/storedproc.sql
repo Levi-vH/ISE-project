@@ -1803,6 +1803,26 @@ BEGIN
 END
 GO
 
+--=============================================================================================================================
+-- SP SP_cancel_workshop: Cancels a workshop                    
+--=============================================================================================================================
+
+CREATE OR ALTER PROC SP_cancel_workshop
+(
+@workshop_id	INT
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				UPDATE	WORKSHOP
+				SET		STATUS = ''geannuleerd''
+				WHERE	WORKSHOP_ID = ' + CAST(@workshop_id AS varchar(7)) + ''
+	EXEC sp_executesql @sql, N'@workshop_id INT', @workshop_id
+END
+GO
+
 /*==============================================================*/
 /* SP Type: DELETE                                              */
 /*==============================================================*/
