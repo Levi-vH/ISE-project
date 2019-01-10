@@ -25,7 +25,7 @@ foreach ($row as $key => $value){
 
 $workshopleader = $row['WORKSHOPLEIDER_VOORNAAM'] .' '. $row['WORKSHOPLEIDER_ACHTERNAAM'];
 
-if($row['WORKSHOPLEIDER_ACHTERNAAM'] OR $row['WORKSHOPLEIDER_VOORNAAM']){
+if ($row['WORKSHOPLEIDER_VOORNAAM'] == 'Nog niet bekend' OR $row['WORKSHOPLEIDER_ACHTERNAAM'] == 'Nog niet bekend') {
     $workshopleader = 'Nog niet bekend';
 }
 
