@@ -1749,17 +1749,17 @@ BEGIN
 
 	SET @sql =  N'UPDATE MODULE_VAN_GROEP
 					SET ' + @column + ' = 1
-					WHERE GROEP_ID = ' + CAST(@groep_id AS varchar(7)) + '
-					AND MODULENUMMER = ' + CAST(@modulenummer AS varchar(1))
-	EXEC sp_executesql @sql, N'@detailToConfirm NVARCHAR(400),@groep_id INT, @modulenummer INT', @detailToConfirm, @groep_id, @modulenummer
+					WHERE GROEP_ID = @groep_id
+					AND MODULENUMMER = @modulenummer'
+	EXEC sp_executesql @sql, N'@groep_id INT, @modulenummer INT', @groep_id, @modulenummer
 
 	IF @column = 'BEVESTIGING_WORKSHOPLEIDER'
 		BEGIN
-			DECLARE @workshopleader_ID INT = (SELECT WORKSHOPLEIDER FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR (7)))
-			DECLARE @start_workshop TIME(7) = (SELECT STARTTIJD FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR(7)))
-			DECLARE @end_workshop TIME(7) = (SELECT EINDTIJD FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR(7)))
-			DECLARE @year INT = (SELECT YEAR(DATUM) FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR(7)))
-			DECLARE @quarter INT = (SELECT DATEPART(QUARTER, DATUM) FROM MODULE_VAN_GROEP WHERE GROEP_ID = CAST(@groep_id AS VARCHAR(7)))
+			DECLARE @workshopleader_ID INT = (SELECT WORKSHOPLEIDER FROM MODULE_VAN_GROEP WHERE GROEP_ID = @groep_id)
+			DECLARE @start_workshop TIME(7) = (SELECT STARTTIJD FROM MODULE_VAN_GROEP WHERE GROEP_ID = @groep_id)
+			DECLARE @end_workshop TIME(7) = (SELECT EINDTIJD FROM MODULE_VAN_GROEP WHERE GROEP_ID = @groep_id)
+			DECLARE @year INT = (SELECT YEAR(DATUM) FROM MODULE_VAN_GROEP WHERE GROEP_ID = @groep_id)
+			DECLARE @quarter INT = (SELECT DATEPART(QUARTER, DATUM) FROM MODULE_VAN_GROEP WHERE GROEP_ID = @groep_id)
 
 			UPDATE	BESCHIKBAARHEID
 			SET		AANTAL_UUR = (AANTAL_UUR - (CAST(DATEDIFF(minute, @start_workshop , @end_workshop) AS NUMERIC(5,2)) / 60.00))
