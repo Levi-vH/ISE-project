@@ -270,6 +270,14 @@ if ($_SESSION['username'] == 'contactpersoon') {
             <br>
 
             <h3>Workshop informatie</h3>
+<!--            <div class="form-group">-->
+<!--                <label class="control-label col-sm-2 font-weight-bold" for="workshopsector">Sector:</label>-->
+<!--                <div class="col-sm-10">-->
+<!--                    --><?php
+//                    echo selectBox("workshopsector", "sector", array("sectornaam"), "sectornaam", array("sectornaam"), "sectornaam");
+//                    ?>
+<!--                </div>-->
+<!--            </div>-->
             <div class="form-group">
                 <label class="control-label col-sm-2" for="Groups">Aantal groepen:</label>
                 <div class="col-sm-10">
