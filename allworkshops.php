@@ -102,7 +102,7 @@ $search_string = null;
                 }
                 if (isset($_POST["WORKSHOPLEIDER_ID"])) {
                     //   $search_string.= 'workshopleider komt binnen';
-                    $search_leader = "'%" . check_input($_POST["WORKSHOPLEIDER_ID"]) . "%'";
+                    $search_leader = check_input($_POST["WORKSHOPLEIDER_ID"]);
                 }
                 if (isset($_POST["Organisation_Name"])) {
                     //   $search_string.= 'organisatie naam komt binnen';
@@ -167,11 +167,17 @@ $search_string = null;
 
                 if ($search_leader != "'%%'") {
                     $workshopleader_id = check_input($_POST["WORKSHOPLEIDER_ID"]);
+                    if($search_leader == "") {
+                        $search_leader = "'%%'";
+                        $workshopleader_id = "'%%'";
+                    }
                     $get_advisorname = "EXEC SP_get_workshopleader_first_and_lastname @workshopleader_id = $workshopleader_id";
                     $stmt2 = $conn->prepare($get_advisorname);
                     $stmt2->execute();
                     $advisor_results = $stmt2->fetch(PDO::FETCH_ASSOC);
-                    $search_string .= 'workshopleider = ' . $advisor_results ["VOORNAAM"] . ' ' . $advisor_results["ACHTERNAAM"];
+                    if($search_leader !== "") {
+                        $search_string .= 'workshopleider = ' . $advisor_results ["VOORNAAM"] . ' ' . $advisor_results["ACHTERNAAM"];
+                    }
                 }
 
                 $sql = "EXEC SP_get_workshops_filtered @workshop_type = $search_workshop, @modulenaam = $search_module, @workshopleider_ID = $search_leader,
@@ -227,7 +233,7 @@ $search_string = null;
 //                if($time + 10000 > time()) {
 //                    updatePage('allworkshops.php');
 //                }
-                // updatePage('allworkshops.php');
+               // updatePage('allworkshops.php');
             }
             ?>
         </table>
