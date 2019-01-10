@@ -181,6 +181,44 @@ GO
 -- Give a workshopleader his/her available hours back if he/she is no longer
 -- leading the workshop.
 --=========================================================================
+CREATE OR ALTER TRIGGER TR_workshop_remove_hours
+ON WORKSHOP
+AFTER INSERT, UPDATE
+AS
+BEGIN
+	DECLARE @RECORDSAFFECTED INT = @@ROWCOUNT
+	IF @RECORDSAFFECTED = 0
+		RETURN
+
+	SET NOCOUNT ON
+
+	BEGIN TRY
+		IF UPDATE(WORKSHOPLEIDER_ID)
+			BEGIN
+				DECLARE @workshopleader_ID INT = (SELECT WORKSHOPLEIDER_ID FROM inserted)
+				DECLARE @start_workshop TIME(7) = (SELECT STARTTIJD FROM inserted)
+				DECLARE @end_workshop TIME(7) = (SELECT EINDTIJD FROM inserted)
+				DECLARE @year INT = (SELECT YEAR(DATUM) FROM inserted)
+				DECLARE @quarter INT = (SELECT DATEPART(QUARTER, DATUM) FROM inserted)
+
+				UPDATE	BESCHIKBAARHEID
+				SET		AANTAL_UUR = (AANTAL_UUR - (CAST(DATEDIFF(minute, @start_workshop , @end_workshop) AS NUMERIC(5,2)) / 60.00))
+				WHERE	WORKSHOPLEIDER_ID = @workshopleader_ID
+				AND		JAAR = @year
+				AND		KWARTAAL = @quarter
+			END
+	END TRY
+	BEGIN CATCH
+		THROW
+	END CATCH
+END
+GO
+
+--=========================================================================
+-- IR? / C? / BR?
+-- Give a workshopleader his/her available hours back if he/she is no longer
+-- leading the workshop.
+--=========================================================================
 CREATE OR ALTER TRIGGER TR_workshop_return_hours
 ON WORKSHOP
 AFTER UPDATE, DELETE
@@ -216,6 +254,12 @@ GO
 
 --=========================================================================
 -- MODULE_VAN_GROEP constraints
+--=========================================================================
+
+--=========================================================================
+-- IR? / C? / BR?
+-- Give a workshopleader his/her available hours back if he/she is no longer
+-- leading the workshop that is still a workshoprequest.
 --=========================================================================
 CREATE OR ALTER TRIGGER TR_module_van_groep_return_hours
 ON MODULE_VAN_GROEP
