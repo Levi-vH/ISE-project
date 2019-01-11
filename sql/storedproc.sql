@@ -884,13 +884,12 @@ BEGIN
 		END
 
 			IF ((@is_open_registration) = 0) AND 
-				 NOT EXISTS	( -- Check if there is already an participant in the database with the same email, name and company
+				 NOT EXISTS	( -- Check if there is already an participant in the database with the same email and name
 					SELECT * --		  if there is, don't insert the participant.
 					FROM DEELNEMER
 					WHERE VOORNAAM = @firstname
 					AND ACHTERNAAM = @lastname
 					AND EMAIL = @email
-					AND ORGANISATIENUMMER = @companyNumber
 					AND IS_OPEN_INSCHRIJVING = 0
 				)
 				BEGIN
@@ -933,13 +932,12 @@ BEGIN
 												@is_open_registration
 				END
 			ELSE IF ((@is_open_registration) = 1) AND 
-					 NOT EXISTS	( -- Check if there is already an participant in the database with the same email, name and company
+					 NOT EXISTS	( -- Check if there is already an participant in the database with the same email and name  
 					SELECT * --		  if there is, don't insert the participant.
 					FROM DEELNEMER
 					WHERE VOORNAAM = @firstname
 					AND ACHTERNAAM = @lastname
 					AND EMAIL = @email
-					AND ORGANISATIENUMMER = @companyNumber
 					AND IS_OPEN_INSCHRIJVING = 1
 				)
 				BEGIN
@@ -997,7 +995,7 @@ BEGIN
 								  WHERE VOORNAAM = @firstname
 										AND ACHTERNAAM = @lastname
 										AND EMAIL = @email
-										AND ORGANISATIENUMMER = @companyNumber'
+									'
 					EXEC sp_executesql @sql,	N'
 												@companyNumber			NVARCHAR(15),
 												@firstname				NVARCHAR(30),
