@@ -24,18 +24,19 @@ if (isset($_GET['organisation_id'])) {
     $_SESSION['username'] = 'planner';
     $_SESSION['planner'] = $_GET['planner'];
     header('Location:  ' . $_SERVER['PHP_SELF']);
-} elseif (isset($_GET['email'])){
-    if(!is_null(getParticipantId($_GET['email'], $_GET['code']))) {
+} elseif (isset($_GET['email'])) {
+    if (!is_null(getParticipantId($_GET['email'], $_GET['code']))) {
         $_SESSION['username'] = 'deelnemer';
         $_SESSION['deelnemer_id'] = getParticipantId($_GET['email'], $_GET['code']);
         header('Location:  ' . $_SERVER['PHP_SELF']);
-    }else{
+    } else {
         header('Location: index.php');
 
     }
 }
 
-function getParticipantId($email, $code) {
+function getParticipantId($email, $code)
+{
     $conn = connectToDB();
 
     $sql = "select deelnemer_id from DEELNEMER where email = ? and inlogcode = ?";
@@ -55,7 +56,7 @@ function getParticipantId($email, $code) {
 <h1 class="text-center">Welcome to ISE-PROJECT SBB</h1>
 <br>
 <?php if (!isset($_SESSION['username'])) {
-    if ((!isset($_POST['planner'])) && (!isset($_POST['deelnemer'])) && (!isset($_POST['contactpersoon']))) { ?>
+    if ((!isset($_POST['planner'])) && (!isset($_POST['deelnemer'])) && (!isset($_POST['contactpersoon'])) && (!isset($_POST['beheerder']))) { ?>
 
         <h3 class="text-center">Login als Planner / Leerbedrijf / Deelnemer</h3>
         <br>
@@ -65,6 +66,7 @@ function getParticipantId($email, $code) {
                     <input align="right" type="submit" name="planner" value="Planner"/>
                     <input align="right" type="submit" name="contactpersoon" value="Contactpersoon"/>
                     <input class="text-center" type="submit" name="deelnemer" value="Deelnemer"/>
+                    <input align="right" type="submit" name="beheerder" value="Beheerder"/>
                 </form>
             </div>
         </div>
@@ -111,14 +113,17 @@ if (isset($_POST['planner'])) { ?>
     <div class="container">
         <h3 class="text-center">Log hieronder in met uw email en code</h3>
         <div class="row justify-content-md-center">
-                <input id="email" type="email" class="form-control" placeholder="Email" name="email" required>
-                <br>
-                <input id= "code" type="text" class="form-control" placeholder="Code" name="code" required>
-                <br>
-                <button class="btn btn-success btn-lg" onclick="setParticipant()">Login</button>
+            <input id="email" type="email" class="form-control" placeholder="Email" name="email" required>
+            <br>
+            <input id="code" type="text" class="form-control" placeholder="Code" name="code" required>
+            <br>
+            <button class="btn btn-success btn-lg" onclick="setParticipant()">Login</button>
         </div>
     </div>
     <?php
+} elseif (isset($_POST['beheerder'])) {
+    $_SESSION['username'] = 'beheerder';
+    header('Location:  ' . $_SERVER['PHP_SELF']);
 }
 
 include 'footer.html'; ?>

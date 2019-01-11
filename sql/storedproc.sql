@@ -39,6 +39,9 @@
 		-SP_insert_workshoprequest
 		-SP_insert_participant_of_workshoprequest
 		-SP_insert_sector
+		-SP_insert_advisor
+		-SP_insert_contactperson
+		-SP_insert_workshopleader
 		-SP_approve_participant_of_workshop
 		-SP_add_participant_to_group
 		-SP_remove_participant_from_group
@@ -888,13 +891,12 @@ BEGIN
 		END
 
 			IF ((@is_open_registration) = 0) AND 
-				 NOT EXISTS	( -- Check if there is already an participant in the database with the same email, name and company
+				 NOT EXISTS	( -- Check if there is already an participant in the database with the same email and name
 					SELECT * --		  if there is, don't insert the participant.
 					FROM DEELNEMER
 					WHERE VOORNAAM = @firstname
 					AND ACHTERNAAM = @lastname
 					AND EMAIL = @email
-					AND ORGANISATIENUMMER = @companyNumber
 					AND IS_OPEN_INSCHRIJVING = 0
 				)
 				BEGIN
@@ -937,13 +939,12 @@ BEGIN
 												@is_open_registration
 				END
 			ELSE IF ((@is_open_registration) = 1) AND 
-					 NOT EXISTS	( -- Check if there is already an participant in the database with the same email, name and company
+					 NOT EXISTS	( -- Check if there is already an participant in the database with the same email and name  
 					SELECT * --		  if there is, don't insert the participant.
 					FROM DEELNEMER
 					WHERE VOORNAAM = @firstname
 					AND ACHTERNAAM = @lastname
 					AND EMAIL = @email
-					AND ORGANISATIENUMMER = @companyNumber
 					AND IS_OPEN_INSCHRIJVING = 1
 				)
 				BEGIN
@@ -1001,7 +1002,7 @@ BEGIN
 								  WHERE VOORNAAM = @firstname
 										AND ACHTERNAAM = @lastname
 										AND EMAIL = @email
-										AND ORGANISATIENUMMER = @companyNumber'
+									'
 					EXEC sp_executesql @sql,	N'
 												@companyNumber			NVARCHAR(15),
 												@firstname				NVARCHAR(30),
@@ -1172,7 +1173,7 @@ END
 GO
 
 --=================================================
--- SP_insert_workshop: inserts a new sector                              
+-- SP_insert_sector: inserts a new sector                              
 --=================================================
 CREATE OR ALTER PROC SP_insert_sector
 (
@@ -1188,6 +1189,122 @@ BEGIN
 				VALUES		(@sectorname)
 				'
 	EXEC sp_executesql @sql, N'@sectorname NVARCHAR(20)', @sectorname
+END
+GO
+
+--=================================================
+-- SP_insert_workshopleader: inserts a new workshopleader                             
+--=================================================
+CREATE OR ALTER PROC SP_insert_workshopleader
+(
+@firstname	NVARCHAR(30),
+@lastname	NVARCHAR(50)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	DECLARE @additive TINYINT = NULL
+	DECLARE @sql NVARCHAR(4000)
+
+	IF EXISTS	(
+				SELECT	*
+				FROM	WORKSHOPLEIDER
+				WHERE	VOORNAAM = @firstname
+				AND		ACHTERNAAM = @lastname
+				)
+		BEGIN
+			SET @additive = (
+							SELECT TOP 1	TOEVOEGING + 1
+							FROM			WORKSHOPLEIDER
+							WHERE			VOORNAAM = @firstname
+							AND				ACHTERNAAM = @lastname
+							ORDER BY		TOEVOEGING DESC
+							)
+		END
+
+	SET @sql =	N'
+				INSERT INTO	WORKSHOPLEIDER (VOORNAAM, ACHTERNAAM, TOEVOEGING)
+				VALUES		(@firstname, @lastname, @additive)
+				'
+	EXEC sp_executesql @sql,	N'
+								@firstname	NVARCHAR(30),
+								@lastname	NVARCHAR(50),
+								@additive	TINYINT',
+								@firstname,
+								@lastname,
+								@additive
+END
+GO
+
+--=================================================
+-- SP_insert_contactperson: inserts a new contactperson                             
+--=================================================
+CREATE OR ALTER PROC SP_insert_contactperson
+(
+@organisationnumber	NVARCHAR(15),
+@firstname			NVARCHAR(30),
+@lastname			NVARCHAR(50),
+@phonenumber		NVARCHAR(12),
+@email				NVARCHAR(100)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				INSERT INTO	CONTACTPERSOON (ORGANISATIENUMMER, VOORNAAM, ACHTERNAAM, TELEFOONNUMMER, EMAIL)
+				VALUES		(@organisationnumber, @firstname, @lastname, @phonenumber, @email)
+				'
+	EXEC sp_executesql @sql,	N'
+								@organisationnumber	NVARCHAR(15),
+								@firstname			NVARCHAR(30),
+								@lastname			NVARCHAR(50),
+								@phonenumber		NVARCHAR(12),
+								@email				NVARCHAR(100)',
+								@organisationnumber,
+								@firstname,
+								@lastname,
+								@phonenumber,
+								@email
+END
+GO
+
+--=================================================
+-- SP_insert_advisor: inserts a new advisor                             
+--=================================================
+CREATE OR ALTER PROC SP_insert_advisor
+(
+@organisationnumber	NVARCHAR(15),
+@sectorname			NVARCHAR(20),
+@firstname			NVARCHAR(30),
+@lastname			NVARCHAR(50),
+@phonenumber		NVARCHAR(12),
+@email				NVARCHAR(100)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				INSERT INTO	ADVISEUR (ORGANISATIENUMMER, SECTORNAAM, VOORNAAM, ACHTERNAAM, TELEFOONNUMMER, EMAIL)
+				VALUES		(@organisationnumber, @sectorname, @firstname, @lastname, @phonenumber, @email)
+				'
+	EXEC sp_executesql @sql,	N'
+								@organisationnumber	NVARCHAR(15),
+								@sectorname			NVARCHAR(20),
+								@firstname			NVARCHAR(30),
+								@lastname			NVARCHAR(50),
+								@phonenumber		NVARCHAR(12),
+								@email				NVARCHAR(100)',
+								@organisationnumber,
+								@sectorname,
+								@firstname,
+								@lastname,
+								@phonenumber,
+								@email
 END
 GO
 

@@ -67,6 +67,26 @@ function generate_header($title_of_page)
             <li class="nav-item active">
                 <a class="nav-link" href="signed_up_workshops.php">Ingeschreven workshops</a>
             </li>';
+        } else if ($_SESSION['username'] == 'beheerder') {
+            $header .= '
+            <li class="nav-item active">
+                <a class="nav-link" href="createorganisation.php">Organisaties</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="createsector.php">Sectoren</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="createplanner.php">Planners</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="createcontactpersons.php">Contactpersonen</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="createworkshopleaders.php">Workshopleiders</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="createadviser.php">Adviseuren</a>
+            </li>';
         }
         $header .= '<li class="nav-item">
                     <a class="nav-link">';
@@ -556,6 +576,7 @@ function createExcelWorkshop($sql)
 
     try {
         $helper->write($spreadsheet, 'Workshops.xlsx');
+        //$helper->writeFile($spreadsheet, 'Workshops.xlsx');
     } catch (Exception $exception) {
         updatePage($_SERVER['PHP_SELF'] . '?error=true');
         //echo 'Sluit eerst het bestand voordat je een nieuwe download.';
@@ -615,4 +636,134 @@ function createExcelParticipants($sql, $workshop_id)
         updatePage($_SERVER['PHP_SELF'] . '?workshop_id=' . $workshop_id . '&error=true');
         //echo 'Sluit eerst het bestand voordat je een nieuwe download.';
     }
+}
+
+function testExcel($sql)
+{
+
+    require_once('PhpSpreadsheet/samples/Header.php');
+
+    $spreadsheet = new PhpOffice\PhpSpreadsheet\Spreadsheet;
+    $helper = new PhpOffice\PhpSpreadsheet\Helper\Sample();
+
+// Set document properties
+    $spreadsheet->getProperties()
+        ->setCreator('ISE projectgroep B2')
+        ->setLastModifiedBy('ISE Projectgroep B2')
+        ->setTitle('PhpSpreadsheet Test Document')
+        ->setSubject('PhpSpreadsheet Test Document')
+        ->setDescription('Test document for PhpSpreadsheet, generated using PHP classes.')
+        ->setKeywords('office PhpSpreadsheet php')
+        ->setCategory('Test result file');
+
+//Try to make connection
+    $conn = connectToDB();
+
+//Run the stored procedure
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+
+
+    $nummer = 1;
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $nummer++;
+        $spreadsheet->setActiveSheetIndex(0)
+            ->setCellValue('A1', 'Naam')
+            ->setCellValue('B1', 'Geboortedatum')
+            ->setCellValue('C1', 'Opleidingsniveau')
+            ->setCellValue('D1', 'Email')
+            ->setCellValue('E1', 'Telefoonnummer')
+            ->setCellValue('A' . $nummer, $row['VOORNAAM'] . ' ' . $row['ACHTERNAAM'])
+            ->setCellValue('B' . $nummer, date('j F Y', strtotime($row['GEBOORTEDATUM'])))
+            ->setCellValue('C' . $nummer, $row['OPLEIDINGSNIVEAU'])
+            ->setCellValue('D' . $nummer, $row['EMAIL'])
+            ->setCellValue('E' . $nummer, $row['TELEFOONNUMMER']);
+
+    }
+// Rename worksheet
+    //$helper->log('Rename worksheet');
+    $spreadsheet->getActiveSheet()
+        ->setTitle('Deelnemers');
+
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="simple.xlsx"');
+    header('Cache-Control: max-age=0');
+// If you're serving to IE 9, then the following may be needed
+    header('Cache-Control: max-age=1');
+
+// If you're serving to IE over SSL, then the following may be needed
+    header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+    header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+    header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+    header('Pragma: public'); // HTTP/1.0
+
+    try {
+        $writer = PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
+    } catch (Exception $exception) {
+    }
+}
+
+function createOrganisation($organisation_name, $organisation_address, $organisation_postcode, $organisation_city, $large_accounts)
+{
+    $conn = connectToDB();
+
+    $sql = "exec SP_create_organisation ?, ?, ?, ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $organisation_name, PDO::PARAM_STR);
+    $stmt->bindParam(2, $organisation_address, PDO::PARAM_STR);
+    $stmt->bindParam(3, $organisation_postcode, PDO::PARAM_STR);
+    $stmt->bindParam(4, $organisation_city, PDO::PARAM_STR);
+    $stmt->bindParam(5, $large_accounts, PDO::PARAM_INT);
+    $stmt->execute();
+
+}
+
+function createSector($sectorname)
+{
+    $conn = connectToDB();
+
+    $sql = "exec SP_insert_sector ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $sectorname, PDO::PARAM_STR);
+    $stmt->execute();
+
+}
+
+function createPlanner($planner_name)
+{
+    $conn = connectToDB();
+
+    $sql = "exec SP_create_planner ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $planner_name, PDO::PARAM_STR);
+    $stmt->execute();
+
+}
+
+function createContactpersoon($organisation_name, $contactperson_name, $contactperson_surname, $contactperson_phonenumber, $contactperson_email)
+{
+    $conn = connectToDB();
+
+    $sql = "exec SP_create_contactperson ?, ?, ?, ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $organisation_name, PDO::PARAM_INT);
+    $stmt->bindParam(2, $contactperson_name, PDO::PARAM_STR);
+    $stmt->bindParam(3, $contactperson_surname, PDO::PARAM_STR);
+    $stmt->bindParam(4, $contactperson_phonenumber, PDO::PARAM_STR);
+    $stmt->bindParam(5, $contactperson_email, PDO::PARAM_STR);
+    $stmt->execute();
+
+}
+
+function createWorkshopleader($workshopleader_name, $workshopleader_surname)
+{
+    $conn = connectToDB();
+
+    $sql = "exec SP_create_workshopleider ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $workshopleader_name, PDO::PARAM_STR);
+    $stmt->bindParam(2, $workshopleader_surname, PDO::PARAM_STR);
+    $stmt->execute();
+
 }

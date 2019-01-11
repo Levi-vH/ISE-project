@@ -133,6 +133,7 @@ $workshoptype = getWorkshopType($workshop_id);
                     if (isset($_POST['downloadexcel'])) {
                         $newSql = 'exec SP_get_list_of_approved_workshop_participants ' . $workshop_id;
                         echo $newSql;
+                        //testExcel($newSql);
                         createExcelParticipants($newSql, $workshop_id);
                         updatePage('workshop_participants.php?workshop_id=' . $workshop_id);
                     }

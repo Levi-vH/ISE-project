@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $moduletekst .= $modulenummer . "<br>";
     }
 
-    sendMail("$email", "Ingeschreven voor workshop(s)", "Beste " . $firstname . " " . $lastname . ", <br><br> U heeft zich succesvol aangemeld voor de onderstaande workshop(s): <br><br>" . $moduletekst . "<br> Wilt alle informatie van de workshops nog eens bekijken of wilt u zich afmelden voor een workshop? <br> Log dan in op de Site met de volgende code: " . $code . " (<b>LET OP: Als u al eerder een code heeft ontvangen vervalt de oude code!</b>) <br><br> Met vriendelijk groet, <br> Het SBB Team");
+    sendMail("$email", "Ingeschreven voor workshop(s)", "Beste " . $firstname . " " . $lastname . ", <br><br> U heeft zich succesvol aangemeld voor de onderstaande workshop(s): <br><br>" . $moduletekst . "<br> Wilt alle informatie van de workshops nog eens bekijken of wilt u zich afmelden voor een workshop? <br> Log dan in op de site met de volgende code: " . $code . " (<b>LET OP: Als u al eerder een code heeft ontvangen vervalt de oude code!</b>) <br><br> Met vriendelijk groet, <br> Het SBB Team");
     $error_message .= "Uw staat nu aangemeld voor de workshops bekijk uw mail voor meer informatie";
 }
 
