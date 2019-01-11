@@ -22,7 +22,7 @@
 		-SP_confirm_workshoprequest
 
 		procedures modified:
-		-
+		-SP_get_participant_workshops
 
    Modifications made by Mark:
 		procedures made:
@@ -824,11 +824,12 @@ BEGIN
 	SET NOCOUNT ON
 	DECLARE @sql NVARCHAR(4000)
 	SET @sql =	N'
-				select DW.WORKSHOP_ID, TYPE, DATUM, MODULENAAM, ORGANISATIENAAM from DEELNEMER_IN_WORKSHOP DW JOIN WORKSHOP W
+				SELECT DW.WORKSHOP_ID, TYPE, DATUM, MODULENAAM, ORGANISATIENAAM, case when (DW.IS_GOEDGEKEURD = 1) then ''Bevestigd''  ELSE   ''Openstaand'' END AS STATUS
+				FROM DEELNEMER_IN_WORKSHOP DW JOIN WORKSHOP W
 				ON DW.WORKSHOP_ID = W.WORKSHOP_ID JOIN MODULE M ON 
 				W.MODULENUMMER = M.MODULENUMMER JOIN ORGANISATIE O ON
 				W.ORGANISATIENUMMER = O.ORGANISATIENUMMER
-				WHERE DEELNEMER_ID = @participant_id
+				WHERE DEELNEMER_ID =  @participant_id
 				'
 	EXEC sp_executesql @sql, N'@participant_id INT', @participant_id
 END

@@ -17,6 +17,7 @@ $deelnemer_id = $_SESSION['deelnemer_id'];
                 <th>Module</th>
                 <th>Datum</th>
                 <th>Organisatie</th>
+                <th>Status inschrijving</th>
             </tr>
             <?php
             //Try to make connection
@@ -46,7 +47,9 @@ $deelnemer_id = $_SESSION['deelnemer_id'];
                 $html .= '<td class="align-middle">';
                 $html .= $row['ORGANISATIENAAM'];
                 $html .= '</td>';
-
+                $html .= '<td class="align-middle">';
+                $html .= $row['STATUS'];
+                $html .= '</td>';
                 $html .= '</tr>';
 
                 echo $html;
