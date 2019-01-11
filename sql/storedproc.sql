@@ -2129,16 +2129,21 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROC SP_delete_sector
+--=============================================================================================================================
+-- SP SP_delete_with_parameters: deletes record(s) for the given parameters                 
+--=============================================================================================================================
+
+CREATE OR ALTER PROC SP_delete_with_parameters
 (
-@sectorname NVARCHAR(20)
+@tablename		NVARCHAR(50),
+@where_column	NVARCHAR(50),
+@where			NVARCHAR(50)
 )
 AS
 BEGIN
 	SET NOCOUNT ON
-
-	DELETE
-	FROM	SECTOR
-	WHERE	SECTORNAAM = @sectorname
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'DELETE FROM ' + @tablename + ' WHERE ' + @where_column + ' = @where'
+	EXEC sp_executesql @sql, N'@where NVARCHAR(50)', @where
 END
 GO
