@@ -152,6 +152,10 @@ DROP TYPE IF EXISTS Bevestiging
 CREATE TYPE Bevestiging FROM BIT
 GO
 
+DROP TYPE IF EXISTS IsActief
+CREATE TYPE IsActief FROM BIT
+GO
+
 DROP TYPE IF EXISTS TypeNaam
 CREATE TYPE TypeNaam FROM VARCHAR(20)
 GO
@@ -175,7 +179,8 @@ GO
 /* Table: PLANNER                                               */
 /*==============================================================*/
 CREATE TABLE PLANNER (
-	PLANNERNAAM		Plannernaam		NOT NULL,
+	PLANNERNAAM		Plannernaam					NOT NULL,
+	IS_ACTIEF		IsActief		DEFAULT 1	NOT NULL,
 	CONSTRAINT PK_PLANNER PRIMARY KEY (PLANNERNAAM)
 )
 GO
@@ -184,7 +189,8 @@ GO
 /* Table: SECTOR                                                */
 /*==============================================================*/
 CREATE TABLE SECTOR (
-   SECTORNAAM          Sectornaam	         NOT NULL,
+   SECTORNAAM          Sectornaam				NOT NULL,
+   IS_ACTIEF		   IsActief		DEFAULT 1	NOT NULL,
    CONSTRAINT PK_SECTOR PRIMARY KEY (SECTORNAAM)
 )
 GO
@@ -214,6 +220,7 @@ CREATE TABLE ADVISEUR (
    ACHTERNAAM			Achternaam				NOT NULL,
    TELEFOONNUMMER       Telefoonnummer			NULL,
    EMAIL                Email					NULL,
+   IS_ACTIEF			IsActief	DEFAULT 1	NOT NULL,
    CONSTRAINT PK_ADVISEUR PRIMARY KEY (ADVISEUR_ID)
 )
 GO
@@ -228,6 +235,7 @@ CREATE TABLE CONTACTPERSOON (
    ACHTERNAAM           Achternaam					NOT NULL,
    TELEFOONNUMMER       Telefoonnummer				NULL,
    EMAIL                Email						NULL,
+   IS_ACTIEF			IsActief	DEFAULT 1		NOT NULL,
    CONSTRAINT PK_CONTACTPERSOON PRIMARY KEY (CONTACTPERSOON_ID)
 )
 GO
@@ -240,6 +248,7 @@ CREATE TABLE WORKSHOPLEIDER (
    VOORNAAM				Voornaam			        NOT NULL,
    ACHTERNAAM			Achternaam					NOT NULL,
    TOEVOEGING			Toevoeging					NULL,
+   IS_ACTIEF			IsActief		DEFAULT 1	NOT NULL,
    CONSTRAINT PK_WORKSHOPLEIDER PRIMARY KEY (WORKSHOPLEIDER_ID)
 )
 GO
