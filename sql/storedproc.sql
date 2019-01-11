@@ -184,9 +184,16 @@ BEGIN
 									SET @sql += ' WHERE D.VOORNAAM IS NULL AND D.ACHTERNAAM IS NULL)'
 								END
 							
-				SET @sql += ' AND W.TYPE LIKE @workshop_type AND MODULENAAM LIKE @modulenaam AND WL.WORKSHOPLEIDER_ID LIKE @workshopleider_ID
-							AND  O.ORGANISATIENAAM LIKE @company_name
-							AND	 W.STATUS LIKE @status'
+				SET @sql += ' AND W.TYPE LIKE @workshop_type
+							AND MODULENAAM LIKE @modulenaam '
+
+							IF(@workshopleider_ID != '%%')
+								BEGIN
+									SET @sql += 'AND WL.WORKSHOPLEIDER_ID LIKE @workshopleider_ID '
+								END
+							
+				SET @sql += 'AND O.ORGANISATIENAAM LIKE @company_name
+							 AND W.STATUS LIKE @status'
 
 	EXEC sp_executesql @sql, N'@workshop_type NVARCHAR(6), @modulenaam NVARCHAR(50), @workshopleider_ID NVARCHAR(10), @company_name NVARCHAR(60),
 	 @firstname NVARCHAR(30), @lastname NVARCHAR(50), @status NVARCHAR(20)', @workshop_type, @modulenaam, @workshopleider_ID, @company_name, @firstname, @lastname, @status

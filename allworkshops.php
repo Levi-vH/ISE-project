@@ -82,7 +82,7 @@ $search_string = null;
             //Run the stored procedure
             // $sql = "SELECT * FROM VW_WORKSHOPS";
 
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty(array_filter($_POST))) {
                 $search_string = null;
                 $search_workshop = "'%%'";
                 $search_module = "'%%'";
