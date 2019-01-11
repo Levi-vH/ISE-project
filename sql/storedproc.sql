@@ -1548,6 +1548,28 @@ BEGIN
 	EXEC sp_executesql @sql, N'@organisationName VARCHAR(60), @adres VARCHAR(60), @postcode VARCHAR(20), @location VARCHAR(60), @LargeAccount BIT',  @organisationName, @adres, @postcode, @location, @LargeAccount 
 END
 GO
+
+--=======================================================================================
+-- SP SP_create_planner: create a planner
+--=======================================================================================
+
+CREATE OR ALTER PROC SP_create_planner
+(
+@plannername VARCHAR(52)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				INSERT INTO PLANNER
+				(PLANNERNAAM)
+				VALUES
+				(@plannername)
+				'
+	EXEC sp_executesql @sql, N'@plannername VARCHAR(52)',  @plannername
+END
+GO
 /*==============================================================*/
 /* SP Type: UPDATE                                              */
 /*==============================================================*/
