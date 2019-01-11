@@ -82,6 +82,10 @@ a:hover{
     width: 35%;
 }
 
+.deletewarning {
+    width: auto;
+}
+
 .colorrow {
      background-color: rgb(126, 241, 85) !important;
 }
