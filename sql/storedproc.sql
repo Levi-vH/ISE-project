@@ -34,6 +34,7 @@
 		-SP_get_participants_of_workshoprequest
 		-SP_get_participants_of_workshoprequest_without_group
 		-SP_get_participants_of_group
+		-SP_check_sector_usage
 		-SP_insert_deelnemer_in_workshop
 		-SP_insert_participant_of_workshop
 		-SP_insert_workshoprequest
@@ -48,6 +49,7 @@
 		-SP_disapprove_participant_of_workshop
 		-SP_remove_participant_from_workshoprequest
 		-SP_delete_workshoprequest
+		-SP_delete_sector
 
 		procedures modified:
 		-SP_get_workshops
@@ -739,6 +741,42 @@ BEGIN
 	EXEC sp_executesql @sql, N'@sectornaam NVARCHAR(10)', @sectornaam
 END
 GO
+
+--=========================================================================================
+-- SP_check_sector_usage: returns '1' if sector is used in any record outside of the sector table                           
+--=========================================================================================
+CREATE OR ALTER PROC SP_check_sector_usage
+(
+@sectornaam		NVARCHAR(10)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	DECLARE @sector_is_used BIT = 0
+	DECLARE @sql NVARCHAR(4000)
+
+	IF EXISTS	(
+				SELECT	A.SECTORNAAM
+				FROM	ADVISEUR A INNER JOIN
+						AANVRAAG AV ON A.SECTORNAAM = AV.SECTORNAAM INNER JOIN
+						DEELNEMER D ON AV.SECTORNAAM = D.SECTORNAAM INNER JOIN
+						WORKSHOP W ON D.SECTORNAAM = W.SECTORNAAM
+				WHERE	A.SECTORNAAM = @sectornaam
+				OR		AV.SECTORNAAM = @sectornaam
+				OR		D.SECTORNAAM = @sectornaam
+				OR		W.SECTORNAAM = @sectornaam
+				)
+		BEGIN
+			SET @sector_is_used = 1
+		END
+
+	SET @sql = N'SELECT @sector_is_used'
+
+	EXEC SP_executesql @sql, N'@sector_is_used BIT', @sector_is_used
+END
+GO
+
 --=========================================================================================
 -- SP_get_cancelled_workshops: returns all cancelled workshops                              
 --=========================================================================================
@@ -2076,3 +2114,18 @@ BEGIN
 	FROM	AANVRAAG
 	WHERE	AANVRAAG_ID = @request_id
 END
+GO
+
+CREATE OR ALTER PROC SP_delete_sector
+(
+@sectorname NVARCHAR(20)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	DELETE
+	FROM	SECTOR
+	WHERE	SECTORNAAM = @sectorname
+END
+GO
