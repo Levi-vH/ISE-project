@@ -1501,6 +1501,32 @@ BEGIN
 
 END
 GO
+
+--=======================================================================================
+-- SP SP_create_organisation: create a organisation                    
+--=======================================================================================
+
+CREATE OR ALTER PROC SP_create_organisation
+(
+@organisationName	VARCHAR(60),
+@adres				VARCHAR(60),
+@postcode			VARCHAR(20),
+@location			VARCHAR(60),
+@LargeAccount		BIT
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				INSERT INTO ORGANISATIE
+				(ORGANISATIENUMMER,ORGANISATIENAAM,ADRES,POSTCODE,PLAATSNAAM,LARGE_ACCOUNTS)
+				VALUES
+				((SELECT MAX(CAST(ORGANISATIENUMMER AS INT) + 1) FROM ORGANISATIE), @organisationName, @adres, @postcode, @location, @LargeAccount)
+				'
+	EXEC sp_executesql @sql, N'@organisationName VARCHAR(60), @adres VARCHAR(60), @postcode VARCHAR(20), @location VARCHAR(60), @LargeAccount BIT',  @organisationName, @adres, @postcode, @location, @LargeAccount 
+END
+GO
 /*==============================================================*/
 /* SP Type: UPDATE                                              */
 /*==============================================================*/
