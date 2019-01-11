@@ -38,6 +38,7 @@
 		-SP_insert_participant_of_workshop
 		-SP_insert_workshoprequest
 		-SP_insert_participant_of_workshoprequest
+		-SP_insert_sector
 		-SP_approve_participant_of_workshop
 		-SP_add_participant_to_group
 		-SP_remove_participant_from_group
@@ -1160,6 +1161,26 @@ BEGIN
 								@contactperson_email,		
 								@contactperson_phonenumber,
 								@organisationnumber	
+END
+GO
+
+--=================================================
+-- SP_insert_workshop: inserts a new sector                              
+--=================================================
+CREATE OR ALTER PROC SP_insert_sector
+(
+@sectorname	NVARCHAR(20)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				INSERT INTO	SECTOR (SECTORNAAM)
+				VALUES		(@sectorname)
+				'
+	EXEC sp_executesql @sql, N'@sectorname NVARCHAR(20)', @sectorname
 END
 GO
 
