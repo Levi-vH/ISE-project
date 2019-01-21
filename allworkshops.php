@@ -252,6 +252,6 @@ $search_string = null;
     </script>
 </div>
 </body>
-<?php include 'footer.html'; ?>
+<?php include 'footer.php'; ?>
 </html>
 

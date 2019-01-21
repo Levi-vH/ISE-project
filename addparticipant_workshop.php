@@ -187,7 +187,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
             </div>
     </body>
     <?php
-    include 'footer.html';
+    include 'footer.php';
 } else {
     notLoggedIn();
 }

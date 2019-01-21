@@ -120,6 +120,6 @@ $workshoptype = getWorkshopType($workshop_id);
 <?php } else {
     notLoggedIn();
 }
-include 'footer.html';
+include 'footer.php';
 
 

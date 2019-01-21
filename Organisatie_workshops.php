@@ -66,4 +66,4 @@ if ($_SESSION['username'] == 'contactpersoon') {
 <?php } else {
     notLoggedIn();
 }
-include 'footer.html';
+include 'footer.php';

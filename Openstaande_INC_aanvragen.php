@@ -81,4 +81,4 @@ generate_header('Incompany Aanvragen');
 <?php } else {
     notLoggedIn();
 }
-include 'footer.html';
+include 'footer.php';
