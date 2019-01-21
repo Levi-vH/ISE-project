@@ -58,7 +58,7 @@ function getParticipantId($email, $code)
 <?php if (!isset($_SESSION['username'])) {
     if ((!isset($_POST['planner'])) && (!isset($_POST['deelnemer'])) && (!isset($_POST['contactpersoon'])) && (!isset($_POST['beheerder']))) { ?>
 
-        <h3 class="text-center">Login als Planner / Leerbedrijf / Deelnemer</h3>
+        <h3 class="text-center">Login als Planner / Leerbedrijf / Deelnemer / Beheerder</h3>
         <br>
         <div class="container">
             <div class="row justify-content-md-center">

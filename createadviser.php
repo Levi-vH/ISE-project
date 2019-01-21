@@ -12,7 +12,7 @@ if ($_SESSION['username'] == 'beheerder') {
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $organisation = $_POST['Organisation_Name'];
-        $adviser_sector = $_POST['sector'];
+        $adviser_sector = $_POST['workshopsector'];
         $adviser_name = $_POST['name'];
         $adviser_surname = $_POST['surname'];
         $adviser_phonenumber = $_POST['phonenumber'];
@@ -20,7 +20,7 @@ if ($_SESSION['username'] == 'beheerder') {
 
         pre_r($_POST);
 
-        //createAdviser($organisation, $adviser_sector, $adviser_name, $adviser_surname, $adviser_phonenumber, $adviser_email);
+        createAdviser($organisation, $adviser_sector, $adviser_name, $adviser_surname, $adviser_phonenumber, $adviser_email);
 
     }
 
@@ -41,7 +41,9 @@ if ($_SESSION['username'] == 'beheerder') {
             <div class="form-group">
                 <label class="control-label col-sm-2 font-weight-bold" for="sector">Sector:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="sector" required>
+                    <?php
+                    echo selectBox("workshopsector", "sector", array("sectornaam"), "sectornaam", array("sectornaam"), "sectornaam");
+                    ?>
                 </div>
             </div>
             <div class="form-group">

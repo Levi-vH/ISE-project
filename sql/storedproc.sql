@@ -1,6 +1,6 @@
 /* =====================================================================
    Author: Lars
-   Create date: 26-11-2018
+    date: 26-11-2018
    Description: this is a script to create random testdata for the
    'SBBWorkshopOmgeving' database
    --------------------------------
@@ -254,6 +254,9 @@ BEGIN
 							C.ACHTERNAAM AS CONTACTPERSOON_ACHTERNAAM,
 							C.TELEFOONNUMMER AS CONTACTPERSON_TELEFOONNUMMER,
 							C.EMAIL AS CONTACTPERSOON_EMAIL,
+							W.CONTACTPERSOON_NAAM,
+							W.CONTACTPERSOON_EMAIL,
+							W.CONTACTPERSOON_TELEFOONNUMMER,
 							ISNULL(	(
 									SELECT	COUNT(*)
 									FROM	DEELNEMER_IN_WORKSHOP
@@ -1724,6 +1727,82 @@ BEGIN
 	EXEC sp_executesql @sql, N'@plannername VARCHAR(52)',  @plannername
 END
 GO
+
+--=======================================================================================
+-- SP SP_create_contactperson: create a contactperson
+--=======================================================================================
+
+CREATE OR ALTER PROC SP_create_contactperson
+(
+@organisationName	VARCHAR(60),
+@name				VARCHAR(60),
+@surname			VARCHAR(20),
+@phonenumber		VARCHAR(60),
+@email				VARCHAR(60)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				INSERT INTO CONTACTPERSOON
+				(ORGANISATIENUMMER, VOORNAAM, ACHTERNAAM, TELEFOONNUMMER, EMAIL)
+				VALUES
+				(@organisationName, @name, @surname, @phonenumber, @email)
+				'
+	EXEC sp_executesql @sql, N'@organisationName VARCHAR(60), @name VARCHAR(60), @surname VARCHAR(20), @phonenumber VARCHAR(60), @email VARCHAR(60)',  @organisationName, @name, @surname, @phonenumber, @email 
+END
+GO
+
+--=======================================================================================
+-- SP SP_create_workshopleader: create a workshopleader
+--=======================================================================================
+
+CREATE OR ALTER PROC SP_create_workshopleader
+(
+@name				VARCHAR(60),
+@surname			VARCHAR(20)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				INSERT INTO WORKSHOPLEIDER
+				(VOORNAAM, ACHTERNAAM)
+				VALUES
+				(@name, @surname)
+				'
+	EXEC sp_executesql @sql, N'@name VARCHAR(60), @surname VARCHAR(20)', @name, @surname
+END
+GO
+
+--=======================================================================================
+-- SP SP_create_adviser: create an adviser
+--=======================================================================================
+
+CREATE OR ALTER PROC SP_create_adviser
+(
+@organisationName	VARCHAR(60),
+@sector				VARCHAR(60),
+@name				VARCHAR(60),
+@surname			VARCHAR(20),
+@phonenumber		VARCHAR(60),
+@email				VARCHAR(60)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'
+				INSERT INTO ADVISEUR
+				(ORGANISATIENUMMER, SECTORNAAM, VOORNAAM, ACHTERNAAM, TELEFOONNUMMER, EMAIL)
+				VALUES
+				(@organisationName, @sector, @name, @surname, @phonenumber, @email)
+				'
+	EXEC sp_executesql @sql, N'@organisationName VARCHAR(60), @sector VARCHAR(20), @name VARCHAR(60), @surname VARCHAR(60), @phonenumber VARCHAR(20), @email VARCHAR(60)', @organisationName, @sector, @name, @surname, @phonenumber, @email
+END
+GO
 /*==============================================================*/
 /* SP Type: UPDATE                                              */
 /*==============================================================*/
@@ -2065,6 +2144,25 @@ BEGIN
 END
 GO
 
+--=============================================================================================================================
+-- SP SP_set_active: sets IS_ACTIEF to '1' for the given parameters                 
+--=============================================================================================================================
+
+CREATE OR ALTER PROC SP_set_active
+(
+@tablename		NVARCHAR(50),
+@where_column	NVARCHAR(50),
+@where			NVARCHAR(50)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'UPDATE ' + @tablename + ' SET IS_ACTIEF = 1 WHERE ' + @where_column + ' = @where'
+	EXEC sp_executesql @sql, N'@where NVARCHAR(50)', @where
+END
+GO
+
 /*==============================================================*/
 /* SP Type: DELETE                                              */
 /*==============================================================*/
@@ -2126,6 +2224,30 @@ BEGIN
 	WHERE	AANVRAAG_ID = @request_id
 END
 GO
+
+CREATE OR ALTER PROC SP_delete_sector
+(
+@sectorname NVARCHAR(20)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DELETE
+	FROM	SECTOR
+	WHERE	SECTORNAAM = @sectorname
+END
+
+CREATE OR ALTER PROC SP_delete_planner
+(
+@plannername NVARCHAR(20)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DELETE
+	FROM	PLANNER
+	WHERE	PLANNERNAAM = @plannername
+END
 
 --=============================================================================================================================
 -- SP SP_delete_with_parameters: deletes record(s) for the given parameters                 

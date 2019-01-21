@@ -9,18 +9,19 @@ $errorMessage = null;
 
 if ($_SESSION['username'] == 'beheerder') {
 
+    generate_header('Nieuwe planner toevoegen');
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $planner_name = $_POST['plannername'];
 
         //pre_r($_POST);
-
-        createPlanner($planner_name);
-
-
+        try {
+            createPlanner($planner_name);
+        } catch (PDOException $e) {
+            echo '<p class="alert-danger warning deletewarning">Planner bestaat al! (of er is iets anders misgegaan)</p>';
+        }
     }
 
-    generate_header('Nieuwe planner toevoegen');
     ?>
     <body>
     <div class="container">
@@ -42,7 +43,8 @@ if ($_SESSION['username'] == 'beheerder') {
             <tr>
                 <th>Alle planners</th>
                 <th>Verwijder planner</th>
-                <p class="alert-danger warning deletewarning">Let op! Het verwijderen van planners heeft geen gevolgen voor de al geplande/aangevraagde workshops met deze planner.</p>
+                <p class="alert-danger warning deletewarning">Let op! Het verwijderen van planners heeft geen gevolgen
+                    voor de al geplande/aangevraagde workshops met deze planner.</p>
             </tr>
             <?php
             $conn = connectToDB();
@@ -58,11 +60,20 @@ if ($_SESSION['username'] == 'beheerder') {
                 $html .= $row['PLANNERNAAM'];
                 $html .= '</td>';
                 $html .= '<td>';
-                $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze planner wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href=""></a>';
+                $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze planner wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="createplanner.php?planner='.$row['PLANNERNAAM'].'&deletePlanner=true"></a>';
                 $html .= '</td>';
                 $html .= '</tr>';
 
                 echo $html;
+            }
+
+            if (isset($_GET['deletePlanner'])) {
+                deletePlanner($_GET['planner']);
+                updatePage('createplanner.php?deleteSuccess');
+            }
+
+            if (isset($_GET['deleteSuccess'])) {
+                echo '<p class="alert-success warning deletewarning">Verwijderen gelukt!</p>';
             }
 
             ?>

@@ -100,7 +100,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form class="form-horizontal" action="" method="post">
         <h3> Modules</h3>
 
-
             <?php
 
             $checkbox_module = '';
