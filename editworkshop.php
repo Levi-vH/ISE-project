@@ -33,7 +33,7 @@ if ($_SESSION['username'] == 'planner') {
     $contactinfo = $row['CONTACTPERSOON_VOORNAAM'] . ' ' . $row['CONTACTPERSOON_ACHTERNAAM'];
 //$workshopmodule = $row['MODULENAAM'];
 //$workshopcompany = $row['ORGANISATIENAAM'];
-//$workshopsector = $row['WORKSHOP_SECTOR'];
+    $workshopsector = $row['SECTORNAAM'];
     $starttime = substr($row['STARTTIJD'], 0, 5);
     $endtime = substr($row['EINDTIJD'], 0, 5);
     $workshopaddress = $row['ADRES'];
@@ -41,56 +41,71 @@ if ($_SESSION['username'] == 'planner') {
     $workshopcity = $row['PLAATSNAAM'];
     $workshopleader = $row['WORKSHOPLEIDER_ID'];
     $workshopnotes = $row['OPMERKING'];
+    $BREIN_date = $row['VERWERKT_BREIN'];
+    $received_participantsinfo = $row['DEELNEMER_GEGEVENS_ONTVANGEN'];
+    $OVK_received = $row['OVK_BEVESTIGING'];
+    $attendance_list_send = $row['PRESENTIELIJST_VERSTUURD'];
+    $attendance_list_received = $row['PRESENTIELIJST_ONTVANGEN'];
+    $evidence_participation_mail = $row['BEWIJS_DEELNAME_MAIL_SBB_WSL'];
+    $contactperson_name = $row['CONTACTPERSOON_NAAM'];
+    $contactperson_email = $row['CONTACTPERSOON_EMAIL'];
+    $contactperson_phonenumber = $row['CONTACTPERSOON_TELEFOONNUMMER'];
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if(isset($_POST['update'])){
+        $workshop_id = $_GET['workshop_id'];
+        $workshopdate = $_POST["workshopdate"];
+        $contactinfo = check_input($_POST["workshopContact"]);
+        $workshopsector = $_POST["workshopsector"];
+        $starttime = $_POST["workshopstarttime"];
+        $endtime = $_POST["workshopendtime"];
+        $workshopadress = check_input($_POST["workshopaddress"]);
+        $workshoppostcode = check_input($_POST["workshoppostcode"]);
+        $workshopcity = check_input($_POST["workshopcity"]);
+        $workshopleader = check_input($_POST["workshopleader"]);
+        $workshopnotes = check_input($_POST['workshopnotes']);
+        $BREIN_date = check_input($_POST['Brein_date']);
+        $received_participantsinfo = check_input($_POST['received_participantsinfo']);
+        $OVK_received = check_input($_POST['OVK_received']);
+        $attendance_list_send = check_input($_POST['attendance_list_send']);
+        $attendance_list_received = check_input($_POST['attendance_list_received']);
+        $evidence_participation_mail = check_input($_POST['evidence_participation_mail']);
+        $contactperson_name = check_input($_POST['contactperson_name']);
+        $contactperson_email = check_input($_POST['contactperson_email']);
+        $contactperson_phonenumber = check_input($_POST['contactperson_phonenumber']);
 
-            $workshoptype = $_POST["workshoptype"];
-            $workshopdate = $_POST["workshopdate"];
-            $contactinfo = check_input($_POST["workshopContact"]);
-            $workshopmodule = $_POST["workshopmodule"];
-            $workshopcompany = $_POST["workshopcompany"];
-            $workshopsector = $_POST["workshopsector"];
-            $starttime = $_POST["workshopstarttime"];
-            $endtime = $_POST["workshopendtime"];
-            $workshopadress = check_input($_POST["workshopaddress"]);
-            $workshoppostcode = check_input($_POST["workshoppostcode"]);
-            $workshopcity = check_input($_POST["workshopcity"]);
-            $workshopleader = check_input($_POST["workshopleader"]);
-            $workshopnotes = check_input($_POST['workshopnotes']);
 
-            if(strtotime($workshopdate) < time()){
-                $errorMessage = 'De workshop mag niet in het verleden liggen';
-                $workshopdate = $row['DATUM'];
-            }else {
+        if(strtotime($workshopdate) < time()){
+            $errorMessage = 'De workshop mag niet in het verleden liggen';
+            $workshopdate = $row['DATUM'];
+        }else {
+            pre_r($_POST);
 
-                //Run the stored procedure
-                $sql = "exec SP_alter_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
-                $stmt = $conn->prepare($sql);
-                $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
-                $stmt->bindParam(2, $workshoptype, PDO::PARAM_STR);
-                $stmt->bindParam(3, $workshopdate, PDO::PARAM_STR);
-                $stmt->bindParam(4, $contactinfo, PDO::PARAM_INT);
-                $stmt->bindParam(5, $workshopmodule, PDO::PARAM_INT);
-                $stmt->bindParam(6, $workshopcompany, PDO::PARAM_STR);
-                $stmt->bindParam(7, $workshopsector, PDO::PARAM_STR);
-                $stmt->bindParam(8, $starttime, PDO::PARAM_STR);
-                $stmt->bindParam(9, $endtime, PDO::PARAM_STR);
-                $stmt->bindParam(10, $workshopadress, PDO::PARAM_STR);
-                $stmt->bindParam(11, $workshoppostcode, PDO::PARAM_STR);
-                $stmt->bindParam(12, $workshopcity, PDO::PARAM_STR);
-                $stmt->bindParam(13, $workshopleader, PDO::PARAM_INT);
-                $stmt->bindParam(14, $workshopnotes, PDO::PARAM_STR);
-                $stmt->execute();
-
-            }
-        }elseif(isset($_POST['cancel'])){
-           $sql = 'exec SP_cancel_workshop ?';
-           $stmt = $conn->prepare($sql);
-           $stmt->bindParam(1,$workshop_id, PDO::PARAM_INT);
-           $stmt->execute();
+            ECHO $workshop_id;
+            //Run the stored procedure
+            $sql = "exec SP_alter_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
+            $stmt->bindParam(2, $workshopdate, PDO::PARAM_STR);
+            $stmt->bindParam(3, $contactinfo, PDO::PARAM_INT);
+            $stmt->bindParam(4, $workshopsector, PDO::PARAM_STR);
+            $stmt->bindParam(5, $starttime, PDO::PARAM_STR);
+            $stmt->bindParam(6, $endtime, PDO::PARAM_STR);
+            $stmt->bindParam(7, $workshopadress, PDO::PARAM_STR);
+            $stmt->bindParam(8, $workshoppostcode, PDO::PARAM_STR);
+            $stmt->bindParam(9, $workshopcity, PDO::PARAM_STR);
+            $stmt->bindParam(10, $workshopleader, PDO::PARAM_INT);
+            $stmt->bindParam(11, $workshopnotes, PDO::PARAM_STR);
+            $stmt->bindParam(12, $BREIN_date, PDO::PARAM_INT);
+            $stmt->bindParam(13, $received_participantsinfo, PDO::PARAM_STR);
+            $stmt->bindParam(14, $OVK_received, PDO::PARAM_STR);
+            $stmt->bindParam(15, $attendance_list_send, PDO::PARAM_INT);
+            $stmt->bindParam(16, $attendance_list_received, PDO::PARAM_INT);
+            $stmt->bindParam(17, $evidence_participation_mail, PDO::PARAM_STR);
+            $stmt->bindParam(18, $contactperson_name, PDO::PARAM_STR);
+            $stmt->bindParam(19, $contactperson_email, PDO::PARAM_STR);
+            $stmt->bindParam(20, $contactperson_phonenumber, PDO::PARAM_STR);
+            $stmt->execute();
         }
-
     }
 
     generate_header('Workshop aanpassen');
@@ -177,14 +192,14 @@ if ($_SESSION['username'] == 'planner') {
                 <h2 class="text-info text-center">Wijzig workshop <?php echo $workshop_id ?></h2>
                 <?= $errorMessage ?>
                 <form class="form-horizontal" action="editworkshop.php?workshop_id=<?php echo $workshop_id ?>" method="post">
-                    <div class="form-group">
+                <!--    <div class="form-group">
                         <label class="control-label col-sm-2 font-weight-bold" for="workshoptype">Type workshop:</label>
                         <div class="col-sm-10">
                             <select class="form-control" name="workshoptype">
-                               <?= $dropdownTypes ?>
+                               <//?= $dropdownTypes ?>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <label class="control-label col-sm-2 font-weight-bold" for="workshopdate">Datum
                             workshop:</label>
@@ -201,16 +216,16 @@ if ($_SESSION['username'] == 'planner') {
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                <!--    <div class="form-group">
                         <label class="control-label col-sm-2 font-weight-bold" for="workshopmodule">Module:</label>
                         <div class="col-sm-10">
-                            <?php
+                            <?php /*
                             echo selectBox("workshopmodule", "module", array("modulenummer", "modulenaam"), "modulenummer", array("modulenummer", "modulenaam"), "modulenummer");
-                            ?>
+                           */ ?>
                             <script href="text/javascript">
                                 var sel = document.getElementById("workshopmodule");
                                 var modulenummer;
-                                modulenummer = <?php echo getModuleNummer($workshop_id)?>;
+                                modulenummer = <?php /*echo getModuleNummer($workshop_id)*/?>;
                                 sel.selectedIndex = modulenummer;
                             </script>
                         </div>
@@ -219,11 +234,11 @@ if ($_SESSION['username'] == 'planner') {
                         <label class="control-label col-sm-2 font-weight-bold"
                                for="workshopcompany">Organisatie:</label>
                         <div class="col-sm-10">
-                            <?php
+                            <?php /*
                             echo selectBox("workshopcompany", "organisatie", array("organisatienaam", "organisatienummer"), "organisatienummer", array("organisatienaam"), "organisatienaam");
-                            ?>
+                           */ ?>
                             <script href="text/javascript">
-                                var val = '<?php echo $row['ORGANISATIENAAM']; ?> ';
+                                var val = '<?php /*echo $row['ORGANISATIENAAM']; */?> ';
                                 $('#workshopcompany option').each(function (){
                                     if($(this).text() === val){
                                         $(this).attr('selected', 'selected');
@@ -233,7 +248,7 @@ if ($_SESSION['username'] == 'planner') {
                                 });
                             </script>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <label class="control-label col-sm-2 font-weight-bold" for="workshopsector">Sector:</label>
                         <div class="col-sm-10">
@@ -320,16 +335,77 @@ if ($_SESSION['username'] == 'planner') {
                                    value="<?php echo $workshopnotes ?>">
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-3">
-                                <button type="submit" class="btn btn-default" name="update">Update workshop</button>
-                            </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3 font-weight-bold" for="Brein_date">Verwerkt in BREIN op:</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" placeholder="Onbekend" name="Brein_date"
+                                   value="<?php echo $BREIN_date ?>">
                         </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-3">
-                                <button type="submit" class="btn btn-danger" name="cancel">Annuleer workshop</button>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 font-weight-bold" for="received_participantsinfo">Deelnemer gegevens ontvangen op:</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" placeholder="Onbekend" name="received_participantsinfo"
+                                   value="<?php echo $received_participantsinfo ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3 font-weight-bold" for="OVK_received">OVK bevestiging op:</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" placeholder="Onbekend" name="OVK_received"
+                                   value="<?php echo $OVK_received ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3 font-weight-bold" for="attendance_list_send">Presentielijst verstuurd op:</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" placeholder="Onbekend" name="attendance_list_send"
+                                   value="<?php echo $attendance_list_send ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3 font-weight-bold" for="attendance_list_received">Presentielijst ontvangen op:</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" placeholder="Onbekend" name="attendance_list_received"
+                                   value="<?php echo $attendance_list_received ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4 font-weight-bold" for="evidence_participation_mail">Bewijs deelname mail SBB WSL op:</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control" placeholder="Onbekend" name="evidence_participation_mail"
+                                   value="<?php echo $evidence_participation_mail ?>">
+                        </div>
+                    </div>
+
+                    <?php if($workshoptype == 'IND') {?>
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-3 font-weight-bold" for="contactperson_name">Contactpersoon naam (voor IND workshops):</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="Onbekend" name="contactperson_name"
+                                   value="<?php echo $contactperson_name ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3 font-weight-bold" for="contactperson_email">Contactpersoon email (voor IND workshops):</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="Onbekend" name="contactperson_email"
+                                   value="<?php echo $contactperson_email ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3 font-weight-bold" for="contactperson_phonenumber">Contactpersoon telefoonnummer (voor IND workshops):</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="Onbekend" name="contactperson_phonenumber"
+                                   value="<?php echo $contactperson_phonenumber ?>">
+                        </div>
+                    </div>
+                    <?php } ?>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default">Update workshop</button>
                         </div>
                     </div>
                 </form>
