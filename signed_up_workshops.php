@@ -66,4 +66,4 @@ $deelnemer_id = $_SESSION['deelnemer_id'];
 </div>
 </body>
 </html>
-<?php include 'footer.html'; ?>
+<?php include 'footer.php'; ?>

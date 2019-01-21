@@ -107,4 +107,4 @@ if ($_SESSION['username'] == 'planner') {
 } else {
     notLoggedIn();
 }
-include 'footer.html';
+include 'footer.php';

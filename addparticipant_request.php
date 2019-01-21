@@ -168,6 +168,6 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
 <?php } else {
     notLoggedIn();
 }
-include 'footer.html';
+include 'footer.php';
 
 

@@ -290,6 +290,6 @@ if ($row['WORKSHOPLEIDER_VOORNAAM'] == 'Nog niet bekend' OR $row['WORKSHOPLEIDER
 </div>
 </body>
 </html>
-<?php include 'footer.html'; ?>
+<?php include 'footer.php'; ?>
 
 

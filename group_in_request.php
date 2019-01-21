@@ -31,6 +31,6 @@ generate_header('Groepen in aanvraag');
         </div>
     </div>
 </body>
-<?php include 'footer.html'; ?>
+<?php include 'footer.php'; ?>
 
 

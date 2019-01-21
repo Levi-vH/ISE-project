@@ -114,4 +114,4 @@ if ($_SESSION['username'] == 'beheerder') {
 } else {
     notLoggedIn();
 }
-include 'footer.html';
+include 'footer.php';

@@ -62,7 +62,7 @@ generate_header('Workshop overzicht voor sector');
 </div>
 </body>
 </html>
-<?php include 'footer.html'; ?>
+<?php include 'footer.php'; ?>
 
 
 

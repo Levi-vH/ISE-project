@@ -299,7 +299,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
 <?php } else {
     echo '<h1> Alleen contactpersonen kunnen deze pagina bezoeken</h1>';
 }
-include 'footer.html';
+include 'footer.php';
 ?>
 </html>
 

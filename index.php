@@ -126,7 +126,7 @@ if (isset($_POST['planner'])) { ?>
     header('Location:  ' . $_SERVER['PHP_SELF']);
 }
 
-include 'footer.html'; ?>
+include 'footer.php'; ?>
 <script>
     function setOrganisation() {
         var element = document.getElementById('Organisation_Name').value;
