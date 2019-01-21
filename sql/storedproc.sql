@@ -8,10 +8,8 @@
    Modifications made by Bart:
 		procedures made:
 		-
-
 		procedures modified:
 		-
-
    Modifications made by Jesse:
 		procedures made:
 		-SP_insert_workshoprequest 
@@ -20,10 +18,8 @@
 		-SP_grant_large_account
 		-SP_ungrant_large_account
 		-SP_confirm_workshoprequest
-
 		procedures modified:
 		-SP_get_participant_workshops
-
    Modifications made by Mark:
 		procedures made:
 		-SP_get_row_numbers_of_group_ids
@@ -50,7 +46,6 @@
 		-SP_remove_participant_from_workshoprequest
 		-SP_delete_workshoprequest
 		-SP_delete_sector
-
 		procedures modified:
 		-SP_get_workshops
 		-SP_get_workshoprequests
@@ -175,7 +170,6 @@ BEGIN
 							WORKSHOPLEIDER WL ON W.WORKSHOPLEIDER_ID = WL.WORKSHOPLEIDER_ID INNER JOIN
 							ADVISEUR A ON W.ADVISEUR_ID = A.ADVISEUR_ID INNER JOIN
 							CONTACTPERSOON C ON W.CONTACTPERSOON_ID = C.CONTACTPERSOON_ID
-
 							WHERE WORKSHOP_ID IN (SELECT W.WORKSHOP_ID FROM WORKSHOP W
 							LEFT JOIN DEELNEMER_IN_WORKSHOP DIW ON DIW.WORKSHOP_ID = W.WORKSHOP_ID
 							LEFT JOIN DEELNEMER D ON DIW.DEELNEMER_ID = D.DEELNEMER_ID'
@@ -254,6 +248,9 @@ BEGIN
 							C.ACHTERNAAM AS CONTACTPERSOON_ACHTERNAAM,
 							C.TELEFOONNUMMER AS CONTACTPERSON_TELEFOONNUMMER,
 							C.EMAIL AS CONTACTPERSOON_EMAIL,
+							W.CONTACTPERSOON_NAAM,
+							W.CONTACTPERSOON_EMAIL,
+							W.CONTACTPERSOON_TELEFOONNUMMER,
 							ISNULL(	(
 									SELECT	COUNT(*)
 									FROM	DEELNEMER_IN_WORKSHOP
@@ -1645,11 +1642,9 @@ BEGIN
 					FROM AANVRAAG A
 					INNER JOIN GROEP G ON G.AANVRAAG_ID = A.AANVRAAG_ID
 					WHERE A.AANVRAAG_ID = @request_id'
-
 	SET @sql3 = N'DELETE A
 					FROM AANVRAAG A
 					WHERE A.AANVRAAG_ID = @request_id'
-
 	SET @sql4 = N'DELETE FROM DEELNEMER_IN_AANVRAAG WHERE AANVRAAG_ID = @request_id'
 	*/
 
@@ -2233,6 +2228,7 @@ BEGIN
 	FROM	SECTOR
 	WHERE	SECTORNAAM = @sectorname
 END
+GO
 
 CREATE OR ALTER PROC SP_delete_planner
 (
@@ -2245,6 +2241,7 @@ BEGIN
 	FROM	PLANNER
 	WHERE	PLANNERNAAM = @plannername
 END
+GO
 
 --=============================================================================================================================
 -- SP SP_delete_with_parameters: deletes record(s) for the given parameters                 
