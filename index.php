@@ -115,7 +115,7 @@ if (isset($_POST['planner'])) { ?>
         <div class="row justify-content-md-center">
             <input id="email" type="email" class="form-control" placeholder="Email" name="email" required>
             <br>
-            <input id="code" type="text" class="form-control" placeholder="Code" name="code" required>
+            <input id="code" type="password" class="form-control" placeholder="Code" name="code" required>
             <br>
             <button class="btn btn-success btn-lg" onclick="setParticipant()">Login</button>
         </div>

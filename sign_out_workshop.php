@@ -3,31 +3,22 @@ include 'functions.php';
 generate_header('Afmelden');
 
 $workshop_id = $_GET['workshop_id'];
-$errorMessage = null;
 if(isset($_POST['resign'])){
-
-
     $conn = connectToDB();
 
     $sqlGetCode = "EXEC SP_get_participant_code ?";
     $stmtGetCode = $conn->prepare($sqlGetCode);
     $stmtGetCode->bindParam(1,$_SESSION['deelnemer_id'], PDO::PARAM_INT);
     $stmtGetCode->execute();
-    $code = $stmtGetCode->fetch()[0];
 
-    if($code == $_POST['sign_out_code']){
-        $sql = "EXEC SP_disapprove_participant_of_workshop ?, ?";
+    $sql = "EXEC SP_disapprove_participant_of_workshop ?, ?";
 
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(1,$workshop_id, PDO::PARAM_INT);
-        $stmt->bindParam(2,$_SESSION['deelnemer_id'], PDO::PARAM_INT);
-        $stmt->execute();
-        header("refresh:0;url=signed_up_workshops.php");
-    }else{
-        $errorMessage = "Uw afmeldcode was niet correct!";
-    }
-
-
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1,$workshop_id, PDO::PARAM_INT);
+    $stmt->bindParam(2,$_SESSION['deelnemer_id'], PDO::PARAM_INT);
+    $stmt->execute();
+    $_SESSION['message'] = 'U bent succesvol uitgeschreven voor deze workshop';
+    header("refresh:0;url=signed_up_workshops.php");
 }
 
 
@@ -51,10 +42,7 @@ if(isset($_POST['resign'])){
         </div>
         <div>
             <h1 class="text-center">Afmelden</h1>
-            <?= $errorMessage ?>
             <form method="POST">
-                <label>Type uw afmeldcode in</label>
-                <input type="text" name="sign_out_code" required/>
                 <input type="submit" name="resign" value="Meld af">
             </form>
         </div>

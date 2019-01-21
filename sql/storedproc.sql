@@ -911,7 +911,6 @@ BEGIN
 	DECLARE @sql NVARCHAR(4000)
 	DECLARE @is_open_registration BIT
 	DECLARE @participant_id INT
-	DECLARE @organisationnumber NVARCHAR(15)
 
 	IF ((SELECT [TYPE] FROM WORKSHOP WHERE WORKSHOP_ID = @workshop_id) = 'IND')
 		BEGIN
@@ -969,8 +968,9 @@ BEGIN
 												@phonenumber,
 												@education,
 												@is_open_registration
-				END
-			ELSE IF ((@is_open_registration) = 1) AND 
+				END			
+			ELSE IF 
+			((@is_open_registration) = 1) AND 
 					 NOT EXISTS	( -- Check if there is already an participant in the database with the same email and name  
 					SELECT * --		  if there is, don't insert the participant.
 					FROM DEELNEMER
@@ -1030,7 +1030,8 @@ BEGIN
 			ELSE 
 				BEGIN 
 					SET @sql = N' UPDATE DEELNEMER
-								  SET INLOGCODE = @INLOGCODE
+								  SET INLOGCODE = @INLOGCODE,
+									  ORGANISATIENUMMER = @companyNumber
 								  WHERE VOORNAAM = @firstname
 										AND ACHTERNAAM = @lastname
 										AND EMAIL = @email
@@ -1045,7 +1046,6 @@ BEGIN
 												@companyNumber,
 												@firstname,	
 												@lastname,	
-				
 												@email,		
 												@inlogcode
 				END
@@ -1057,10 +1057,8 @@ BEGIN
 									WHERE VOORNAAM = @firstname
 											AND ACHTERNAAM = @lastname
 											AND EMAIL = @email
-											AND ORGANISATIENUMMER = @companyNumber
 											AND IS_OPEN_INSCHRIJVING = @is_open_registration
 									) 
-
 
 	EXEC SP_insert_deelnemer_in_workshop @workshop_id, @participant_id
 END

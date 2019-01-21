@@ -10,6 +10,12 @@ $deelnemer_id = $_SESSION['deelnemer_id'];
 <body>
 <div class="container">
     <h2 class="text-info text-center">Overzicht workshops</h2>
+    <?php
+        if(isset($_SESSION['message'])) {
+            echo '<p>' . $_SESSION['message'] . '</p>';
+            unset($_SESSION['message']);
+        }
+    ?>
     <div>
         <table class='table table-striped table-hover'>
             <tr>
