@@ -760,10 +760,126 @@ function createWorkshopleader($workshopleader_name, $workshopleader_surname)
 {
     $conn = connectToDB();
 
-    $sql = "exec SP_create_workshopleider ?, ?";
+    $sql = "exec SP_create_workshopleader ?, ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshopleader_name, PDO::PARAM_STR);
     $stmt->bindParam(2, $workshopleader_surname, PDO::PARAM_STR);
+    $stmt->execute();
+
+}
+
+function createAdviser($organisation_name, $sector, $name, $surname, $phonenumber, $email)
+{
+    $conn = connectToDB();
+
+    $sql = "exec SP_create_adviser ?, ?, ?, ?, ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $organisation_name, PDO::PARAM_STR);
+    $stmt->bindParam(2, $sector, PDO::PARAM_STR);
+    $stmt->bindParam(3, $name, PDO::PARAM_STR);
+    $stmt->bindParam(4, $surname, PDO::PARAM_STR);
+    $stmt->bindParam(5, $phonenumber, PDO::PARAM_STR);
+    $stmt->bindParam(6, $email, PDO::PARAM_STR);
+
+    $stmt->execute();
+
+}
+
+function checkIfSectorExists($sectorname)
+{
+    $conn = connectToDB();
+
+    $sql = "SELECT SECTORNAAM FROM SECTOR WHERE SECTORNAAM = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $sectorname, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $row['SECTORNAAM'];
+
+}
+
+function checkIfSectorExistsAnywhere($sectorname) {
+
+    $conn = connectToDB();
+
+    $sql = "exec SP_check_sector_usage ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $sectorname, PDO::PARAM_STR);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if($row['IS_USED'] == 1) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
+
+function deleteSector($sectorname) {
+
+    $conn = connectToDB();
+
+    $sql = "exec SP_delete_sector ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $sectorname, PDO::PARAM_STR);
+    $stmt->execute();
+
+}
+
+function deletePlanner($plannername) {
+
+    $conn = connectToDB();
+
+    $sql = "exec SP_delete_planner ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $plannername, PDO::PARAM_STR);
+    $stmt->execute();
+
+}
+
+
+function setInactive($tabelnaam, $wherecolumn, $where) {
+
+    $conn = connectToDB();
+
+    $sql = "exec SP_set_not_active ?, ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $tabelnaam, PDO::PARAM_STR);
+    $stmt->bindParam(2, $wherecolumn, PDO::PARAM_STR);
+    $stmt->bindParam(3, $where, PDO::PARAM_STR);
+
+    $stmt->execute();
+
+}
+
+function setActive($tabelnaam, $wherecolumn, $where) {
+
+    $conn = connectToDB();
+
+    $sql = "exec SP_set_active ?, ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $tabelnaam, PDO::PARAM_STR);
+    $stmt->bindParam(2, $wherecolumn, PDO::PARAM_STR);
+    $stmt->bindParam(3, $where, PDO::PARAM_STR);
+
+    $stmt->execute();
+
+}
+
+function checkIfActive($tabelnaam, $wherecolumn, $where) {
+
+    $conn = connectToDB();
+
+    $sql = "exec SP_set_active ?, ?, ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $tabelnaam, PDO::PARAM_STR);
+    $stmt->bindParam(2, $wherecolumn, PDO::PARAM_STR);
+    $stmt->bindParam(3, $where, PDO::PARAM_STR);
+
     $stmt->execute();
 
 }

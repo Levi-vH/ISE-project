@@ -38,9 +38,8 @@ if ($_SESSION['username'] == 'beheerder') {
                     gevolgen voor de al geplande/aangevraagde workshops met deze contactpersoon.</p>
             </tr>
             <?php
-            if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['Organisation_Name'])) {
+            if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['name'])) {
                 $organisation_name = $_POST['Organisation_Name'];
-
 
                 $conn = connectToDB();
                 $sql = "SELECT * FROM CONTACTPERSOON WHERE ORGANISATIENUMMER = ?";
@@ -70,7 +69,7 @@ if ($_SESSION['username'] == 'beheerder') {
                 }
             }
             if (isset($organisation_name)) { ?>
-                <form class="form-horizontal" action="createcontactpersons.php" method="post">
+                <form class="form-horizontal" action="createcontactpersons.php?organisation=<?=$organisation_name?>" method="post">
                     <h2>Maak nieuwe contactpersoon aan</h2>
                     <div class="form-group">
                         <label class="control-label col-sm-2 font-weight-bold" for="name">Voornaam:</label>
@@ -112,11 +111,14 @@ if ($_SESSION['username'] == 'beheerder') {
                 $contactperson_email = $_POST['email'];
 
                 pre_r($_POST);
-                echo $organisation_name;
 
-                //createContactperson($organisation_name, $contactperson_name, $contactperson_surname,
-                //    $contactperson_phonenumber, $contactperson_email );
+                createContactpersoon($_GET['organisation'], $contactperson_name, $contactperson_surname,
+                    $contactperson_phonenumber, $contactperson_email );
+                updatePage('createcontactpersons.php?createSuccess');
+            }
 
+            if(isset($_GET['createSuccess'])) {
+                echo '<p class="alert-success warning deletewarning">Contactpersoon toegevoegd!</p>';
             }
 
             ?>

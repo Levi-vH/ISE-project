@@ -7,19 +7,21 @@ include 'functions.php';
 
 if ($_SESSION['username'] == 'beheerder') {
 
+    generate_header('Nieuwe workshopleider toevoegen');
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $workshopleider_name = $_POST['name'];
         $workshopleider_surname = $_POST['surname'];
+        try {
+            createWorkshopleader($workshopleider_name, $workshopleider_surname);
+            echo '<p class="alert-success warning deletewarning">Workshopleider aangemaakt!</p>';
 
-        pre_r($_POST);
-
-        createWorkshopleader($workshopleider_name, $workshopleider_surname);
-
-
+        } catch (PDOException $e) {
+            echo '<p class="alert-danger warning deletewarning">Workshopleider bestaat al!</p>';
+        }
     }
 
-    generate_header('Nieuwe workshopleider toevoegen');
+
     ?>
     <body>
     <div class="container">
