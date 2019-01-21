@@ -177,7 +177,7 @@ AND CONTACTPERSOON_EMAIL IS NOT NULL AND CONTACTPERSOON_TELEFOONNUMMER IS NOT NU
 GO
 
 --=========================================================================
--- IR? / C? / BR?
+-- IR16 / C16 / BR16
 -- Give a workshopleader his/her available hours back if he/she is no longer
 -- leading the workshop.
 --=========================================================================
