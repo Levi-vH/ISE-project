@@ -2243,6 +2243,46 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROC SP_delete_contactperson
+(
+@contactperson_id NVARCHAR(20)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DELETE
+	FROM	CONTACTPERSOON
+	WHERE	CONTACTPERSOON_ID = @contactperson_id
+END
+GO
+
+CREATE OR ALTER PROC SP_delete_adviser
+(
+@adviser_id NVARCHAR(20)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DELETE
+	FROM	ADVISEUR
+	WHERE	ADVISEUR_ID = @adviser_id
+END
+GO
+
+
+CREATE OR ALTER PROC SP_delete_workshopleader
+(
+@workshopleader_id NVARCHAR(20)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DELETE
+	FROM	WORKSHPOLEIDER
+	WHERE	WORKSHOPLEADER_ID = @workshopleader_id
+END
+GO
+
 --=============================================================================================================================
 -- SP SP_delete_with_parameters: deletes record(s) for the given parameters                 
 --=============================================================================================================================

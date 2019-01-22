@@ -42,7 +42,9 @@ if ($_SESSION['username'] == 'beheerder') {
         <table class='table table-striped table-hover'>
             <tr>
                 <th>Alle planners</th>
+                <th>Zet planner actief/inactief</th>
                 <th>Verwijder planner</th>
+                <th>Status</th>
                 <p class="alert-danger warning deletewarning">Let op! Het verwijderen van planners heeft geen gevolgen
                     voor de al geplande/aangevraagde workshops met deze planner.</p>
             </tr>
@@ -59,9 +61,28 @@ if ($_SESSION['username'] == 'beheerder') {
                 $html .= '<td>';
                 $html .= $row['PLANNERNAAM'];
                 $html .= '</td>';
+                if ($row['IS_ACTIEF'] == 1) {
+                    $html .= '<td>';
+                    $html .= '<a class="fas fa-ban" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze sector op inactief wilt zetten? \')" href="createplanner.php?planner=' . $row['PLANNERNAAM'] . '&inactivePlanner=true"></a>';
+                    $html .= '</td>';
+                } elseif ($row['IS_ACTIEF'] == 0) {
+                    $html .= '<td>';
+                    $html .= '<a class="fas fa-check" id="approvebutton" onclick="return confirm(\'Weet je zeker dat je deze sector op actief wilt zetten? \')" href="createplanner.php?planner=' . $row['PLANNERNAAM'] . '&activePlanner=true"></a>';
+                    $html .= '</td>';
+                }
                 $html .= '<td>';
                 $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze planner wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href="createplanner.php?planner='.$row['PLANNERNAAM'].'&deletePlanner=true"></a>';
                 $html .= '</td>';
+                if ($row['IS_ACTIEF'] == 1) {
+                    $html .= '<td>';
+                    $html .= '<p>ACTIEF</p>';
+                    $html .= '</td>';
+                } elseif ($row['IS_ACTIEF'] == 0) {
+                    $html .= '<td>';
+                    $html .= '<p>INACTIEF</p>';
+                    $html .= '</td>';
+                }
+                $html .= '</tr>';
                 $html .= '</tr>';
 
                 echo $html;
@@ -70,10 +91,18 @@ if ($_SESSION['username'] == 'beheerder') {
             if (isset($_GET['deletePlanner'])) {
                 deletePlanner($_GET['planner']);
                 updatePage('createplanner.php?deleteSuccess');
+            }elseif (isset($_GET['inactivePlanner'])) {
+                setInactive('PLANNER', 'PLANNERNAAM', $_GET['planner']);
+                updatePage('createplanner.php?inactiveSuccess');
+            }  if (isset($_GET['activePlanner'])) {
+                setActive('PLANNER','PLANNERNAAM', $_GET['planner']);
+                updatePage('createplanner.php?inactiveSuccess');
             }
 
             if (isset($_GET['deleteSuccess'])) {
                 echo '<p class="alert-success warning deletewarning">Verwijderen gelukt!</p>';
+            } elseif (isset($_GET['inactiveSuccess'])) {
+                echo '<p class="alert-success warning deletewarning">Op inactief/actief gezet!</p>';
             }
 
             ?>
