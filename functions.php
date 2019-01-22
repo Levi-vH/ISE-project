@@ -841,6 +841,17 @@ function deletePlanner($plannername) {
 
 }
 
+function deleteContactperson($id) {
+
+    $conn = connectToDB();
+
+    $sql = "exec SP_delete_contactperson ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1, $id , PDO::PARAM_STR);
+    $stmt->execute();
+
+}
+
 
 function setInactive($tabelnaam, $wherecolumn, $where) {
 

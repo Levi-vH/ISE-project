@@ -5,10 +5,36 @@ if (!isset($_SESSION)) {
 
 include 'functions.php';
 
+pre_r($_GET);
+
 if ($_SESSION['username'] == 'beheerder') {
+
+    if(isset($_GET['organisatiename'])){
+        $organisation_name = $_GET['organisatiename'];
+    }
 
 
     generate_header('Nieuwe planner toevoegen');
+
+
+
+    if (isset($_GET['deleteContactperson'])) {
+        deleteContactperson($_GET['contactperson']);
+        updatePage('createcontactpersons.php?deleteSuccess&organisatiename='. $organisation_name . '');
+    } elseif (isset($_GET['inactiveContactperson'])) {
+        setInactive('CONTACTPERSOON', 'CONTACTPERSOON_ID', $_GET['contactperson']);
+        updatePage('createcontactpersons.php?inactiveSuccess&organisatiename='. $organisation_name . '');
+    } elseif (isset($_GET['activeContactperson'])) {
+        setActive('CONTACTPERSOON', 'CONTACTPERSOON_ID', $_GET['contactperson']);
+        updatePage('createcontactpersons.php?inactiveSuccess&organisatiename='. $organisation_name . '');
+    }
+
+    if (isset($_GET['deleteSuccess'])) {
+        echo '<p class="alert-success warning deletewarning">Verwijderen gelukt!</p>';
+    } elseif (isset($_GET['inactiveSuccess'])) {
+        echo '<p class="alert-success warning deletewarning">Op inactief/actief gezet!</p>';
+    }
+
     ?>
     <body>
     <div class="container">
@@ -40,8 +66,11 @@ if ($_SESSION['username'] == 'beheerder') {
                     gevolgen voor de al geplande/aangevraagde workshops met deze contactpersoon.</p>
             </tr>
             <?php
-            if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['name'])) {
-                $organisation_name = $_POST['Organisation_Name'];
+            if (($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST['name']) || isset($organisation_name))) {
+                if(!isset($organisation_name)){
+                    $organisation_name = $_POST['Organisation_Name'];
+                }
+
 
                 $conn = connectToDB();
                 $sql = "SELECT * FROM CONTACTPERSOON WHERE ORGANISATIENUMMER = ?";
@@ -63,15 +92,15 @@ if ($_SESSION['username'] == 'beheerder') {
                     $html .= '</td>';
                     if ($row['IS_ACTIEF'] == 1) {
                         $html .= '<td>';
-                        $html .= '<a class="fas fa-ban" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze sector op inactief wilt zetten? \')" href="createcontactpersons.php?contactperson=' . $row['CONTACTPERSOON_ID'] . '&inactiveContactperson=true"></a>';
+                        $html .= '<a class="fas fa-ban" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze contactpersoon op inactief wilt zetten? \')" href="createcontactpersons.php?contactperson=' . $row['CONTACTPERSOON_ID'] . '&inactiveContactperson=true&organisatiename='.$organisation_name .'"></a>';
                         $html .= '</td>';
                     } elseif ($row['IS_ACTIEF'] == 0) {
                         $html .= '<td>';
-                        $html .= '<a class="fas fa-check" id="approvebutton" onclick="return confirm(\'Weet je zeker dat je deze sector op actief wilt zetten? \')" href="createcontactpersons.php?contactperson=' . $row['CONTACTPERSOON_ID'] . '&activeContactperson=true"></a>';
+                        $html .= '<a class="fas fa-check" id="approvebutton" onclick="return confirm(\'Weet je zeker dat je deze contactpersoon op actief wilt zetten? \')" href="createcontactpersons.php?contactperson=' . $row['CONTACTPERSOON_ID'] . '&activeContactperson=true&organisatiename='.$organisation_name .'"></a>';
                         $html .= '</td>';
                     }
                     $html .= '<td>';
-                    $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze sector wilt verwijderen?\')" href="createcontactpersons.php?contactperson=' . $row['CONTACTPERSOON_ID'] . '&deleteContactperson=true"></a>';
+                    $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze contactpersoon wilt verwijderen?\')" href="createcontactpersons.php?contactperson=' . $row['CONTACTPERSOON_ID'] . '&deleteContactperson=true&organisatiename='.$organisation_name .'"></a>';
                     $html .= '</td>';
                     if ($row['IS_ACTIEF'] == 1) {
                         $html .= '<td>';
@@ -88,22 +117,6 @@ if ($_SESSION['username'] == 'beheerder') {
 
                 }
 
-                if (isset($_GET['deleteContactperson'])) {
-                    deleteContactperson($_GET['contactperson']);
-                    updatePage('createcontactpersons.php?deleteSuccess');
-                } elseif (isset($_GET['inactiveContactperson'])) {
-                    setInactive('CONTACTPERSOON', 'CONTACTPERSOON_ID', $_GET['contactperson']);
-                    updatePage('createcontactpersons.php?inactiveSuccess');
-                } elseif (isset($_GET['activeContactperson'])) {
-                    setActive('CONTACTPERSOON', 'CONTACTPERSOON_ID', $_GET['contactperson']);
-                    updatePage('createcontactpersons.php?inactiveSuccess');
-                }
-
-                if (isset($_GET['deleteSuccess'])) {
-                    echo '<p class="alert-success warning deletewarning">Verwijderen gelukt!</p>';
-                } elseif (isset($_GET['inactiveSuccess'])) {
-                    echo '<p class="alert-success warning deletewarning">Op inactief/actief gezet!</p>';
-                }
                 if (isset($organisation_name)) { ?>
                     <form class="form-horizontal"
                           action="createcontactpersons.php?organisation=<?= $organisation_name ?>"
