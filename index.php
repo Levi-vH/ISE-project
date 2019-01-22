@@ -24,6 +24,9 @@ if (isset($_GET['organisation_id'])) {
     $_SESSION['username'] = 'planner';
     $_SESSION['planner'] = $_GET['planner'];
     header('Location:  ' . $_SERVER['PHP_SELF']);
+} elseif (isset($_GET['beheerder'])) {
+    $_SESSION['username'] = 'beheerder';
+    header('Location:  ' . $_SERVER['PHP_SELF']);
 } elseif (isset($_GET['email'])) {
     if (!is_null(getParticipantId($_GET['email'], $_GET['code']))) {
         $_SESSION['username'] = 'deelnemer';
@@ -122,8 +125,18 @@ if (isset($_POST['planner'])) { ?>
     </div>
     <?php
 } elseif (isset($_POST['beheerder'])) {
-    $_SESSION['username'] = 'beheerder';
-    header('Location:  ' . $_SERVER['PHP_SELF']);
+    ?>
+    <div class="container">
+        <h3 class="text-center">Log hieronder in met uw beheerdersaccount</h3>
+        <div class="row justify-content-md-center">
+            <input id="usernameB" type="text" class="form-control" placeholder="gebruikersnaam" name="usernameB" required>
+            <br>
+            <input id="passwordB" type="password" class="form-control" placeholder="wachtwoord" name="passwordB" required>
+            <br>
+            <button class="btn btn-success btn-lg" onclick="setManager()">Login</button>
+        </div>
+    </div>
+    <?php
 }
 
 include 'footer.php'; ?>
@@ -153,6 +166,16 @@ include 'footer.php'; ?>
             window.location.href = "index.php?email=" + element + "&code=" + element2;
         } else {
             alert("Log aub in")
+        }
+    }
+
+    function setManager() {
+        var username = document.getElementById('usernameB').value;
+        var password = document.getElementById('passwordB').value;
+        if (username === "beheerder" && password === "bG56F12pp") {
+            window.location.href = "index.php?beheerder=" + username
+        } else {
+            alert("Log aub met een bestaand account in")
         }
     }
 </script>
