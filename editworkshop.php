@@ -20,6 +20,7 @@ if ($_SESSION['username'] == 'planner') {
     $conn = connectToDB();
 
 //Run the stored procedure
+// $sql = "SELECT * FROM VW_WORKSHOPS";
     $sql = "exec SP_get_workshops @where = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
@@ -68,42 +69,84 @@ if ($_SESSION['username'] == 'planner') {
         $attendance_list_send = check_input($_POST['attendance_list_send']);
         $attendance_list_received = check_input($_POST['attendance_list_received']);
         $evidence_participation_mail = check_input($_POST['evidence_participation_mail']);
-        $contactperson_name = check_input($_POST['contactperson_name']);
-        $contactperson_email = check_input($_POST['contactperson_email']);
-        $contactperson_phonenumber = check_input($_POST['contactperson_phonenumber']);
-
+        if ($row['TYPE'] == 'IND') {
+            $contactperson_name = check_input($_POST['contactperson_name']);
+            $contactperson_email = check_input($_POST['contactperson_email']);
+            $contactperson_phonenumber = check_input($_POST['contactperson_phonenumber']);
+        }
 
         if(strtotime($workshopdate) < time()){
             $errorMessage = 'De workshop mag niet in het verleden liggen';
             $workshopdate = $row['DATUM'];
         }else {
-            pre_r($_POST);
+            if($OVK_received == "") {
+                $OVK_received = null;
+            }
+            if($BREIN_date == "") {
+                $BREIN_date = null;
+            }
+            if($received_participantsinfo == "") {
+                $received_participantsinfo = null;
+            }
+            if($attendance_list_send == "") {
+                $attendance_list_send = null;
+            }
+            if($attendance_list_received == "") {
+                $attendance_list_received = null;
+            }
+            if($evidence_participation_mail == "") {
+                $evidence_participation_mail = null;
+            }
 
-            ECHO $workshop_id;
-            //Run the stored procedure
-            $sql = "exec SP_alter_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
-            $stmt = $conn->prepare($sql);
-            $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
-            $stmt->bindParam(2, $workshopdate, PDO::PARAM_STR);
-            $stmt->bindParam(3, $contactinfo, PDO::PARAM_INT);
-            $stmt->bindParam(4, $workshopsector, PDO::PARAM_STR);
-            $stmt->bindParam(5, $starttime, PDO::PARAM_STR);
-            $stmt->bindParam(6, $endtime, PDO::PARAM_STR);
-            $stmt->bindParam(7, $workshopadress, PDO::PARAM_STR);
-            $stmt->bindParam(8, $workshoppostcode, PDO::PARAM_STR);
-            $stmt->bindParam(9, $workshopcity, PDO::PARAM_STR);
-            $stmt->bindParam(10, $workshopleader, PDO::PARAM_INT);
-            $stmt->bindParam(11, $workshopnotes, PDO::PARAM_STR);
-            $stmt->bindParam(12, $BREIN_date, PDO::PARAM_INT);
-            $stmt->bindParam(13, $received_participantsinfo, PDO::PARAM_STR);
-            $stmt->bindParam(14, $OVK_received, PDO::PARAM_STR);
-            $stmt->bindParam(15, $attendance_list_send, PDO::PARAM_INT);
-            $stmt->bindParam(16, $attendance_list_received, PDO::PARAM_INT);
-            $stmt->bindParam(17, $evidence_participation_mail, PDO::PARAM_STR);
-            $stmt->bindParam(18, $contactperson_name, PDO::PARAM_STR);
-            $stmt->bindParam(19, $contactperson_email, PDO::PARAM_STR);
-            $stmt->bindParam(20, $contactperson_phonenumber, PDO::PARAM_STR);
-            $stmt->execute();
+            // if the workshop is and IND workshop the last 3 parameters have to be not null
+            if ($row['TYPE'] == 'IND') {
+                //Run the stored procedure
+                $sql = "exec SP_alter_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
+                $stmt->bindParam(2, $workshopdate, PDO::PARAM_STR);
+                $stmt->bindParam(3, $contactinfo, PDO::PARAM_INT);
+                $stmt->bindParam(4, $workshopsector, PDO::PARAM_STR);
+                $stmt->bindParam(5, $starttime, PDO::PARAM_STR);
+                $stmt->bindParam(6, $endtime, PDO::PARAM_STR);
+                $stmt->bindParam(7, $workshopadress, PDO::PARAM_STR);
+                $stmt->bindParam(8, $workshoppostcode, PDO::PARAM_STR);
+                $stmt->bindParam(9, $workshopcity, PDO::PARAM_STR);
+                $stmt->bindParam(10, $workshopleader, PDO::PARAM_INT);
+                $stmt->bindParam(11, $workshopnotes, PDO::PARAM_STR);
+                $stmt->bindParam(12, $BREIN_date, PDO::PARAM_INT);
+                $stmt->bindParam(13, $received_participantsinfo, PDO::PARAM_STR);
+                $stmt->bindParam(14, $OVK_received, PDO::PARAM_STR);
+                $stmt->bindParam(15, $attendance_list_send, PDO::PARAM_INT);
+                $stmt->bindParam(16, $attendance_list_received, PDO::PARAM_INT);
+                $stmt->bindParam(17, $evidence_participation_mail, PDO::PARAM_STR);
+                $stmt->bindParam(18, $contactperson_name, PDO::PARAM_STR);
+                $stmt->bindParam(19, $contactperson_email, PDO::PARAM_STR);
+                $stmt->bindParam(20, $contactperson_phonenumber, PDO::PARAM_STR);
+                $stmt->execute();
+            } else {
+                // if the workshop type is not IND the last 3 parameters have to be null
+                $sql = "exec SP_alter_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
+                $stmt->bindParam(2, $workshopdate, PDO::PARAM_STR);
+                $stmt->bindParam(3, $contactinfo, PDO::PARAM_INT);
+                $stmt->bindParam(4, $workshopsector, PDO::PARAM_STR);
+                $stmt->bindParam(5, $starttime, PDO::PARAM_STR);
+                $stmt->bindParam(6, $endtime, PDO::PARAM_STR);
+                $stmt->bindParam(7, $workshopadress, PDO::PARAM_STR);
+                $stmt->bindParam(8, $workshoppostcode, PDO::PARAM_STR);
+                $stmt->bindParam(9, $workshopcity, PDO::PARAM_STR);
+                $stmt->bindParam(10, $workshopleader, PDO::PARAM_INT);
+                $stmt->bindParam(11, $workshopnotes, PDO::PARAM_STR);
+                $stmt->bindParam(12, $BREIN_date, PDO::PARAM_INT);
+                $stmt->bindParam(13, $received_participantsinfo, PDO::PARAM_STR);
+                $stmt->bindParam(14, $OVK_received, PDO::PARAM_STR);
+                $stmt->bindParam(15, $attendance_list_send, PDO::PARAM_INT);
+                $stmt->bindParam(16, $attendance_list_received, PDO::PARAM_INT);
+                $stmt->bindParam(17, $evidence_participation_mail, PDO::PARAM_STR);
+                $stmt->execute();
+            }
         }
     }
 
@@ -416,4 +459,4 @@ if ($_SESSION['username'] == 'planner') {
 <?php } else {
     notLoggedIn();
 }
-include 'footer.php';
+include 'footer.html';
