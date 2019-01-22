@@ -1692,7 +1692,7 @@ BEGIN
 				INSERT INTO ORGANISATIE
 				(ORGANISATIENUMMER,ORGANISATIENAAM,ADRES,POSTCODE,PLAATSNAAM,LARGE_ACCOUNTS)
 				VALUES
-				((SELECT MAX(CAST(ORGANISATIENUMMER AS INT) + 1) FROM ORGANISATIE), @organisationName, @adres, @postcode, @location, @LargeAccount)
+				((SELECT ISNULL(MAX(CAST(ORGANISATIENUMMER AS INT) + 1),1) FROM ORGANISATIE), @organisationName, @adres, @postcode, @location, @LargeAccount)
 				'
 	EXEC sp_executesql @sql, N'@organisationName VARCHAR(60), @adres VARCHAR(60), @postcode VARCHAR(20), @location VARCHAR(60), @LargeAccount BIT',  @organisationName, @adres, @postcode, @location, @LargeAccount 
 END
