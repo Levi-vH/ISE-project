@@ -37,7 +37,6 @@ AND		TABLE_SCHEMA LIKE ('dbo%')
 --=======================================================
 -- tests for the check on the automatic update on status
 --=======================================================
-
 -- test with type = 'afgehandeld'
 DROP PROCEDURE IF EXISTS [testWorkshop].[test for the automatic change to the bevestigd state 1]
 GO
@@ -813,12 +812,11 @@ GO
 -- Test for when IS_OPEN_INSCHRIJVING is 1 then GEWENST_BEGELEIDINGSNIVEAU 
 -- and FUNCTIENAAM have to be NOT NULL
 --======================================================================================
-
 -- Test for IS_OPEN_INSCHRIJVING is 1 AND the rest is NOT NULL 
-DROP PROCEDURE IF EXISTS [testDeelnemer].[test for open inschrvijving 1]
+DROP PROCEDURE IF EXISTS [testDeelnemer].[test for open inschrijving 1]
 GO
 
-CREATE OR ALTER PROCEDURE [testDeelnemer].[test for open inschrvijving 1]
+CREATE OR ALTER PROCEDURE [testDeelnemer].[test for open inschrijving 1]
 AS
 BEGIN
 
@@ -836,10 +834,10 @@ END
 GO
 
 -- Test for IS_OPEN_INSCHRIJVING is 0 AND the rest is NOT NULL 
-DROP PROCEDURE IF EXISTS [testDeelnemer].[test for open inschrvijving 2]
+DROP PROCEDURE IF EXISTS [testDeelnemer].[test for open inschrijving 2]
 GO
 
-CREATE OR ALTER PROCEDURE [testDeelnemer].[test for open inschrvijving 2]
+CREATE OR ALTER PROCEDURE [testDeelnemer].[test for open inschrijving 2]
 AS
 BEGIN
 
@@ -857,10 +855,10 @@ END
 GO
 
 -- Test for IS_OPEN_INSCHRIJVING is 1 AND FUNCTIENAAM is NULL 
-DROP PROCEDURE IF EXISTS [testDeelnemer].[test for open inschrvijving 3]
+DROP PROCEDURE IF EXISTS [testDeelnemer].[test for open inschrijving 3]
 GO
 
-CREATE OR ALTER PROCEDURE [testDeelnemer].[test for open inschrvijving 3]
+CREATE OR ALTER PROCEDURE [testDeelnemer].[test for open inschrijving 3]
 AS
 BEGIN
 
@@ -873,7 +871,7 @@ BEGIN
 	INSERT INTO DEELNEMER ([ORGANISATIENUMMER], [AANHEF], [VOORNAAM], [ACHTERNAAM],
 							[GEBOORTEDATUM], [EMAIL], [TELEFOONNUMMER], [OPLEIDINGSNIVEAU], [IS_OPEN_INSCHRIJVING],
 							[GEWENST_BEGELEIDINGSNIVEAU], [FUNCTIENAAM], [SECTORNAAM])
-	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 'niveau', NULL, NULL); 
+	VALUES(NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL); 
 END
 GO
 
@@ -913,7 +911,7 @@ BEGIN
 	
 	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_ind_workshop_values';
 
-	EXEC tSQLt.ExpectnoException
+	EXEC tSQLt.ExpectException
 
 	INSERT INTO WORKSHOP ([TYPE], CONTACTPERSOON_NAAM, CONTACTPERSOON_EMAIL, CONTACTPERSOON_TELEFOONNUMMER)
 	VALUES('INC', 'naam2', 'email@hotmail.com', '0612345678');
@@ -932,7 +930,7 @@ BEGIN
 	
 	EXEC tSQLt.ApplyConstraint @Tablename = 'dbo.WORKSHOP', @ConstraintName = 'CK_ind_workshop_values';
 
-	EXEC tSQLt.ExpectException
+	EXEC tSQLt.ExpectNoException
 
 	INSERT INTO WORKSHOP ([TYPE], CONTACTPERSOON_NAAM, CONTACTPERSOON_EMAIL, CONTACTPERSOON_TELEFOONNUMMER)
 	VALUES('IND', 'naam3', NULL, '0612345678');
