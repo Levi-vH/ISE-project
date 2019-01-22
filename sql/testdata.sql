@@ -573,10 +573,10 @@ GO
 /* Table: PLANNER				                                */
 /*==============================================================*/
 INSERT INTO [SBBWORKSHOPOMGEVING].[DBO].[PLANNER]
-VALUES	('D. Krom'),
-		('R. Ates'),
-		('G. Gültekin'),
-		('K. deBruijn')
+VALUES	('D. Krom',1),
+		('R. Ates',1),
+		('G. Gültekin',1),
+		('K. deBruijn',1)
 GO
 
 -- Adding SBB to ORGANISATIE
