@@ -101,6 +101,13 @@ footer{
     margin-top: auto;
 }
 
+.deletebutton{
+    border:0;
+    padding:0;
+    background:0;
+    cursor:pointer;
+}
+
 
 /*
 

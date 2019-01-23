@@ -2365,3 +2365,27 @@ BEGIN
 	EXEC sp_executesql @sql, N'@where NVARCHAR(50)', @where
 END
 GO
+
+--=============================================================================================================================
+-- SP SP_delete_workshopleader_hours: Delete workshopleader hours based on given parameters        
+--=============================================================================================================================
+
+CREATE OR ALTER PROC SP_delete_workshopleader_hours
+(
+@id INT,
+@kwartaal CHAR(1),
+@jaar SMALLINT,
+@aantal_uur NUMERIC(5,2)
+)
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @sql NVARCHAR(4000)
+	SET @sql =	N'DELETE FROM BESCHIKBAARHEID
+					WHERE WORKSHOPLEIDER_ID= @id
+					AND KWARTAAL= @kwartaal
+					AND JAAR = @jaar
+					AND AANTAL_UUR = @aantal_uur'
+	EXEC sp_executesql @sql, N'@id INT,@kwartaal CHAR(1),@jaar SMALLINT,@aantal_uur NUMERIC(5,2)', @id, @kwartaal, @jaar, @aantal_uur
+END
+GO

@@ -894,3 +894,27 @@ function checkIfActive($tabelnaam, $wherecolumn, $where) {
     $stmt->execute();
 
 }
+
+function insertWorkshopleaderHours($id, $quarter, $year, $amount_of_hours){
+    $conn = connectToDB();
+
+    $sql = 'EXEC SP_insert_workshopleader_availability ?, ?, ?, ?';
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1,$id,PDO::PARAM_INT);
+    $stmt->bindParam(2,$quarter, PDO::PARAM_INT);
+    $stmt->bindParam(3, $year, PDO::PARAM_INT);
+    $stmt->bindParam(4, $amount_of_hours, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+function deleteWorkshopleaderHours($id, $quarter, $year, $amount_of_hours){
+    $conn = connectToDB();
+
+    $sql = 'EXEC SP_delete_workshopleader_hours ?,?,?,?';
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(1,$id,PDO::PARAM_INT);
+    $stmt->bindParam(2,$quarter, PDO::PARAM_INT);
+    $stmt->bindParam(3, $year, PDO::PARAM_INT);
+    $stmt->bindParam(4, $amount_of_hours, PDO::PARAM_INT);
+    $stmt->execute();
+}

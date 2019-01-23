@@ -7,7 +7,25 @@ include 'functions.php';
 generate_header('Workshopleiders');
 
 if ($_SESSION['username'] == 'planner') {
+    if (isset($_GET['add'])) {
+        if ($_GET['add'] == true) {
+            $id = $_POST['workshopleader'];
+            $year = $_POST['year'];
+            $quarter = $_POST['quarter'];
+            $hours = $_POST['hours'];
 
+            insertWorkshopleaderHours($id, $quarter, $year, $hours);
+        }
+    }
+
+    if(isset($_POST['delete'])){
+        $id = $_POST['workshopleader'];
+        $year = $_POST['year'];
+        $quarter = $_POST['quarter'];
+        $hours = $_POST['hours'];
+
+        deleteWorkshopleaderHours($id, $quarter, $year, $hours);
+    }
 
 // The ones that do not get checked are dropdown or select.
 
@@ -40,6 +58,7 @@ if ($_SESSION['username'] == 'planner') {
         </script>
         <h2>Plan nieuwe uren in</h2>
         <form class="form-horizontal" action="workshopleaders.php?add=true" method="post">
+            <input type="hidden" value="<?= $workshopleader_id ?>" name="workshopleader">
             <div class="form-group">
                 <label class="control-label col-sm-2 font-weight-bold" for="year">Jaar</label>
                 <div class="col-sm-10">
@@ -79,7 +98,12 @@ if ($_SESSION['username'] == 'planner') {
                 $stmt->execute();
 
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    $html = '';
+                    $html = '<form method="post"  class="form-horizontal" onsubmit="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')">';
+                    $html .= '<input type="hidden" name="year" value="'.$row['JAAR'].'">';
+                    $html .= '<input type="hidden" name="quarter" value="'.$row['KWARTAAL'].'">';
+                    $html .= '<input type="hidden" name="hours" value="'.$row['AANTAL_UUR'].'">';
+                    $html .= '<input type="hidden" name="workshopleader" value="'.$workshopleader_id.'">';
+
                     $html .= '<tr>';
                     $html .= '<td>';
                     $html .= $row['JAAR'];
@@ -91,9 +115,10 @@ if ($_SESSION['username'] == 'planner') {
                     $html .= $row['AANTAL_UUR'];
                     $html .= '</td>';
                     $html .= '<td>';
-                    $html .= '<a class="fas fa-times" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')" href=""></a>';
+                    $html .= '<button type="submit" name="delete" class="deletebutton"><i class="fas fa-times" id="denybutton"></i></button>';
                     $html .= '</td>';
                     $html .= '</tr>';
+                    $html .= '</form>';
 
                     echo $html;
                 }
