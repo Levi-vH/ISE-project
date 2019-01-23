@@ -26,7 +26,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     if(isset($_POST['Zet_om_naar_workshop'])){
         foreach($_POST['edit'] as $groep){
             foreach($groep as $module){
-                pre_r($module);
+
 
                 $sql8 = "EXEC SP_confirm_workshoprequest ?, ?, ?";
                 $stmt8 = $conn->prepare($sql8);
