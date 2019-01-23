@@ -7,6 +7,8 @@ include 'functions.php';
 
 $errorMessage = null;
 
+generate_header('Workshop aanmaken');
+
 if ($_SESSION['username'] == 'planner') {
 // define (empty) variables
     $workshopdate = $contactsbb = $workshopmodule = $workshopsector = $starttime = $endtime =
@@ -53,22 +55,19 @@ if ($_SESSION['username'] == 'planner') {
 
         try {
             $stmt->execute();
+            $sql2 = "SELECT TOP 1 WORKSHOP_ID FROM WORKSHOP ORDER BY WORKSHOP_ID DESC";
+            $stmt2 = $conn->prepare($sql2);
+            $stmt2->execute();
+
+            $row = $stmt2->fetch(PDO::FETCH_ASSOC);
+
+            header('Location: workshop.php?workshop_id=' . $row['WORKSHOP_ID']);
         } catch (PDOException $e) {
-            echo '<p class="alert-danger warning deletewarning">Email moet een @ en punt bevatten en de workshop mag niet in het verleden liggen(of er is iets misgegaan in de database)</p>';
+            echo '<p class="alert-danger warning deletewarning ">Email moet een @ en punt bevatten en de workshop mag niet in het verleden liggen(of er is iets misgegaan in de database)</p>';
         }
-
-
-        $sql2 = "SELECT TOP 1 WORKSHOP_ID FROM WORKSHOP ORDER BY WORKSHOP_ID DESC";
-        $stmt2 = $conn->prepare($sql2);
-        $stmt2->execute();
-
-        $row = $stmt2->fetch(PDO::FETCH_ASSOC);
-
-        header('Location: workshop.php?workshop_id=' . $row['WORKSHOP_ID']);
-    }
 }
 
-generate_header('Workshop aanmaken');
+
 ?>
 
     <body>
