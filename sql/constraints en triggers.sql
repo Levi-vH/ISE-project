@@ -8,7 +8,6 @@
    Modifications made by Mark: made CK_ind_workshop_values
    ================================================================ */
 
--- Constraints with a ** have no tests 
 
 USE [SBBWorkshopOmgeving]
 GO
@@ -355,7 +354,7 @@ GO
 
 --========================================================================================
 -- IR8 / C8 / BR8
--- KWARTAAL has to be 1, 2, 3 or 4 **
+-- KWARTAAL has to be 1, 2, 3 or 4
 --========================================================================================
 ALTER TABLE BESCHIKBAARHEID
 DROP CONSTRAINT IF EXISTS CK_kwartaal
@@ -367,7 +366,7 @@ GO
 
 --========================================================================================
 -- IR10 / C10 / BR10
--- JAAR has to be between 1900 and 2200 **
+-- JAAR has to be between 1900 and 2200
 --========================================================================================
 ALTER TABLE BESCHIKBAARHEID
 DROP CONSTRAINT IF EXISTS CK_jaar
