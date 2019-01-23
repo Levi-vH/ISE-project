@@ -229,11 +229,6 @@ $search_string = null;
 
             if (isset($_GET['error'])) {
                 echo '<p class="alert-danger warning">Fout! Sluit eerst het oude bestand <br>Elke download wordt in het zelfde bestand geschreven<br>Verander eerst de bestandsnaam voordat je het opnieuw download</p>';
-//                $time = time();
-//                if($time + 10000 > time()) {
-//                    updatePage('allworkshops.php');
-//                }
-               // updatePage('allworkshops.php');
             }
             ?>
         </table>

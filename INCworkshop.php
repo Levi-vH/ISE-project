@@ -13,7 +13,6 @@ if ($_SESSION['username'] == 'contactpersoon') {
 
 // The ones that do not get checked are dropdown or select.
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        pre_r($_POST);
         $Organisation_Relationnumber = check_input($_POST["Organisation_Relationnumber"]);
         $Contact_ID = check_input($_POST["Contact_Name"]);
         $SBB_Planner = check_input($_POST["Coordination_Contact"]);

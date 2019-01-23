@@ -17,10 +17,7 @@ if ($_SESSION['username'] == 'beheerder') {
         $organisation_city = $_POST['city'];
         $large_accounts = $_POST['la'];
 
-        pre_r($_POST);
-
         createOrganisation($organisation_name, $organisation_address, $organisation_postcode, $organisation_city, $large_accounts);
-
 
     }
 

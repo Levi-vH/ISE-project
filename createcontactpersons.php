@@ -5,8 +5,6 @@ if (!isset($_SESSION)) {
 
 include 'functions.php';
 
-pre_r($_GET);
-
 if ($_SESSION['username'] == 'beheerder') {
 
     if(isset($_GET['organisatiename'])){
@@ -15,8 +13,6 @@ if ($_SESSION['username'] == 'beheerder') {
 
 
     generate_header('Nieuwe planner toevoegen');
-
-
 
     if (isset($_GET['deleteContactperson'])) {
         deleteContactperson($_GET['contactperson']);

@@ -18,8 +18,6 @@ if ($_SESSION['username'] == 'beheerder') {
         $adviser_phonenumber = $_POST['phonenumber'];
         $adviser_email = $_POST['email'];
 
-        pre_r($_POST);
-
         createAdviser($organisation, $adviser_sector, $adviser_name, $adviser_surname, $adviser_phonenumber, $adviser_email);
 
     }

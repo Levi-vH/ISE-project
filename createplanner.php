@@ -14,7 +14,6 @@ if ($_SESSION['username'] == 'beheerder') {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $planner_name = $_POST['plannername'];
 
-        //pre_r($_POST);
         try {
             createPlanner($planner_name);
         } catch (PDOException $e) {

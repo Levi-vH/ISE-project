@@ -10,8 +10,8 @@ $errorMessage = null;
 if ($_SESSION['username'] == 'planner') {
 // define (empty) variables
     $workshopdate = $contactsbb = $workshopmodule = $workshopsector = $starttime = $endtime =
-    $workshopadress  = $workshopcity = $workshoppostcode = $workshopleader = $workshopnotes =
-    $contactcompanyname  = $contactcompanyemail = $contactcompanyphone = '';
+    $workshopadress = $workshopcity = $workshoppostcode = $workshopleader = $workshopnotes =
+    $contactcompanyname = $contactcompanyemail = $contactcompanyphone = '';
 
 // The ones that do not get checked are dropdown or select.
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -30,9 +30,9 @@ if ($_SESSION['username'] == 'planner') {
         $contactcompanyemail = check_input($_POST['contactcompanyemail']);
         $contactcompanyphone = check_input($_POST["contactcompanyphone"]);
 
-        if(strtotime($workshopdate) < time()){
+        if (strtotime($workshopdate) < time()) {
             $errorMessage = 'De workshop mag niet in het verleden liggen';
-        }else{
+        } else {
             //Try to make connection
             $conn = connectToDB();
 
@@ -53,7 +53,12 @@ if ($_SESSION['username'] == 'planner') {
             $stmt->bindParam(12, $contactcompanyname, PDO::PARAM_STR);
             $stmt->bindParam(13, $contactcompanyemail, PDO::PARAM_STR);
             $stmt->bindParam(14, $contactcompanyphone, PDO::PARAM_STR);
-            $stmt->execute();
+
+            try {
+                $stmt->execute();
+            } catch (PDOException $e) {
+                echo '<p class="alert-danger warning deletewarning">Email moet een @ en punt bevatten(of er is iets anders misgegaan in de database)</p>';
+            }
 
 
             $sql2 = "SELECT TOP 1 WORKSHOP_ID FROM WORKSHOP ORDER BY WORKSHOP_ID DESC";
@@ -62,8 +67,7 @@ if ($_SESSION['username'] == 'planner') {
 
             $row = $stmt2->fetch(PDO::FETCH_ASSOC);
 
-
-            header('Location: workshop.php?workshop_id='.$row['WORKSHOP_ID']);
+            header('Location: workshop.php?workshop_id=' . $row['WORKSHOP_ID']);
         }
     }
 
@@ -83,9 +87,11 @@ if ($_SESSION['username'] == 'planner') {
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-sm-6 font-weight-bold" for="Coordination_Contact">Contactpersoon SBB:</label>
+                <label class="control-label col-sm-6 font-weight-bold" for="Coordination_Contact">Contactpersoon
+                    SBB:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="Coordination_Contact" value="<?= $_SESSION['planner']?>" readonly>
+                    <input type="text" class="form-control" name="Coordination_Contact"
+                           value="<?= $_SESSION['planner'] ?>" readonly>
                 </div>
             </div>
             <div class="form-group">
@@ -130,7 +136,8 @@ if ($_SESSION['username'] == 'planner') {
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-sm-2 font-weight-bold" for="workshoppostalcode">Postcode workshop:</label>
+                <label class="control-label col-sm-2 font-weight-bold" for="workshoppostalcode">Postcode
+                    workshop:</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" placeholder="Postcode" name="workshoppostalcode" required>
                 </div>
