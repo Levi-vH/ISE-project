@@ -26,7 +26,7 @@ if ($_SESSION['username'] == 'planner') {
                     ?>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-dark">Kies workshopleider</button>
+                <button type="submit" class="btn btn-success">Kies workshopleider</button>
             </div>
         </form>
         <?php
@@ -58,7 +58,7 @@ if ($_SESSION['username'] == 'planner') {
                     <input type="text" class="form-control" placeholder="Aantal uur" name="hours" required>
                 </div>
             </div>
-            <button type="submit" class="btn btn-dark">Voeg toe</button>
+            <button type="submit" class="btn btn-success">Voeg toe</button>
         </form>
         <h2>Overzicht</h2>
         <div>
