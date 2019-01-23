@@ -85,7 +85,7 @@ function generate_header($title_of_page)
                 <a class="nav-link" href="createworkshopleaders.php">Workshopleiders</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="createadviser.php">Adviseuren</a>
+                <a class="nav-link" href="createadvisor.php">Adviseurs</a>
             </li>';
         }
         $header .= '<li class="nav-item">
