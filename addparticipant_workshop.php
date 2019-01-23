@@ -21,6 +21,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $lastname = check_input($_POST["lastnameInput"]);
         $birthDate = check_input($_POST["birthDateInput"]);
         $email = check_input($_POST["emailInput"]);
+        $inlogcode = null;
         $phonenumber = check_input($_POST["phonenumberInput"]);
         $educationalAttainment = check_input($_POST["educationalAttainmentInput"]);
         $educationalAttainmentStudents = check_input($_POST["educationalAttainmentStudentsInput"]);
@@ -45,12 +46,13 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $stmtInsertDeelnemer->bindParam(4, $lastname, PDO::PARAM_STR);
         $stmtInsertDeelnemer->bindParam(5, $birthDate, PDO::PARAM_STR);
         $stmtInsertDeelnemer->bindParam(6, $email, PDO::PARAM_STR);
-        $stmtInsertDeelnemer->bindParam(7, $phonenumber, PDO::PARAM_STR);
-        $stmtInsertDeelnemer->bindParam(8, $educationalAttainment, PDO::PARAM_STR);
-        $stmtInsertDeelnemer->bindParam(9, $educationalAttainmentStudents, PDO::PARAM_STR);
-        $stmtInsertDeelnemer->bindParam(10, $sector, PDO::PARAM_INT);
-        $stmtInsertDeelnemer->bindParam(11, $functionInCompany, PDO::PARAM_STR);
-        $stmtInsertDeelnemer->bindParam(12, $workshop_id, PDO::PARAM_INT);
+        $stmtInsertDeelnemer->bindParam(7, $inlogcode, PDO::PARAM_STR);
+        $stmtInsertDeelnemer->bindParam(8, $phonenumber, PDO::PARAM_STR);
+        $stmtInsertDeelnemer->bindParam(9, $educationalAttainment, PDO::PARAM_STR);
+        $stmtInsertDeelnemer->bindParam(10, $educationalAttainmentStudents, PDO::PARAM_STR);
+        $stmtInsertDeelnemer->bindParam(11, $sector, PDO::PARAM_INT);
+        $stmtInsertDeelnemer->bindParam(12, $functionInCompany, PDO::PARAM_STR);
+        $stmtInsertDeelnemer->bindParam(13, $workshop_id, PDO::PARAM_INT);
         $stmtInsertDeelnemer->execute();
 
 
@@ -166,11 +168,6 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         <?php
                         echo selectBox("sectorInput", "Sector", array("Sectornaam"), "Sectornaam", array("Sectornaam"), "Sectornaam");
                         ?>
-                    </div>
-                    <div class="form-group">
-                        <label for="companyLocationInput">Vestigingplaats</label>
-                        <input name="companyLocationInput" type="text" class="form-control" id="companyLocationInput"
-                               placeholder="Vestigingplaats" required>
                     </div>
                     <div class="form-group">
                         <label for="functionInCompanyInput">Functie in bedrijf</label>
