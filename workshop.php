@@ -168,6 +168,10 @@ if ($row['WORKSHOPLEIDER_VOORNAAM'] == 'Nog niet bekend' OR $row['WORKSHOPLEIDER
                 </div>
 
                 <div class="recieved-details details">
+                 <?php
+                 if($_SESSION['username'] == 'planner'){
+                 ?>
+
                     <h3> Ontvangen gegevens</h3>
                     <div class="detail-row">
                         <div class="details-column">
@@ -178,15 +182,6 @@ if ($row['WORKSHOPLEIDER_VOORNAAM'] == 'Nog niet bekend' OR $row['WORKSHOPLEIDER
                         </div>
 
                     </div>
-                    <!--<div class="detail-row">
-                        <div class="details-column">
-                            Deelnemer gegevens ontvangen:
-                        </div>
-                        <div class="details-value">
-                            < ?= $row['DEELNEMER_GEGEVENS_ONTVANGEN'] ?>
-                        </div>
-
-                    </div>-->
                     <?php
                     if ($row['TYPE'] !== 'IND') {
                         ?>
@@ -211,6 +206,7 @@ if ($row['WORKSHOPLEIDER_VOORNAAM'] == 'Nog niet bekend' OR $row['WORKSHOPLEIDER
 
                     </div>
                 </div>
+                <?php } ?>
 
                 <?php
                 if ($row['TYPE'] !== 'IND') {
