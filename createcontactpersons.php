@@ -158,8 +158,6 @@ if ($_SESSION['username'] == 'beheerder') {
                 $contactperson_phonenumber = $_POST['phonenumber'];
                 $contactperson_email = $_POST['email'];
 
-                pre_r($_POST);
-
                 createContactpersoon($_GET['organisation'], $contactperson_name, $contactperson_surname,
                     $contactperson_phonenumber, $contactperson_email);
                 updatePage('createcontactpersons.php?createSuccess');
