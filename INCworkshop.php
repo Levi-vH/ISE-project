@@ -233,7 +233,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
             <div class="form-group">
                 <label class="control-label col-sm-2" for="Coordination_Contact">Contactpersoon:</label>
                 <div class="col-sm-10">
-                    <?php echo selectBox("Coordination_Contact", "planner", array("plannernaam"), "plannernaam", array("plannernaam"), "plannernaam"); ?>
+                    <?php echo selectBox("Coordination_Contact", "planner", array("plannernaam"), "plannernaam", array("plannernaam"), "plannernaam", NULL, "IS_ACTIEF = 1"); ?>
                 </div>
             </div>
             <br>

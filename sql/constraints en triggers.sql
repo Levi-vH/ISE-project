@@ -139,6 +139,18 @@ ADD CONSTRAINT CK_workshop_type_and_sector CHECK(SECTORNAAM IS NOT NULL OR TYPE 
 GO
 
 --========================================================================================
+-- IR13 / C13 / BR13
+-- Check if the e-mail contains a '@' and a '.'
+--========================================================================================
+ALTER TABLE WORKSHOP
+DROP CONSTRAINT IF EXISTS CK_deelnemer_email
+GO
+
+ALTER TABLE WORKSHOP
+ADD CONSTRAINT CK_contactperson_email CHECK (CONTACTPERSOON_EMAIL LIKE '%@%.%')
+GO
+
+--========================================================================================
 -- IR9 / C9 / BR9
 -- Check if the workshopstatus is 'uitgezet', 'bevestigd', 'geannuleerd' or 'afgehandeld'
 --========================================================================================

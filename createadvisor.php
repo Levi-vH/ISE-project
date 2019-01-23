@@ -27,7 +27,7 @@ if ($_SESSION['username'] == 'beheerder') {
     <body>
     <div class="container">
         <h2 class="text-info text-center">Maak een nieuwe adviseur aan</h2>
-        <form class="form-horizontal" action="createadviser.php" method="post">
+        <form class="form-horizontal" action="createadvisor.php" method="post">
             <div class="form-group">
                 <label class="control-label col-sm-2 font-weight-bold" for="Organisation_Name">Organisatie Naam:</label>
                 <div class="col-sm-10">
