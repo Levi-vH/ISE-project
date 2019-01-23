@@ -88,7 +88,7 @@ if (isset($_POST['planner'])) { ?>
     <div class="container">
         <h3 class="text-center">Kies hieronder uw account</h3>
         <div class="row justify-content-md-center">
-            <?php echo selectBox("Coordination_Contact", "planner", array("plannernaam"), "plannernaam", array("plannernaam"), "plannernaam"); ?>
+            <?php echo selectBox("Coordination_Contact", "planner", array("plannernaam"), "plannernaam", array("plannernaam"), "plannernaam", NULL, "IS_ACTIEF = 1"); ?>
         </div>
         <br>
         <div class="row justify-content-md-center">
