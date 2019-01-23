@@ -928,6 +928,8 @@ BEGIN
 					AND IS_OPEN_INSCHRIJVING = 0
 				)
 				BEGIN
+
+				PRINT 'HIER KOM IK'
 					SET @sql =	N'
 								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, INLOGCODE, TELEFOONNUMMER, OPLEIDINGSNIVEAU, IS_OPEN_INSCHRIJVING)
 								VALUES	(
@@ -943,7 +945,7 @@ BEGIN
 										@is_open_registration
 										)
 								'
-
+PRINT 'HIER KOM IK2'
 								EXEC sp_executesql @sql,	N'
 												@companyNumber			NVARCHAR(15),
 												@salutation				NVARCHAR(7),
@@ -961,7 +963,8 @@ BEGIN
 												@firstname,	
 												@lastname,	
 												@birthdate,	
-												@email,		
+												@email,	
+												@inlogcode,
 												@phonenumber,
 												@education,
 												@is_open_registration
@@ -977,6 +980,7 @@ BEGIN
 					AND IS_OPEN_INSCHRIJVING = 1
 				)
 				BEGIN
+				PRINT 'HIER KOM IK2'
 					SET @sql =	N'
 								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, INLOGCODE, TELEFOONNUMMER, OPLEIDINGSNIVEAU, GEWENST_BEGELEIDINGSNIVEAU, SECTORNAAM, FUNCTIENAAM, IS_OPEN_INSCHRIJVING)
 								VALUES	(
@@ -1026,6 +1030,7 @@ BEGIN
 				END
 			ELSE 
 				BEGIN 
+				PRINT 'HIER KOM IK3'
 					SET @sql = N' UPDATE DEELNEMER
 								  SET INLOGCODE = @INLOGCODE,
 									  ORGANISATIENUMMER = @companyNumber
@@ -1056,7 +1061,18 @@ BEGIN
 											AND EMAIL = @email
 											AND IS_OPEN_INSCHRIJVING = @is_open_registration
 									) 
+			
+			IF (@participant_id IS NULL) 
+				BEGIN
+					SET @participant_id = (
+					SELECT DEELNEMER_ID 
+					FROM DEELNEMER
+					WHERE VOORNAAM = @firstname
+					AND ACHTERNAAM = @lastname
+					AND EMAIL = @email)
+				END
 
+				PRINT 'HIER KOM IK4'
 	EXEC SP_insert_deelnemer_in_workshop @workshop_id, @participant_id
 END
 GO
@@ -1073,6 +1089,8 @@ CREATE OR ALTER PROC SP_insert_deelnemer_in_workshop
 
 AS
 BEGIN
+
+PRINT @deelnemer_id
 	SET NOCOUNT ON
 	IF NOT EXISTS (SELECT * FROM DEELNEMER_IN_WORKSHOP WHERE DEELNEMER_ID = @deelnemer_id AND WORKSHOP_ID = @workshop_id)
 		BEGIN
@@ -1080,12 +1098,18 @@ BEGIN
 	
 		DECLARE @sql NVARCHAR(4000)
 		DECLARE @volgnummer INT = (SELECT MAX(VOLGNUMMER + 1) FROM DEELNEMER_IN_WORKSHOP WHERE workshop_id = @workshop_id)
+		DECLARE @goedgekeurd BIT = 0
+
+		IF ((SELECT [TYPE] FROM WORKSHOP WHERE WORKSHOP_ID = @workshop_id) != 'IND')
+		BEGIN
+			SET @goedgekeurd = 1
+		END
 	
 		IF @volgnummer IS NULL
 		BEGIN
 			SET @volgnummer = 1
 		END
-	
+
 		SET @sql =	N'
 					INSERT INTO	DEELNEMER_IN_WORKSHOP
 					VALUES		(
