@@ -7,6 +7,7 @@ include 'functions.php';
 
 generate_header('Deelnemer toevoegen');
 
+pre_r($_POST);
 
 if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactpersoon') {
     $error_message = NULL;
@@ -27,7 +28,6 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $educationalAttainmentStudents = check_input($_POST["educationalAttainmentStudentsInput"]);
         $companyName = check_input($_POST["Organisation_Name"]);
         $sector = check_input($_POST["sectorInput"]);
-        $companyLocation = check_input($_POST["companyLocationInput"]);
         $Organisation_name = check_input($_POST["Organisation_Name"]);
         $functionInCompany = check_input($_POST["functionInCompanyInput"]);
 
@@ -38,7 +38,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
 
         $conn = connectToDB();
 
-        $sqlInsertDeelnemer = "SP_insert_participant_in_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+        $sqlInsertDeelnemer = "SP_insert_participant_in_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
         $stmtInsertDeelnemer = $conn->prepare($sqlInsertDeelnemer);
         $stmtInsertDeelnemer->bindParam(1, $Organisation_name, PDO::PARAM_INT);
         $stmtInsertDeelnemer->bindParam(2, $salutation, PDO::PARAM_STR);

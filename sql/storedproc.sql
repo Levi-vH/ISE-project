@@ -929,7 +929,6 @@ BEGIN
 				)
 				BEGIN
 
-				PRINT 'HIER KOM IK'
 					SET @sql =	N'
 								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, INLOGCODE, TELEFOONNUMMER, OPLEIDINGSNIVEAU, IS_OPEN_INSCHRIJVING)
 								VALUES	(
@@ -945,7 +944,6 @@ BEGIN
 										@is_open_registration
 										)
 								'
-PRINT 'HIER KOM IK2'
 								EXEC sp_executesql @sql,	N'
 												@companyNumber			NVARCHAR(15),
 												@salutation				NVARCHAR(7),
@@ -980,7 +978,6 @@ PRINT 'HIER KOM IK2'
 					AND IS_OPEN_INSCHRIJVING = 1
 				)
 				BEGIN
-				PRINT 'HIER KOM IK2'
 					SET @sql =	N'
 								INSERT INTO	DEELNEMER (ORGANISATIENUMMER, AANHEF, VOORNAAM, ACHTERNAAM, GEBOORTEDATUM, EMAIL, INLOGCODE, TELEFOONNUMMER, OPLEIDINGSNIVEAU, GEWENST_BEGELEIDINGSNIVEAU, SECTORNAAM, FUNCTIENAAM, IS_OPEN_INSCHRIJVING)
 								VALUES	(
@@ -1030,7 +1027,6 @@ PRINT 'HIER KOM IK2'
 				END
 			ELSE 
 				BEGIN 
-				PRINT 'HIER KOM IK3'
 					SET @sql = N' UPDATE DEELNEMER
 								  SET INLOGCODE = @INLOGCODE,
 									  ORGANISATIENUMMER = @companyNumber
@@ -1072,7 +1068,6 @@ PRINT 'HIER KOM IK2'
 					AND EMAIL = @email)
 				END
 
-				PRINT 'HIER KOM IK4'
 	EXEC SP_insert_deelnemer_in_workshop @workshop_id, @participant_id
 END
 GO
@@ -1116,17 +1111,19 @@ PRINT @deelnemer_id
 								@workshop_id,
 								@deelnemer_id,
 								@volgnummer,
-								0
+								@goedgekeurd
 								)
 					'
 		EXEC sp_executesql @sql,	N'
 									@workshop_id	INT,
 									@deelnemer_id	INT,
-									@volgnummer		INT 
+									@volgnummer		INT, 
+									@goedgekeurd	INT
 									',
 									@workshop_id,
 									@deelnemer_id,
-									@volgnummer
+									@volgnummer,
+									@goedgekeurd
 	
 	END
 END
