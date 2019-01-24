@@ -864,18 +864,21 @@ AS
 BEGIN
 	SET NOCOUNT ON
 
-	DECLARE @sql NVARCHAR(4000)
-	SET @sql =	N'
-				INSERT INTO	BESCHIKBAARHEID (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
-				VALUES		(@workshopleader_id, @quarter, @year, @amount_of_hours)
-				'
-	EXEC sp_executesql @sql,	N'
-								@workshopleader_id	INT,
-								@quarter			NCHAR(1),
-								@year				SMALLINT,
-								@amount_of_hours	SMALLINT
-								',
-								@workshopleader_id, @quarter, @year, @amount_of_hours
+	IF NOT EXISTS (SELECT * FROM BESCHIKBAARHEID WHERE WORKSHOPLEIDER_ID = @workshopleader_id AND KWARTAAL = @quarter AND JAAR = @year)
+	BEGIN
+		DECLARE @sql NVARCHAR(4000)
+		SET @sql =	N'
+					INSERT INTO	BESCHIKBAARHEID (WORKSHOPLEIDER_ID, KWARTAAL, JAAR, AANTAL_UUR)
+					VALUES		(@workshopleader_id, @quarter, @year, @amount_of_hours)
+					'
+		EXEC sp_executesql @sql,	N'
+									@workshopleader_id	INT,
+									@quarter			NCHAR(1),
+									@year				SMALLINT,
+									@amount_of_hours	SMALLINT
+									',
+									@workshopleader_id, @quarter, @year, @amount_of_hours
+	END
 END
 GO
 
