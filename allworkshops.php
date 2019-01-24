@@ -178,7 +178,6 @@ pre_r($_POST);
             }
 
                 if ($search_leader != "'%%'") {
-                    echo 'in';
                     $workshopleader_id = check_input($_POST["WORKSHOPLEIDER_ID"]);
                     if($search_leader == "") {
                         $search_leader = "'%%'";
@@ -195,6 +194,8 @@ pre_r($_POST);
 
                 $sql = "EXEC SP_get_workshops_filtered @workshop_type = $search_workshop, @modulenaam = $search_module, @workshopleider_ID = $search_leader,
                 @company_name = $search_company_name, @firstname = $firstname, @lastname = $lastname, @status = $workshopStatus";
+
+                echo $sql;
 
                 $user_searched = true;
             }
