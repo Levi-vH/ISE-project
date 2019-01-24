@@ -188,11 +188,11 @@ BEGIN
 
 							IF(@workshopleider_ID != '%%')
 								BEGIN
-									SET @sql += 'AND WL.WORKSHOPLEIDER_ID LIKE @workshopleider_ID '
+									SET @sql += 'AND W.WORKSHOPLEIDER_ID LIKE @workshopleider_ID OR W.WORKSHOPLEIDER_ID IS NULL '
 								END
 							
 				SET @sql += 'AND O.ORGANISATIENAAM LIKE @company_name
-							 AND W.STATUS LIKE @status'
+							 AND W.STATUS LIKE @status OR W.STATUS IS NULL'
 
 	EXEC sp_executesql @sql, N'@workshop_type NVARCHAR(6), @modulenaam NVARCHAR(50), @workshopleider_ID NVARCHAR(10), @company_name NVARCHAR(60),
 	 @firstname NVARCHAR(30), @lastname NVARCHAR(50), @status NVARCHAR(20)', @workshop_type, @modulenaam, @workshopleider_ID, @company_name, @firstname, @lastname, @status

@@ -103,7 +103,7 @@ pre_r($_POST);
                     //    $search_string.= 'moduletype komt binnen';
                     $search_module = "'%" . check_input($_POST["Module_type"]) . "%'";
                 }
-                if (isset($_POST["WORKSHOPLEIDER_ID"])) {
+                if ($_POST["WORKSHOPLEIDER_ID"] !== "") {
                     //$search_string.= 'workshopleider komt binnen';
                     $search_leader = check_input($_POST["WORKSHOPLEIDER_ID"]);
                 }
@@ -177,7 +177,7 @@ pre_r($_POST);
                 <?php
             }
 
-                if ($search_leader != "'%%'") {
+                if (is_numeric($search_leader)) {
                     $workshopleader_id = check_input($_POST["WORKSHOPLEIDER_ID"]);
                     if($search_leader == "") {
                         $search_leader = "'%%'";
@@ -191,7 +191,7 @@ pre_r($_POST);
                         $search_string .= 'workshopleider = ' . $advisor_results ["VOORNAAM"] . ' ' . $advisor_results["ACHTERNAAM"];
                     }
                 }
-
+                
                 $sql = "EXEC SP_get_workshops_filtered @workshop_type = $search_workshop, @modulenaam = $search_module, @workshopleider_ID = $search_leader,
                 @company_name = $search_company_name, @firstname = $firstname, @lastname = $lastname, @status = $workshopStatus";
 
