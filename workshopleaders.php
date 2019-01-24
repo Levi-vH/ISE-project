@@ -7,7 +7,7 @@ include 'functions.php';
 generate_header('Workshopleiders');
 
 if ($_SESSION['username'] == 'planner') {
-    if (isset($_GET['add'])) {
+    if (isset($_GET['add']) && !isset($_POST['delete'])) {
         if ($_GET['add'] == true) {
             $id = $_POST['workshopleader'];
             $year = $_POST['year'];
