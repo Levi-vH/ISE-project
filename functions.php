@@ -375,7 +375,7 @@ function sendMail($to, $subject, $body)
     if (!$mail->Send()) {
         echo 'Message was not sent!.';
         echo 'Mailer error: ' . $mail->ErrorInfo;
-    } 
+    }
 }
 
 function getCountOfWorkshopsForSector($sectorname)
