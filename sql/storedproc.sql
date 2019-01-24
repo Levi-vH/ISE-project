@@ -188,7 +188,7 @@ BEGIN
 
 							IF(@workshopleider_ID != '%%')
 								BEGIN
-									SET @sql += 'AND W.WORKSHOPLEIDER_ID LIKE @workshopleider_ID OR W.WORKSHOPLEIDER_ID IS NULL'
+									SET @sql += 'AND W.WORKSHOPLEIDER_ID LIKE @workshopleider_ID OR W.WORKSHOPLEIDER_ID IS NULL '
 								END
 							
 				SET @sql += 'AND O.ORGANISATIENAAM LIKE @company_name
