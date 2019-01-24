@@ -65,7 +65,6 @@ if ($_SESSION['username'] == 'planner') {
                 </div>
             </div>
             <div class="col-md-10 col-sm-8 main-content">
-                <!--Main content code to be written here -->
                 <h1>Openstaande inschrijvingen</h1>
                 <div>
                     <table class='table table-striped table-hover'>

@@ -8,9 +8,6 @@ include 'functions.php';
 $error_message = NULL;
 if ($_SESSION['username'] == 'contactpersoon') {
 
-// define (empty) variables
-//$Organisation_Relationnumber = $Contact_ID = $SBB_Planner = $Advisor_practical_learning = $Groups = $Aanvraag_ID = $Group_Module1 = $Group_Module2 = $Group_Module3 = $Group_Module1_voorkeur = $Group_Module2_voorkeur = $Group_Module3_voorkeur = $Adress = $Contact_Person = '';
-
 // The ones that do not get checked are dropdown or select.
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $Organisation_Relationnumber = check_input($_POST["Organisation_Relationnumber"]);
@@ -57,7 +54,6 @@ if ($_SESSION['username'] == 'contactpersoon') {
                                 $Aanvraag_ID = $resultaat['LAATSTE_INDEX'];
 
                             }
-                            // if ($Groups > 1) {
 
                             for ($i = 1; $i <= $Groups; $i++) {
                                 $Group_Module1 = NULL;

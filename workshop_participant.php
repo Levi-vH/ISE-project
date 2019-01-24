@@ -9,7 +9,6 @@ $workshoptype = getWorkshopType($workshop_id);
 $conn = connectToDB();
 
 //Run the stored procedure
-// $sql = "SELECT * FROM VW_WORKSHOPS";
 $sql = "exec SP_get_workshops @where = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
@@ -48,7 +47,6 @@ if ($row['WORKSHOPLEIDER_VOORNAAM'] == 'Nog niet bekend' OR $row['WORKSHOPLEIDER
             </div>
         </div>
         <div class="col-md-10 col-sm-8 main-content">
-            <!--Main content code to be written here -->
             <div class="details-container">
                 <div class="workshop-details details">
                     <h3> Workshop Details</h3>

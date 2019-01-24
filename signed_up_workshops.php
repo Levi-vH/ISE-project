@@ -30,7 +30,6 @@ $deelnemer_id = $_SESSION['deelnemer_id'];
             $conn = connectToDB();
 
             //Run the stored procedure
-            // $sql = "SELECT * FROM VW_WORKSHOPS";
             $sql = "EXEC SP_get_participant_workshops ?";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(1, $deelnemer_id, PDO::PARAM_INT);

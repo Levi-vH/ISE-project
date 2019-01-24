@@ -29,10 +29,6 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $Organisation_name = check_input($_POST["Organisation_Name"]);
         $functionInCompany = check_input($_POST["functionInCompanyInput"]);
 
-//        if (isset($salutation) && isset($firstname) && isset($lastname) && isset($birthDate) && isset($email) && isset($phonenumber) && isset($educationalAttainment)
-//            && isset($educationalAttainmentStudents) && isset($companyName) && isset($sector) && isset($companyLocation) && isset($Organisation_name) && isset($functionInCompany)) {
-//
-
 
         $conn = connectToDB();
 
@@ -53,12 +49,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $stmtInsertDeelnemer->bindParam(13, $workshop_id, PDO::PARAM_INT);
         $stmtInsertDeelnemer->execute();
 
-
-//              }
-//    } else {
-//        $error_message .= "U heeft een veld niet ingevoerd, ieder veld is verplicht.";
-//    }
-    }
+        }
 
     ?>
     <body>

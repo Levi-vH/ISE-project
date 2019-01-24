@@ -66,7 +66,6 @@ if ($row['WORKSHOPLEIDER_VOORNAAM'] == 'Nog niet bekend' OR $row['WORKSHOPLEIDER
             </div>
         </div>
         <div class="col-md-10 col-sm-8 main-content">
-            <!--Main content code to be written here -->
             <div class="details-container">
                 <div class="workshop-details details">
                     <h3> Workshop Details</h3>

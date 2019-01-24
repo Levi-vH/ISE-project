@@ -97,7 +97,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 $stmt7->bindParam(1, $detailToConfirm,PDO::PARAM_STR);
                 $stmt7->bindParam(2, $groepNumber,PDO::PARAM_INT);
                 $stmt7->bindParam(3, $moduleNumber,PDO::PARAM_INT);
-//                $stmt7->bindParam(4, $moduleleader,PDO::PARAM_INT);
 
                 $stmt7->execute();
             }
@@ -138,7 +137,6 @@ $turnIntoWorkshop = true;
             </div>
         </div>
         <div class="col-md-10 col-sm-8 main-content">
-            <!--Main content code to be written here -->
             <h1 class="text-center">Aanvraag Details</h1>
 
             <div class="details-container">
