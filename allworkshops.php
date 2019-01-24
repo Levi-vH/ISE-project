@@ -4,8 +4,6 @@ include 'functions.php';
 generate_header('Workshop overzicht');
 
 $search_string = null;
-
-pre_r($_POST);
 ?>
 
 <div class="container">
@@ -187,15 +185,10 @@ pre_r($_POST);
                     $stmt2 = $conn->prepare($get_advisorname);
                     $stmt2->execute();
                     $advisor_results = $stmt2->fetch(PDO::FETCH_ASSOC);
-                    if($search_leader !== "") {
-                        $search_string .= 'workshopleider = ' . $advisor_results ["VOORNAAM"] . ' ' . $advisor_results["ACHTERNAAM"];
-                    }
                 }
-                
+
                 $sql = "EXEC SP_get_workshops_filtered @workshop_type = $search_workshop, @modulenaam = $search_module, @workshopleider_ID = $search_leader,
                 @company_name = $search_company_name, @firstname = $firstname, @lastname = $lastname, @status = $workshopStatus";
-
-                echo $sql;
 
                 $user_searched = true;
             }
@@ -206,9 +199,6 @@ pre_r($_POST);
 
             $stmt = $conn->prepare($sql);
             $stmt->execute();
-            if ($search_string !== NULL) {
-                echo '<div class ="container"> <p>' . $search_string . '</p> </div>';
-            }
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
