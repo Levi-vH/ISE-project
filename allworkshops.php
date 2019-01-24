@@ -4,6 +4,8 @@ include 'functions.php';
 generate_header('Workshop overzicht');
 
 $search_string = null;
+
+pre_r($_POST);
 ?>
 
 <div class="container">
@@ -91,6 +93,7 @@ $search_string = null;
                 $search_status = "'%%'";
                 $firstname = "'%%'";
                 $lastname = "'%%'";
+                $workshopStatus = "'%%'";
 
                 if (isset($_POST["Workshop_type"])) {
                     //   $search_string.= 'workshoptype komt binnen';
@@ -101,7 +104,7 @@ $search_string = null;
                     $search_module = "'%" . check_input($_POST["Module_type"]) . "%'";
                 }
                 if (isset($_POST["WORKSHOPLEIDER_ID"])) {
-                    //   $search_string.= 'workshopleider komt binnen';
+                    //$search_string.= 'workshopleider komt binnen';
                     $search_leader = check_input($_POST["WORKSHOPLEIDER_ID"]);
                 }
                 if (isset($_POST["Organisation_Name"])) {
@@ -166,6 +169,7 @@ $search_string = null;
             }
 
                 if ($search_leader != "'%%'") {
+                    echo 'in';
                     $workshopleader_id = check_input($_POST["WORKSHOPLEIDER_ID"]);
                     if($search_leader == "") {
                         $search_leader = "'%%'";
