@@ -7,8 +7,6 @@ include 'functions.php';
 
 generate_header('Deelnemer toevoegen');
 
-pre_r($_POST);
-
 if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactpersoon') {
     $error_message = NULL;
 
