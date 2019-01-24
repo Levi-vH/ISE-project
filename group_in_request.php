@@ -25,7 +25,6 @@ generate_header('Groepen in aanvraag');
             </div>
         </div>
         <div class="col-md-10 col-sm-8 main-content">
-            <!--Main content code to be written here -->
             <h1 class="text-center">Aanvraag Details</h1>
             <h3>workshopnummer<?php echo $aanvraag_id ?></h3>
         </div>

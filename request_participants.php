@@ -14,16 +14,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
     ?>
     <script type="text/javascript">
         function colorSelectedRow(row, pagina) {
-
             window.location.href = pagina;
-
-            // var els = document.getElementsByClassName("groupsrow"); // Creates an HTMLObjectList not an array.
-            // Array.prototype.forEach.call(els, function(el) {
-            //     el.removeAttribute("style");
-            // });
-
-            // row.style.backgroundColor = "";
-
         }
     </script>
     <body>
@@ -47,7 +38,6 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                 </div>
             </div>
             <div class="col-md-10 col-sm-8 main-content">
-                <!--Main content code to be written here -->
                 <h1>Groepen</h1>
                 <table class='table table-striped table-hover'>
                     <tr>
