@@ -47,7 +47,7 @@ generate_header('Workshop overzicht voor sector');
                     // console.log(dataPointss.length);
                     window.onload = function () {
                         var chart = new CanvasJS.Chart("chartContainer", {
-                                theme: "light1", // "light1", "light2", "dark1", "dark2"
+                                theme: "light1",
                                 exportEnabled: true,
                                 animationEnabled: true,
                                 text: "HEEEEEEEEEY",

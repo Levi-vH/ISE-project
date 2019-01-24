@@ -27,8 +27,6 @@ if ($_SESSION['username'] == 'planner') {
         deleteWorkshopleaderHours($id, $quarter, $year, $hours);
     }
 
-// The ones that do not get checked are dropdown or select.
-
 
     ?>
 
