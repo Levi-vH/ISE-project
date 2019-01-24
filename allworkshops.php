@@ -139,6 +139,15 @@ pre_r($_POST);
                     var value = "<?= $_POST['Module_type']?>";
                     element.value = value;
                 </script>
+
+            <?php
+            }
+            if ($search_leader != "'%%'") { ?>
+                <script type="text/javascript">
+                    var element = document.getElementById("WORKSHOPLEIDER_ID");
+                    var value = "<?= $_POST['WORKSHOPLEIDER_ID']?>";
+                    element.value = value;
+                </script>
             <?php
             }
 
@@ -242,11 +251,12 @@ pre_r($_POST);
         function resetSearch() {
             var element1 = document.getElementById("Workshop_type");
             var element2 = document.getElementById("Module_type");
+            var element6 = document.getElementById("WORKSHOPLEIDER_ID");
             var element3 = document.getElementById("Organisation_Name");
             var element4 = document.getElementById("inputParticipantFirstName");
             var element5 = document.getElementById("inputParticipantLastName");
-            element1.selectedIndex = element2.selectedIndex = element3.selectedIndex = 0;
-            element4.value = element5.value = '';
+            element1.selectedIndex = element2.selectedIndex = element3.selectedIndex = element6.selectedIndex = 0;
+            element4.value = element5.value =  '';
         }
 
     </script>
