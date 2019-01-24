@@ -80,7 +80,6 @@ $search_string = null;
             $conn = connectToDB();
             $user_searched = false;
             //Run the stored procedure
-            // $sql = "SELECT * FROM VW_WORKSHOPS";
 
             if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty(array_filter($_POST))) {
                 $search_string = null;
@@ -94,27 +93,21 @@ $search_string = null;
                 $workshopStatus = "'%%'";
 
                 if (isset($_POST["Workshop_type"])) {
-                    //   $search_string.= 'workshoptype komt binnen';
                     $search_workshop = "'%" . check_input($_POST["Workshop_type"]) . "%'";
                 }
                 if (isset($_POST["Module_type"])) {
-                    //    $search_string.= 'moduletype komt binnen';
                     $search_module = "'%" . check_input($_POST["Module_type"]) . "%'";
                 }
                 if ($_POST["WORKSHOPLEIDER_ID"] !== "") {
-                    //$search_string.= 'workshopleider komt binnen';
                     $search_leader = check_input($_POST["WORKSHOPLEIDER_ID"]);
                 }
                 if (isset($_POST["Organisation_Name"])) {
-                    //   $search_string.= 'organisatie naam komt binnen';
                     $search_company_name = "'%" . check_input($_POST["Organisation_Name"]) . "%'";
                 }
                 if (isset($_POST["inputParticipantFirstName"])) {
-                    //   $search_string.= 'voornaam komt binnen';
                     $firstname = "'%" . check_input($_POST["inputParticipantFirstName"]) . "%'";
                 }
                 if (isset($_POST["inputParticipantLastName"])) {
-                    //   $search_string.= 'achternaam komt binnen';
                     $lastname = "'%" . check_input($_POST["inputParticipantLastName"]) . "%'";
                 }
                 if (isset($_POST["Workshop_status"])) {

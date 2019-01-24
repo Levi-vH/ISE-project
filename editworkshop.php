@@ -20,7 +20,7 @@ if ($_SESSION['username'] == 'planner') {
     $conn = connectToDB();
 
 //Run the stored procedure
-// $sql = "SELECT * FROM VW_WORKSHOPS";
+
     $sql = "exec SP_get_workshops @where = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
@@ -31,8 +31,7 @@ if ($_SESSION['username'] == 'planner') {
     $workshoptype = $row['TYPE'];
     $workshopdate = $row['DATUM'];
     $contactinfo = $row['CONTACTPERSOON_VOORNAAM'] . ' ' . $row['CONTACTPERSOON_ACHTERNAAM'];
-//$workshopmodule = $row['MODULENAAM'];
-//$workshopcompany = $row['ORGANISATIENAAM'];
+
     $workshopsector = $row['SECTORNAAM'];
     $starttime = substr($row['STARTTIJD'], 0, 5);
     $endtime = substr($row['EINDTIJD'], 0, 5);
@@ -234,14 +233,6 @@ if ($_SESSION['username'] == 'planner') {
                 <h2 class="text-info text-center">Wijzig workshop <?php echo $workshop_id ?></h2>
                 <?= $errorMessage ?>
                 <form class="form-horizontal" action="editworkshop.php?workshop_id=<?php echo $workshop_id ?>" method="post">
-                <!--    <div class="form-group">
-                        <label class="control-label col-sm-2 font-weight-bold" for="workshoptype">Type workshop:</label>
-                        <div class="col-sm-10">
-                            <select class="form-control" name="workshoptype">
-                               <//?= $dropdownTypes ?>
-                            </select>
-                        </div>
-                    </div> -->
                     <div class="form-group">
                         <label class="control-label col-sm-2 font-weight-bold" for="workshopdate">Datum
                             workshop:</label>
@@ -258,39 +249,6 @@ if ($_SESSION['username'] == 'planner') {
                             </select>
                         </div>
                     </div>
-                <!--    <div class="form-group">
-                        <label class="control-label col-sm-2 font-weight-bold" for="workshopmodule">Module:</label>
-                        <div class="col-sm-10">
-                            <?php /*
-                            echo selectBox("workshopmodule", "module", array("modulenummer", "modulenaam"), "modulenummer", array("modulenummer", "modulenaam"), "modulenummer");
-                           */ ?>
-                            <script href="text/javascript">
-                                var sel = document.getElementById("workshopmodule");
-                                var modulenummer;
-                                modulenummer = <?php /*echo getModuleNummer($workshop_id)*/?>;
-                                sel.selectedIndex = modulenummer;
-                            </script>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-sm-2 font-weight-bold"
-                               for="workshopcompany">Organisatie:</label>
-                        <div class="col-sm-10">
-                            <?php /*
-                            echo selectBox("workshopcompany", "organisatie", array("organisatienaam", "organisatienummer"), "organisatienummer", array("organisatienaam"), "organisatienaam");
-                           */ ?>
-                            <script href="text/javascript">
-                                var val = '<?php /*echo $row['ORGANISATIENAAM']; */?> ';
-                                $('#workshopcompany option').each(function (){
-                                    if($(this).text() === val){
-                                        $(this).attr('selected', 'selected');
-                                        return false;
-                                    }
-                                    return true;
-                                });
-                            </script>
-                        </div>
-                    </div> -->
                     <div class="form-group">
                         <label class="control-label col-sm-2 font-weight-bold" for="workshopsector">Sector:</label>
                         <div class="col-sm-10">
