@@ -49,7 +49,7 @@ function getParticipantId($email, $code)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet ophalen.</p>';
     }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -60,7 +60,10 @@ function getParticipantId($email, $code)
 
 ?>
 <body>
-<h1 class="text-center">Welcome to ISE-PROJECT SBB</h1>
+<h1 class="text-center">Workshopomgeving SBB</h1>
+<div class="img">
+    <img src="Images/sbblogo.jpg" width="350" height="300" title="sbblogo" alt="sbblogo"/>
+</div>
 <br>
 <?php if (!isset($_SESSION['username'])) {
     if ((!isset($_POST['planner'])) && (!isset($_POST['deelnemer'])) && (!isset($_POST['contactpersoon'])) && (!isset($_POST['beheerder']))) { ?>
@@ -133,9 +136,11 @@ if (isset($_POST['planner'])) { ?>
     <div class="container">
         <h3 class="text-center">Log hieronder in met uw beheerdersaccount</h3>
         <div class="row justify-content-md-center">
-            <input id="usernameB" type="text" class="form-control" placeholder="gebruikersnaam" name="usernameB" required>
+            <input id="usernameB" type="text" class="form-control" placeholder="gebruikersnaam" name="usernameB"
+                   required>
             <br>
-            <input id="passwordB" type="password" class="form-control" placeholder="wachtwoord" name="passwordB" required>
+            <input id="passwordB" type="password" class="form-control" placeholder="wachtwoord" name="passwordB"
+                   required>
             <br>
             <button class="btn btn-success btn-lg" onclick="setManager()">Login</button>
         </div>

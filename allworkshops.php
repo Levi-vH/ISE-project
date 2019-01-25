@@ -179,7 +179,7 @@ $search_string = null;
                     try {
                         $stmt2->execute();
                     } catch (PDOException $e) {
-                        echo '<p class="alert-danger warning deletewarning">Kan workshopleider niet ophalen. Message: ' . $e . '</p>';
+                        echo '<p class="alert-danger warning deletewarning">Kan workshopleider niet ophalen.</p>';
                     }
                     $advisor_results = $stmt2->fetch(PDO::FETCH_ASSOC);
                 }
@@ -198,7 +198,7 @@ $search_string = null;
             try {
                 $stmt->execute();
             } catch (PDOException $e) {
-                echo '<p class="alert-danger warning deletewarning">Kan workshops niet ophalen. Message: ' . $e . '</p>';
+                echo '<p class="alert-danger warning deletewarning">Kan workshops niet ophalen. Message:</p>';
             }
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

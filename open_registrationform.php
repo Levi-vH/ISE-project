@@ -17,7 +17,7 @@ $stmt = $conn->prepare($sql);
 try {
     $stmt->execute();
 } catch (PDOException $e) {
-    echo '<p class="alert-danger warning deletewarning">Kan moduleinformatie niet ophalen. Message: ' . $e . '</p>';
+    echo '<p class="alert-danger warning deletewarning">Kan moduleinformatie niet ophalen.</p>';
 }
 
 $row = $stmt->fetchALL(PDO::FETCH_ASSOC);
@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 try {
                     $stmt3->execute();
                 } catch (PDOException $e) {
-                    echo '<p class="alert-danger warning deletewarning">Kan workshopmodule niet ophalen. Message: ' . $e . '</p>';
+                    echo '<p class="alert-danger warning deletewarning">Kan workshopmodule niet ophalen.</p>';
                 }
 
                 while ($resultaat = $stmt3->fetch(PDO::FETCH_ASSOC)) {
@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     try {
                         $stmtInsertDeelnemer->execute();
                     } catch (PDOException $e) {
-                        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet invoeren in workshop. Message: ' . $e . '</p>';
+                        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet invoeren in workshop.</p>';
                     }
                 }
             }
@@ -137,7 +137,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             try {
                 $stmt2->execute();
             } catch (PDOException $e) {
-                echo '<p class="alert-danger warning deletewarning">Kan modulenummer niet ophalen. Message: ' . $e . '</p>';
+                echo '<p class="alert-danger warning deletewarning">Kan modulenummer niet ophalen.</p>';
             }
 
             $checkbox_module .= '<select name ="post[' . $module["MODULENUMMER"] . '][Workshop]"" >';

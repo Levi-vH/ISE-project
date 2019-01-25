@@ -21,7 +21,7 @@ function generate_header($title_of_page)
 </head>
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="index.php">BetaDi</a>
+        <a class="navbar-brand" href="index.php">SBB</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -214,7 +214,7 @@ function deleteUserWorkshop($workshop_id, $participant_id)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan deelnemer of workshop niet verwijderen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemer of workshop niet verwijderen.</p>';
     }
 }
 
@@ -230,7 +230,7 @@ function deleteUserAanvraag($aanvraag_id, $participant_id)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet verwijderen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet verwijderen.</p>';
     }
 }
 
@@ -246,7 +246,7 @@ function addUser($workshop_id, $participant_id)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet toevoegen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet toevoegen.</p>';
     }
 }
 
@@ -270,7 +270,7 @@ function getModuleNummer($id)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan modulenummer niet opvragen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan modulenummer niet opvragen.</p>';
     }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -290,7 +290,7 @@ function getWorkshopType($id)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan workshoptype niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan workshoptype niet ophalen.</p>';
     }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -311,7 +311,7 @@ function getGroupNumber($id)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan groepsnummer niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan groepsnummer niet ophalen.</p>';
     }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -331,7 +331,7 @@ function getFirstGroup($aanvraag_id)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan eerste groep niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan eerste groep niet ophalen.</p>';
     }
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $firstgroup = $row['GROEP_ID'];
@@ -351,7 +351,7 @@ function addUserToGroup($aanvraag_id, $groeps_id, $participant_id)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet aan groep toevoegen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet aan groep toevoegen.</p>';
     }
 }
 
@@ -368,7 +368,7 @@ function deleteUserFromGroup($aanvraag_id, $groeps_id, $participant_id)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet verwijderen van groep. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet verwijderen van groep.</p>';
     }
 }
 
@@ -383,7 +383,7 @@ function getRightGroepsNummer($groepss_id)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan juiste groepsnummer niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan juiste groepsnummer niet ophalen.</p>';
     }
 
     $groepsnummer = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -427,7 +427,7 @@ function getCountOfWorkshopsForSector($sectorname)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan het aantal workshop van sectoren niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan het aantal workshop van sectoren niet ophalen.</p>';
     }
     $nummer = 0;
 
@@ -447,7 +447,7 @@ function getCountOfCancelledWorkshops()
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan geannuleerde workshops niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan geannuleerde workshops niet ophalen.</p>';
     }
 
     $nummer = 0;
@@ -469,7 +469,7 @@ function getCountOfWorkshopsForWorkshopLeader($workshopleader)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan aantal workshops van workshopleiders niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan aantal workshops van workshopleiders niet ophalen.</p>';
     }
 
     $nummer = 0;
@@ -491,7 +491,7 @@ function getCountOfWorkshopsFromOrganisation($organisation)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan aantal workshops van organisatie niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan aantal workshops van organisatie niet ophalen.</p>';
     }
 
     $nummer = 0;
@@ -512,7 +512,7 @@ function getCountOfTypeWorkshops()
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan aantal type workshops niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan aantal type workshops niet ophalen.</p>';
     }
 
     $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -530,7 +530,7 @@ function getCountOfAllWorkshops()
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan aantal workshops niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan aantal workshops niet ophalen.</p>';
     }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -554,7 +554,7 @@ function getOrganisationName($organisationnumber)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan organisatienaam niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan organisatienaam niet ophalen.</p>';
     }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -572,7 +572,7 @@ function getWorkshopleaderName($workshopleader_id)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan workshopleider niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan workshopleider niet ophalen.</p>';
     }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -619,7 +619,7 @@ function createExcelWorkshop($sql)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan excel bestand niet schrijven. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan excel bestand niet schrijven.</p>';
     }
 
 
@@ -682,7 +682,7 @@ function createExcelParticipants($sql, $workshop_id)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan excel bestand niet schrijven. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan excel bestand niet schrijven.</p>';
     }
 
 
@@ -740,7 +740,7 @@ function testExcel($sql)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan excel bestand niet schrijven. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan excel bestand niet schrijven.</p>';
     }
 
 
@@ -798,7 +798,7 @@ function createOrganisation($organisation_name, $organisation_address, $organisa
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan organisatie niet aanmaken. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan organisatie niet aanmaken.</p>';
     }
 
 }
@@ -813,7 +813,7 @@ function createSector($sectorname)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan sector niet aanmaken. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan sector niet aanmaken.</p>';
     }
 
 }
@@ -828,7 +828,7 @@ function createPlanner($planner_name)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan planner niet aanmaken. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan planner niet aanmaken.</p>';
     }
 
 }
@@ -847,7 +847,7 @@ function createContactpersoon($organisation_name, $contactperson_name, $contactp
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan contactpersoon niet aanmaken. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan contactpersoon niet aanmaken.</p>';
     }
 
 }
@@ -863,7 +863,7 @@ function createWorkshopleader($workshopleader_name, $workshopleader_surname)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan workshopleider niet aanmaken. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan workshopleider niet aanmaken.</p>';
     }
 
 }
@@ -883,7 +883,7 @@ function createAdviser($organisation_name, $sector, $name, $surname, $phonenumbe
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan adviseur niet aanmaken. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan adviseur niet aanmaken.</p>';
     }
 
 }
@@ -898,7 +898,7 @@ function checkIfSectorExists($sectorname)
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Er is iets misgegaan met sectoren. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Er is iets misgegaan met sectoren.</p>';
     }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -917,7 +917,7 @@ function checkIfSectorExistsAnywhere($sectorname) {
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Er is iets misgegaan met sectoren. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Er is iets misgegaan met sectoren.</p>';
     }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -940,7 +940,7 @@ function deleteSector($sectorname) {
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan sector niet verwijderen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan sector niet verwijderen.</p>';
     }
 }
 
@@ -954,7 +954,7 @@ function deletePlanner($plannername) {
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan planner niet verwijderen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan planner niet verwijderen. Planner staat nog bij een workshop of ergens anders.</p>';
     }
 
 }
@@ -969,7 +969,7 @@ function deleteContactperson($id) {
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan contactpersoon niet verwijderen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan contactpersoon niet verwijderen.</p>';
     }
 
 }
@@ -988,7 +988,7 @@ function setInactive($tabelnaam, $wherecolumn, $where) {
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan niet op inactief zetten. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan niet op inactief zetten.</p>';
     }
 
 }
@@ -1006,7 +1006,7 @@ function setActive($tabelnaam, $wherecolumn, $where) {
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan niet op actief zetten. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan niet op actief zetten.</p>';
     }
 
 }
@@ -1023,7 +1023,7 @@ function insertWorkshopleaderHours($id, $quarter, $year, $amount_of_hours){
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan workshopleideruren niet invoeren. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan workshopleideruren niet invoeren.</p>';
     }
 }
 
@@ -1039,6 +1039,6 @@ function deleteWorkshopleaderHours($id, $quarter, $year, $amount_of_hours){
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan workshopleideruren niet verwijderen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan workshopleideruren niet verwijderen.</p>';
     }
 }

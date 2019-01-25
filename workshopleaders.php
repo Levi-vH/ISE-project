@@ -96,7 +96,7 @@ if ($_SESSION['username'] == 'planner') {
                 try {
                     $stmt->execute();
                 } catch (PDOException $e) {
-                    echo '<p class="alert-danger warning deletewarning">Kan beschikbaarheid van workshopleider(s) niet ophalen. Message: ' . $e . '</p>';
+                    echo '<p class="alert-danger warning deletewarning">Kan beschikbaarheid van workshopleider(s) niet ophalen.</p>';
                 }
 
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

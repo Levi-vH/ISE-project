@@ -46,7 +46,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
                             try {
                                 $stmt->execute();
                             } catch (PDOException $e) {
-                                echo '<p class="alert-danger warning deletewarning">Kan workshopaanvraag niet invoeren. Message: ' . $e . '</p>';
+                                echo '<p class="alert-danger warning deletewarning">Kan workshopaanvraag niet invoeren.</p>';
                             }
 
                             //get aanvraagID
@@ -55,7 +55,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
                             try {
                                 $stmt2->execute();
                             } catch (PDOException $e) {
-                                echo '<p class="alert-danger warning deletewarning">Kan aanvraagnummer niet ophalen. Message: ' . $e . '</p>';
+                                echo '<p class="alert-danger warning deletewarning">Kan aanvraagnummer niet ophalen.</p>';
                             }
 
                             while ($resultaat = $stmt2->fetch(PDO::FETCH_ASSOC)) {
@@ -135,7 +135,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
                                         try {
                                             $stmt3->execute();
                                         } catch (PDOException $e) {
-                                            echo '<p class="alert-danger warning deletewarning">Kan groepsinformatie niet invoeren. Message: ' . $e . '</p>';
+                                            echo '<p class="alert-danger warning deletewarning">Kan groepsinformatie niet invoeren.</p>';
                                         }
 
                                         header('Location: INCaanvraag.php?aanvraag_id=' . $Aanvraag_ID . '');

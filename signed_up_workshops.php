@@ -37,7 +37,7 @@ $deelnemer_id = $_SESSION['deelnemer_id'];
             try {
                 $stmt->execute();
             } catch (PDOException $e) {
-                echo '<p class="alert-danger warning deletewarning">Kan workshops van deelnemer niet ophalen. Message: ' . $e . '</p>';
+                echo '<p class="alert-danger warning deletewarning">Kan workshops van deelnemer niet ophalen.</p>';
             }
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

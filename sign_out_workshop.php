@@ -13,7 +13,7 @@ if(isset($_POST['resign'])){
     try {
         $stmtGetCode->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan deelnemerscode niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemerscode niet ophalen.</p>';
     }
 
     $sql = "EXEC SP_disapprove_participant_of_workshop ?, ?";
@@ -24,7 +24,7 @@ if(isset($_POST['resign'])){
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet uischrijven. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet uischrijven.</p>';
     }
     $_SESSION['message'] = 'U bent succesvol uitgeschreven voor deze workshop';
     header("refresh:0;url=signed_up_workshops.php");

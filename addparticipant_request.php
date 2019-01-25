@@ -35,7 +35,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         try {
             $stmt->execute();
         } catch (PDOException $e) {
-            echo '<p class="alert-danger warning deletewarning">Kon deelnemer niet toevoegen. Message: ' . $e . '</p>';
+            echo '<p class="alert-danger warning deletewarning">Kon deelnemer niet toevoegen.</p>';
         }
     }
     generate_header('Deelnemers toevoegen');

@@ -15,7 +15,7 @@ $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
 try {
     $stmt->execute();
 } catch (PDOException $e) {
-    echo '<p class="alert-danger warning deletewarning">Kan workshops niet ophalen. Message: ' . $e . '</p>';
+    echo '<p class="alert-danger warning deletewarning">Kan workshops niet ophalen.</p>';
 }
 
 $row = $stmt->fetch(PDO::FETCH_ASSOC);

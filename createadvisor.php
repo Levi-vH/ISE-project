@@ -21,7 +21,7 @@ if ($_SESSION['username'] == 'beheerder') {
         try {
             createAdviser($organisation, $adviser_sector, $adviser_name, $adviser_surname, $adviser_phonenumber, $adviser_email);
         } catch (PDOException $e) {
-            echo '<p class="alert-danger warning deletewarning">Kan adviseur niet aanmaken. Message: ' . $e . '</p>';
+            echo '<p class="alert-danger warning deletewarning">Kan adviseur niet aanmaken.</p>';
         }
 
     }

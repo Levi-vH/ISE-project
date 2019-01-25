@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
             $stmt->execute();
         } catch (PDOException $e) {
-            echo '<p class="alert-danger warning deletewarning">Kan organisatie niet machtigen. Message: ' . $e . '</p>';
+            echo '<p class="alert-danger warning deletewarning">Kan organisatie niet machtigen.</p>';
         }
     }
     if(isset($_POST["Organisation_Name2"])){
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
             $stmt2->execute();
         } catch (PDOException $e) {
-            echo '<p class="alert-danger warning deletewarning">Kan omachtiging van organisatie niet intrekken. Message: ' . $e . '</p>';
+            echo '<p class="alert-danger warning deletewarning">Kan omachtiging van organisatie niet intrekken.</p>';
         }
     }
 }

@@ -19,7 +19,7 @@ if ($_SESSION['username'] == 'beheerder') {
         try {
             createOrganisation($organisation_name, $organisation_address, $organisation_postcode, $organisation_city, $large_accounts);
         } catch (PDOException $e) {
-            echo '<p class="alert-danger warning deletewarning">Kan organisatie niet aanmaken. Message: ' . $e . '</p>';
+            echo '<p class="alert-danger warning deletewarning">Kan organisatie niet aanmaken.</p>';
         }
     }
     generate_header('Nieuwe organisatie toevoegen');

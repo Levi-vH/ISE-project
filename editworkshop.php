@@ -28,7 +28,7 @@ if ($_SESSION['username'] == 'planner') {
     try {
         $stmt->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan workshops niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan workshops niet ophalen.</p>';
     }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -130,7 +130,7 @@ if ($_SESSION['username'] == 'planner') {
                 try {
                     $stmt->execute();
                 } catch (PDOException $e) {
-                    echo '<p class="alert-danger warning deletewarning">Kan workshops niet wijzigen. Message: ' . $e . '</p>';
+                    echo '<p class="alert-danger warning deletewarning">Kan workshops niet wijzigen.</p>';
                 }
             } else {
                 // if the workshop type is not IND the last 3 parameters have to be null
@@ -156,7 +156,7 @@ if ($_SESSION['username'] == 'planner') {
                 try {
                     $stmt->execute();
                 } catch (PDOException $e) {
-                    echo '<p class="alert-danger warning deletewarning">Kan workshops niet wijzigen. Message: ' . $e . '</p>';
+                    echo '<p class="alert-danger warning deletewarning">Kan workshops niet wijzigen.</p>';
                 }
             }
         }
@@ -169,7 +169,7 @@ if ($_SESSION['username'] == 'planner') {
     try {
         $statement->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan workshoptypes niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan workshoptypes niet ophalen.</p>';
     }
 
     $types = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -191,7 +191,7 @@ if ($_SESSION['username'] == 'planner') {
     try {
         $statement->execute();
     } catch (PDOException $e) {
-        echo '<p class="alert-danger warning deletewarning">Kan workshoptypes niet ophalen. Message: ' . $e . '</p>';
+        echo '<p class="alert-danger warning deletewarning">Kan workshoptypes niet ophalen.</p>';
     }
     $contacts = $statement->fetchAll(PDO::FETCH_ASSOC);
     $dropdownContact = '<option disabled> Kies een Contactpersoon...</option>';

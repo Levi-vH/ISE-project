@@ -57,7 +57,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     try {
                         $stmt->execute();
                     } catch (PDOException $e) {
-                        echo '<p class="alert-danger warning deletewarning">Kan groepen niet ophalen. Message: ' . $e . '</p>';
+                        echo '<p class="alert-danger warning deletewarning">Kan groepen niet ophalen.</p>';
                     }
 
                     $nummer = 0;
@@ -118,7 +118,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         try {
                             $stmt->execute();
                         } catch (PDOException $e) {
-                            echo '<p class="alert-danger warning deletewarning">Kan lijst met deelnemers niet ophalen. Message: ' . $e . '</p>';
+                            echo '<p class="alert-danger warning deletewarning">Kan lijst met deelnemers niet ophalen.</p>';
                         }
 
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -167,7 +167,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         try {
                             $stmt->execute();
                         } catch (PDOException $e) {
-                            echo '<p class="alert-danger warning deletewarning">Kan deelnemers van groep niet ophalen. Message: ' . $e . '</p>';
+                            echo '<p class="alert-danger warning deletewarning">Kan deelnemers van groep niet ophalen.</p>';
                         }
 
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

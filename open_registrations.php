@@ -86,7 +86,7 @@ if ($_SESSION['username'] == 'planner') {
                         try {
                             $stmt->execute();
                         } catch (PDOException $e) {
-                            echo '<p class="alert-danger warning deletewarning">Kan lijst met deelnemers niet ophalen. Message: ' . $e . '</p>';
+                            echo '<p class="alert-danger warning deletewarning">Kan lijst met deelnemers niet ophalen.</p>';
                         }
 
                         $nummer = 0;

@@ -79,7 +79,7 @@ $workshoptype = getWorkshopType($workshop_id);
                     try {
                         $stmt->execute();
                     } catch (PDOException $e) {
-                        echo '<p class="alert-danger warning deletewarning">Kan reservelijst niet ophalen. Message: ' . $e . '</p>';
+                        echo '<p class="alert-danger warning deletewarning">Kan reservelijst niet ophalen.</p>';
                     }$stmt->execute();
 
                     $nummer = 0;

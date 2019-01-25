@@ -74,7 +74,7 @@ if ($_SESSION['username'] == 'beheerder') {
                 try {
                     $stmt->execute();
                 } catch (PDOException $e) {
-                    echo '<p class="alert-danger warning deletewarning">Kan contactpersoon niet ophalen. Message: ' . $e . '</p>';
+                    echo '<p class="alert-danger warning deletewarning">Kan contactpersoon niet ophalen.</p>';
                 }
 
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

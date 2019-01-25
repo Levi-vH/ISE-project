@@ -46,7 +46,7 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                 try {
                     $stmt->execute();
                 } catch (PDOException $e) {
-                    echo '<p class="alert-danger warning deletewarning">Kan lijst met INC aanvragen niet ophalen. Message: ' . $e . '</p>';
+                    echo '<p class="alert-danger warning deletewarning">Kan lijst met INC aanvragen niet ophalen.</p>';
                 }
                 $nummer = 0;
 
