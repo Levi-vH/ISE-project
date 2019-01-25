@@ -175,7 +175,7 @@ ADD CONSTRAINT CK_workshop_endtime CHECK (STARTTIJD < EINDTIJD)
 GO
 
 --========================================================================================
--- IR? / C? / BR?
+-- IR18 / C18 / BR18
 -- If TYPE is 'IND' then CONTACTPERSOON_NAAM, CONTACTPERSOON_EMAIL 
 -- and CONTACTPERSOON_TELEFOONNUMMER have to be NOT NULL
 --========================================================================================
@@ -227,7 +227,7 @@ END
 GO
 
 --=========================================================================
--- IR? / C? / BR?
+-- IR19 / C19 / BR19
 -- Give a workshopleader his/her available hours back if he/she is no longer
 -- leading the workshop.
 --=========================================================================
@@ -269,7 +269,7 @@ GO
 --=========================================================================
 
 --=========================================================================
--- IR? / C? / BR?
+-- IR20 / C20 / BR20
 -- Give a workshopleader his/her available hours back if he/she is no longer
 -- leading the workshop that is still a workshoprequest.
 --=========================================================================
