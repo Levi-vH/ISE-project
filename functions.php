@@ -211,7 +211,11 @@ function deleteUserWorkshop($workshop_id, $participant_id)
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemer of workshop niet verwijderen. Message: ' . $e . '</p>';
+    }
 }
 
 function deleteUserAanvraag($aanvraag_id, $participant_id)
@@ -223,7 +227,11 @@ function deleteUserAanvraag($aanvraag_id, $participant_id)
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet verwijderen. Message: ' . $e . '</p>';
+    }
 }
 
 function addUser($workshop_id, $participant_id)
@@ -235,7 +243,11 @@ function addUser($workshop_id, $participant_id)
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $participant_id, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet toevoegen. Message: ' . $e . '</p>';
+    }
 }
 
 function updatePage($pagina)
@@ -255,7 +267,11 @@ function getModuleNummer($id)
     $sql = "exec SP_get_workshops @where = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $id, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan modulenummer niet opvragen. Message: ' . $e . '</p>';
+    }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $modulenummer = $row['MODULENUMMER'];
@@ -271,7 +287,11 @@ function getWorkshopType($id)
     $sql = "SELECT TYPE FROM WORKSHOP WHERE WORKSHOP_ID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $id, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan workshoptype niet ophalen. Message: ' . $e . '</p>';
+    }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $workshoptype = $row['TYPE'];
@@ -288,7 +308,11 @@ function getGroupNumber($id)
     $sql = "SELECT TYPE FROM WORKSHOP WHERE WORKSHOP_ID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $id, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan groepsnummer niet ophalen. Message: ' . $e . '</p>';
+    }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $workshoptype = $row['TYPE'];
@@ -304,8 +328,11 @@ function getFirstGroup($aanvraag_id)
     $sql = "select top 1 GROEP_ID from GROEP where aanvraag_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
-    $stmt->execute();
-
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan eerste groep niet ophalen. Message: ' . $e . '</p>';
+    }
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $firstgroup = $row['GROEP_ID'];
 
@@ -321,7 +348,11 @@ function addUserToGroup($aanvraag_id, $groeps_id, $participant_id)
     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $groeps_id, PDO::PARAM_INT);
     $stmt->bindParam(3, $participant_id, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet aan groep toevoegen. Message: ' . $e . '</p>';
+    }
 }
 
 
@@ -334,7 +365,11 @@ function deleteUserFromGroup($aanvraag_id, $groeps_id, $participant_id)
     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
     $stmt->bindParam(2, $groeps_id, PDO::PARAM_INT);
     $stmt->bindParam(3, $participant_id, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet verwijderen van groep. Message: ' . $e . '</p>';
+    }
 }
 
 function getRightGroepsNummer($groepss_id)
@@ -345,7 +380,11 @@ function getRightGroepsNummer($groepss_id)
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $_GET['aanvraag_id'], PDO::PARAM_INT);
     $stmt->bindParam(2, $groepss_id, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan juiste groepsnummer niet ophalen. Message: ' . $e . '</p>';
+    }
 
     $groepsnummer = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -385,8 +424,11 @@ function getCountOfWorkshopsForSector($sectorname)
     $sql = "EXEC SP_get_workshops_for_sector ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $sectorname, PDO::PARAM_STR);
-    $stmt->execute();
-
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan het aantal workshop van sectoren niet ophalen. Message: ' . $e . '</p>';
+    }
     $nummer = 0;
 
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -402,7 +444,11 @@ function getCountOfCancelledWorkshops()
 
     $sql = "EXEC SP_get_cancelled_workshops";
     $stmt = $conn->prepare($sql);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan geannuleerde workshops niet ophalen. Message: ' . $e . '</p>';
+    }
 
     $nummer = 0;
 
@@ -420,7 +466,11 @@ function getCountOfWorkshopsForWorkshopLeader($workshopleader)
     $sql = "EXEC SP_get_workshops_for_workshopleader ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshopleader, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan aantal workshops van workshopleiders niet ophalen. Message: ' . $e . '</p>';
+    }
 
     $nummer = 0;
 
@@ -438,7 +488,11 @@ function getCountOfWorkshopsFromOrganisation($organisation)
     $sql = "SELECT * FROM WORKSHOP WHERE ORGANISATIENUMMER = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $organisation, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan aantal workshops van organisatie niet ophalen. Message: ' . $e . '</p>';
+    }
 
     $nummer = 0;
 
@@ -455,7 +509,11 @@ function getCountOfTypeWorkshops()
 
     $sql = "EXEC SP_get_count_workshoptypes";
     $stmt = $conn->prepare($sql);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan aantal type workshops niet ophalen. Message: ' . $e . '</p>';
+    }
 
     $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -469,7 +527,11 @@ function getCountOfAllWorkshops()
 
     $sql = "SELECT COUNT(WORKSHOP_ID) AS AANTAL FROM WORKSHOP";
     $stmt = $conn->prepare($sql);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan aantal workshops niet ophalen. Message: ' . $e . '</p>';
+    }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -489,7 +551,11 @@ function getOrganisationName($organisationnumber)
     $sql = "SELECT ORGANISATIENAAM FROM ORGANISATIE WHERE ORGANISATIENUMMER = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $organisationnumber, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan organisatienaam niet ophalen. Message: ' . $e . '</p>';
+    }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -503,7 +569,11 @@ function getWorkshopleaderName($workshopleader_id)
     $sql = "select voornaam, achternaam from WORKSHOPLEIDER where WORKSHOPLEIDER_ID = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshopleader_id, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan workshopleider niet ophalen. Message: ' . $e . '</p>';
+    }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -546,7 +616,11 @@ function createExcelWorkshop($sql)
 
 //Run the stored procedure
     $stmt = $conn->prepare($sql);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan excel bestand niet schrijven. Message: ' . $e . '</p>';
+    }
 
 
     $nummer = 1;
@@ -605,7 +679,11 @@ function createExcelParticipants($sql, $workshop_id)
 
 //Run the stored procedure
     $stmt = $conn->prepare($sql);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan excel bestand niet schrijven. Message: ' . $e . '</p>';
+    }
 
 
     $nummer = 1;
@@ -659,7 +737,11 @@ function testExcel($sql)
 
 //Run the stored procedure
     $stmt = $conn->prepare($sql);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan excel bestand niet schrijven. Message: ' . $e . '</p>';
+    }
 
 
     $nummer = 1;
@@ -713,7 +795,11 @@ function createOrganisation($organisation_name, $organisation_address, $organisa
     $stmt->bindParam(3, $organisation_postcode, PDO::PARAM_STR);
     $stmt->bindParam(4, $organisation_city, PDO::PARAM_STR);
     $stmt->bindParam(5, $large_accounts, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan organisatie niet aanmaken. Message: ' . $e . '</p>';
+    }
 
 }
 
@@ -724,7 +810,11 @@ function createSector($sectorname)
     $sql = "exec SP_insert_sector ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $sectorname, PDO::PARAM_STR);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan sector niet aanmaken. Message: ' . $e . '</p>';
+    }
 
 }
 
@@ -735,7 +825,11 @@ function createPlanner($planner_name)
     $sql = "exec SP_create_planner ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $planner_name, PDO::PARAM_STR);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan planner niet aanmaken. Message: ' . $e . '</p>';
+    }
 
 }
 
@@ -750,7 +844,11 @@ function createContactpersoon($organisation_name, $contactperson_name, $contactp
     $stmt->bindParam(3, $contactperson_surname, PDO::PARAM_STR);
     $stmt->bindParam(4, $contactperson_phonenumber, PDO::PARAM_STR);
     $stmt->bindParam(5, $contactperson_email, PDO::PARAM_STR);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan contactpersoon niet aanmaken. Message: ' . $e . '</p>';
+    }
 
 }
 
@@ -762,7 +860,11 @@ function createWorkshopleader($workshopleader_name, $workshopleader_surname)
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshopleader_name, PDO::PARAM_STR);
     $stmt->bindParam(2, $workshopleader_surname, PDO::PARAM_STR);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan workshopleider niet aanmaken. Message: ' . $e . '</p>';
+    }
 
 }
 
@@ -778,8 +880,11 @@ function createAdviser($organisation_name, $sector, $name, $surname, $phonenumbe
     $stmt->bindParam(4, $surname, PDO::PARAM_STR);
     $stmt->bindParam(5, $phonenumber, PDO::PARAM_STR);
     $stmt->bindParam(6, $email, PDO::PARAM_STR);
-
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan adviseur niet aanmaken. Message: ' . $e . '</p>';
+    }
 
 }
 
@@ -790,7 +895,11 @@ function checkIfSectorExists($sectorname)
     $sql = "SELECT SECTORNAAM FROM SECTOR WHERE SECTORNAAM = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $sectorname, PDO::PARAM_STR);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Er is iets misgegaan met sectoren. Message: ' . $e . '</p>';
+    }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -805,7 +914,11 @@ function checkIfSectorExistsAnywhere($sectorname) {
     $sql = "exec SP_check_sector_usage ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $sectorname, PDO::PARAM_STR);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Er is iets misgegaan met sectoren. Message: ' . $e . '</p>';
+    }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -824,8 +937,11 @@ function deleteSector($sectorname) {
     $sql = "exec SP_delete_sector ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $sectorname, PDO::PARAM_STR);
-    $stmt->execute();
-
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan sector niet verwijderen. Message: ' . $e . '</p>';
+    }
 }
 
 function deletePlanner($plannername) {
@@ -835,7 +951,11 @@ function deletePlanner($plannername) {
     $sql = "exec SP_delete_planner ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $plannername, PDO::PARAM_STR);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan planner niet verwijderen. Message: ' . $e . '</p>';
+    }
 
 }
 
@@ -846,7 +966,11 @@ function deleteContactperson($id) {
     $sql = "exec SP_delete_contactperson ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $id , PDO::PARAM_STR);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan contactpersoon niet verwijderen. Message: ' . $e . '</p>';
+    }
 
 }
 
@@ -861,7 +985,11 @@ function setInactive($tabelnaam, $wherecolumn, $where) {
     $stmt->bindParam(2, $wherecolumn, PDO::PARAM_STR);
     $stmt->bindParam(3, $where, PDO::PARAM_STR);
 
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan niet op inactief zetten. Message: ' . $e . '</p>';
+    }
 
 }
 
@@ -875,21 +1003,11 @@ function setActive($tabelnaam, $wherecolumn, $where) {
     $stmt->bindParam(2, $wherecolumn, PDO::PARAM_STR);
     $stmt->bindParam(3, $where, PDO::PARAM_STR);
 
-    $stmt->execute();
-
-}
-
-function checkIfActive($tabelnaam, $wherecolumn, $where) {
-
-    $conn = connectToDB();
-
-    $sql = "exec SP_set_active ?, ?, ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(1, $tabelnaam, PDO::PARAM_STR);
-    $stmt->bindParam(2, $wherecolumn, PDO::PARAM_STR);
-    $stmt->bindParam(3, $where, PDO::PARAM_STR);
-
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan niet op actief zetten. Message: ' . $e . '</p>';
+    }
 
 }
 
@@ -902,7 +1020,11 @@ function insertWorkshopleaderHours($id, $quarter, $year, $amount_of_hours){
     $stmt->bindParam(2,$quarter, PDO::PARAM_INT);
     $stmt->bindParam(3, $year, PDO::PARAM_INT);
     $stmt->bindParam(4, $amount_of_hours, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan workshopleideruren niet invoeren. Message: ' . $e . '</p>';
+    }
 }
 
 function deleteWorkshopleaderHours($id, $quarter, $year, $amount_of_hours){
@@ -914,5 +1036,9 @@ function deleteWorkshopleaderHours($id, $quarter, $year, $amount_of_hours){
     $stmt->bindParam(2,$quarter, PDO::PARAM_INT);
     $stmt->bindParam(3, $year, PDO::PARAM_INT);
     $stmt->bindParam(4, $amount_of_hours, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan workshopleideruren niet verwijderen. Message: ' . $e . '</p>';
+    }
 }

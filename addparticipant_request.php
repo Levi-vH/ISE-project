@@ -32,9 +32,12 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $stmt->bindParam(5, $email, PDO::PARAM_STR);
         $stmt->bindParam(6, $phonenumber, PDO::PARAM_STR);
         $stmt->bindParam(7, $educational_attainment, PDO::PARAM_STR);
-        $stmt->execute();
+        try {
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo '<p class="alert-danger warning deletewarning">Kon deelnemer niet toevoegen. Message: ' . $e . '</p>';
+        }
     }
-
     generate_header('Deelnemers toevoegen');
 
     $group = getFirstGroup($aanvraag_id);
@@ -78,7 +81,11 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     $sql = "exec SP_get_participants_of_workshoprequest ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
-                    $stmt->execute();
+                    try {
+                        $stmt->execute();
+                    } catch (PDOException $e) {
+                        echo '<p class="alert-danger warning deletewarning">Kan deelnemers van aanvraag niet ophalen. Message: ' . $e . '</p>';
+                    }
 
                     $nummer = 0;
 
@@ -113,7 +120,11 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
 
                     }
                     if (isset($_GET['deleteUser'])) {
-                        deleteUserAanvraag($aanvraag_id, $_GET['participant_id']);
+                        try {
+                            deleteUserAanvraag($aanvraag_id, $_GET['participant_id']);
+                        } catch (PDOException $e) {
+                            echo '<p class="alert-danger warning deletewarning">Kan deelnemers niet verwijderen. Message: ' . $e . '</p>';
+                        }
                         updatePage($_SERVER['PHP_SELF'] . '?aanvraag_id=' . $aanvraag_id);
                     }
 

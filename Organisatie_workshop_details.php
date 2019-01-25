@@ -11,17 +11,21 @@ $conn = connectToDB();
 $sql = "exec SP_get_workshops @where = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
-$stmt->execute();
+try {
+    $stmt->execute();
+} catch (PDOException $e) {
+    echo '<p class="alert-danger warning deletewarning">Kan workshops niet ophalen. Message: ' . $e . '</p>';
+}
 
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-foreach ($row as $key => $value){
-    if($value == ''){
+foreach ($row as $key => $value) {
+    if ($value == '') {
         $row[$key] = 'Nog niet bekend';
     }
 }
 
-$workshopleader = $row['WORKSHOPLEIDER_VOORNAAM'] .' '. $row['WORKSHOPLEIDER_ACHTERNAAM'];
+$workshopleader = $row['WORKSHOPLEIDER_VOORNAAM'] . ' ' . $row['WORKSHOPLEIDER_ACHTERNAAM'];
 
 if ($row['WORKSHOPLEIDER_VOORNAAM'] == 'Nog niet bekend' OR $row['WORKSHOPLEIDER_ACHTERNAAM'] == 'Nog niet bekend') {
     $workshopleader = 'Nog niet bekend';
@@ -101,7 +105,7 @@ if ($row['WORKSHOPLEIDER_VOORNAAM'] == 'Nog niet bekend' OR $row['WORKSHOPLEIDER
                             Starttijd:
                         </div>
                         <div class="details-value">
-                            <?= date('H:i',strtotime($row['STARTTIJD'])) ?>
+                            <?= date('H:i', strtotime($row['STARTTIJD'])) ?>
                         </div>
 
                     </div>
@@ -110,7 +114,7 @@ if ($row['WORKSHOPLEIDER_VOORNAAM'] == 'Nog niet bekend' OR $row['WORKSHOPLEIDER
                             Eindtijd:
                         </div>
                         <div class="details-value">
-                            <?= date('H:i',strtotime($row['EINDTIJD'])) ?>
+                            <?= date('H:i', strtotime($row['EINDTIJD'])) ?>
                         </div>
 
                     </div>
@@ -119,7 +123,7 @@ if ($row['WORKSHOPLEIDER_VOORNAAM'] == 'Nog niet bekend' OR $row['WORKSHOPLEIDER
                             Adres:
                         </div>
                         <div class="details-value">
-                            <?= $row['ADRES'] . ' ' . $row['PLAATSNAAM']  ?>
+                            <?= $row['ADRES'] . ' ' . $row['PLAATSNAAM'] ?>
                         </div>
 
                     </div>
@@ -159,7 +163,7 @@ if ($row['WORKSHOPLEIDER_VOORNAAM'] == 'Nog niet bekend' OR $row['WORKSHOPLEIDER
                             Naam:
                         </div>
                         <div class="details-value">
-                            <?= $row['ADVISEUR_VOORNAAM'] .' '. $row['ADVISEUR_ACHTERNAAM']  ?>
+                            <?= $row['ADVISEUR_VOORNAAM'] . ' ' . $row['ADVISEUR_ACHTERNAAM'] ?>
                         </div>
 
                     </div>
@@ -190,7 +194,7 @@ if ($row['WORKSHOPLEIDER_VOORNAAM'] == 'Nog niet bekend' OR $row['WORKSHOPLEIDER
                             Naam:
                         </div>
                         <div class="details-value">
-                            <?= $row['CONTACTPERSOON_VOORNAAM'] .' ' . $row['CONTACTPERSOON_ACHTERNAAM'] ?>
+                            <?= $row['CONTACTPERSOON_VOORNAAM'] . ' ' . $row['CONTACTPERSOON_ACHTERNAAM'] ?>
                         </div>
 
                     </div>

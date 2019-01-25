@@ -176,7 +176,11 @@ $search_string = null;
                     }
                     $get_advisorname = "EXEC SP_get_workshopleader_first_and_lastname @workshopleader_id = $workshopleader_id";
                     $stmt2 = $conn->prepare($get_advisorname);
-                    $stmt2->execute();
+                    try {
+                        $stmt2->execute();
+                    } catch (PDOException $e) {
+                        echo '<p class="alert-danger warning deletewarning">Kan workshopleider niet ophalen. Message: ' . $e . '</p>';
+                    }
                     $advisor_results = $stmt2->fetch(PDO::FETCH_ASSOC);
                 }
 
@@ -191,7 +195,11 @@ $search_string = null;
             }
 
             $stmt = $conn->prepare($sql);
-            $stmt->execute();
+            try {
+                $stmt->execute();
+            } catch (PDOException $e) {
+                echo '<p class="alert-danger warning deletewarning">Kan workshops niet ophalen. Message: ' . $e . '</p>';
+            }
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 

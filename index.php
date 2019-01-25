@@ -40,13 +40,17 @@ if (isset($_GET['organisation_id'])) {
 
 function getParticipantId($email, $code)
 {
-    $conn = connectToDB();
 
+    $conn = connectToDB();
     $sql = "select deelnemer_id from DEELNEMER where email = ? and inlogcode = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $email, PDO::PARAM_STR);
     $stmt->bindParam(2, $code, PDO::PARAM_STR);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet ophalen. Message: ' . $e . '</p>';
+    }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 

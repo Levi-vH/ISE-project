@@ -9,14 +9,17 @@ if (!isset($_SESSION)) {
 $workshop_id = $_GET['workshop_id'];
 $workshoptype = getWorkshopType($workshop_id);
 
-
 $conn = connectToDB();
 
 //Run the stored procedure
 $sql = "exec SP_get_workshops @where = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
-$stmt->execute();
+try {
+    $stmt->execute();
+} catch (PDOException $e) {
+    echo '<p class="alert-danger warning deletewarning">Kan workshops niet ophalen. Message: ' . $e . '</p>';
+}
 
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 

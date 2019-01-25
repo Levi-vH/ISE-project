@@ -86,12 +86,15 @@ $workshoptype = getWorkshopType($workshop_id);
                     </tr>
                     <?php
                     $conn = connectToDB();
-
                     //Run the stored procedure
                     $sql = "exec SP_get_list_of_approved_workshop_participants ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
-                    $stmt->execute();
+                    try {
+                        $stmt->execute();
+                    } catch (PDOException $e) {
+                        echo '<p class="alert-danger warning deletewarning">Kan lijst met deelnemers niet ophalen. Message: ' . $e . '</p>';
+                    }
 
                     $nummer = 0;
 

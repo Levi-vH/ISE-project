@@ -93,7 +93,11 @@ if ($_SESSION['username'] == 'planner') {
                 $sql = "SELECT * FROM BESCHIKBAARHEID WHERE WORKSHOPLEIDER_ID = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bindParam(1, $workshopleader_id, PDO::PARAM_INT);
-                $stmt->execute();
+                try {
+                    $stmt->execute();
+                } catch (PDOException $e) {
+                    echo '<p class="alert-danger warning deletewarning">Kan beschikbaarheid van workshopleider(s) niet ophalen. Message: ' . $e . '</p>';
+                }
 
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $html = '<form method="post"  class="form-horizontal" onsubmit="return confirm(\'Weet je zeker dat je deze persoon wilt verwijderen? Zijn of haar gegevens worden niet opgeslagen\')">';

@@ -8,13 +8,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //Try to make connection
     $conn = connectToDB();
+
     if(isset($_POST["Organisation_Name"])) {
         $Organisation_grant = check_input($_POST["Organisation_Name"]);
 
         $sql = "exec SP_grant_large_account ?";
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(1, $Organisation_grant, PDO::PARAM_INT);
-        $stmt->execute();
+        try {
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo '<p class="alert-danger warning deletewarning">Kan organisatie niet machtigen. Message: ' . $e . '</p>';
+        }
     }
     if(isset($_POST["Organisation_Name2"])){
         $Organisation_ungrant = check_input($_POST["Organisation_Name2"]);
@@ -22,7 +27,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql2 = "exec SP_ungrant_large_account ?";
         $stmt2 = $conn->prepare($sql2);
         $stmt2->bindParam(1, $Organisation_ungrant, PDO::PARAM_INT);
-        $stmt2->execute();
+        try {
+            $stmt2->execute();
+        } catch (PDOException $e) {
+            echo '<p class="alert-danger warning deletewarning">Kan omachtiging van organisatie niet intrekken. Message: ' . $e . '</p>';
+        }
     }
 }
 

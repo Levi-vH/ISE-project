@@ -29,11 +29,16 @@ $deelnemer_id = $_SESSION['deelnemer_id'];
             //Try to make connection
             $conn = connectToDB();
 
+
             //Run the stored procedure
             $sql = "EXEC SP_get_participant_workshops ?";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(1, $deelnemer_id, PDO::PARAM_INT);
-            $stmt->execute();
+            try {
+                $stmt->execute();
+            } catch (PDOException $e) {
+                echo '<p class="alert-danger warning deletewarning">Kan workshops van deelnemer niet ophalen. Message: ' . $e . '</p>';
+            }
 
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 

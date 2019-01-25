@@ -18,7 +18,11 @@ if ($_SESSION['username'] == 'beheerder') {
         $adviser_phonenumber = $_POST['phonenumber'];
         $adviser_email = $_POST['email'];
 
-        createAdviser($organisation, $adviser_sector, $adviser_name, $adviser_surname, $adviser_phonenumber, $adviser_email);
+        try {
+            createAdviser($organisation, $adviser_sector, $adviser_name, $adviser_surname, $adviser_phonenumber, $adviser_email);
+        } catch (PDOException $e) {
+            echo '<p class="alert-danger warning deletewarning">Kan adviseur niet aanmaken. Message: ' . $e . '</p>';
+        }
 
     }
 

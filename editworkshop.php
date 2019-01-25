@@ -19,12 +19,17 @@ if ($_SESSION['username'] == 'planner') {
 //Try to make connection
     $conn = connectToDB();
 
+
 //Run the stored procedure
 
     $sql = "exec SP_get_workshops @where = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan workshops niet ophalen. Message: ' . $e . '</p>';
+    }
 
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -122,7 +127,11 @@ if ($_SESSION['username'] == 'planner') {
                 $stmt->bindParam(18, $contactperson_name, PDO::PARAM_STR);
                 $stmt->bindParam(19, $contactperson_email, PDO::PARAM_STR);
                 $stmt->bindParam(20, $contactperson_phonenumber, PDO::PARAM_STR);
-                $stmt->execute();
+                try {
+                    $stmt->execute();
+                } catch (PDOException $e) {
+                    echo '<p class="alert-danger warning deletewarning">Kan workshops niet wijzigen. Message: ' . $e . '</p>';
+                }
             } else {
                 // if the workshop type is not IND the last 3 parameters have to be null
                 $sql = "exec SP_alter_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
@@ -144,7 +153,11 @@ if ($_SESSION['username'] == 'planner') {
                 $stmt->bindParam(15, $attendance_list_send, PDO::PARAM_INT);
                 $stmt->bindParam(16, $attendance_list_received, PDO::PARAM_INT);
                 $stmt->bindParam(17, $evidence_participation_mail, PDO::PARAM_STR);
-                $stmt->execute();
+                try {
+                    $stmt->execute();
+                } catch (PDOException $e) {
+                    echo '<p class="alert-danger warning deletewarning">Kan workshops niet wijzigen. Message: ' . $e . '</p>';
+                }
             }
         }
     }
@@ -153,7 +166,11 @@ if ($_SESSION['username'] == 'planner') {
 
     $getTypes = "SELECT * FROM WORKSHOPTYPE";
     $statement = $conn->prepare($getTypes);
-    $statement->execute();
+    try {
+        $statement->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan workshoptypes niet ophalen. Message: ' . $e . '</p>';
+    }
 
     $types = $statement->fetchAll(PDO::FETCH_ASSOC);
     $dropdownTypes = '<option disabled> Kies een Type... </option>';
@@ -171,9 +188,11 @@ if ($_SESSION['username'] == 'planner') {
 
     $statement = $conn->prepare($getContact);
     $statement->bindParam(1, $workshop_id,PDO::PARAM_INT);
-    $statement->execute();
-
-
+    try {
+        $statement->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan workshoptypes niet ophalen. Message: ' . $e . '</p>';
+    }
     $contacts = $statement->fetchAll(PDO::FETCH_ASSOC);
     $dropdownContact = '<option disabled> Kies een Contactpersoon...</option>';
 

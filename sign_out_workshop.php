@@ -6,17 +6,26 @@ $workshop_id = $_GET['workshop_id'];
 if(isset($_POST['resign'])){
     $conn = connectToDB();
 
+
     $sqlGetCode = "EXEC SP_get_participant_code ?";
     $stmtGetCode = $conn->prepare($sqlGetCode);
     $stmtGetCode->bindParam(1,$_SESSION['deelnemer_id'], PDO::PARAM_INT);
-    $stmtGetCode->execute();
+    try {
+        $stmtGetCode->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemerscode niet ophalen. Message: ' . $e . '</p>';
+    }
 
     $sql = "EXEC SP_disapprove_participant_of_workshop ?, ?";
 
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(1,$workshop_id, PDO::PARAM_INT);
     $stmt->bindParam(2,$_SESSION['deelnemer_id'], PDO::PARAM_INT);
-    $stmt->execute();
+    try {
+        $stmt->execute();
+    } catch (PDOException $e) {
+        echo '<p class="alert-danger warning deletewarning">Kan deelnemer niet uischrijven. Message: ' . $e . '</p>';
+    }
     $_SESSION['message'] = 'U bent succesvol uitgeschreven voor deze workshop';
     header("refresh:0;url=signed_up_workshops.php");
 }

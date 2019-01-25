@@ -67,12 +67,15 @@ if ($_SESSION['username'] == 'beheerder') {
                     $organisation_name = $_POST['Organisation_Name'];
                 }
 
-
                 $conn = connectToDB();
                 $sql = "SELECT * FROM CONTACTPERSOON WHERE ORGANISATIENUMMER = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->bindParam(1, $organisation_name, PDO::PARAM_STR);
-                $stmt->execute();
+                try {
+                    $stmt->execute();
+                } catch (PDOException $e) {
+                    echo '<p class="alert-danger warning deletewarning">Kan contactpersoon niet ophalen. Message: ' . $e . '</p>';
+                }
 
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $html = '';

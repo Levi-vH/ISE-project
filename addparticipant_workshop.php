@@ -29,7 +29,6 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $Organisation_name = check_input($_POST["Organisation_Name"]);
         $functionInCompany = check_input($_POST["functionInCompanyInput"]);
 
-
         $conn = connectToDB();
 
         $sqlInsertDeelnemer = "SP_insert_participant_in_workshop ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
@@ -47,9 +46,13 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
         $stmtInsertDeelnemer->bindParam(11, $sector, PDO::PARAM_INT);
         $stmtInsertDeelnemer->bindParam(12, $functionInCompany, PDO::PARAM_STR);
         $stmtInsertDeelnemer->bindParam(13, $workshop_id, PDO::PARAM_INT);
-        $stmtInsertDeelnemer->execute();
-
+        try {
+            $stmtInsertDeelnemer->execute();
+        } catch (PDOException $e) {
+            echo '<p class="alert-danger warning deletewarning">Kon deelnemer niet toevoegen. Message: ' . $e . '</p>';
         }
+
+    }
 
     ?>
     <body>
@@ -62,11 +65,11 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         <?php
                         if ($_SESSION['username'] == "planner") {
                             echo '<li>';
-                            echo '<a href="workshop.php?workshop_id='.$workshop_id.'">Details</a>';
+                            echo '<a href="workshop.php?workshop_id=' . $workshop_id . '">Details</a>';
                             echo '</li>';
-                        } elseif($_SESSION['username'] == "contactpersoon") {
+                        } elseif ($_SESSION['username'] == "contactpersoon") {
                             echo '<li>';
-                            echo '<a href="Organisatie_workshop_details.php?workshop_id='.$workshop_id.'">Details</a>';
+                            echo '<a href="Organisatie_workshop_details.php?workshop_id=' . $workshop_id . '">Details</a>';
                             echo '</li>';
                         }
                         ?>

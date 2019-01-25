@@ -8,11 +8,16 @@ generate_header('Incompany aanvraag');
 
 $conn = connectToDB();
 
+
 //Run the stored procedure
 $sql = "exec SP_get_workshoprequests ?";
 $stmt = $conn->prepare($sql);
 $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
-$stmt->execute();
+try {
+    $stmt->execute();
+} catch (PDOException $e) {
+    echo '<p class="alert-danger warning deletewarning">Kan workshopaanvragen niet ophalen. Message: ' . $e . '</p>';
+}
 
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -33,7 +38,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 $stmt8->bindParam(1,$aanvraag_id, PDO::PARAM_INT);
                 $stmt8->bindParam(2,$module['GROEP_ID'], PDO::PARAM_INT);
                 $stmt8->bindParam(3,$module['MODULENUMMER'],PDO::PARAM_INT);
-                $stmt8->execute();
+                try {
+                    $stmt8->execute();
+                } catch (PDOException $e) {
+                    echo '<p class="alert-danger warning deletewarning">Kan workshopaanvraag niet omzetten. Message: ' . $e . '</p>';
+                }
             }
         }
         header("refresh:0;url=allworkshops.php");
@@ -77,7 +86,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 $stmt6->bindParam(4, $moduleStart, PDO::PARAM_STR);
                 $stmt6->bindParam(5, $moduleEind, PDO::PARAM_STR);
                 $stmt6->bindParam(6, $moduleleader, PDO::PARAM_INT);
-                $stmt6->execute();
+                try {
+                    $stmt6->execute();
+                } catch (PDOException $e) {
+                    echo '<p class="alert-danger warning deletewarning">Er is iets misgegaan. Message: ' . $e . '</p>';
+                }
             }
 
             $detailToConfirm = null;
@@ -97,8 +110,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 $stmt7->bindParam(1, $detailToConfirm,PDO::PARAM_STR);
                 $stmt7->bindParam(2, $groepNumber,PDO::PARAM_INT);
                 $stmt7->bindParam(3, $moduleNumber,PDO::PARAM_INT);
-
-                $stmt7->execute();
+                try {
+                    $stmt7->execute();
+                } catch (PDOException $e) {
+                    echo '<p class="alert-danger warning deletewarning">Kan workshopaanvragen niet ophalen. Message: ' . $e . '</p>';
+                }
             }
 
 
@@ -244,7 +260,11 @@ $turnIntoWorkshop = true;
                 $sql2 = "exec SP_get_group_ids ?";
                 $stmt2 = $conn->prepare($sql2);
                 $stmt2->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
-                $stmt2->execute();
+                try {
+                    $stmt2->execute();
+                } catch (PDOException $e) {
+                    echo '<p class="alert-danger warning deletewarning">Kan groepids niet ophalen. Message: ' . $e . '</p>';
+                }
 
                 $groups = $stmt2->fetchall(PDO::FETCH_ASSOC);
                 $i = 1;
@@ -258,7 +278,11 @@ $turnIntoWorkshop = true;
                     $sql3 = "exec SP_get_information_of_group ?";
                     $stmt3 = $conn->prepare($sql3);
                     $stmt3->bindParam(1, $GroupIDs[$i]['GROEP_ID'], PDO::PARAM_INT);
-                    $stmt3->execute();
+                    try {
+                        $stmt3->execute();
+                    } catch (PDOException $e) {
+                        echo '<p class="alert-danger warning deletewarning">Kan groepsinformatie niet ophalen. Message: ' . $e . '</p>';
+                    }
 
                     $groupinfo = $stmt3->fetch(PDO::FETCH_ASSOC);
 
@@ -333,7 +357,11 @@ $turnIntoWorkshop = true;
                     $sql4 = "exec SP_get_modulenumbers ?";
                     $stmt4 = $conn->prepare($sql4);
                     $stmt4->bindParam(1, $GroupIDs[$i]['GROEP_ID'], PDO::PARAM_INT);
-                    $stmt4->execute();
+                    try {
+                        $stmt4->execute();
+                    } catch (PDOException $e) {
+                        echo '<p class="alert-danger warning deletewarning">Kan modulenummers niet ophalen. Message: ' . $e . '</p>';
+                    }
 
                     $Modules = $stmt4->fetchall(PDO::FETCH_ASSOC);
                     $k = 1;

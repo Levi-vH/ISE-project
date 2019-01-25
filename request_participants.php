@@ -54,7 +54,11 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                     $sql = "exec SP_get_groups ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
-                    $stmt->execute();
+                    try {
+                        $stmt->execute();
+                    } catch (PDOException $e) {
+                        echo '<p class="alert-danger warning deletewarning">Kan groepen niet ophalen. Message: ' . $e . '</p>';
+                    }
 
                     $nummer = 0;
 
@@ -111,7 +115,11 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $sql = "exec SP_get_participants_of_workshoprequest_without_group ?";
                         $stmt = $conn->prepare($sql);
                         $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
-                        $stmt->execute();
+                        try {
+                            $stmt->execute();
+                        } catch (PDOException $e) {
+                            echo '<p class="alert-danger warning deletewarning">Kan lijst met deelnemers niet ophalen. Message: ' . $e . '</p>';
+                        }
 
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             $html = '';
@@ -156,8 +164,11 @@ if ($_SESSION['username'] == 'planner' or $_SESSION['username'] == 'contactperso
                         $stmt = $conn->prepare($sql);
                         $stmt->bindParam(1, $aanvraag_id, PDO::PARAM_INT);
                         $stmt->bindParam(2, $_GET['groeps_id'], PDO::PARAM_INT);
-
-                        $stmt->execute();
+                        try {
+                            $stmt->execute();
+                        } catch (PDOException $e) {
+                            echo '<p class="alert-danger warning deletewarning">Kan deelnemers van groep niet ophalen. Message: ' . $e . '</p>';
+                        }
 
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             $html = '';

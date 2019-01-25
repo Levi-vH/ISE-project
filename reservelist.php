@@ -71,11 +71,16 @@ $workshoptype = getWorkshopType($workshop_id);
                     //Try to make connection
                     $conn = connectToDB();
 
+
                     //Run the stored procedure
                     $sql = "exec SP_get_reservelist_of_approved_workshop_participants ?";
                     $stmt = $conn->prepare($sql);
                     $stmt->bindParam(1, $workshop_id, PDO::PARAM_INT);
-                    $stmt->execute();
+                    try {
+                        $stmt->execute();
+                    } catch (PDOException $e) {
+                        echo '<p class="alert-danger warning deletewarning">Kan reservelijst niet ophalen. Message: ' . $e . '</p>';
+                    }$stmt->execute();
 
                     $nummer = 0;
 

@@ -11,7 +11,11 @@ if ($_SESSION['username'] == 'beheerder') {
         $sectorname = $_POST['sectorname'];
 
         if (checkIfSectorExists($sectorname) == "") {
-            createSector($sectorname);
+            try {
+                createSector($sectorname);
+            } catch (PDOException $e) {
+                echo '<p class="alert-danger warning deletewarning">Kan sector niet aanmaken. Message: ' . $e . '</p>';
+            }
         } else {
             echo '<p class="alert-danger warning deletewarning">Sector bestaat al!</p>';
         }

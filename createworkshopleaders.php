@@ -15,7 +15,6 @@ if ($_SESSION['username'] == 'beheerder') {
         try {
             createWorkshopleader($workshopleider_name, $workshopleider_surname);
             echo '<p class="alert-success warning deletewarning">Workshopleider aangemaakt!</p>';
-
         } catch (PDOException $e) {
             echo '<p class="alert-danger warning deletewarning">Workshopleider bestaat al!</p>';
         }

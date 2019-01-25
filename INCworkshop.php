@@ -43,12 +43,20 @@ if ($_SESSION['username'] == 'contactpersoon') {
                             $stmt->bindParam(3, $Advisor_practical_learning, PDO::PARAM_INT);
                             $stmt->bindParam(4, $SBB_Planner, PDO::PARAM_STR);
                             $stmt->bindParam(5, $Sector, PDO::PARAM_STR);
-                            $stmt->execute();
+                            try {
+                                $stmt->execute();
+                            } catch (PDOException $e) {
+                                echo '<p class="alert-danger warning deletewarning">Kan workshopaanvraag niet invoeren. Message: ' . $e . '</p>';
+                            }
 
                             //get aanvraagID
                             $sql2 = "SELECT IDENT_CURRENT('AANVRAAG') AS LAATSTE_INDEX";
                             $stmt2 = $conn->prepare($sql2);
-                            $stmt2->execute();
+                            try {
+                                $stmt2->execute();
+                            } catch (PDOException $e) {
+                                echo '<p class="alert-danger warning deletewarning">Kan aanvraagnummer niet ophalen. Message: ' . $e . '</p>';
+                            }
 
                             while ($resultaat = $stmt2->fetch(PDO::FETCH_ASSOC)) {
                                 $Aanvraag_ID = $resultaat['LAATSTE_INDEX'];
@@ -124,7 +132,11 @@ if ($_SESSION['username'] == 'contactpersoon') {
                                         $stmt3->bindParam(9, $Postcode, PDO::PARAM_STR);
                                         $stmt3->bindParam(10, $Placename, PDO::PARAM_STR);
                                         $stmt3->bindParam(11, $Contact_Person, PDO::PARAM_STR);
-                                        $stmt3->execute();
+                                        try {
+                                            $stmt3->execute();
+                                        } catch (PDOException $e) {
+                                            echo '<p class="alert-danger warning deletewarning">Kan groepsinformatie niet invoeren. Message: ' . $e . '</p>';
+                                        }
 
                                         header('Location: INCaanvraag.php?aanvraag_id=' . $Aanvraag_ID . '');
                                     } else {

@@ -16,11 +16,12 @@ if ($_SESSION['username'] == 'beheerder') {
         $organisation_postcode = $_POST['postcode'];
         $organisation_city = $_POST['city'];
         $large_accounts = $_POST['la'];
-
-        createOrganisation($organisation_name, $organisation_address, $organisation_postcode, $organisation_city, $large_accounts);
-
+        try {
+            createOrganisation($organisation_name, $organisation_address, $organisation_postcode, $organisation_city, $large_accounts);
+        } catch (PDOException $e) {
+            echo '<p class="alert-danger warning deletewarning">Kan organisatie niet aanmaken. Message: ' . $e . '</p>';
+        }
     }
-
     generate_header('Nieuwe organisatie toevoegen');
     ?>
     <body>

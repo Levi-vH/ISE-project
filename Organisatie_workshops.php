@@ -25,6 +25,7 @@ if ($_SESSION['username'] == 'contactpersoon') {
                 //Try to make connection
                 $conn = connectToDB();
 
+
                 //Run the stored procedure
                 $sql = "exec SP_get_workshops @where = ?, @where_column = ?";
                 $where = getOrganisationName($_SESSION['organisation']);
@@ -32,7 +33,11 @@ if ($_SESSION['username'] == 'contactpersoon') {
                 $stmt = $conn->prepare($sql);
                 $stmt->bindParam(1, $where, PDO::PARAM_STR);
                 $stmt->bindParam(2, $where_column, PDO::PARAM_STR);
-                $stmt->execute();
+                try {
+                    $stmt->execute();
+                } catch (PDOException $e) {
+                    echo '<p class="alert-danger warning deletewarning">Kan workshops niet ophalen. Message: ' . $e . '</p>';
+                }
 
 
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
