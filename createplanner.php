@@ -62,11 +62,11 @@ if ($_SESSION['username'] == 'beheerder') {
                 $html .= '</td>';
                 if ($row['IS_ACTIEF'] == 1) {
                     $html .= '<td>';
-                    $html .= '<a class="fas fa-ban" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze sector op inactief wilt zetten? \')" href="createplanner.php?planner=' . $row['PLANNERNAAM'] . '&inactivePlanner=true"></a>';
+                    $html .= '<a class="fas fa-ban" id="denybutton" onclick="return confirm(\'Weet je zeker dat je deze planner op inactief wilt zetten? \')" href="createplanner.php?planner=' . $row['PLANNERNAAM'] . '&inactivePlanner=true"></a>';
                     $html .= '</td>';
                 } elseif ($row['IS_ACTIEF'] == 0) {
                     $html .= '<td>';
-                    $html .= '<a class="fas fa-check" id="approvebutton" onclick="return confirm(\'Weet je zeker dat je deze sector op actief wilt zetten? \')" href="createplanner.php?planner=' . $row['PLANNERNAAM'] . '&activePlanner=true"></a>';
+                    $html .= '<a class="fas fa-check" id="approvebutton" onclick="return confirm(\'Weet je zeker dat je deze planner op actief wilt zetten? \')" href="createplanner.php?planner=' . $row['PLANNERNAAM'] . '&activePlanner=true"></a>';
                     $html .= '</td>';
                 }
                 $html .= '<td>';
