@@ -1,60 +1,7 @@
 /* =====================================================================
-   Author: Lars
-    date: 26-11-2018
-   Description: this is a script to create random testdata for the
+   Description: this is a script to create stored procs for the
    'SBBWorkshopOmgeving' database
-   --------------------------------
-   Modified by: Bart, Jesse, Mark
-   Modifications made by Bart:
-		procedures made:
-		-
-		procedures modified:
-		-
-   Modifications made by Jesse:
-		procedures made:
-		-SP_insert_workshoprequest 
-		-SP_insert_group_of_workshoprequest
-		-SP_add_date_and_time_to_request_from_group
-		-SP_grant_large_account
-		-SP_ungrant_large_account
-		-SP_confirm_workshoprequest
-		procedures modified:
-		-SP_get_participant_workshops
-   Modifications made by Mark:
-		procedures made:
-		-SP_get_row_numbers_of_group_ids
-		-SP_get_groups
-		-SP_get_list_of_approved_workshop_participants
-		-SP_get_reservelist_of_approved_workshop_participants
-		-SP_get_list_of_to_approve_workshop_participants
-		-SP_get_participants_of_workshoprequest
-		-SP_get_participants_of_workshoprequest_without_group
-		-SP_get_participants_of_group
-		-SP_check_sector_usage
-		-SP_insert_deelnemer_in_workshop
-		-SP_insert_participant_of_workshop
-		-SP_insert_workshoprequest
-		-SP_insert_participant_of_workshoprequest
-		-SP_insert_sector
-		-SP_insert_advisor
-		-SP_insert_contactperson
-		-SP_insert_workshopleader
-		-SP_approve_participant_of_workshop
-		-SP_add_participant_to_group
-		-SP_remove_participant_from_group
-		-SP_disapprove_participant_of_workshop
-		-SP_remove_participant_from_workshoprequest
-		-SP_delete_workshoprequest
-		-SP_delete_sector
-		procedures modified:
-		-SP_get_workshops
-		-SP_get_workshoprequests
-		-SP_insert_participant_in_workshop
-		-SP_insert_group_of_workshoprequest
-		-SP_insert_workshop
-		-SP_confirm_workshoprequest
-		-SP_confirm_workshop_details
-   ==================================================================== */
+   */
 
 USE SBBWorkshopOmgeving
 GO
